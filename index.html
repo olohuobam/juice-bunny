@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Juice Bunny — Unlimited Premium Entertainment</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   ROOT & RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
+  --text:#fff;--text2:#a0a0b0;--text3:#606070;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --card:#16161f;--success:#00c878;--error:#ff4757;--radius:12px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--pink)}
+a{text-decoration:none;color:inherit}
+
+/* ============================================================
+   PAGE ROUTER
+   ============================================================ */
+.page{display:none}
+.page.active{display:block}
+
+/* ============================================================
+   SHARED NAV
+   ============================================================ */
+.main-nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(13,13,18,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.logo-spin{width:52px;height:52px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,45,120,.6))}
+@keyframes logoSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.logo-name{font-family:'Dancing Script',cursive;font-size:22px;font-weight:700;color:#fff}
+.nav-links{display:flex;gap:30px}
+.nav-links a{color:var(--text2);font-size:14px;cursor:pointer;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-right{display:flex;align-items:center;gap:12px}
+.btn-nav-login{background:none;border:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;padding:8px 16px;transition:color .2s}
+.btn-nav-login:hover{color:#fff}
+.btn-nav-signup{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:9px 22px;border-radius:20px;cursor:pointer;transition:all .2s}
+.btn-nav-signup:hover{background:var(--pink2);transform:translateY(-1px)}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;border:2px solid rgba(255,45,120,0.4);display:none}
+.btn-upgrade-nav{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:8px 18px;border-radius:20px;cursor:pointer;transition:all .2s;display:none}
+.btn-upgrade-nav:hover{background:var(--pink2)}
+@media(max-width:768px){.nav-links{display:none}.main-nav{padding:0 20px}}
+
+/* ============================================================
+   SHARED UTILS
+   ============================================================ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes spin360{to{transform:rotate(360deg)}}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;pointer-events:none}
+.toast.error{background:var(--error)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ============================================================
+   PAGE 1 — LANDING
+   ============================================================ */
+#page-home{padding-top:64px}
+
+/* TICKER */
+.ticker{background:var(--pink);height:28px;overflow:hidden;display:flex;align-items:center}
+.ticker-track{display:flex;animation:tickerMove 28s linear infinite;white-space:nowrap}
+.ticker-item{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff;padding:0 20px;display:flex;align-items:center;gap:10px}
+.t-star{color:rgba(255,255,255,.6);font-size:8px}
+
+/* HERO */
+.hero{
+  min-height:calc(100vh - 92px);
+  display:flex;align-items:center;
+  background:radial-gradient(ellipse 90% 70% at 65% 40%,rgba(180,20,100,.18) 0%,transparent 65%),
+             radial-gradient(ellipse 50% 50% at 10% 90%,rgba(100,0,60,.12) 0%,transparent 50%),var(--bg);
+  position:relative;overflow:hidden;
+}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 80%)}
+.hero-inner{max-width:1160px;margin:0 auto;padding:60px 40px;width:100%;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;position:relative;z-index:1}
+.hero-h1{font-size:clamp(40px,6vw,60px);font-weight:700;line-height:1.05;margin-bottom:4px;animation:fadeUp .7s .1s both}
+.hero-h1-pink{font-size:clamp(40px,6vw,60px);font-weight:700;line-height:1.05;color:var(--pink);margin-bottom:4px;animation:fadeUp .7s .2s both}
+.hero-sub{font-size:14px;color:var(--text2);line-height:1.7;max-width:400px;margin:18px 0 32px;animation:fadeUp .7s .3s both}
+.hero-btns{display:flex;gap:12px;animation:fadeUp .7s .4s both;flex-wrap:wrap}
+.btn-hero-watch{display:flex;align-items:center;gap:8px;background:var(--pink);color:#fff;border:none;padding:13px 26px;border-radius:25px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-hero-watch:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-hero-plans{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:13px 26px;border-radius:25px;font-family:'Inter',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
+.btn-hero-plans:hover{background:rgba(255,255,255,.1);color:#fff}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
+.bunny-wrap{width:320px;height:340px;display:flex;align-items:center;justify-content:center;position:relative}
+.bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
+.bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
+.bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
+.bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
+.bunny-img{width:260px;height:300px;object-fit:contain;filter:drop-shadow(0 0 50px rgba(255,45,120,.6)) drop-shadow(0 0 20px rgba(255,45,120,.3));animation:floatY 5s ease-in-out infinite;position:relative;z-index:1;border-radius:0}
+@media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:200px;height:220px}.bunny-img{width:140px;height:160px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
+
+/* STATS */
+.stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 40px}
+.stats-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat{text-align:center}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--pink)}
+.stat-lbl{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+@media(max-width:600px){.stats-inner{grid-template-columns:repeat(2,1fr)}}
+
+/* SECTIONS */
+.section{padding:80px 40px}
+.sec-inner{max-width:1160px;margin:0 auto}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:6px;display:block}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4vw,3.5rem);letter-spacing:1px;line-height:1}
+.sec-title span{color:var(--pink)}
+.sec-sub{font-size:14px;color:var(--text2);margin-top:8px;max-width:500px}
+@media(max-width:600px){.section{padding:60px 20px}}
+
+/* TRENDING */
+.trending-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.filter-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.ftab{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:none;color:var(--text2);font-family:'Inter',sans-serif;transition:all .2s}
+.ftab.active,.ftab:hover{background:var(--pink);border-color:var(--pink);color:#fff}
+.movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.movie-card{border-radius:10px;overflow:hidden;cursor:pointer;position:relative;transition:transform .3s,box-shadow .3s;background:var(--card)}
+.movie-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.movie-thumb{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:4.5rem}
+.movie-badge{position:absolute;top:10px;left:10px;background:var(--pink);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:5px}
+.movie-badge.free-badge{background:rgba(0,200,120,.9)}
+.movie-info{padding:12px 12px 14px}
+.movie-title{font-size:14px;font-weight:600;margin-bottom:5px}
+.movie-meta-r{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)}
+.star-g{color:#f5c518}
+.dot3{width:3px;height:3px;background:var(--text3);border-radius:50%;display:inline-block}
+
+/* FEATURES */
+.bg2-section{background:var(--bg2)}
+.feat-center{text-align:center;margin-bottom:48px}
+.feat-center .sec-sub{margin:8px auto 0}
+.feats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;transition:border-color .3s,transform .3s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,45,120,.06),transparent 60%);opacity:0;transition:opacity .3s}
+.feat-card:hover{border-color:rgba(255,45,120,.3);transform:translateY(-3px)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{font-size:22px;margin-bottom:14px;display:block}
+.feat-title{font-size:14px;font-weight:600;margin-bottom:6px}
+.feat-desc{font-size:13px;color:var(--text2);line-height:1.6}
+@media(max-width:768px){.feats-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.feats-grid{grid-template-columns:1fr}}
+
+/* FREE CONTENT */
+.free-label-big{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#fff;margin-bottom:4px}
+.free-sublabel{font-size:11px;color:var(--text3);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:28px}
+.free-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.free-card{border-radius:10px;overflow:hidden;cursor:pointer;position:relative;transition:transform .3s;background:var(--card)}
+.free-card:hover{transform:translateY(-4px)}
+.free-thumb{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative}
+.free-bdg{position:absolute;top:10px;left:10px;background:rgba(0,200,120,.9);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px}
+.free-dur{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:2px 7px;border-radius:4px}
+.free-play-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;background:rgba(0,0,0,.3)}
+.free-card:hover .free-play-ov{opacity:1}
+.play-circle{width:44px;height:44px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:16px}
+.free-info{padding:12px}
+.free-card-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.free-card-meta{font-size:11px;color:var(--text3)}
+@media(max-width:600px){.free-grid{grid-template-columns:1fr 1fr}}
+
+/* PREMIUM CONTENT */
+.members-bdg{display:inline-block;background:rgba(255,45,120,.15);border:1px solid rgba(255,45,120,.3);color:var(--pink);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:4px;margin-bottom:12px}
+.prem-title-big{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#fff;margin-bottom:4px}
+.prem-sublabel{font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:28px}
+.prem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prem-card{border-radius:10px;overflow:hidden;cursor:pointer;position:relative;transition:transform .3s;background:var(--card)}
+.prem-card:hover{transform:translateY(-4px)}
+.prem-thumb{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative}
+.prem-bdg{position:absolute;top:10px;left:10px;background:var(--pink);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;z-index:1}
+.prem-yr{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:var(--text2);font-size:10px;padding:2px 7px;border-radius:4px;z-index:1}
+.lock-ov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center}
+.lock-circle{width:44px;height:44px;background:rgba(255,45,120,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
+@media(max-width:600px){.prem-grid{grid-template-columns:1fr 1fr}}
+
+/* DEVICES */
+.devices-section{background:linear-gradient(135deg,#0d0d12,#1a0a18,#0d0d12);padding:80px 40px}
+.devices-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px}
+.dev-h2{font-size:30px;font-weight:700;line-height:1.2;margin-bottom:12px}
+.dev-h2 span{color:var(--pink)}
+.dev-p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:360px}
+.dev-list{list-style:none}
+.dev-list li{font-size:14px;color:var(--text2);padding:5px 0;display:flex;align-items:center;gap:10px}
+.dev-list li::before{content:'';width:8px;height:8px;background:var(--pink);border-radius:50%;flex-shrink:0}
+.dev-visual{position:relative;height:260px;display:flex;align-items:center;justify-content:center}
+.dev-screen{width:300px;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.dev-screen::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,45,120,.05))}
+.dev-phone{position:absolute;right:-10px;top:-20px;width:80px;height:140px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;transform:rotate(8deg)}
+@media(max-width:768px){.devices-inner{grid-template-columns:1fr}.dev-visual{display:none}}
+
+/* PRICING */
+.pricing-card{max-width:520px;margin:0 auto;background:linear-gradient(135deg,#2a0a1e,#1e0a2a,#2a0a1e);border:1px solid rgba(255,45,120,.2);border-radius:16px;padding:48px;text-align:center;position:relative;overflow:hidden}
+.pricing-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,45,120,.15),transparent)}
+.pricing-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.pc-inner{position:relative;z-index:1}
+.pc-eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.pc-eyebrow::before,.pc-eyebrow::after{content:'✦';font-size:8px;opacity:.7}
+.pc-price{font-size:72px;font-weight:700;line-height:1;color:#fff}
+.pc-price sup{font-size:26px;vertical-align:top;margin-top:14px;display:inline-block;color:var(--text2);font-weight:400}
+.pc-price sub{font-size:18px;color:var(--text2);font-weight:400}
+.pc-perks{display:flex;align-items:center;justify-content:center;gap:12px;margin:18px 0 28px;font-size:12px;color:var(--text2);flex-wrap:wrap}
+.pc-dot{width:4px;height:4px;background:var(--text3);border-radius:50%;display:inline-block}
+.btn-getaccess{width:100%;padding:14px;border-radius:25px;border:none;background:var(--pink);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;letter-spacing:.5px;text-transform:uppercase}
+.btn-getaccess:hover{background:var(--pink2);transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.pc-methods{margin-top:14px;font-size:12px;color:var(--text3)}
+.pay-badges{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.pay-badge{background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--text2);font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px}
+
+/* TESTIMONIALS */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.test-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px}
+.test-stars{color:var(--pink);font-size:14px;letter-spacing:2px;margin-bottom:14px}
+.test-quote{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.test-name{font-size:14px;font-weight:600}
+.test-role{font-size:12px;color:var(--text3)}
+@media(max-width:768px){.test-grid{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq-wrap{max-width:620px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:20px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:color .2s}
+.faq-q:hover{color:var(--pink)}
+.faq-arrow{font-size:12px;color:var(--text3);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{font-size:13px;color:var(--text2);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
+
+/* CTA BANNER */
+.cta-wrap{padding:40px}
+.cta-card{max-width:1160px;margin:0 auto;background:linear-gradient(135deg,rgba(180,20,100,.6),rgba(120,0,80,.5),rgba(180,20,100,.4));border-radius:20px;padding:64px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(255,45,120,.2),transparent);pointer-events:none}
+.cta-bunny{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:160px;opacity:.2;pointer-events:none}
+.cta-inner{position:relative;z-index:1}
+.cta-h2{font-size:clamp(24px,4vw,38px);font-weight:700;line-height:1.2;margin-bottom:14px}
+.cta-h2 span{color:var(--pink)}
+.cta-p{font-size:14px;color:rgba(255,255,255,.75);margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta1{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:13px 28px;border-radius:25px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-cta1:hover{background:rgba(255,255,255,.25)}
+.btn-cta2{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.15);padding:13px 28px;border-radius:25px;font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-cta2:hover{background:rgba(255,255,255,.14)}
+
+/* FOOTER */
+footer{background:var(--bg2);padding:52px 40px 28px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1160px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:44px;padding-bottom:36px;border-bottom:1px solid var(--border)}
+.footer-logo{display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer}
+.footer-tagline{font-size:11px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;line-height:1.8;margin-bottom:14px}
+.footer-pay-row{display:flex;gap:8px;flex-wrap:wrap}
+.f-pay{background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--text2);font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:5px}
+.footer-col h4{font-size:12px;font-weight:600;letter-spacing:1px;color:#fff;margin-bottom:14px}
+.footer-col a{display:block;font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:9px;transition:color .2s}
+.footer-col a:hover{color:var(--pink)}
+.f-nl-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:5px}
+.f-nl-sub{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;line-height:1.5}
+.f-nl-input{width:100%;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;margin-bottom:8px}
+.f-nl-input::placeholder{color:var(--text3)}
+.f-nl-input:focus{border-color:var(--pink)}
+.btn-subscribe{width:100%;padding:10px;background:var(--pink);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.btn-subscribe:hover{background:var(--pink2)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:22px;flex-wrap:wrap;gap:10px}
+.footer-bottom p{font-size:12px;color:var(--text3)}
+.footer-bottom-links{display:flex;gap:18px}
+.footer-bottom-links a{font-size:12px;color:var(--text3);cursor:pointer;transition:color .2s}
+.footer-bottom-links a:hover{color:var(--pink)}
+.scroll-top-btn{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:var(--pink);border:none;border-radius:50%;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:100;opacity:0;pointer-events:none}
+.scroll-top-btn.show{opacity:1;pointer-events:auto}
+.scroll-top-btn:hover{background:var(--pink2);transform:translateY(-2px)}
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}}
+
+/* PRICING TIERS */
+.pricing-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto}
+.tier-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:32px 28px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.tier-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.tier-card.featured{border-color:var(--pink);background:linear-gradient(160deg,rgba(255,45,120,.08),var(--card))}
+.tier-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.tier-card.vip{border-color:rgba(255,200,50,.3);background:linear-gradient(160deg,rgba(255,200,50,.06),var(--card))}
+.tier-card.vip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#ffc832,transparent)}
+.tier-hot{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--pink);color:#fff;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 16px;border-radius:0 0 10px 10px;white-space:nowrap}
+.tier-hot.vip-hot{background:linear-gradient(135deg,#ffc832,#ff8c00);color:#000}
+.tier-name{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;margin-top:16px}
+.tier-price{font-size:54px;font-weight:700;line-height:1;margin-bottom:8px}
+.tier-price sup{font-size:22px;vertical-align:top;margin-top:10px;display:inline-block;color:var(--text2);font-weight:400}
+.tier-price sub{font-size:15px;color:var(--text2);font-weight:400}
+.tier-desc{font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.tier-perks{list-style:none;margin-bottom:24px}
+.tier-perks li{font-size:13px;color:var(--text2);padding:7px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.tier-perks li::before{content:'✓';color:var(--pink);font-weight:700;font-size:12px;flex-shrink:0}
+.tier-perks li.no{color:var(--text3)}
+.tier-perks li.no::before{content:'✕';color:var(--text3)}
+.tier-card.vip .tier-perks li::before{color:#ffc832}
+.btn-tier{width:100%;padding:13px;border-radius:25px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .25s}
+.btn-tier.primary{background:var(--pink);color:#fff;border:none}
+.btn-tier.primary:hover{background:var(--pink2);box-shadow:0 8px 24px var(--pink-glow)}
+.btn-tier.secondary{background:none;color:var(--text2);border:1px solid var(--border2)}
+.btn-tier.secondary:hover{border-color:var(--pink);color:var(--pink)}
+.btn-tier.vip-btn{background:linear-gradient(135deg,#ffc832,#ff8c00);color:#000;border:none;font-weight:800}
+.btn-tier.vip-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,200,50,.35)}
+@media(max-width:768px){.pricing-tiers{grid-template-columns:1fr;max-width:420px}}
+
+/* BROADCAST MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex;animation:fadeIn .25s ease}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:560px;position:relative;overflow:hidden;animation:popIn .35s cubic-bezier(.175,.885,.32,1.275)}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.modal-head{padding:28px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.modal-title{font-size:20px;font-weight:700}
+.modal-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0;transition:color .2s;flex-shrink:0}
+.modal-close:hover{color:#fff}
+.modal-body{padding:24px 28px 28px}
+.modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.mtab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text3);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.mtab.active{color:#fff;border-bottom-color:var(--pink)}
+.mtab-pane{display:none}
+.mtab-pane.active{display:block;animation:fadeIn .25s ease}
+.bc-field{margin-bottom:14px}
+.bc-label{font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:7px;display:block}
+.bc-input{width:100%;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;resize:vertical}
+.bc-input:focus{border-color:var(--pink)}
+.bc-input::placeholder{color:var(--text3)}
+.bc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.bc-hint{font-size:11px;color:var(--text3);margin-top:4px}
+.bc-recipients{font-size:13px;color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bc-count{background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.25);color:var(--pink);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+.btn-send{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px 28px;border-radius:10px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px}
+.btn-send:hover{background:var(--pink2);transform:translateY(-1px);box-shadow:0 6px 20px var(--pink-glow)}
+.btn-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.seg-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.seg-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.seg-btn.active{background:var(--pink);border-color:var(--pink);color:#fff}
+.seg-btn:hover:not(.active){border-color:rgba(255,45,120,.4);color:var(--pink)}
+.admin-broadcast-btn{position:fixed;bottom:80px;right:24px;z-index:200;background:linear-gradient(135deg,var(--pink),#c41060);border:none;color:#fff;border-radius:50px;padding:12px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 8px 28px var(--pink-glow);transition:all .25s}
+.admin-broadcast-btn:hover{transform:translateY(-2px)}
+
+/* UNSUBSCRIBE RETENTION */
+#page-unsub{min-height:100vh;padding-top:64px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(180,20,100,.12),transparent 60%),var(--bg)}
+.unsub-wrap{max-width:640px;width:100%;padding:40px 20px;text-align:center}
+.unsub-step{display:none}
+.unsub-step.active{display:block;animation:fadeIn .4s ease}
+.unsub-bunny{font-size:80px;margin-bottom:20px;display:block;animation:floatY 4s ease-in-out infinite}
+.unsub-title{font-size:30px;font-weight:700;margin-bottom:12px;line-height:1.2}
+.unsub-title span{color:var(--pink)}
+.unsub-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
+.unsub-offers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px;text-align:left}
+.offer-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;transition:border-color .3s,transform .3s;cursor:pointer}
+.offer-card:hover{border-color:var(--pink);transform:translateY(-3px)}
+.offer-icon{font-size:28px;margin-bottom:10px;display:block}
+.offer-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.offer-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.offer-badge{display:inline-block;background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.25);color:var(--pink);font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:20px;margin-top:8px}
+.unsub-btns{display:flex;flex-direction:column;align-items:center;gap:10px}
+.btn-stay{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px 40px;border-radius:25px;cursor:pointer;transition:all .25s}
+.btn-stay:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-still-unsub{background:none;border:none;color:var(--text3);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:color .2s;text-decoration:underline;padding:4px}
+.btn-still-unsub:hover{color:var(--text2)}
+@media(max-width:540px){.unsub-offers{grid-template-columns:1fr}}
+
+/* ============================================================
+   PAGE 2 — SIGNUP
+   ============================================================ */
+#page-signup{min-height:100vh;padding-top:64px;position:relative}
+.auth-page-bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 60% 80% at 0% 50%,rgba(180,20,100,.14) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 100% 20%,rgba(100,0,150,.1) 0%,transparent 55%),var(--bg)}
+.auth-grid-bg{position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+.signup-wrap{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.auth-shell{width:100%;max-width:480px}
+.auth-card{background:rgba(22,22,31,.94);border:1px solid var(--border2);border-radius:20px;padding:44px 40px;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.auth-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,45,120,.06),transparent);pointer-events:none}
+.auth-header{text-align:center;margin-bottom:28px;position:relative;z-index:1}
+.auth-icon{width:56px;height:56px;border-radius:16px;background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.25);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
+.auth-title{font-size:24px;font-weight:700;margin-bottom:6px}
+.auth-subtitle{font-size:14px;color:var(--text2)}
+
+/* STEPS */
+.steps-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;position:relative;z-index:1}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:1px;background:var(--border2)}
+.step-item.done:not(:last-child)::after{background:var(--pink)}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);background:var(--bg);transition:all .3s;position:relative;z-index:1}
+.step-item.active .step-dot{border-color:var(--pink);color:var(--pink);background:rgba(255,45,120,.1)}
+.step-item.done .step-dot{border-color:var(--pink);background:var(--pink);color:#fff}
+.step-lbl{font-size:10px;color:var(--text3);letter-spacing:.5px;font-weight:500}
+.step-item.active .step-lbl{color:var(--pink)}
+.step-item.done .step-lbl{color:var(--text2)}
+
+/* FORM PANELS */
+.form-panel{display:none;position:relative;z-index:1}
+.form-panel.active{display:block;animation:fadeIn .3s ease}
+.field-wrap{margin-bottom:16px}
+.field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+label{display:block;font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--text2);margin-bottom:7px;text-transform:uppercase}
+.inp-wrap{position:relative}
+.inp-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.5;pointer-events:none}
+input[type=text],input[type=email],input[type=password],input[type=date],select{width:100%;padding:13px 14px 13px 42px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none}
+input:focus,select:focus{border-color:var(--pink);background:rgba(255,45,120,.05)}
+input::placeholder{color:var(--text3)}
+select option{background:var(--bg3);color:var(--text)}
+.eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;transition:color .2s}
+.eye-btn:hover{color:var(--text2)}
+.field-err{font-size:11px;color:var(--error);margin-top:5px;display:none}
+.field-wrap.err input,.field-wrap.err select{border-color:var(--error)}
+.field-wrap.err .field-err{display:block}
+.field-wrap.ok input{border-color:var(--success)}
+.field-hint{font-size:11px;color:var(--text3);margin-top:5px}
+
+/* STRENGTH BAR */
+.strength-bar{display:flex;gap:4px;margin-top:8px}
+.s-seg{height:3px;flex:1;border-radius:2px;background:var(--border2);transition:background .3s}
+.s-lbl{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* AGE GATE */
+.age-gate-box{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:10px;padding:16px;margin-bottom:20px;text-align:center}
+.age-gate-icon{font-size:28px;margin-bottom:8px}
+.age-gate-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.age-gate-text{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* CHECKBOXES */
+.check-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;cursor:pointer}
+.check-row input[type=checkbox]{width:18px;height:18px;border-radius:5px;flex-shrink:0;margin-top:2px;accent-color:var(--pink);cursor:pointer}
+.check-label{font-size:13px;color:var(--text2);line-height:1.5}
+.check-label a{color:var(--pink)}
+.check-label a:hover{text-decoration:underline}
+.check-row.age-row .check-label{color:#fff;font-weight:600}
+
+/* PLAN CHOOSER */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.plan-opt{border:1.5px solid var(--border2);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;position:relative;text-align:center}
+.plan-opt:hover{border-color:rgba(255,45,120,.4)}
+.plan-opt.sel{border-color:var(--pink);background:rgba(255,45,120,.07)}
+.plan-opt input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.plan-opt-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.plan-opt-price{font-size:20px;font-weight:700;color:var(--pink)}
+.plan-opt-price small{font-size:12px;color:var(--text2);font-weight:400}
+.plan-opt-tag{font-size:10px;color:var(--text2);margin-top:2px}
+.plan-hot{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--pink);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:10px;white-space:nowrap}
+
+/* PERKS STRIP */
+.perks-strip{background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:10px;padding:18px;margin-bottom:18px}
+.perks-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:12px}
+.perk-item{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.perk-item:last-child{margin-bottom:0}
+.perk-dot-s{width:6px;height:6px;background:var(--pink);border-radius:50%;flex-shrink:0}
+.perk-text{font-size:13px;color:var(--text2)}
+
+/* DIVIDER */
+.or-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--text3);font-size:12px}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* SOCIAL BTNS */
+.social-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.btn-social{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;border:1px solid var(--border2);background:rgba(255,255,255,.03);color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-social:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.2);color:#fff}
+
+/* BUTTONS */
+.btn-submit{width:100%;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--pink),#c41060);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;letter-spacing:.3px;position:relative;overflow:hidden}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-back-step{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border2);background:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.btn-back-step:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.auth-foot-txt{text-align:center;font-size:13px;color:var(--text3);margin-top:18px}
+.auth-foot-txt a{color:var(--pink);font-weight:600;cursor:pointer}
+.auth-foot-txt a:hover{text-decoration:underline}
+
+/* SUCCESS */
+.success-panel{display:none;text-align:center;padding:20px 0;position:relative;z-index:1}
+.success-anim{width:72px;height:72px;border-radius:50%;background:rgba(0,200,120,.12);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
+.success-title{font-size:22px;font-weight:700;margin-bottom:8px}
+.success-txt{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.6}
+.btn-goto{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:#fff;border:none;padding:13px 32px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-goto:hover{background:var(--pink2);transform:translateY(-2px)}
+@media(max-width:520px){.auth-card{padding:32px 20px}.field-row-2{grid-template-columns:1fr}.plan-grid{grid-template-columns:1fr}.social-btns{grid-template-columns:1fr}}
+
+/* ============================================================
+   PAGE 3 — LOGIN
+   ============================================================ */
+#page-login{min-height:100vh;padding-top:64px}
+.login-wrap{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.login-shell{width:100%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;border-radius:20px;overflow:hidden;border:1px solid var(--border2)}
+
+/* LEFT BRAND PANEL */
+.login-left{background:linear-gradient(160deg,#1a0a18,#2d0a22,#1a0a2a);padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 30% 40%,rgba(255,45,120,.2),transparent);pointer-events:none}
+.ll-inner{position:relative;z-index:1}
+.ll-brand{display:flex;align-items:center;gap:10px;margin-bottom:40px;cursor:pointer}
+.ll-headline{font-size:28px;font-weight:700;line-height:1.2;margin-bottom:10px}
+.ll-headline span{color:var(--pink)}
+.ll-sub{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:36px}
+.ll-perks{display:flex;flex-direction:column;gap:14px}
+.ll-perk{display:flex;align-items:center;gap:12px}
+.ll-perk-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,45,120,.15);border:1px solid rgba(255,45,120,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ll-perk-info{font-size:13px;color:rgba(255,255,255,.7);line-height:1.4}
+.ll-perk-info strong{display:block;color:#fff;font-size:13px;margin-bottom:1px}
+.ll-bottom{position:relative;z-index:1;margin-top:36px}
+.ll-bunny-bg{font-size:80px;opacity:.06;position:absolute;bottom:-10px;right:-10px;animation:floatY 6s ease-in-out infinite}
+.ll-test{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px}
+.ll-test-stars{color:var(--pink);font-size:12px;letter-spacing:1px;margin-bottom:8px}
+.ll-test-q{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;font-style:italic;margin-bottom:12px}
+.ll-test-author{display:flex;align-items:center;gap:10px}
+.ll-test-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.ll-test-name{font-size:13px;font-weight:600}
+.ll-test-role{font-size:11px;color:var(--text3)}
+
+/* RIGHT FORM PANEL */
+.login-right{background:rgba(16,16,22,.97);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.login-right::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.err-banner{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--error);display:none;animation:fadeIn .3s ease}
+.err-banner.show{display:flex;align-items:center;gap:8px}
+.forgot-row{display:flex;justify-content:flex-end;margin:-6px 0 14px}
+.forgot-lnk{font-size:12px;color:var(--pink);cursor:pointer;transition:opacity .2s}
+.forgot-lnk:hover{opacity:.8;text-decoration:underline}
+.remember-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.remember-row input[type=checkbox]{accent-color:var(--pink);width:16px;height:16px;cursor:pointer}
+.remember-row label{font-size:13px;color:var(--text2);cursor:pointer;text-transform:none;letter-spacing:0;margin:0}
+
+/* FORGOT PANEL */
+.login-main{}.login-forgot{display:none}
+.login-main.hidden{display:none}
+.login-forgot.show{display:block;animation:fadeIn .3s ease}
+.back-lnk{background:none;border:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;padding:0 0 20px;display:flex;align-items:center;gap:6px;transition:color .2s}
+.back-lnk:hover{color:#fff}
+@media(max-width:720px){.login-shell{grid-template-columns:1fr}.login-left{display:none}.login-right{border-radius:20px}}
+
+/* ============================================================
+   PAGE 4 — PLAYER
+   ============================================================ */
+#page-player{padding-top:64px;min-height:100vh}
+
+/* PLAYER */
+.player-wrap{background:#000;position:relative;width:100%}
+.video-box{position:relative;width:100%;max-width:1100px;margin:0 auto;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#000}
+.vid-bg-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8rem;transition:filter .3s;background:linear-gradient(135deg,#1a0510,#2d0a1a,#0a0a1a)}
+.vid-bg-inner.playing{filter:brightness(.65)}
+.vid-blur-preview{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8rem;filter:blur(14px) brightness(.4);transform:scale(1.05);display:none}
+
+/* PROGRESS */
+.vid-prog{position:absolute;bottom:60px;left:0;right:0;height:3px;background:rgba(255,255,255,.15);cursor:pointer;transition:height .2s;z-index:10}
+.vid-prog:hover{height:5px}
+.vid-prog-fill{height:100%;background:var(--pink);width:0%;transition:width .1s linear;position:relative}
+.vid-prog-fill::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:50%;background:var(--pink);opacity:0;transition:opacity .2s}
+.vid-prog:hover .vid-prog-fill::after{opacity:1}
+
+/* CONTROLS */
+.vid-ctrl{position:absolute;bottom:0;left:0;right:0;padding:14px 18px 12px;background:linear-gradient(transparent,rgba(0,0,0,.85));display:flex;align-items:center;gap:10px;opacity:0;transition:opacity .3s;z-index:10}
+.video-box:hover .vid-ctrl,.video-box.paused .vid-ctrl{opacity:1}
+.ctrl-b{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:4px;transition:transform .15s,color .15s;line-height:1}
+.ctrl-b:hover{transform:scale(1.15);color:var(--pink)}
+.ctrl-space{flex:1}
+.time-txt{font-size:13px;color:rgba(255,255,255,.8);white-space:nowrap;min-width:90px}
+.vol-wrap{display:flex;align-items:center;gap:8px}
+.vol-range{width:70px;height:3px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.3);border-radius:2px;cursor:pointer}
+.vol-range::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--pink);cursor:pointer}
+.q-badge{background:rgba(255,45,120,.15);border:1px solid rgba(255,45,120,.4);color:var(--pink);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:5px;cursor:pointer;transition:all .2s}
+.q-badge:hover{background:rgba(255,45,120,.3)}
+.q-badge.free-q{background:rgba(0,200,120,.1);border-color:rgba(0,200,120,.4);color:var(--success)}
+
+/* QUALITY MENU */
+.q-menu{position:absolute;bottom:54px;right:18px;background:rgba(18,18,26,.97);border:1px solid var(--border2);border-radius:10px;overflow:hidden;min-width:165px;display:none;z-index:20;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+.q-menu.open{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.qm-hdr{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+.qm-row{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;transition:background .15s}
+.qm-row:hover{background:rgba(255,255,255,.05)}
+.qm-row.cur{color:var(--pink)}
+.qm-row.locked{color:var(--text3);cursor:default}
+.qm-chk{font-size:12px;color:var(--pink)}
+.qm-lk{font-size:11px;color:var(--text3)}
+.qm-pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.qm-pill.free{background:rgba(0,200,120,.15);color:var(--success)}
+.qm-pill.prem{background:rgba(255,45,120,.15);color:var(--pink)}
+
+/* CENTER PLAY */
+.center-play-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;transition:opacity .3s}
+.center-play-btn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:28px;backdrop-filter:blur(8px)}
+.video-box.playing .center-play-wrap{opacity:0}
+.video-box:hover .center-play-wrap{opacity:1}
+
+/* PAYWALL */
+.paywall-ov{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(10,10,16,.88);backdrop-filter:blur(6px);display:none}
+.pw-card{background:rgba(20,20,28,.98);border:1px solid rgba(255,45,120,.25);border-radius:20px;padding:40px 36px;text-align:center;max-width:400px;width:90%;position:relative;overflow:hidden;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
+.pw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.pw-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,45,120,.08),transparent);pointer-events:none}
+.pw-ico{font-size:44px;margin-bottom:16px;display:block}
+.pw-title{font-size:22px;font-weight:700;margin-bottom:8px}
+.pw-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.pw-price-big{font-size:36px;font-weight:700;color:#fff;margin-bottom:4px}
+.pw-price-big span{font-size:16px;color:var(--text2);font-weight:400}
+.pw-perk-list{display:flex;flex-direction:column;gap:8px;margin:16px 0 24px;text-align:left}
+.pw-perk-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
+.pw-perk-item::before{content:'✓';color:var(--pink);font-weight:700;font-size:13px;width:16px;flex-shrink:0}
+.btn-pw-main{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--pink),#c41060);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-bottom:10px}
+.btn-pw-main:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-pw-ghost{width:100%;padding:12px;border-radius:12px;background:none;border:1px solid var(--border2);color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-pw-ghost:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.pw-pay-methods{margin-top:14px;font-size:11px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px}
+.pw-sep{width:3px;height:3px;background:var(--text3);border-radius:50%}
+
+/* PLAYER CONTENT AREA */
+.player-content{max-width:1100px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.video-title-h{font-size:22px;font-weight:700;margin-bottom:12px}
+.vid-meta-pills{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.vpill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);border:1px solid var(--border);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text2)}
+.vpill.pink{background:rgba(255,45,120,.1);border-color:rgba(255,45,120,.3);color:var(--pink)}
+.vpill.green{background:rgba(0,200,120,.1);border-color:rgba(0,200,120,.3);color:var(--success)}
+.vid-actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.vact-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--text2);padding:9px 16px;border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
+.vact-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+.vact-btn.liked{color:var(--pink);border-color:rgba(255,45,120,.4)}
+.vid-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px;max-width:700px}
+
+/* TABS */
+.info-tabs-row{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.itab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.itab.active{color:#fff;border-bottom-color:var(--pink)}
+.itab:hover:not(.active){color:var(--text2)}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .3s ease}
+
+/* CAST */
+.cast-row{display:flex;gap:16px;flex-wrap:wrap}
+.cast-item{text-align:center;width:80px}
+.cast-av{width:60px;height:60px;border-radius:50%;margin:0 auto 6px;background:linear-gradient(135deg,#2a0a1a,#1a1a2a);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid var(--border2)}
+.cast-nm{font-size:11px;font-weight:600;margin-bottom:2px}
+.cast-rl{font-size:10px;color:var(--text3)}
+
+/* COMMENTS */
+.cmt-input-row{display:flex;gap:10px;margin-bottom:16px}
+.cmt-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.cmt-input{flex:1;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s;resize:none;height:44px;overflow:hidden}
+.cmt-input:focus{border-color:var(--pink)}
+.cmt-post-btn{background:var(--pink);border:none;color:#fff;padding:0 16px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.cmt-post-btn:hover{background:var(--pink2)}
+.cmt-item{display:flex;gap:10px;margin-bottom:14px}
+.cmt-body{flex:1}
+.cmt-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.cmt-text{font-size:13px;color:var(--text2);line-height:1.5}
+.cmt-acts{display:flex;gap:12px;margin-top:6px}
+.cmt-act{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:color .2s}
+.cmt-act:hover{color:var(--pink)}
+
+/* SIDEBAR */
+.player-sidebar{}
+.sidebar-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.up-list{display:flex;flex-direction:column;gap:10px}
+.up-card{display:flex;gap:12px;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;position:relative}
+.up-card:hover{background:rgba(255,255,255,.04)}
+.up-thumb{width:100px;height:64px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;position:relative;overflow:hidden}
+.up-lock-ov{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:14px}
+.up-info{flex:1;min-width:0}
+.up-title{font-size:13px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-meta{font-size:11px;color:var(--text3)}
+.up-bdg{font-size:8px;font-weight:700;letter-spacing:.8px;padding:2px 7px;border-radius:3px;position:absolute;top:8px;left:8px}
+.up-bdg.free{background:rgba(0,200,120,.8);color:#fff}
+.up-bdg.prem{background:rgba(255,45,120,.8);color:#fff}
+.sidebar-sep{height:1px;background:var(--border);margin:18px 0}
+.stream-info-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:16px}
+.si-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px}
+.si-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.si-row:last-child{border-bottom:none}
+.si-label{font-size:12px;color:var(--text2)}
+.si-val{font-size:12px;font-weight:600}
+.si-val.pink{color:var(--pink)}
+.si-val.green{color:var(--success)}
+.btn-upgrade-si{width:100%;padding:10px;background:var(--pink);border:none;color:#fff;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:14px}
+.btn-upgrade-si:hover{background:var(--pink2)}
+@media(max-width:900px){.player-content{grid-template-columns:1fr}.player-sidebar{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SHARED NAV
+     ============================================================ -->
+<nav class="main-nav">
+  <div class="nav-logo" onclick="goTo('home')">
+    <img src="juice-bunny-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <span class="logo-name">Juice Bunny</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a onclick="goTo('home')">Home</a>
+    <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100)">Movies</a>
+    <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100)">Premium</a>
+    <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Pricing</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
+    <button class="btn-nav-signup" id="btnNavSignup" onclick="goTo('signup')">Sign Up</button>
+    <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goTo('signup')">Go Premium</button>
+    <div class="nav-avatar" id="navAvatar">JD</div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     PAGE: HOME
+     ============================================================ -->
+<div id="page-home" class="page active">
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="t-star">★</span>ANYTIME</span>
+      <span class="ticker-item"><span class="t-star">★</span>NO ADS EVER</span>
+      <span class="ticker-item"><span class="t-star">★</span>NEW DROPS WEEKLY</span>
+      <span class="ticker-item"><span class="t-star">★</span>SUBSCRIBE FOR FULL ACCESS</span>
+      <span class="ticker-item"><span class="t-star">★</span>BITCOIN & CCBILL ACCEPTED</span>
+      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD QUALITY</span>
+      <span class="ticker-item"><span class="t-star">★</span>ANYTIME</span>
+      <span class="ticker-item"><span class="t-star">★</span>NO ADS EVER</span>
+      <span class="ticker-item"><span class="t-star">★</span>NEW DROPS WEEKLY</span>
+      <span class="ticker-item"><span class="t-star">★</span>SUBSCRIBE FOR FULL ACCESS</span>
+      <span class="ticker-item"><span class="t-star">★</span>BITCOIN & CCBILL ACCEPTED</span>
+      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD QUALITY</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-h1">Unlimited Premium</div>
+        <div class="hero-h1-pink">Movies &<br/>Entertainment</div>
+        <p class="hero-sub">Immerse yourself in a luxury cinematic experience. Stream exclusive 4K content, award-winning originals, and blockbuster hits on any device.</p>
+        <div class="hero-btns">
+          <button class="btn-hero-watch" onclick="goTo('signup')">▶ Start Watching</button>
+          <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="bunny-wrap">
+          <div class="bunny-glow"></div>
+          <div class="bunny-ring" style="inset:0"></div>
+          <div class="bunny-ring" style="inset:-20px"></div>
+          <div class="bunny-ring" style="inset:-45px"></div>
+          <img src="juice-bunny-logo.png" class="bunny-img" alt="Juice Bunny Mascot" style="border-radius:0;object-fit:contain"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat reveal"><div class="stat-num">10K+</div><div class="stat-lbl">Videos</div></div>
+      <div class="stat reveal reveal-d1"><div class="stat-num">4K</div><div class="stat-lbl">Ultra HD</div></div>
+      <div class="stat reveal reveal-d2"><div class="stat-num">50K+</div><div class="stat-lbl">Members</div></div>
+      <div class="stat reveal reveal-d3"><div class="stat-num">New</div><div class="stat-lbl">Weekly Drops</div></div>
+    </div>
+  </div>
+
+  <!-- TRENDING NOW -->
+  <section class="section" id="trending">
+    <div class="sec-inner">
+      <div class="trending-head">
+        <div>
+          <span class="sec-label reveal">Popular</span>
+          <h2 class="sec-title reveal">Trending <span>Now</span></h2>
+          <p class="sec-sub reveal">Discover the most popular movies and shows.</p>
+        </div>
+        <div class="filter-tabs reveal">
+          <button class="ftab active" onclick="filterMovies(this,'all')">Trending</button>
+          <button class="ftab" onclick="filterMovies(this,'new')">New Releases</button>
+          <button class="ftab" onclick="filterMovies(this,'action')">Action</button>
+          <button class="ftab" onclick="filterMovies(this,'romance')">Romance</button>
+          <button class="ftab" onclick="filterMovies(this,'anime')">Anime</button>
+          <button class="ftab" onclick="filterMovies(this,'originals')">Originals</button>
+        </div>
+      </div>
+      <div class="movie-grid" id="movieGrid"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section bg2-section" id="features">
+    <div class="sec-inner">
+      <div class="feat-center reveal">
+        <h2 class="sec-title">The Premium Viewing <span>Experience</span></h2>
+        <p class="sec-sub">Everything you need for the ultimate entertainment setup, beautifully designed and expertly engineered.</p>
+      </div>
+      <div class="feats-grid">
+        <div class="feat-card reveal"><span class="feat-icon">📺</span><div class="feat-title">4K Ultra HD Streaming</div><div class="feat-desc">Experience cinema-quality visuals with our advanced streaming technology.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🖥️</span><div class="feat-title">Watch Anywhere</div><div class="feat-desc">Seamlessly transition between your TV, phone, tablet, and desktop.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon">⬇️</span><div class="feat-title">Offline Downloads</div><div class="feat-desc">Download your favorite shows and watch them without an internet connection.</div></div>
+        <div class="feat-card reveal"><span class="feat-icon">✨</span><div class="feat-title">Personalized Picks</div><div class="feat-desc">Curated content tailored exactly to your unique viewing preferences.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🤖</span><div class="feat-title">AI Suggestions</div><div class="feat-desc">Our smart AI learns what you love to suggest your next binge.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon">🔒</span><div class="feat-title">100% Private</div><div class="feat-desc">No tracking, no ads, no data selling. Your viewing history is yours alone.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE CONTENT -->
+  <section class="section" id="free-content">
+    <div class="sec-inner">
+      <div class="reveal">
+        <div style="font-size:11px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Sample the vault — no sign up required</div>
+        <div class="free-label-big">FREE CONTENT</div>
+      </div>
+      <div class="free-grid" id="freeGrid"></div>
+    </div>
+  </section>
+
+  <!-- PREMIUM CONTENT -->
+  <section class="section" style="padding-top:0" id="premium-content">
+    <div class="sec-inner">
+      <div class="reveal">
+        <div class="members-bdg">Members Only</div>
+        <div class="prem-title-big">PREMIUM CONTENT</div>
+        <div class="prem-sublabel">Exclusive Drops — Unlock with $3.99/mo</div>
+      </div>
+      <div class="prem-grid" id="premGrid"></div>
+    </div>
+  </section>
+
+  <!-- DEVICES -->
+  <div class="devices-section">
+    <div class="devices-inner">
+      <div class="reveal">
+        <h2 class="dev-h2">Available on all your<br/><span>favorite devices</span></h2>
+        <p class="dev-p">Whether you're at home on the big screen or commuting with your phone, Juice Bunny delivers flawless streaming quality tailored to your device.</p>
+        <ul class="dev-list">
+          <li>Smart TVs & Gaming Consoles</li>
+          <li>Smartphones & Tablets</li>
+          <li>Desktop & Laptops</li>
+        </ul>
+      </div>
+      <div class="reveal reveal-d2">
+        <div class="dev-visual">
+          <div class="dev-screen">🎬</div>
+          <div class="dev-phone">📱</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="sec-inner">
+      <div style="text-align:center;margin-bottom:48px" class="reveal">
+        <h2 class="sec-title">Choose Your <span>Plan</span></h2>
+        <p class="sec-sub" style="margin:8px auto 0">No hidden fees. Cancel anytime. Pay with CCBill or Bitcoin.</p>
+      </div>
+      <div class="pricing-tiers reveal">
+
+        <!-- FREE -->
+        <div class="tier-card">
+          <div class="tier-name">Free</div>
+          <div class="tier-price"><sup>$</sup>0<sub>/mo</sub></div>
+          <div class="tier-desc">Get a taste of Juice Bunny at no cost.</div>
+          <ul class="tier-perks">
+            <li>480p SD streaming</li>
+            <li>Limited free library</li>
+            <li>Stereo audio</li>
+            <li class="no">No exclusive content</li>
+            <li class="no">No 4K quality</li>
+            <li class="no">No model photos</li>
+          </ul>
+          <button class="btn-tier secondary" onclick="goTo('signup')">Start Free</button>
+        </div>
+
+        <!-- PREMIUM $3.99 -->
+        <div class="tier-card featured">
+          <div class="tier-hot">Most Popular</div>
+          <div class="tier-name">Premium</div>
+          <div class="tier-price"><sup>$</sup>3.99<sub>/mo</sub></div>
+          <div class="tier-desc">Full access to all exclusive adult content in stunning 4K.</div>
+          <ul class="tier-perks">
+            <li>4K Ultra HD streaming</li>
+            <li>Full content library</li>
+            <li>Dolby audio</li>
+            <li>All exclusive drops</li>
+            <li>Offline downloads</li>
+            <li class="no">No model photos</li>
+          </ul>
+          <button class="btn-tier primary" onclick="goTo('signup')">Get Premium</button>
+        </div>
+
+        <!-- VIP $10 -->
+        <div class="tier-card vip">
+          <div class="tier-hot vip-hot">✦ VIP</div>
+          <div class="tier-name">VIP Access</div>
+          <div class="tier-price"><sup>$</sup>10<sub>/mo</sub></div>
+          <div class="tier-desc">Everything in Premium plus complimentary model photos every month.</div>
+          <ul class="tier-perks">
+            <li>Everything in Premium</li>
+            <li>4K Ultra HD streaming</li>
+            <li>📸 Complimentary model photos</li>
+            <li>Early access to new drops</li>
+            <li>VIP member badge</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn-tier vip-btn" onclick="goTo('signup')">Go VIP</button>
+        </div>
+
+      </div>
+      <div class="pay-badges reveal" style="margin-top:28px;justify-content:center;display:flex;gap:10px;flex-wrap:wrap">
+        <span class="pay-badge">💳 CCBill</span>
+        <span class="pay-badge">₿ Bitcoin</span>
+        <span class="pay-badge">🔒 256-bit SSL</span>
+        <span class="pay-badge">↩ Cancel Anytime</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section bg2-section">
+    <div class="sec-inner">
+      <div style="text-align:center;margin-bottom:44px" class="reveal">
+        <h2 class="sec-title">Loved by <span>Viewers</span></h2>
+        <p class="sec-sub" style="margin:8px auto 0">Join thousands of satisfied subscribers worldwide.</p>
+      </div>
+      <div class="test-grid">
+        <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-quote">"The streaming quality is absolutely unmatched. The 4K originals feel like I'm sitting in a private theater. Worth every penny."</p><div class="test-author"><div class="test-av">SJ</div><div><div class="test-name">Sarah Jenkins</div><div class="test-role">Movie Enthusiast</div></div></div></div>
+        <div class="test-card reveal reveal-d1"><div class="test-stars">★★★★★</div><p class="test-quote">"Juice Bunny's UI is a masterpiece. It's so smooth, finding something to watch is actually fun instead of a chore."</p><div class="test-author"><div class="test-av">MC</div><div><div class="test-name">Michael Chen</div><div class="test-role">Tech Reviewer</div></div></div></div>
+        <div class="test-card reveal reveal-d2"><div class="test-stars">★★★★☆</div><p class="test-quote">"The personalized recommendations are spot on. I've discovered so many amazing films I wouldn't have found otherwise."</p><div class="test-author"><div class="test-av">ED</div><div><div class="test-name">Emma Davis</div><div class="test-role">Daily Streamer</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="sec-inner">
+      <div style="text-align:center;margin-bottom:40px" class="reveal">
+        <h2 class="sec-title">Frequently Asked <span>Questions</span></h2>
+        <p class="sec-sub" style="margin:8px auto 0">Got questions? We've got answers.</p>
+      </div>
+      <div class="faq-wrap reveal" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-wrap">
+    <div class="cta-card reveal">
+      <img src="juice-bunny-logo.png" class="cta-bunny" alt="" style="border-radius:0;object-fit:contain"/>
+      <div class="cta-inner">
+        <h2 class="cta-h2">Ready to Experience<br/><span>Premium Entertainment?</span></h2>
+        <p class="cta-p">Join Juice Bunny today and unlock a world of cinematic luxury. Your first 7 days are on us.</p>
+        <div class="cta-btns">
+          <button class="btn-cta1" onclick="goTo('signup')">▶ Start Streaming</button>
+          <button class="btn-cta2" onclick="goTo('signup')">Get Premium</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo" onclick="goTo('home')">
+            <img src="juice-bunny-logo.png" style="width:40px;height:40px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,45,120,.5))" alt=""/>
+            <span class="logo-name">Juice Bunny</span>
+          </div>
+          <div class="footer-tagline">RETRO · EXCLUSIVE · UNFILTERED.<br/>YOUR STREAMING PLATFORM<br/>FOR THE BOLD AND CURIOUS.</div>
+          <div class="footer-pay-row">
+            <span class="f-pay">BTC</span><span class="f-pay">VISA</span><span class="f-pay">MC</span><span class="f-pay">GPB</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a onclick="goTo('home')">Home</a>
+          <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100)">Movies</a>
+          <a>TV Shows</a>
+          <a>Originals</a>
+          <a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a>Help Center</a>
+          <a onclick="document.getElementById('faqList').scrollIntoView({behavior:'smooth'})">FAQ</a>
+          <a>Contact Us</a>
+          <a>Supported Devices</a>
+        </div>
+        <div class="footer-col">
+          <div class="f-nl-label">Stay Updated</div>
+          <div class="f-nl-sub">New drops straight to your inbox.</div>
+          <input type="email" class="f-nl-input" placeholder="your@email.com" id="nlEmail"/>
+          <button class="btn-subscribe" onclick="subscribeNewsletter()">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Juice Bunny. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a>Privacy Policy</a>
+          <a>Terms of Service</a>
+          <a>2257 Compliance</a>
+          <a onclick="goTo('unsub')" style="color:var(--error)">Cancel Subscription</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-home -->
+
+<!-- ============================================================
+     PAGE: SIGNUP
+     ============================================================ -->
+<div id="page-signup" class="page">
+  <div class="auth-page-bg"></div>
+  <div class="auth-grid-bg"></div>
+  <div class="signup-wrap">
+    <div class="auth-shell">
+      <div class="auth-card">
+        <div class="auth-header" id="su-header">
+          <div class="auth-icon">🐰</div>
+          <div class="auth-title">Join Juice Bunny</div>
+          <div class="auth-subtitle">Unlock the full experience. Exclusive content awaits.</div>
+        </div>
+        <div class="steps-bar" id="su-steps">
+          <div class="step-item active" id="su-s1"><div class="step-dot">1</div><div class="step-lbl">Account</div></div>
+          <div class="step-item" id="su-s2"><div class="step-dot">2</div><div class="step-lbl">Verify</div></div>
+          <div class="step-item" id="su-s3"><div class="step-dot">3</div><div class="step-lbl">Plan</div></div>
+        </div>
+
+        <!-- PANEL 1 -->
+        <div class="form-panel active" id="su-p1">
+          <div class="social-btns">
+            <button class="btn-social">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google
+            </button>
+            <button class="btn-social">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook
+            </button>
+          </div>
+          <div class="or-divider">or sign up with email</div>
+          <div class="field-row-2">
+            <div class="field-wrap" id="fw-fname"><label>First Name</label><div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="su-fname" placeholder="John" oninput="suValidateName('su-fname','fw-fname')"/></div><div class="field-err">Required</div></div>
+            <div class="field-wrap" id="fw-lname"><label>Last Name</label><div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="su-lname" placeholder="Doe" oninput="suValidateName('su-lname','fw-lname')"/></div><div class="field-err">Required</div></div>
+          </div>
+          <div class="field-wrap" id="fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="su-email" placeholder="john@example.com" oninput="suValidateEmail()"/></div><div class="field-err">Enter a valid email</div></div>
+          <div class="field-wrap" id="fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="su-pass" placeholder="Min. 8 characters" oninput="suCheckStrength()"/><button class="eye-btn" onclick="suTogglePass('su-pass',this)" type="button">👁</button></div><div class="strength-bar"><div class="s-seg" id="ss1"></div><div class="s-seg" id="ss2"></div><div class="s-seg" id="ss3"></div><div class="s-seg" id="ss4"></div></div><div class="s-lbl" id="su-slbl">Enter a password</div><div class="field-err">Min. 8 characters</div></div>
+          <div class="field-wrap" id="fw-conf"><label>Confirm Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="su-conf" placeholder="Repeat password" oninput="suValidateConf()"/><button class="eye-btn" onclick="suTogglePass('su-conf',this)" type="button">👁</button></div><div class="field-err">Passwords don't match</div></div>
+          <button class="btn-submit" onclick="suGoStep2()">Continue →</button>
+          <div class="auth-foot-txt">Already have an account? <a onclick="goTo('login')">Log in</a></div>
+        </div>
+
+        <!-- PANEL 2 -->
+        <div class="form-panel" id="su-p2">
+          <div class="age-gate-box"><div class="age-gate-icon">🔞</div><div class="age-gate-title">Age Verification Required</div><div class="age-gate-text">Juice Bunny contains adult content for mature audiences only. You must be 18+ to continue.</div></div>
+          <div class="field-wrap" id="fw-dob"><label>Date of Birth</label><div class="inp-wrap"><span class="inp-icon">📅</span><input type="date" id="su-dob" onchange="suValidateAge()"/></div><div class="field-hint">You must be 18+ to access this platform</div><div class="field-err">You must be 18 or older</div></div>
+          <div class="field-wrap" id="fw-country"><label>Country</label><div class="inp-wrap"><span class="inp-icon">🌍</span><select id="su-country" onchange="suCheckVerifyBtn()"><option value="">Select your country</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Other</option></select></div></div>
+          <div style="margin-bottom:18px">
+            <div class="check-row age-row"><input type="checkbox" id="su-agecheck" onchange="suCheckVerifyBtn()"/><div class="check-label">I confirm that I am 18 years of age or older and legally permitted to view adult content in my jurisdiction.</div></div>
+            <div class="check-row"><input type="checkbox" id="su-terms" onchange="suCheckVerifyBtn()"/><div class="check-label">I agree to the <a>Terms of Service</a>, <a>Privacy Policy</a>, and <a>2257 Compliance Statement</a>.</div></div>
+            <div class="check-row"><input type="checkbox" id="su-mkt"/><div class="check-label">Send me exclusive deals and new content alerts. (Optional)</div></div>
+          </div>
+          <button class="btn-submit" id="su-verifybtn" onclick="suGoStep3()" disabled>Verify & Continue →</button>
+          <button class="btn-back-step" onclick="suGoPanel(1)">← Back</button>
+        </div>
+
+        <!-- PANEL 3 -->
+        <div class="form-panel" id="su-p3">
+          <div style="text-align:center;margin-bottom:22px"><div style="font-size:16px;font-weight:700;margin-bottom:4px">Choose Your Plan</div><div style="font-size:13px;color:var(--text2)">Start free or go premium. Cancel anytime.</div></div>
+          <div class="plan-grid">
+            <label class="plan-opt" id="po-free" onclick="suSelectPlan('free')"><input type="radio" name="plan" value="free"/><div class="plan-opt-name">Free</div><div class="plan-opt-price">$0<small>/mo</small></div><div class="plan-opt-tag">SD Quality · Limited</div></label>
+            <label class="plan-opt sel" id="po-prem" onclick="suSelectPlan('premium')"><div class="plan-hot">Most Popular</div><input type="radio" name="plan" value="premium" checked/><div class="plan-opt-name">Premium</div><div class="plan-opt-price">$3.99<small>/mo</small></div><div class="plan-opt-tag">4K · Full Access</div></label>
+          </div>
+          <div class="perks-strip" id="su-perks">
+            <div class="perks-title">What you get</div>
+            <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Unlimited 4K Ultra HD streaming</span></div>
+            <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full access to all exclusive content</span></div>
+            <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">New drops every week</span></div>
+            <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Offline downloads included</span></div>
+            <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Cancel anytime, no hidden fees</span></div>
+          </div>
+          <button class="btn-submit" id="su-createbtn" onclick="suCreateAccount()"><span id="su-createtxt">🔥 Create My Account</span></button>
+          <button class="btn-back-step" onclick="suGoPanel(2)">← Back</button>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success-panel" id="su-success">
+          <div class="success-anim">✓</div>
+          <div class="success-title">Welcome to Juice Bunny! 🐰</div>
+          <div class="success-txt">Your account has been created. Time to explore exclusive content made just for you.</div>
+          <button class="btn-goto" onclick="goTo('home');updateNavLoggedIn()">Start Watching →</button>
+        </div>
+      </div>
+      <div class="auth-foot-txt" style="margin-top:16px;font-size:11px;color:var(--text3)">🔒 256-bit SSL encrypted · Your data is safe with us</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE: LOGIN
+     ============================================================ -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-shell">
+      <!-- LEFT -->
+      <div class="login-left">
+        <div class="ll-inner">
+          <div class="ll-brand" onclick="goTo('home')">
+            <img src="juice-bunny-logo.png" style="width:50px;height:50px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,45,120,.5))" alt=""/>
+            <span class="logo-name">Juice Bunny</span>
+          </div>
+          <div class="ll-headline">Welcome back<br/>to <span>Juice Bunny</span></div>
+          <div class="ll-sub">Your exclusive premium entertainment hub. Thousands of titles, new drops weekly, zero ads — ever.</div>
+          <div class="ll-perks">
+            <div class="ll-perk"><div class="ll-perk-icon">🎬</div><div class="ll-perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon">🔒</div><div class="ll-perk-info"><strong>100% Private</strong>No tracking, no ads, ever</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon">⚡</div><div class="ll-perk-info"><strong>New Drops Weekly</strong>Fresh exclusive content every week</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon">₿</div><div class="ll-perk-info"><strong>Pay Your Way</strong>Credit card or Bitcoin accepted</div></div>
+          </div>
+        </div>
+        <div class="ll-bottom">
+          <div class="ll-bunny-bg">🐰</div>
+          <div class="ll-test">
+            <div class="ll-test-stars">★★★★★</div>
+            <div class="ll-test-q">"Best streaming platform I've ever used. The content quality and privacy features are unmatched."</div>
+            <div class="ll-test-author"><div class="ll-test-av">AK</div><div><div class="ll-test-name">Alex K.</div><div class="ll-test-role">Premium Member · 2 years</div></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT -->
+      <div class="login-right">
+        <!-- MAIN LOGIN -->
+        <div class="login-main" id="li-main">
+          <div class="auth-header" style="margin-bottom:22px;text-align:left">
+            <div class="auth-title">Sign in to your account</div>
+            <div class="auth-subtitle">Good to see you again 👋</div>
+          </div>
+          <div class="err-banner" id="li-err"><span>⚠️</span><span id="li-err-msg">Invalid email or password.</span></div>
+          <div class="social-btns">
+            <button class="btn-social"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</button>
+            <button class="btn-social"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</button>
+          </div>
+          <div class="or-divider">or sign in with email</div>
+          <div class="field-wrap" id="li-fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="li-email" placeholder="your@email.com" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/></div><div class="field-err">Enter a valid email</div></div>
+          <div class="field-wrap" id="li-fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="li-pass" placeholder="Your password" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/><button class="eye-btn" onclick="liTogglePass()" type="button">👁</button></div><div class="field-err">Password is required</div></div>
+          <div class="forgot-row"><span class="forgot-lnk" onclick="liShowForgot()">Forgot password?</span></div>
+          <div class="remember-row"><input type="checkbox" id="li-remember"/><label for="li-remember">Keep me signed in</label></div>
+          <button class="btn-submit" id="li-btn" onclick="liDoLogin()"><span id="li-btn-txt">Sign In →</span></button>
+          <div class="auth-foot-txt">New to Juice Bunny? <a onclick="goTo('signup')">Create an account</a></div>
+          <div class="auth-foot-txt" style="margin-top:8px;font-size:11px;color:var(--text3)">🔒 Try: demo@juicebunny.com / password123</div>
+        </div>
+        <!-- FORGOT -->
+        <div class="login-forgot" id="li-forgot">
+          <button class="back-lnk" onclick="liShowMain()">← Back to sign in</button>
+          <div class="auth-header" style="margin-bottom:22px;text-align:left"><div class="auth-title">Reset your password</div><div class="auth-subtitle">We'll send you a reset link.</div></div>
+          <div class="field-wrap" id="li-fw-reset"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="li-reset-email" placeholder="your@email.com"/></div><div class="field-err">Enter a valid email</div></div>
+          <button class="btn-submit" onclick="liDoReset()"><span id="li-reset-txt">Send Reset Link →</span></button>
+          <div class="auth-foot-txt" style="margin-top:14px;font-size:12px;color:var(--text3)">Check your spam folder if you don't see it within a few minutes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE: PLAYER
+     ============================================================ -->
+<div id="page-player" class="page">
+  <div class="player-wrap">
+    <div class="video-box paused" id="vid-box" onclick="vpTogglePlay()">
+      <div class="vid-bg-inner" id="vid-bg">👩‍🎤</div>
+      <div class="vid-blur-preview" id="vid-blur">👩‍🎤</div>
+      <div class="center-play-wrap"><div class="center-play-btn" id="vp-center-btn">▶</div></div>
+      <div class="vid-prog" id="vid-prog" onclick="vpSeek(event)"><div class="vid-prog-fill" id="vid-fill"></div></div>
+      <div class="vid-ctrl" id="vid-ctrl">
+        <button class="ctrl-b" id="vp-play-btn" onclick="vpTogglePlay();event.stopPropagation()">▶</button>
+        <button class="ctrl-b" onclick="vpSkip(-10);event.stopPropagation()" title="−10s">⏪</button>
+        <button class="ctrl-b" onclick="vpSkip(10);event.stopPropagation()" title="+10s">⏩</button>
+        <div class="vol-wrap" onclick="event.stopPropagation()">
+          <button class="ctrl-b" id="vp-mute" onclick="vpToggleMute()">🔊</button>
+          <input type="range" class="vol-range" id="vp-vol" min="0" max="100" value="80" oninput="vpSetVol(this.value)"/>
+        </div>
+        <span class="time-txt" id="vp-time">0:00 / 28:00</span>
+        <div class="ctrl-space"></div>
+        <div style="position:relative;z-index:15" onclick="event.stopPropagation()">
+          <button class="q-badge free-q" id="vp-q-btn" onclick="vpToggleQMenu()">480p SD</button>
+          <div class="q-menu" id="vp-q-menu">
+            <div class="qm-hdr">Video Quality</div>
+            <div class="qm-row cur" onclick="vpSetQuality('480p','free')"><span>480p SD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill free">FREE</span><span class="qm-chk" id="qc-480">✓</span></div></div>
+            <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>720p HD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
+            <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>1080p FHD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
+            <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>4K Ultra HD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
+          </div>
+        </div>
+        <button class="ctrl-b" onclick="vpFullscreen();event.stopPropagation()" title="Fullscreen">⛶</button>
+      </div>
+      <div class="paywall-ov" id="vp-paywall">
+        <div class="pw-card">
+          <span class="pw-ico">🔒</span>
+          <div class="pw-title">Members Only Content</div>
+          <div class="pw-sub">You've watched your free preview. Subscribe to continue watching this and all exclusive content.</div>
+          <div class="pw-price-big">$3.99<span>/month</span></div>
+          <div class="pw-perk-list">
+            <div class="pw-perk-item">Unlimited 4K Ultra HD streaming</div>
+            <div class="pw-perk-item">Full access to all exclusive content</div>
+            <div class="pw-perk-item">New drops every week</div>
+            <div class="pw-perk-item">Download for offline viewing</div>
+            <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
+          </div>
+          <button class="btn-pw-main" onclick="goTo('signup')">🔥 Unlock Full Access — $3.99/mo</button>
+          <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
+          <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="player-content">
+    <div>
+      <div class="video-title-h" id="vp-title">Neon Dreams</div>
+      <div class="vid-meta-pills">
+        <span class="vpill pink" id="vp-access-pill">🔒 Premium</span>
+        <span class="vpill"><span style="color:#f5c518">★</span> 4.9</span>
+        <span class="vpill">28 min</span>
+        <span class="vpill">Sci-Fi</span>
+        <span class="vpill">2024</span>
+        <span class="vpill" id="vp-q-pill">480p SD</span>
+      </div>
+      <div class="vid-actions-row">
+        <button class="vact-btn" id="vp-like-btn" onclick="vpToggleLike()">♡ Like</button>
+        <button class="vact-btn" onclick="vpWatchlist()">+ Watchlist</button>
+        <button class="vact-btn" onclick="vpShare()">↗ Share</button>
+        <button class="vact-btn" onclick="goTo('home')">← Back</button>
+      </div>
+      <p class="vid-desc">A hypnotic journey through neon-drenched dreamscapes where reality dissolves into art. Follow the untold story of an underground dancer who discovers her performances are unlocking dormant memories of a parallel life. Shot in stunning 4K with a score that pulses like a heartbeat.</p>
+      <div class="info-tabs-row">
+        <button class="itab active" onclick="vpSwitchTab('details',this)">Details</button>
+        <button class="itab" onclick="vpSwitchTab('cast',this)">Cast</button>
+        <button class="itab" onclick="vpSwitchTab('comments',this)">Comments (12)</button>
+      </div>
+      <div class="tab-pane active" id="vp-tab-details">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px">
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Director</div><div style="font-size:14px;font-weight:500">Amara Osei</div></div>
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Year</div><div style="font-size:14px;font-weight:500">2024</div></div>
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Genre</div><div style="font-size:14px;font-weight:500">Sci-Fi · Drama</div></div>
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Runtime</div><div style="font-size:14px;font-weight:500">28 minutes</div></div>
+        </div>
+        <div style="padding:16px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:10px;font-size:13px;color:var(--text2)">🔞 <strong style="color:#fff">18+ Content.</strong> This video contains explicit adult content for mature audiences only.</div>
+      </div>
+      <div class="tab-pane" id="vp-tab-cast">
+        <div class="cast-row">
+          <div class="cast-item"><div class="cast-av">👩‍🎤</div><div class="cast-nm">Zara Monroe</div><div class="cast-rl">Lead</div></div>
+          <div class="cast-item"><div class="cast-av">🧔</div><div class="cast-nm">Marcus Reid</div><div class="cast-rl">Supporting</div></div>
+          <div class="cast-item"><div class="cast-av">👩</div><div class="cast-nm">Lyra Stone</div><div class="cast-rl">Supporting</div></div>
+          <div class="cast-item"><div class="cast-av">🧑</div><div class="cast-nm">Dev Kapoor</div><div class="cast-rl">Cameo</div></div>
+        </div>
+      </div>
+      <div class="tab-pane" id="vp-tab-comments">
+        <div class="cmt-input-row"><div class="cmt-av">JD</div><textarea class="cmt-input" id="cmt-input" placeholder="Share your thoughts..." oninput="vpAutoResize(this)"></textarea><button class="cmt-post-btn" onclick="vpPostComment()">Post</button></div>
+        <div id="cmt-list">
+          <div class="cmt-item"><div class="cmt-av" style="background:linear-gradient(135deg,#1a3a5c,#0a1a3a)">SK</div><div class="cmt-body"><div class="cmt-name">Sarah K. <span style="font-size:11px;color:var(--text3);font-weight:400">· 2 days ago</span></div><div class="cmt-text">Absolutely breathtaking cinematography. The neon lighting is on another level. 🔥</div><div class="cmt-acts"><button class="cmt-act" onclick="vpLikeCmt(this)">♡ 24</button><button class="cmt-act">Reply</button></div></div></div>
+          <div class="cmt-item"><div class="cmt-av" style="background:linear-gradient(135deg,#1a2a1a,#0a1a0a)">MJ</div><div class="cmt-body"><div class="cmt-name">Mike J. <span style="font-size:11px;color:var(--text3);font-weight:400">· 5 days ago</span></div><div class="cmt-text">The score is incredible. Need a full album release ASAP.</div><div class="cmt-acts"><button class="cmt-act" onclick="vpLikeCmt(this)">♡ 18</button><button class="cmt-act">Reply</button></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="player-sidebar">
+      <div class="sidebar-title">Up Next</div>
+      <div class="up-list" id="vp-up-next"></div>
+      <div class="sidebar-sep"></div>
+      <div class="stream-info-card">
+        <div class="si-title">Stream Info</div>
+        <div class="si-row"><span class="si-label">Current Quality</span><span class="si-val green" id="si-current">480p SD</span></div>
+        <div class="si-row"><span class="si-label">Max Available</span><span class="si-val pink">4K UHD 🔒</span></div>
+        <div class="si-row"><span class="si-label">Your Plan</span><span class="si-val" style="color:var(--text3)">Free</span></div>
+        <div class="si-row"><span class="si-label">Bitrate</span><span class="si-val green">2 Mbps</span></div>
+        <button class="btn-upgrade-si" onclick="goTo('signup')">Upgrade to 4K →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ADMIN BROADCAST BTN (visible after login as admin) -->
+<button class="admin-broadcast-btn" id="broadcastBtn" onclick="openBroadcast()">📢 Broadcast</button>
+
+<!-- TOAST -->
+<div class="toast" id="globalToast"></div>
+
+<!-- ============================================================
+     BROADCAST MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="broadcastModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">📢 Send Announcement</div>
+        <div class="modal-sub">Email or text all your subscribers at once</div>
+      </div>
+      <button class="modal-close" onclick="closeBroadcast()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="mtab active" onclick="switchBcTab('email',this)">✉️ Email</button>
+        <button class="mtab" onclick="switchBcTab('sms',this)">📱 SMS / Text</button>
+      </div>
+
+      <!-- EMAIL TAB -->
+      <div class="mtab-pane active" id="bc-email">
+        <div class="bc-field">
+          <span class="bc-label">Send to</span>
+          <div class="seg-btns">
+            <button class="seg-btn active" onclick="bcSelectSeg(this,'all')">All Members (1,240)</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'premium')">Premium (820)</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'vip')">VIP (180)</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'free')">Free (240)</button>
+          </div>
+        </div>
+        <div class="bc-field">
+          <span class="bc-label">Subject Line</span>
+          <input type="text" class="bc-input" id="bc-email-subject" placeholder="e.g. 🔥 New drop just landed — don't miss it!"/>
+        </div>
+        <div class="bc-field">
+          <span class="bc-label">Message</span>
+          <textarea class="bc-input" id="bc-email-body" rows="5" placeholder="Write your announcement here...&#10;&#10;You can mention new content, special offers, or VIP perks."></textarea>
+          <div class="bc-hint">Personalization tags: {first_name}, {plan_name}</div>
+        </div>
+        <div class="bc-recipients">
+          Sending to: <span class="bc-count" id="bc-email-count">1,240 subscribers</span>
+        </div>
+        <button class="btn-send" id="bc-email-send" onclick="bcSendEmail()">
+          <span>✉️</span> Send Email Now
+        </button>
+      </div>
+
+      <!-- SMS TAB -->
+      <div class="mtab-pane" id="bc-sms">
+        <div class="bc-field">
+          <span class="bc-label">Send to</span>
+          <div class="seg-btns">
+            <button class="seg-btn active" onclick="bcSelectSmsSeg(this,'all')">All Members (1,240)</button>
+            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'premium')">Premium (820)</button>
+            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'vip')">VIP (180)</button>
+          </div>
+        </div>
+        <div class="bc-field">
+          <span class="bc-label">Text Message</span>
+          <textarea class="bc-input" id="bc-sms-body" rows="4" placeholder="Keep it short! e.g. &#10;Juice Bunny 🐰: New VIP content just dropped! Watch now 👉 juicebunny.com" maxlength="160" oninput="bcCountChars(this)"></textarea>
+          <div class="bc-hint" id="bc-sms-chars">0 / 160 characters</div>
+        </div>
+        <div class="bc-field" style="background:rgba(255,200,50,.05);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:12px">
+          <div style="font-size:12px;color:#ffc832;font-weight:600;margin-bottom:4px">⚠️ SMS requires Twilio integration</div>
+          <div style="font-size:12px;color:var(--text2)">Add your Twilio Account SID and Auth Token in Settings to activate SMS sending.</div>
+        </div>
+        <div class="bc-recipients">
+          Sending to: <span class="bc-count" id="bc-sms-count">1,240 subscribers</span>
+        </div>
+        <button class="btn-send" id="bc-sms-send" onclick="bcSendSMS()">
+          <span>📱</span> Send Text Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE: UNSUBSCRIBE RETENTION
+     ============================================================ -->
+<div id="page-unsub" class="page">
+  <div class="unsub-wrap">
+
+    <!-- STEP 1: First offer -->
+    <div class="unsub-step active" id="unsub-s1">
+      <span class="unsub-bunny">🐰</span>
+      <h2 class="unsub-title">Wait — don't go <span>just yet!</span></h2>
+      <p class="unsub-sub">We'd hate to see you leave. Before you cancel, here are some exclusive offers we've put together just for you.</p>
+      <div class="unsub-offers">
+        <div class="offer-card" onclick="unsubAcceptOffer('pause')">
+          <span class="offer-icon">⏸️</span>
+          <div class="offer-title">Pause Your Subscription</div>
+          <div class="offer-desc">Not ready to commit right now? Pause for up to 3 months and come back whenever you want.</div>
+          <span class="offer-badge">No Charge While Paused</span>
+        </div>
+        <div class="offer-card" onclick="unsubAcceptOffer('discount')">
+          <span class="offer-icon">🎁</span>
+          <div class="offer-title">Get 50% Off Next Month</div>
+          <div class="offer-desc">Stay for just $1.99 next month. Full premium access, half the price. One-time offer.</div>
+          <span class="offer-badge">Limited Time Offer</span>
+        </div>
+        <div class="offer-card" onclick="unsubAcceptOffer('downgrade')">
+          <span class="offer-icon">⬇️</span>
+          <div class="offer-title">Switch to Free Plan</div>
+          <div class="offer-desc">Keep your account and access our free library. No charge, no commitment.</div>
+          <span class="offer-badge">Always Free</span>
+        </div>
+        <div class="offer-card" onclick="unsubAcceptOffer('vip')">
+          <span class="offer-icon">✨</span>
+          <div class="offer-title">Try VIP for Free</div>
+          <div class="offer-desc">Upgrade to VIP including exclusive model photos — free for 7 days, then $10/mo.</div>
+          <span class="offer-badge">7-Day Free Trial</span>
+        </div>
+      </div>
+      <div class="unsub-btns">
+        <button class="btn-stay" onclick="unsubGoStep(2)">See More Reasons to Stay →</button>
+        <button class="btn-still-unsub" onclick="unsubGoStep(3)">No thanks, continue cancelling</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Second offer / feedback -->
+    <div class="unsub-step" id="unsub-s2">
+      <span class="unsub-bunny">😢</span>
+      <h2 class="unsub-title">Help us <span>do better</span></h2>
+      <p class="unsub-sub">Tell us why you're leaving and we'll do our best to fix it. Your feedback shapes what we build next.</p>
+      <div class="unsub-offers" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="offer-card" onclick="unsubSelectReason(this,'Too expensive')">
+          <span class="offer-icon">💸</span>
+          <div class="offer-title">Too Expensive</div>
+        </div>
+        <div class="offer-card" onclick="unsubSelectReason(this,'Not enough content')">
+          <span class="offer-icon">🎬</span>
+          <div class="offer-title">Not Enough Content</div>
+        </div>
+        <div class="offer-card" onclick="unsubSelectReason(this,'Technical issues')">
+          <span class="offer-icon">⚙️</span>
+          <div class="offer-title">Technical Issues</div>
+        </div>
+        <div class="offer-card" onclick="unsubSelectReason(this,'Just a break')">
+          <span class="offer-icon">😴</span>
+          <div class="offer-title">Just Taking a Break</div>
+        </div>
+        <div class="offer-card" onclick="unsubSelectReason(this,'Found something else')">
+          <span class="offer-icon">🔍</span>
+          <div class="offer-title">Found Something Else</div>
+        </div>
+        <div class="offer-card" onclick="unsubSelectReason(this,'Other')">
+          <span class="offer-icon">💬</span>
+          <div class="offer-title">Other Reason</div>
+        </div>
+      </div>
+      <div class="bc-field" style="max-width:480px;margin:0 auto 28px">
+        <textarea class="bc-input" id="unsub-feedback" rows="3" placeholder="Anything else you'd like to tell us? (optional)"></textarea>
+      </div>
+      <div class="unsub-btns">
+        <button class="btn-stay" onclick="unsubGoHome()">🐰 Actually, I'll Stay!</button>
+        <button class="btn-still-unsub" onclick="unsubGoStep(3)">Continue with cancellation</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Confirmed cancelled -->
+    <div class="unsub-step" id="unsub-s3">
+      <span class="unsub-sad">😞</span>
+      <h2 class="unsub-title">You've been <span>unsubscribed</span></h2>
+      <p class="unsub-sub">We're sorry to see you go. Your subscription has been cancelled and you won't be charged again. Your access continues until the end of your billing period.</p>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:24px;max-width:400px;margin:0 auto 32px;text-align:left">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">📅 Access ends: <strong style="color:#fff">June 16, 2025</strong></div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">💳 No further charges</div>
+        <div style="font-size:13px;color:var(--text2)">📧 Confirmation sent to your email</div>
+      </div>
+      <div class="unsub-btns">
+        <button class="btn-stay" onclick="unsubGoHome()">Rejoin Juice Bunny</button>
+        <button class="btn-still-unsub" onclick="goTo('home')">Back to Home</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0,0);
+  if(page === 'home') initReveal();
+  if(page === 'player') { vpBuildUpNext(); vpUpdateTime(); }
+  if(page === 'unsub') { unsubGoStep(1); }
+}
+
+/* ============================================================
+   NAV STATE
+   ============================================================ */
+let isLoggedIn = false;
+function updateNavLoggedIn() {
+  isLoggedIn = true;
+  document.getElementById('btnNavLogin').style.display = 'none';
+  document.getElementById('btnNavSignup').style.display = 'none';
+  document.getElementById('btnNavUpgrade').style.display = 'block';
+  document.getElementById('navAvatar').style.display = 'flex';
+  // Show broadcast button for admin
+  const bc = document.getElementById('broadcastBtn');
+  bc.style.display = 'flex';
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function showToast(msg, isErr) {
+  const t = document.getElementById('globalToast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' error' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ============================================================
+   HOME DATA
+   ============================================================ */
+const moviesData = [
+  {title:'Neon Dreams',rating:'4.9',genre:'Sci-Fi',premium:true,bg:'linear-gradient(135deg,#3a0a1a,#6a1a3a)',emoji:'👩‍🎤',cat:'all'},
+  {title:'Velocity',rating:'4.7',genre:'Action',premium:false,bg:'linear-gradient(135deg,#0a0a1a,#1a1a3a)',emoji:'🏙️',cat:'action'},
+  {title:'Cyber City',rating:'4.8',genre:'Cyberpunk',premium:true,bg:'linear-gradient(135deg,#0a1a2a,#0a2a3a)',emoji:'🌆',cat:'action'},
+  {title:'Midnight Romance',rating:'4.5',genre:'Romance',premium:false,bg:'linear-gradient(135deg,#1a0a0a,#2a0a1a)',emoji:'🌙',cat:'romance'},
+  {title:'Shadow Protocol',rating:'4.6',genre:'Thriller',premium:true,bg:'linear-gradient(135deg,#0a0a0a,#1a0a1a)',emoji:'🕵️',cat:'originals'},
+  {title:'Scarlet Moon',rating:'4.9',genre:'Romance',premium:true,bg:'linear-gradient(135deg,#2a0a1a,#3a0a2a)',emoji:'🌹',cat:'romance'},
+  {title:'Uprising',rating:'4.4',genre:'Action',premium:false,bg:'linear-gradient(135deg,#1a0a0a,#2a0a0a)',emoji:'💥',cat:'action'},
+  {title:'Phantom Signal',rating:'4.7',genre:'Anime',premium:true,bg:'linear-gradient(135deg,#0a1a0a,#1a2a1a)',emoji:'⚡',cat:'anime'},
+];
+const freeData = [
+  {title:'MIDNIGHT CIRCUIT',meta:'FREE · 4K · 28 MIN',bg:'linear-gradient(135deg,#0a0a0a,#1a1a2a)',emoji:'🎭',dur:'28 MIN'},
+  {title:'TAPE LOOP NO.7',meta:'FREE · HD · 15 MIN',bg:'linear-gradient(135deg,#0d0a0a,#1a0a0a)',emoji:'🎸',dur:'15 MIN'},
+  {title:'SIGNAL LOST',meta:'FREE · 4K · 11 MIN',bg:'linear-gradient(135deg,#0a1a0a,#1a2a1a)',emoji:'📡',dur:'11 MIN'},
+];
+const premData = [
+  {bg:'linear-gradient(135deg,#1a0a0a,#3a0a1a)',emoji:'🔥',yr:'2024'},
+  {bg:'linear-gradient(135deg,#0a0a1a,#1a0a2a)',emoji:'⚡',yr:'2023'},
+  {bg:'linear-gradient(135deg,#1a0a1a,#2a0a2a)',emoji:'💋',yr:'2024'},
+];
+const faqData = [
+  {q:'Can I cancel anytime?',a:'Yes, cancel at any time with no hidden fees. Your premium access continues until the end of your billing cycle.'},
+  {q:'Is offline viewing supported?',a:'Yes! Premium subscribers can download content and watch offline on mobile and tablet.'},
+  {q:'How many devices are allowed?',a:'Stream on up to 3 devices simultaneously with a single premium subscription.'},
+  {q:'Is there a free trial?',a:'Yes! Enjoy your first 7 days completely free. No charge until your trial ends.'},
+  {q:'What payment methods are accepted?',a:'We accept credit cards via CCBill and Bitcoin through our secure crypto gateway.'},
+  {q:'What video quality is included?',a:'Free users get 480p SD. Premium unlocks 720p, 1080p FHD, and 4K Ultra HD.'},
+];
+
+function buildMovieGrid(filter='all') {
+  const grid = document.getElementById('movieGrid');
+  const list = filter==='all' ? moviesData : moviesData.filter(m=>m.cat===filter||m.cat==='all');
+  grid.innerHTML = list.map(m=>`
+    <div class="movie-card" onclick="goTo('player')">
+      <div class="movie-thumb" style="background:${m.bg}">${m.emoji}</div>
+      ${m.premium?'<span class="movie-badge">Premium</span>':'<span class="movie-badge free-badge">Free</span>'}
+      <div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta-r"><span class="star-g">★</span>${m.rating}<span class="dot3"></span>${m.genre}</div></div>
+    </div>`).join('');
+}
+function buildFreeGrid() {
+  document.getElementById('freeGrid').innerHTML = freeData.map(v=>`
+    <div class="free-card" onclick="goTo('player')">
+      <div class="free-thumb" style="background:${v.bg}">${v.emoji}
+        <span class="free-bdg">Free</span><span class="free-dur">${v.dur}</span>
+        <div class="free-play-ov"><div class="play-circle">▶</div></div>
+      </div>
+      <div class="free-info"><div class="free-card-title">${v.title}</div><div class="free-card-meta">${v.meta}</div></div>
+    </div>`).join('');
+}
+function buildPremGrid() {
+  document.getElementById('premGrid').innerHTML = premData.map(v=>`
+    <div class="prem-card" onclick="goTo('player')">
+      <div class="prem-thumb" style="background:${v.bg}">${v.emoji}
+        <span class="prem-bdg">Members</span><span class="prem-yr">${v.yr}</span>
+        <div class="lock-ov"><div class="lock-circle">🔒</div></div>
+      </div>
+    </div>`).join('');
+}
+function buildFAQ() {
+  document.getElementById('faqList').innerHTML = faqData.map((f,i)=>`
+    <div class="faq-item" id="fq${i}">
+      <button class="faq-q" onclick="toggleFaq(${i})">${f.q}<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">${f.a}</div>
+    </div>`).join('');
+  document.getElementById('fq0').classList.add('open');
+}
+function toggleFaq(i) {
+  const el=document.getElementById('fq'+i), was=el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(e=>e.classList.remove('open'));
+  if(!was) el.classList.add('open');
+}
+function filterMovies(btn,cat) {
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  buildMovieGrid(cat);
+}
+function subscribeNewsletter() {
+  const inp=document.getElementById('nlEmail');
+  if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim())){
+    showToast('✓ Subscribed! Check your inbox.');
+    inp.value='';
+  } else {
+    inp.style.borderColor='var(--error)';
+    setTimeout(()=>inp.style.borderColor='',1500);
+  }
+}
+
+/* SCROLL REVEAL */
+function initReveal() {
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}});
+  },{threshold:.1});
+  document.querySelectorAll('#page-home .reveal').forEach(el=>{if(!el.classList.contains('visible'))io.observe(el)});
+}
+window.addEventListener('scroll',()=>{
+  document.getElementById('scrollTopBtn').classList.toggle('show',window.scrollY>400);
+});
+
+/* ============================================================
+   SIGNUP LOGIC
+   ============================================================ */
+function suGoPanel(n) {
+  document.querySelectorAll('#page-signup .form-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('su-p'+n).classList.add('active');
+  for(let i=1;i<=3;i++){
+    const s=document.getElementById('su-s'+i);
+    s.className='step-item'+(i<n?' done':i===n?' active':'');
+  }
+}
+function suValidateName(id,fw){
+  const v=document.getElementById(id).value.trim();
+  const f=document.getElementById(fw);
+  f.classList.toggle('err',v.length===0);
+  f.classList.toggle('ok',v.length>0);
+}
+function suValidateEmail(){
+  const v=document.getElementById('su-email').value;
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const f=document.getElementById('fw-email');
+  f.classList.toggle('err',!ok&&v.length>0);
+  f.classList.toggle('ok',ok);
+}
+function suCheckStrength(){
+  const v=document.getElementById('su-pass').value;
+  const cols=['#ff4757','#ffa502','#eccc68','#00c878'],labs=['Too weak','Fair','Good','Strong'];
+  let sc=0;if(v.length>=8)sc++;if(/[A-Z]/.test(v))sc++;if(/[0-9]/.test(v))sc++;if(/[^A-Za-z0-9]/.test(v))sc++;
+  ['ss1','ss2','ss3','ss4'].forEach((s,i)=>{document.getElementById(s).style.background=i<sc?cols[sc-1]:'rgba(255,255,255,.08)'});
+  const lbl=document.getElementById('su-slbl');
+  lbl.textContent=v.length===0?'Enter a password':labs[sc-1]||'Too weak';
+  lbl.style.color=sc>0?cols[sc-1]:'var(--text3)';
+  const f=document.getElementById('fw-pass');
+  f.classList.toggle('err',v.length>0&&v.length<8);
+  f.classList.toggle('ok',sc>=2);
+}
+function suValidateConf(){
+  const p=document.getElementById('su-pass').value,c=document.getElementById('su-conf').value;
+  const f=document.getElementById('fw-conf');
+  f.classList.toggle('err',c.length>0&&p!==c);
+  f.classList.toggle('ok',c.length>0&&p===c);
+}
+function suTogglePass(id,btn){
+  const inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+  btn.textContent=inp.type==='password'?'👁':'🙈';
+}
+function suGoStep2(){
+  const fname=document.getElementById('su-fname').value.trim();
+  const lname=document.getElementById('su-lname').value.trim();
+  const email=document.getElementById('su-email').value;
+  const pass=document.getElementById('su-pass').value;
+  const conf=document.getElementById('su-conf').value;
+  let ok=true;
+  if(!fname){document.getElementById('fw-fname').classList.add('err');ok=false}
+  if(!lname){document.getElementById('fw-lname').classList.add('err');ok=false}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('fw-email').classList.add('err');ok=false}
+  if(pass.length<8){document.getElementById('fw-pass').classList.add('err');ok=false}
+  if(pass!==conf){document.getElementById('fw-conf').classList.add('err');ok=false}
+  if(ok) suGoPanel(2);
+}
+function suValidateAge(){
+  const dob=new Date(document.getElementById('su-dob').value),today=new Date();
+  let age=today.getFullYear()-dob.getFullYear();
+  const m=today.getMonth()-dob.getMonth();
+  if(m<0||(m===0&&today.getDate()<dob.getDate()))age--;
+  const f=document.getElementById('fw-dob');
+  f.classList.toggle('err',age<18);
+  f.classList.toggle('ok',age>=18);
+  suCheckVerifyBtn();
+}
+function suCheckVerifyBtn(){
+  const ageOk=document.getElementById('fw-dob').classList.contains('ok');
+  const ageCheck=document.getElementById('su-agecheck').checked;
+  const terms=document.getElementById('su-terms').checked;
+  const country=document.getElementById('su-country').value;
+  document.getElementById('su-verifybtn').disabled=!(ageOk&&ageCheck&&terms&&country);
+}
+function suGoStep3(){suGoPanel(3)}
+function suSelectPlan(plan){
+  document.getElementById('po-free').classList.toggle('sel',plan==='free');
+  document.getElementById('po-prem').classList.toggle('sel',plan==='premium');
+  const perks=document.getElementById('su-perks');
+  if(plan==='free'){
+    perks.innerHTML=`<div class="perks-title">Free includes</div>
+      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">480p SD streaming only</span></div>
+      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">Limited free library</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Upgrade to Premium anytime</span></div>`;
+    document.getElementById('su-createtxt').textContent='Create Free Account';
+  } else {
+    perks.innerHTML=`<div class="perks-title">What you get</div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Unlimited 4K Ultra HD streaming</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full access to all exclusive content</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">New drops every week</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Offline downloads included</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Cancel anytime, no hidden fees</span></div>`;
+    document.getElementById('su-createtxt').textContent='🔥 Create My Account';
+  }
+}
+function suCreateAccount(){
+  const btn=document.getElementById('su-createbtn');
+  btn.disabled=true;
+  document.getElementById('su-createtxt').textContent='Creating account...';
+  setTimeout(()=>{
+    document.querySelectorAll('#page-signup .form-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('su-steps').style.display='none';
+    document.getElementById('su-header').style.display='none';
+    document.getElementById('su-success').style.display='block';
+  },1800);
+}
+
+/* ============================================================
+   LOGIN LOGIC
+   ============================================================ */
+function liClearErr(){document.getElementById('li-err').classList.remove('show')}
+function liTogglePass(){
+  const inp=document.getElementById('li-pass'),btn=document.querySelector('#li-main .eye-btn');
+  inp.type=inp.type==='password'?'text':'password';
+  if(btn) btn.textContent=inp.type==='password'?'👁':'🙈';
+}
+function liDoLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  let ok=true;
+  document.getElementById('li-fw-email').classList.remove('err');
+  document.getElementById('li-fw-pass').classList.remove('err');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('li-fw-email').classList.add('err');ok=false}
+  if(!pass){document.getElementById('li-fw-pass').classList.add('err');ok=false}
+  if(!ok) return;
+  const btn=document.getElementById('li-btn');
+  btn.disabled=true;
+  document.getElementById('li-btn-txt').textContent='Signing in...';
+  setTimeout(()=>{
+    if(email==='demo@juicebunny.com'&&pass==='password123'){
+      showToast('✓ Signed in! Welcome back.');
+      updateNavLoggedIn();
+      setTimeout(()=>goTo('home'),1200);
+    } else {
+      document.getElementById('li-err').classList.add('show');
+      document.getElementById('li-err-msg').textContent='Invalid email or password. Try demo@juicebunny.com / password123';
+      btn.disabled=false;
+      document.getElementById('li-btn-txt').textContent='Sign In →';
+    }
+  },1200);
+}
+function liShowForgot(){
+  document.getElementById('li-main').classList.add('hidden');
+  document.getElementById('li-forgot').classList.add('show');
+}
+function liShowMain(){
+  document.getElementById('li-forgot').classList.remove('show');
+  document.getElementById('li-main').classList.remove('hidden');
+}
+function liDoReset(){
+  const email=document.getElementById('li-reset-email').value.trim();
+  const f=document.getElementById('li-fw-reset');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){f.classList.add('err');return}
+  f.classList.remove('err');
+  document.getElementById('li-reset-txt').textContent='Sending...';
+  setTimeout(()=>{
+    showToast('✓ Reset link sent! Check your inbox.');
+    setTimeout(liShowMain,1800);
+    document.getElementById('li-reset-txt').textContent='Send Reset Link →';
+  },1200);
+}
+
+/* ============================================================
+   PLAYER LOGIC
+   ============================================================ */
+let vpPlaying=false,vpMuted=false,vpTime=0,vpDuration=28*60,vpInterval=null,vpPaywallShown=false;
+const vpUpNextData=[
+  {title:'Velocity',genre:'Action',dur:'1h 15m',prem:false,bg:'linear-gradient(135deg,#0a0a1a,#1a1a3a)',emoji:'🏙️'},
+  {title:'Cyber City',genre:'Cyberpunk',dur:'52 min',prem:true,bg:'linear-gradient(135deg,#0a1a2a,#0a2a3a)',emoji:'🌆'},
+  {title:'Midnight Romance',genre:'Romance',dur:'44 min',prem:true,bg:'linear-gradient(135deg,#1a0a0a,#2a0a1a)',emoji:'🌙'},
+  {title:'Shadow Protocol',genre:'Thriller',dur:'1h 8m',prem:true,bg:'linear-gradient(135deg,#0a0a0a,#1a0a1a)',emoji:'🕵️'},
+  {title:'Tape Loop No.7',genre:'Experimental',dur:'15 min',prem:false,bg:'linear-gradient(135deg,#0d0a0a,#1a0a0a)',emoji:'🎸'},
+];
+function vpBuildUpNext(){
+  document.getElementById('vp-up-next').innerHTML=vpUpNextData.map((v,i)=>`
+    <div class="up-card" onclick="vpLoadVideo(${i})">
+      <div class="up-thumb" style="background:${v.bg}">${v.emoji}${v.prem?'<div class="up-lock-ov">🔒</div>':''}</div>
+      <div class="up-info"><div class="up-title">${v.title}</div><div class="up-meta">${v.genre} · ${v.dur}</div></div>
+      <span class="up-bdg ${v.prem?'prem':'free'}">${v.prem?'MEMBERS':'FREE'}</span>
+    </div>`).join('');
+}
+function vpLoadVideo(i){
+  const v=vpUpNextData[i];
+  document.getElementById('vp-title').textContent=v.title;
+  document.getElementById('vid-bg').textContent=v.emoji;
+  vpStop();vpTime=0;vpPaywallShown=false;
+  vpUpdateTime();
+  document.getElementById('vid-fill').style.width='0%';
+  document.getElementById('vp-paywall').style.display='none';
+  document.getElementById('vid-blur').style.display='none';
+  const pill=document.getElementById('vp-access-pill');
+  if(v.prem){pill.innerHTML='🔒 Premium';pill.className='vpill pink';}
+  else{pill.innerHTML='✓ Free';pill.className='vpill green';}
+  showToast('Loading: '+v.title);
+}
+function vpTogglePlay(){
+  if(vpPlaying) vpStop(); else vpStart();
+}
+function vpStart(){
+  vpPlaying=true;
+  const box=document.getElementById('vid-box');
+  box.classList.remove('paused');box.classList.add('playing');
+  document.getElementById('vp-play-btn').textContent='⏸';
+  document.getElementById('vp-center-btn').textContent='⏸';
+  document.getElementById('vid-bg').classList.add('playing');
+  vpInterval=setInterval(()=>{
+    vpTime++;
+    const isPrem=document.getElementById('vp-access-pill').innerHTML.includes('Premium');
+    if(isPrem&&vpTime>=30&&!vpPaywallShown){vpStop();vpShowPaywall();return}
+    if(vpTime>=vpDuration){vpStop();vpTime=0;}
+    vpUpdateTime();
+    document.getElementById('vid-fill').style.width=(vpTime/vpDuration*100)+'%';
+  },1000);
+}
+function vpStop(){
+  vpPlaying=false;clearInterval(vpInterval);
+  const box=document.getElementById('vid-box');
+  box.classList.add('paused');box.classList.remove('playing');
+  document.getElementById('vp-play-btn').textContent='▶';
+  document.getElementById('vp-center-btn').textContent='▶';
+  document.getElementById('vid-bg').classList.remove('playing');
+}
+function vpSkip(s){
+  event.stopPropagation();
+  vpTime=Math.max(0,Math.min(vpDuration,vpTime+s));
+  vpUpdateTime();
+  document.getElementById('vid-fill').style.width=(vpTime/vpDuration*100)+'%';
+}
+function vpSeek(e){
+  e.stopPropagation();
+  const bar=document.getElementById('vid-prog'),rect=bar.getBoundingClientRect();
+  vpTime=Math.floor(((e.clientX-rect.left)/rect.width)*vpDuration);
+  document.getElementById('vid-fill').style.width=(vpTime/vpDuration*100)+'%';
+  vpUpdateTime();
+}
+function vpUpdateTime(){
+  const fmt=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  document.getElementById('vp-time').textContent=`${fmt(vpTime)} / ${fmt(vpDuration)}`;
+}
+function vpToggleMute(){
+  vpMuted=!vpMuted;
+  document.getElementById('vp-mute').textContent=vpMuted?'🔇':'🔊';
+  document.getElementById('vp-vol').value=vpMuted?0:80;
+}
+function vpSetVol(v){
+  vpMuted=v==0;
+  document.getElementById('vp-mute').textContent=v==0?'🔇':v<50?'🔉':'🔊';
+}
+function vpToggleQMenu(){document.getElementById('vp-q-menu').classList.toggle('open')}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#vp-q-btn')&&!e.target.closest('#vp-q-menu'))
+    document.getElementById('vp-q-menu').classList.remove('open');
+});
+function vpSetQuality(q,tier){
+  if(tier==='premium'){vpUpgradePrompt();return}
+  document.getElementById('vp-q-btn').textContent=q;
+  document.getElementById('vp-q-pill').textContent=q;
+  document.getElementById('si-current').textContent=q;
+  document.getElementById('vp-q-menu').classList.remove('open');
+  showToast('Quality set to '+q);
+}
+function vpUpgradePrompt(){
+  document.getElementById('vp-q-menu').classList.remove('open');
+  vpShowPaywall();
+}
+function vpShowPaywall(){
+  vpPaywallShown=true;vpStop();
+  document.getElementById('vp-paywall').style.display='flex';
+  document.getElementById('vid-blur').style.display='flex';
+}
+function vpClosePaywall(){
+  document.getElementById('vp-paywall').style.display='none';
+  document.getElementById('vid-blur').style.display='none';
+}
+function vpFullscreen(){
+  const box=document.getElementById('vid-box');
+  if(!document.fullscreenElement) box.requestFullscreen&&box.requestFullscreen();
+  else document.exitFullscreen&&document.exitFullscreen();
+}
+function vpSwitchTab(name,btn){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('vp-tab-'+name).classList.add('active');
+}
+function vpToggleLike(){
+  const btn=document.getElementById('vp-like-btn');
+  btn.classList.toggle('liked');
+  btn.textContent=btn.classList.contains('liked')?'♥ Liked':'♡ Like';
+}
+function vpWatchlist(){showToast('Added to your watchlist!')}
+function vpShare(){navigator.clipboard&&navigator.clipboard.writeText(window.location.href);showToast('Link copied!')}
+function vpPostComment(){
+  const inp=document.getElementById('cmt-input'),text=inp.value.trim();
+  if(!text) return;
+  const list=document.getElementById('cmt-list');
+  const el=document.createElement('div');el.className='cmt-item';
+  el.innerHTML=`<div class="cmt-av" style="background:linear-gradient(135deg,var(--pink),#8b00ff)">JD</div><div class="cmt-body"><div class="cmt-name">You <span style="font-size:11px;color:var(--text3);font-weight:400">· Just now</span></div><div class="cmt-text">${text}</div><div class="cmt-acts"><button class="cmt-act" onclick="vpLikeCmt(this)">♡ 0</button><button class="cmt-act">Reply</button></div></div>`;
+  list.prepend(el);inp.value='';inp.style.height='44px';
+}
+function vpLikeCmt(btn){
+  const n=parseInt(btn.textContent.split(' ')[1])+1;
+  btn.textContent='♥ '+n;btn.style.color='var(--pink)';
+}
+function vpAutoResize(el){el.style.height='44px';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  const onPlayer=document.getElementById('page-player').classList.contains('active');
+  if(!onPlayer) return;
+  if(e.code==='Space'){e.preventDefault();vpTogglePlay()}
+  if(e.code==='ArrowRight') vpSkip(10);
+  if(e.code==='ArrowLeft') vpSkip(-10);
+  if(e.code==='KeyM') vpToggleMute();
+  if(e.code==='KeyF') vpFullscreen();
+});
+
+/* ============================================================
+   BROADCAST MODAL
+   ============================================================ */
+function openBroadcast(){document.getElementById('broadcastModal').classList.add('open')}
+function closeBroadcast(){document.getElementById('broadcastModal').classList.remove('open')}
+document.getElementById('broadcastModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeBroadcast()});
+
+function switchBcTab(name,btn){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.mtab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bc-'+name).classList.add('active');
+}
+
+const segCounts={all:'1,240 subscribers',premium:'820 subscribers',vip:'180 subscribers',free:'240 subscribers'};
+function bcSelectSeg(btn,seg){
+  btn.closest('.seg-btns').querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bc-email-count').textContent=segCounts[seg];
+}
+function bcSelectSmsSeg(btn,seg){
+  btn.closest('.seg-btns').querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bc-sms-count').textContent=segCounts[seg];
+}
+function bcCountChars(el){
+  document.getElementById('bc-sms-chars').textContent=el.value.length+' / 160 characters';
+}
+function bcSendEmail(){
+  const subj=document.getElementById('bc-email-subject').value.trim();
+  const body=document.getElementById('bc-email-body').value.trim();
+  if(!subj||!body){showToast('Please fill in subject and message',true);return}
+  const btn=document.getElementById('bc-email-send');
+  btn.disabled=true;btn.innerHTML='<span>⏳</span> Sending...';
+  setTimeout(()=>{
+    closeBroadcast();
+    showToast('✓ Email broadcast sent successfully!');
+    btn.disabled=false;btn.innerHTML='<span>✉️</span> Send Email Now';
+    document.getElementById('bc-email-subject').value='';
+    document.getElementById('bc-email-body').value='';
+  },2000);
+}
+function bcSendSMS(){
+  const body=document.getElementById('bc-sms-body').value.trim();
+  if(!body){showToast('Please write a message',true);return}
+  const btn=document.getElementById('bc-sms-send');
+  btn.disabled=true;btn.innerHTML='<span>⏳</span> Sending...';
+  setTimeout(()=>{
+    closeBroadcast();
+    showToast('✓ SMS broadcast sent! (Requires Twilio setup)');
+    btn.disabled=false;btn.innerHTML='<span>📱</span> Send Text Now';
+    document.getElementById('bc-sms-body').value='';
+  },2000);
+}
+
+/* ============================================================
+   UNSUBSCRIBE RETENTION
+   ============================================================ */
+function unsubGoStep(n){
+  document.querySelectorAll('.unsub-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('unsub-s'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function unsubAcceptOffer(type){
+  const msgs={
+    pause:'✓ Subscription paused for 3 months. See you soon! 🐰',
+    discount:'✓ 50% discount applied! Only $1.99 next month.',
+    downgrade:'✓ Switched to Free plan. Your account stays active.',
+    vip:'✓ VIP trial activated! 7 days free. Enjoy the model photos! ✨'
+  };
+  closeBroadcast();
+  showToast(msgs[type]);
+  setTimeout(()=>goTo('home'),1500);
+}
+function unsubSelectReason(card,reason){
+  document.querySelectorAll('#unsub-s2 .offer-card').forEach(c=>c.style.borderColor='');
+  card.style.borderColor='var(--pink)';
+  showToast('Feedback noted: "'+reason+'" — thank you!');
+}
+function unsubGoHome(){
+  showToast('Welcome back! 🐰 So glad you stayed!');
+  setTimeout(()=>goTo('home'),1200);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildMovieGrid();
+buildFreeGrid();
+buildPremGrid();
+buildFAQ();
+setTimeout(initReveal,100);
+</script>
+</body>
+</html>

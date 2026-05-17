@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Neon Dreams — Juice Bunny</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
+  --text:#fff;--text2:#a0a0b0;--text3:#606070;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --card:#16161f;--success:#00c878;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--pink)}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(13,13,18,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+.logo-spin{width:32px;height:32px;border-radius:50%;animation:spin 14s linear infinite;object-fit:cover}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-name{font-family:'Dancing Script',cursive;font-size:21px;font-weight:700;color:#fff}
+.nav-center{display:flex;gap:28px}
+.nav-center a{color:var(--text2);text-decoration:none;font-size:14px;transition:color .2s}
+.nav-center a:hover{color:#fff}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),#8b00ff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;cursor:pointer;
+  border:2px solid rgba(255,45,120,0.4);
+}
+.btn-upgrade{
+  background:var(--pink);border:none;color:#fff;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  padding:8px 18px;border-radius:20px;cursor:pointer;transition:all .2s;
+}
+.btn-upgrade:hover{background:var(--pink2)}
+
+/* PAGE */
+.page{padding-top:64px;min-height:100vh}
+
+/* ── PLAYER SECTION ── */
+.player-section{
+  background:#000;
+  position:relative;
+}
+
+/* VIDEO WRAPPER */
+.video-wrap{
+  position:relative;width:100%;max-width:1100px;
+  margin:0 auto;
+  background:#000;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  cursor:pointer;
+}
+.video-wrap:fullscreen{max-width:100%;height:100vh;aspect-ratio:unset}
+
+/* VIDEO BG PLACEHOLDER */
+.vid-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#1a0510 0%,#2d0a1a 30%,#0a0a1a 60%,#05050d 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:8rem;
+  transition:filter .3s;
+}
+.vid-bg.playing{filter:brightness(.7)}
+
+/* PREVIEW BLUR for locked */
+.vid-preview-blur{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#0d0010,#1a0520);
+  display:flex;align-items:center;justify-content:center;
+  font-size:8rem;
+  filter:blur(12px) brightness(.5);
+  transform:scale(1.05);
+}
+
+/* PROGRESS BAR PREVIEW */
+.vid-progress-preview{
+  position:absolute;bottom:60px;left:0;right:0;height:3px;
+  background:rgba(255,255,255,0.15);
+  cursor:pointer;
+  transition:height .2s;
+  z-index:10;
+}
+.vid-progress-preview:hover{height:5px}
+.vid-progress-fill{
+  height:100%;background:var(--pink);width:0%;
+  transition:width .1s linear;position:relative;
+}
+.vid-progress-fill::after{
+  content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);
+  width:12px;height:12px;border-radius:50%;background:var(--pink);
+  opacity:0;transition:opacity .2s;
+}
+.vid-progress-preview:hover .vid-progress-fill::after{opacity:1}
+.vid-time-tooltip{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);color:#fff;font-size:11px;
+  padding:3px 8px;border-radius:5px;pointer-events:none;opacity:0;
+  transition:opacity .2s;
+}
+
+/* CUSTOM CONTROLS */
+.vid-controls{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:16px 20px 14px;
+  background:linear-gradient(transparent,rgba(0,0,0,0.85));
+  display:flex;align-items:center;gap:12px;
+  opacity:0;transition:opacity .3s;
+  z-index:10;
+}
+.video-wrap:hover .vid-controls,
+.video-wrap.paused .vid-controls{opacity:1}
+.ctrl-btn{
+  background:none;border:none;color:#fff;
+  font-size:18px;cursor:pointer;padding:4px;
+  transition:transform .15s,color .15s;line-height:1;
+}
+.ctrl-btn:hover{transform:scale(1.15);color:var(--pink)}
+.ctrl-spacer{flex:1}
+.time-display{font-size:13px;color:rgba(255,255,255,0.8);white-space:nowrap;min-width:90px}
+.vol-wrap{display:flex;align-items:center;gap:8px}
+.vol-slider{
+  width:70px;height:3px;
+  -webkit-appearance:none;appearance:none;
+  background:rgba(255,255,255,0.3);border-radius:2px;cursor:pointer;
+}
+.vol-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:var(--pink);cursor:pointer;
+}
+
+/* QUALITY BADGE */
+.quality-badge{
+  background:rgba(255,45,120,0.15);border:1px solid rgba(255,45,120,0.4);
+  color:var(--pink);font-size:11px;font-weight:700;letter-spacing:1px;
+  padding:3px 9px;border-radius:5px;cursor:pointer;transition:all .2s;
+}
+.quality-badge:hover{background:rgba(255,45,120,0.3)}
+.quality-free{
+  background:rgba(0,200,120,0.1);border-color:rgba(0,200,120,0.4);
+  color:var(--success);
+}
+
+/* QUALITY DROPDOWN */
+.quality-menu{
+  position:absolute;bottom:56px;right:20px;
+  background:rgba(18,18,26,0.97);border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;min-width:160px;
+  display:none;z-index:20;
+  box-shadow:0 16px 40px rgba(0,0,0,.6);
+}
+.quality-menu.open{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.qm-header{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+.qm-item{
+  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;font-size:14px;transition:background .15s;
+}
+.qm-item:hover{background:rgba(255,255,255,.05)}
+.qm-item.active{color:var(--pink)}
+.qm-item.locked{color:var(--text3);cursor:default}
+.qm-item .qm-check{font-size:12px;color:var(--pink)}
+.qm-lock{font-size:11px;color:var(--text3)}
+.qm-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.qm-badge.free{background:rgba(0,200,120,.15);color:var(--success)}
+.qm-badge.premium{background:rgba(255,45,120,.15);color:var(--pink)}
+
+/* PAYWALL OVERLAY */
+.paywall{
+  position:absolute;inset:0;z-index:30;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(10,10,16,0.88);
+  backdrop-filter:blur(6px);
+}
+.paywall-card{
+  background:rgba(20,20,28,0.98);
+  border:1px solid rgba(255,45,120,0.25);
+  border-radius:20px;padding:40px 36px;
+  text-align:center;max-width:400px;width:90%;
+  position:relative;overflow:hidden;
+  animation:popIn .4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.paywall-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+}
+.paywall-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,45,120,.08),transparent);
+  pointer-events:none;
+}
+.pw-icon{font-size:44px;margin-bottom:16px;display:block}
+.pw-title{font-size:22px;font-weight:700;margin-bottom:8px}
+.pw-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px}
+.pw-preview-note{
+  font-size:12px;color:var(--text3);margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.pw-timer{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,45,120,0.1);border:1px solid rgba(255,45,120,0.2);
+  border-radius:20px;padding:6px 14px;
+  font-size:12px;font-weight:600;color:var(--pink);
+  margin-bottom:24px;
+}
+.pw-price{
+  font-size:36px;font-weight:700;color:#fff;margin-bottom:4px;
+}
+.pw-price span{font-size:16px;color:var(--text2);font-weight:400}
+.pw-perks{
+  display:flex;flex-direction:column;gap:8px;
+  margin:16px 0 24px;text-align:left;
+}
+.pw-perk{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
+.pw-perk::before{content:'✓';color:var(--pink);font-weight:700;font-size:13px;width:16px;flex-shrink:0}
+.btn-pw{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--pink),#c41060);
+  color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .25s;margin-bottom:10px;
+}
+.btn-pw:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-pw-ghost{
+  width:100%;padding:12px;border-radius:12px;
+  background:none;border:1px solid var(--border2);
+  color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;
+}
+.btn-pw-ghost:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.pw-methods{margin-top:14px;font-size:11px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px}
+.pw-method-dot{width:3px;height:3px;background:var(--text3);border-radius:50%}
+
+/* CENTER PLAY BUTTON */
+.center-play{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:5;pointer-events:none;
+}
+.center-play-btn{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  border:2px solid rgba(255,255,255,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  transition:all .3s;
+  backdrop-filter:blur(8px);
+}
+.video-wrap.playing .center-play{opacity:0}
+.video-wrap:hover .center-play{opacity:1}
+
+/* CONTENT AREA */
+.content-area{
+  max-width:1100px;margin:0 auto;
+  padding:28px 20px 60px;
+  display:grid;grid-template-columns:1fr 340px;gap:28px;
+  align-items:start;
+}
+
+/* VIDEO INFO */
+.video-info-main{}
+.video-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.video-title-big{font-size:24px;font-weight:700;line-height:1.2}
+.video-actions{display:flex;gap:10px;flex-shrink:0}
+.action-btn{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--border2);
+  color:var(--text2);padding:9px 16px;border-radius:20px;
+  font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;
+}
+.action-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+.action-btn.liked{color:var(--pink);border-color:rgba(255,45,120,.4)}
+.video-meta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.meta-pill{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text2);
+}
+.meta-pill.pink{background:rgba(255,45,120,.1);border-color:rgba(255,45,120,.3);color:var(--pink)}
+.meta-pill.green{background:rgba(0,200,120,.1);border-color:rgba(0,200,120,.3);color:var(--success)}
+.star-gold{color:#f5c518}
+.video-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px;max-width:700px}
+
+/* TABS */
+.info-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.itab{
+  padding:10px 20px;font-size:14px;font-weight:500;color:var(--text3);
+  background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;
+}
+.itab.active{color:#fff;border-bottom-color:var(--pink)}
+.itab:hover:not(.active){color:var(--text2)}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* CAST */
+.cast-grid{display:flex;gap:16px;flex-wrap:wrap}
+.cast-card{text-align:center;width:80px}
+.cast-avatar{
+  width:60px;height:60px;border-radius:50%;margin:0 auto 6px;
+  background:linear-gradient(135deg,#2a0a1a,#1a1a2a);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  border:2px solid var(--border2);
+}
+.cast-name{font-size:11px;font-weight:600;margin-bottom:2px}
+.cast-role{font-size:10px;color:var(--text3)}
+
+/* COMMENTS */
+.comment-box{margin-bottom:20px}
+.comment-input-wrap{display:flex;gap:10px;margin-bottom:16px}
+.comment-av{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),#8b00ff);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+}
+.comment-input{
+  flex:1;padding:11px 14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);border-radius:10px;
+  color:#fff;font-family:'Inter',sans-serif;font-size:13px;outline:none;
+  transition:border-color .2s;resize:none;height:44px;overflow:hidden;
+}
+.comment-input:focus{border-color:var(--pink)}
+.comment-submit{
+  background:var(--pink);border:none;color:#fff;
+  padding:0 16px;border-radius:10px;font-family:'Inter',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;
+}
+.comment-submit:hover{background:var(--pink2)}
+.comment{display:flex;gap:10px;margin-bottom:16px}
+.comment-body{flex:1}
+.comment-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.comment-text{font-size:13px;color:var(--text2);line-height:1.5}
+.comment-actions{display:flex;gap:12px;margin-top:6px}
+.comment-action{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:color .2s;display:flex;align-items:center;gap:4px}
+.comment-action:hover{color:var(--pink)}
+
+/* SIDEBAR */
+.sidebar{}
+.sidebar-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+
+/* UP NEXT */
+.up-next-list{display:flex;flex-direction:column;gap:12px}
+.up-card{
+  display:flex;gap:12px;cursor:pointer;padding:8px;border-radius:10px;
+  transition:background .2s;position:relative;
+}
+.up-card:hover{background:rgba(255,255,255,.04)}
+.up-thumb{
+  width:100px;height:64px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  position:relative;overflow:hidden;
+}
+.up-lock{
+  position:absolute;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.up-info{flex:1;min-width:0}
+.up-title{font-size:13px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-meta{font-size:11px;color:var(--text3)}
+.up-badge{
+  position:absolute;top:8px;left:8px;
+  font-size:8px;font-weight:700;letter-spacing:.8px;
+  padding:2px 7px;border-radius:3px;
+}
+.up-badge.free{background:rgba(0,200,120,.8);color:#fff}
+.up-badge.premium{background:rgba(255,45,120,.8);color:#fff}
+
+/* DIVIDER */
+.sidebar-divider{height:1px;background:var(--border);margin:20px 0}
+
+/* QUALITY INFO CARD */
+.quality-info-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:16px;
+}
+.qi-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px}
+.qi-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.qi-row:last-child{border-bottom:none}
+.qi-label{font-size:12px;color:var(--text2)}
+.qi-val{font-size:12px;font-weight:600}
+.qi-val.pink{color:var(--pink)}
+.qi-val.green{color:var(--success)}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;
+  font-size:14px;font-weight:600;z-index:999;
+  transition:transform .4s cubic-bezier(0.175,0.885,0.32,1.275);
+  white-space:nowrap;
+}
+.toast.error-toast{background:#ff4757}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:900px){
+  .content-area{grid-template-columns:1fr}
+  .sidebar{display:none}
+  nav .nav-center{display:none}
+  .video-actions{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="juicy-bunny.html" class="nav-logo">
+    <img src="https://em-content.zobj.net/source/google/387/rabbit_1f407.png" alt="Juice Bunny" class="logo-spin"/>
+    <span class="logo-name">Juice Bunny</span>
+  </a>
+  <div class="nav-center">
+    <a href="juicy-bunny.html">Home</a>
+    <a href="juicy-bunny.html#trending">Movies</a>
+    <a href="juicy-bunny.html#premium">Premium</a>
+    <a href="juicy-bunny.html#pricing">Pricing</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-upgrade" onclick="window.location.href='signup.html'">Go Premium</button>
+    <div class="nav-avatar" title="My Account">JD</div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- PLAYER SECTION -->
+  <div class="player-section">
+    <div class="video-wrap paused" id="videoWrap" onclick="togglePlay()">
+
+      <!-- VIDEO BG (placeholder for real video) -->
+      <div class="vid-bg" id="vidBg">👩‍🎤</div>
+
+      <!-- PREVIEW BLUR (shown for locked content) -->
+      <div class="vid-preview-blur" id="previewBlur" style="display:none">👩‍🎤</div>
+
+      <!-- CENTER PLAY -->
+      <div class="center-play">
+        <div class="center-play-btn" id="centerPlayBtn">▶</div>
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div class="vid-progress-preview" id="progressBar" onclick="seekVideo(event)">
+        <div class="vid-progress-fill" id="progressFill"></div>
+        <div class="vid-time-tooltip" id="timeTooltip">0:00</div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="vid-controls" id="vidControls">
+        <button class="ctrl-btn" id="playBtn" onclick="togglePlay();event.stopPropagation()">▶</button>
+        <button class="ctrl-btn" onclick="skip(-10);event.stopPropagation()" title="Rewind 10s">⏪</button>
+        <button class="ctrl-btn" onclick="skip(10);event.stopPropagation()" title="Forward 10s">⏩</button>
+        <div class="vol-wrap" onclick="event.stopPropagation()">
+          <button class="ctrl-btn" onclick="toggleMute()" id="muteBtn">🔊</button>
+          <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" oninput="setVolume(this.value)"/>
+        </div>
+        <span class="time-display" id="timeDisplay">0:00 / 28:00</span>
+        <div class="ctrl-spacer"></div>
+        <div style="position:relative;z-index:15" onclick="event.stopPropagation()">
+          <button class="quality-badge quality-free" id="qualityBtn" onclick="toggleQualityMenu()">480p SD</button>
+          <div class="quality-menu" id="qualityMenu">
+            <div class="qm-header">Video Quality</div>
+            <div class="qm-item active" onclick="setQuality('480p','free')">
+              <span>480p SD</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="qm-badge free">FREE</span>
+                <span class="qm-check" id="check480">✓</span>
+              </div>
+            </div>
+            <div class="qm-item locked" id="q720" onclick="upgradePrompt()">
+              <span>720p HD</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="qm-badge premium">PREMIUM</span>
+                <span class="qm-lock">🔒</span>
+              </div>
+            </div>
+            <div class="qm-item locked" id="q1080" onclick="upgradePrompt()">
+              <span>1080p FHD</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="qm-badge premium">PREMIUM</span>
+                <span class="qm-lock">🔒</span>
+              </div>
+            </div>
+            <div class="qm-item locked" id="q4k" onclick="upgradePrompt()">
+              <span>4K Ultra HD</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="qm-badge premium">PREMIUM</span>
+                <span class="qm-lock">🔒</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="ctrl-btn" onclick="toggleFullscreen();event.stopPropagation()" title="Fullscreen">⛶</button>
+      </div>
+
+      <!-- PAYWALL OVERLAY (shown for locked premium content) -->
+      <div class="paywall" id="paywallOverlay" style="display:none">
+        <div class="paywall-card">
+          <span class="pw-icon">🔒</span>
+          <div class="pw-title">Members Only Content</div>
+          <div class="pw-sub">This is exclusive premium content. You've watched your free preview.</div>
+          <div class="pw-timer" id="pwTimer">
+            <span>⏱</span> <span id="previewCountdown">Preview ends in 0:30</span>
+          </div>
+          <div class="pw-price">$3.99<span>/month</span></div>
+          <div class="pw-perks">
+            <div class="pw-perk">Unlimited 4K Ultra HD streaming</div>
+            <div class="pw-perk">Full access to all exclusive content</div>
+            <div class="pw-perk">New drops every week — no waiting</div>
+            <div class="pw-perk">Download for offline viewing</div>
+            <div class="pw-perk">Cancel anytime, zero hidden fees</div>
+          </div>
+          <button class="btn-pw" onclick="window.location.href='signup.html'">🔥 Unlock Full Access — $3.99/mo</button>
+          <button class="btn-pw-ghost" onclick="closePaywall()">Continue Watching Preview</button>
+          <div class="pw-methods">
+            <span>💳 CCBill</span>
+            <span class="pw-method-dot"></span>
+            <span>₿ Bitcoin</span>
+            <span class="pw-method-dot"></span>
+            <span>🔒 SSL Secured</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /video-wrap -->
+  </div><!-- /player-section -->
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+
+    <!-- MAIN INFO -->
+    <div class="video-info-main">
+      <div class="video-top">
+        <div class="video-title-big" id="videoTitle">Neon Dreams</div>
+        <div class="video-actions">
+          <button class="action-btn" id="likeBtn" onclick="toggleLike()">♡ Like</button>
+          <button class="action-btn" onclick="toggleWatchlist()">+ Watchlist</button>
+          <button class="action-btn" onclick="shareVideo()">↗ Share</button>
+        </div>
+      </div>
+
+      <div class="video-meta-row">
+        <span class="meta-pill pink" id="accessPill">🔒 Premium</span>
+        <span class="meta-pill"><span class="star-gold">★</span> 4.9</span>
+        <span class="meta-pill">28 min</span>
+        <span class="meta-pill">Sci-Fi</span>
+        <span class="meta-pill">2024</span>
+        <span class="meta-pill" id="qualityPill">480p SD</span>
+      </div>
+
+      <p class="video-desc">
+        A hypnotic journey through neon-drenched dreamscapes where reality dissolves into art. 
+        Follow the untold story of an underground dancer who discovers her performances are 
+        unlocking dormant memories of a parallel life. Shot in stunning 4K with a score that 
+        pulses like a heartbeat — Neon Dreams is the most talked-about piece of the year.
+      </p>
+
+      <!-- TABS -->
+      <div class="info-tabs">
+        <button class="itab active" onclick="switchTab('details',this)">Details</button>
+        <button class="itab" onclick="switchTab('cast',this)">Cast</button>
+        <button class="itab" onclick="switchTab('comments',this)">Comments (12)</button>
+      </div>
+
+      <!-- DETAILS TAB -->
+      <div class="tab-panel active" id="tab-details">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Director</div>
+            <div style="font-size:14px;font-weight:500">Amara Osei</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Year</div>
+            <div style="font-size:14px;font-weight:500">2024</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Genre</div>
+            <div style="font-size:14px;font-weight:500">Sci-Fi · Drama</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Runtime</div>
+            <div style="font-size:14px;font-weight:500">28 minutes</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Language</div>
+            <div style="font-size:14px;font-weight:500">English</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Rating</div>
+            <div style="font-size:14px;font-weight:500;color:#f5c518">★ 4.9 / 5.0</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:16px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:10px;font-size:13px;color:var(--text2)">
+          🔞 <strong style="color:#fff">18+ Content.</strong> This video contains explicit adult content intended for mature audiences only. By watching, you confirm you are 18 years of age or older.
+        </div>
+      </div>
+
+      <!-- CAST TAB -->
+      <div class="tab-panel" id="tab-cast">
+        <div class="cast-grid">
+          <div class="cast-card">
+            <div class="cast-avatar">👩‍🎤</div>
+            <div class="cast-name">Zara Monroe</div>
+            <div class="cast-role">Lead</div>
+          </div>
+          <div class="cast-card">
+            <div class="cast-avatar">🧔</div>
+            <div class="cast-name">Marcus Reid</div>
+            <div class="cast-role">Supporting</div>
+          </div>
+          <div class="cast-card">
+            <div class="cast-avatar">👩</div>
+            <div class="cast-name">Lyra Stone</div>
+            <div class="cast-role">Supporting</div>
+          </div>
+          <div class="cast-card">
+            <div class="cast-avatar">🧑</div>
+            <div class="cast-name">Dev Kapoor</div>
+            <div class="cast-role">Cameo</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMENTS TAB -->
+      <div class="tab-panel" id="tab-comments">
+        <div class="comment-box">
+          <div class="comment-input-wrap">
+            <div class="comment-av">JD</div>
+            <textarea class="comment-input" placeholder="Share your thoughts..." id="commentInput" oninput="autoResize(this)"></textarea>
+            <button class="comment-submit" onclick="postComment()">Post</button>
+          </div>
+          <div id="commentList">
+            <div class="comment">
+              <div class="comment-av" style="background:linear-gradient(135deg,#1a3a5c,#0a1a3a)">SK</div>
+              <div class="comment-body">
+                <div class="comment-name">Sarah K. <span style="font-size:11px;color:var(--text3);font-weight:400">· 2 days ago</span></div>
+                <div class="comment-text">Absolutely breathtaking cinematography. The neon lighting is on another level. Watched it three times already. 🔥</div>
+                <div class="comment-actions">
+                  <button class="comment-action" onclick="likeComment(this)">♡ 24</button>
+                  <button class="comment-action">Reply</button>
+                </div>
+              </div>
+            </div>
+            <div class="comment">
+              <div class="comment-av" style="background:linear-gradient(135deg,#1a2a1a,#0a1a0a)">MJ</div>
+              <div class="comment-body">
+                <div class="comment-name">Mike J. <span style="font-size:11px;color:var(--text3);font-weight:400">· 5 days ago</span></div>
+                <div class="comment-text">The score is incredible. Need a full album release ASAP.</div>
+                <div class="comment-actions">
+                  <button class="comment-action" onclick="likeComment(this)">♡ 18</button>
+                  <button class="comment-action">Reply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-title">Up Next</div>
+      <div class="up-next-list" id="upNextList"></div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="quality-info-card">
+        <div class="qi-title">Stream Info</div>
+        <div class="qi-row">
+          <span class="qi-label">Current Quality</span>
+          <span class="qi-val green" id="qiCurrent">480p SD</span>
+        </div>
+        <div class="qi-row">
+          <span class="qi-label">Max Available</span>
+          <span class="qi-val pink">4K UHD 🔒</span>
+        </div>
+        <div class="qi-row">
+          <span class="qi-label">Your Plan</span>
+          <span class="qi-val" style="color:var(--text3)">Free</span>
+        </div>
+        <div class="qi-row">
+          <span class="qi-label">Bitrate</span>
+          <span class="qi-val green">2 Mbps</span>
+        </div>
+        <div style="margin-top:14px">
+          <button onclick="window.location.href='signup.html'" style="width:100%;padding:10px;background:var(--pink);border:none;color:#fff;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+            Upgrade to 4K →
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// STATE
+let isPlaying = false;
+let isMuted = false;
+let currentTime = 0;
+let duration = 28 * 60; // 28 min
+let playInterval = null;
+let isPremium = false; // free user
+let previewLimit = 30; // 30s free preview for premium content
+let previewWarned = false;
+let selectedQuality = '480p';
+let paywallShown = false;
+
+const videosData = [
+  {title:'Velocity',genre:'Action',duration:'1h 15m',premium:false,bg:'linear-gradient(135deg,#0a0a1a,#1a1a3a)',emoji:'🏙️'},
+  {title:'Cyber City',genre:'Cyberpunk',duration:'52 min',premium:true,bg:'linear-gradient(135deg,#0a1a2a,#0a2a3a)',emoji:'🌆'},
+  {title:'Midnight Romance',genre:'Romance',duration:'44 min',premium:true,bg:'linear-gradient(135deg,#1a0a0a,#2a0a1a)',emoji:'🌙'},
+  {title:'Shadow Protocol',genre:'Thriller',duration:'1h 8m',premium:true,bg:'linear-gradient(135deg,#0a0a0a,#1a0a1a)',emoji:'🕵️'},
+  {title:'Tape Loop No.7',genre:'Experimental',duration:'15 min',premium:false,bg:'linear-gradient(135deg,#0d0a0a,#1a0a0a)',emoji:'🎸'},
+];
+
+function buildUpNext() {
+  document.getElementById('upNextList').innerHTML = videosData.map((v,i) => `
+    <div class="up-card" onclick="loadVideo(${i})">
+      <div class="up-thumb" style="background:${v.bg}">
+        ${v.emoji}
+        ${v.premium ? '<div class="up-lock">🔒</div>' : ''}
+      </div>
+      <div class="up-info">
+        <div class="up-title">${v.title}</div>
+        <div class="up-meta">${v.genre} · ${v.duration}</div>
+      </div>
+      <span class="up-badge ${v.premium ? 'premium' : 'free'}">${v.premium ? 'MEMBERS' : 'FREE'}</span>
+    </div>
+  `).join('');
+}
+
+function loadVideo(i) {
+  const v = videosData[i];
+  document.getElementById('videoTitle').textContent = v.title;
+  document.getElementById('vidBg').textContent = v.emoji;
+  stopPlay();
+  currentTime = 0;
+  previewWarned = false;
+  paywallShown = false;
+  updateTimeDisplay();
+  document.getElementById('progressFill').style.width = '0%';
+
+  if(v.premium && !isPremium) {
+    document.getElementById('accessPill').innerHTML = '🔒 Premium';
+    document.getElementById('accessPill').className = 'meta-pill pink';
+    document.getElementById('previewBlur').style.display = 'none';
+    closePaywall();
+  } else {
+    document.getElementById('accessPill').innerHTML = '✓ Free';
+    document.getElementById('accessPill').className = 'meta-pill green';
+    closePaywall();
+  }
+  showToast('Loading: ' + v.title);
+}
+
+function togglePlay() {
+  // Check if current video is premium and user is not premium
+  const isPremiumContent = document.getElementById('accessPill').innerHTML.includes('Premium');
+  if(isPremiumContent && !isPremium && paywallShown) return;
+
+  if(isPlaying) {
+    stopPlay();
+  } else {
+    startPlay();
+  }
+}
+
+function startPlay() {
+  isPlaying = true;
+  document.getElementById('videoWrap').classList.remove('paused');
+  document.getElementById('videoWrap').classList.add('playing');
+  document.getElementById('playBtn').textContent = '⏸';
+  document.getElementById('centerPlayBtn').textContent = '⏸';
+  document.getElementById('vidBg').classList.add('playing');
+
+  playInterval = setInterval(() => {
+    currentTime++;
+    // Check preview limit for premium content
+    const isPremiumContent = document.getElementById('accessPill').innerHTML.includes('Premium');
+    if(isPremiumContent && !isPremium && currentTime >= previewLimit && !paywallShown) {
+      stopPlay();
+      showPaywall();
+      return;
+    }
+    if(currentTime >= duration) { stopPlay(); currentTime = 0; }
+    updateTimeDisplay();
+    const pct = (currentTime / duration) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+  }, 1000);
+}
+
+function stopPlay() {
+  isPlaying = false;
+  clearInterval(playInterval);
+  document.getElementById('videoWrap').classList.add('paused');
+  document.getElementById('videoWrap').classList.remove('playing');
+  document.getElementById('playBtn').textContent = '▶';
+  document.getElementById('centerPlayBtn').textContent = '▶';
+  document.getElementById('vidBg').classList.remove('playing');
+}
+
+function skip(secs) {
+  event.stopPropagation();
+  currentTime = Math.max(0, Math.min(duration, currentTime + secs));
+  updateTimeDisplay();
+  document.getElementById('progressFill').style.width = (currentTime/duration*100) + '%';
+}
+
+function seekVideo(e) {
+  e.stopPropagation();
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  currentTime = Math.floor(pct * duration);
+  document.getElementById('progressFill').style.width = (pct * 100) + '%';
+  updateTimeDisplay();
+}
+
+function updateTimeDisplay() {
+  const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  document.getElementById('timeDisplay').textContent = `${fmt(currentTime)} / ${fmt(duration)}`;
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  document.getElementById('muteBtn').textContent = isMuted ? '🔇' : '🔊';
+  document.getElementById('volSlider').value = isMuted ? 0 : 80;
+}
+
+function setVolume(v) {
+  isMuted = v == 0;
+  document.getElementById('muteBtn').textContent = v == 0 ? '🔇' : v < 50 ? '🔉' : '🔊';
+}
+
+function toggleQualityMenu() {
+  document.getElementById('qualityMenu').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('#qualityBtn') && !e.target.closest('#qualityMenu')) {
+    document.getElementById('qualityMenu').classList.remove('open');
+  }
+});
+
+function setQuality(q, tier) {
+  if(tier === 'premium' && !isPremium) { upgradePrompt(); return; }
+  selectedQuality = q;
+  document.getElementById('qualityBtn').textContent = q;
+  document.getElementById('qualityBtn').className = tier === 'free' ? 'quality-badge quality-free' : 'quality-badge';
+  document.getElementById('qualityPill').textContent = q;
+  document.getElementById('qiCurrent').textContent = q;
+  document.querySelectorAll('.qm-check').forEach(c => c.style.opacity = '0');
+  document.getElementById('check480').style.opacity = q === '480p' ? '1' : '0';
+  document.getElementById('qualityMenu').classList.remove('open');
+  showToast('Quality set to ' + q);
+}
+
+function upgradePrompt() {
+  document.getElementById('qualityMenu').classList.remove('open');
+  showPaywall();
+}
+
+function showPaywall() {
+  paywallShown = true;
+  stopPlay();
+  document.getElementById('paywallOverlay').style.display = 'flex';
+  document.getElementById('previewBlur').style.display = 'block';
+  // Start countdown
+  let cd = 30;
+  const cdInterval = setInterval(() => {
+    cd--;
+    document.getElementById('previewCountdown').textContent = `Preview ended · Watch full video`;
+    if(cd <= 0) clearInterval(cdInterval);
+  }, 1000);
+}
+
+function closePaywall() {
+  document.getElementById('paywallOverlay').style.display = 'none';
+  document.getElementById('previewBlur').style.display = 'none';
+}
+
+function toggleFullscreen() {
+  const wrap = document.getElementById('videoWrap');
+  if(!document.fullscreenElement) {
+    wrap.requestFullscreen && wrap.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.itab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleLike() {
+  const btn = document.getElementById('likeBtn');
+  btn.classList.toggle('liked');
+  btn.textContent = btn.classList.contains('liked') ? '♥ Liked' : '♡ Like';
+}
+
+function toggleWatchlist() {
+  showToast('Added to your watchlist!');
+}
+
+function shareVideo() {
+  navigator.clipboard && navigator.clipboard.writeText(window.location.href);
+  showToast('Link copied to clipboard!');
+}
+
+function postComment() {
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const list = document.getElementById('commentList');
+  const el = document.createElement('div');
+  el.className = 'comment';
+  el.innerHTML = `
+    <div class="comment-av" style="background:linear-gradient(135deg,var(--pink),#8b00ff)">JD</div>
+    <div class="comment-body">
+      <div class="comment-name">You <span style="font-size:11px;color:var(--text3);font-weight:400">· Just now</span></div>
+      <div class="comment-text">${text}</div>
+      <div class="comment-actions">
+        <button class="comment-action" onclick="likeComment(this)">♡ 0</button>
+        <button class="comment-action">Reply</button>
+      </div>
+    </div>`;
+  list.prepend(el);
+  input.value = '';
+  input.style.height = '44px';
+}
+
+function likeComment(btn) {
+  const parts = btn.textContent.split(' ');
+  const count = parseInt(parts[1]) + 1;
+  btn.textContent = '♥ ' + count;
+  btn.style.color = 'var(--pink)';
+}
+
+function autoResize(el) {
+  el.style.height = '44px';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error-toast' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if(e.code === 'Space'){e.preventDefault();togglePlay()}
+  if(e.code === 'ArrowRight') skip(10);
+  if(e.code === 'ArrowLeft') skip(-10);
+  if(e.code === 'KeyM') toggleMute();
+  if(e.code === 'KeyF') toggleFullscreen();
+});
+
+buildUpNext();
+updateTimeDisplay();
+</script>
+</body>
+</html>
