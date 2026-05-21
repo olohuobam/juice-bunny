@@ -685,6 +685,138 @@ select option{background:var(--bg3);color:var(--text)}
 .btn-upgrade-si{width:100%;padding:10px;background:var(--pink);border:none;color:#fff;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:14px}
 .btn-upgrade-si:hover{background:var(--pink2)}
 @media(max-width:900px){.player-content{grid-template-columns:1fr}.player-sidebar{display:none}}
+/* ============================================================
+   PAGE: PAYMENT
+   ============================================================ */
+#page-payment{min-height:100vh;padding-top:64px;background:radial-gradient(ellipse 70% 60% at 50% 20%,rgba(180,20,100,.14),transparent 60%),var(--bg)}
+.payment-wrap{max-width:960px;margin:0 auto;padding:48px 20px 80px;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+.payment-left{}
+.payment-back{display:flex;align-items:center;gap:8px;color:var(--text2);font-size:13px;cursor:pointer;margin-bottom:24px;background:none;border:none;font-family:'Inter',sans-serif;transition:color .2s}
+.payment-back:hover{color:#fff}
+.payment-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.payment-sub{font-size:14px;color:var(--text2);margin-bottom:28px}
+
+/* PLAN SUMMARY BADGE */
+.plan-summary-badge{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:12px;padding:16px 20px;margin-bottom:28px;
+}
+.psb-left{display:flex;align-items:center;gap:12px}
+.psb-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.2);display:flex;align-items:center;justify-content:center;font-size:20px}
+.psb-name{font-size:15px;font-weight:700}
+.psb-billing{font-size:12px;color:var(--text3);margin-top:2px}
+.psb-price{font-size:22px;font-weight:700;color:var(--pink)}
+.psb-price span{font-size:13px;color:var(--text3);font-weight:400}
+.change-plan-lnk{font-size:12px;color:var(--pink);cursor:pointer;margin-top:4px;display:block}
+.change-plan-lnk:hover{text-decoration:underline}
+
+/* PAYMENT METHOD SELECTOR */
+.method-label{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.method-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.method-card{
+  border:2px solid var(--border2);border-radius:14px;padding:20px;cursor:pointer;
+  transition:all .25s;position:relative;text-align:center;
+  background:rgba(255,255,255,.02);
+}
+.method-card:hover{border-color:rgba(255,45,120,.4);background:rgba(255,45,120,.04)}
+.method-card.selected{border-color:var(--pink);background:rgba(255,45,120,.07)}
+.method-card.selected::before{content:'✓';position:absolute;top:10px;right:12px;font-size:12px;color:var(--pink);font-weight:700}
+.method-icon{font-size:32px;margin-bottom:10px;display:block}
+.method-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.method-desc{font-size:11px;color:var(--text3);line-height:1.4}
+.method-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-top:6px}
+.method-badge.secure{background:rgba(0,200,120,.12);color:var(--success)}
+.method-badge.crypto{background:rgba(255,165,0,.12);color:#ffa500}
+
+/* PAYMENT FORMS */
+.pay-form{display:none;animation:fadeIn .3s ease}
+.pay-form.active{display:block}
+
+/* CCBILL FORM */
+.ccbill-notice{background:rgba(0,200,120,.06);border:1px solid rgba(0,200,120,.2);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:10px}
+.ccbill-notice .notice-icon{font-size:18px;flex-shrink:0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0}
+.form-field{margin-bottom:16px}
+.form-field label{display:block;font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--text2);margin-bottom:7px;text-transform:uppercase}
+.form-input{width:100%;padding:13px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--pink);background:rgba(255,45,120,.04)}
+.form-input::placeholder{color:var(--text3)}
+.card-input-wrap{position:relative}
+.card-icons{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;gap:4px;font-size:18px}
+.cvv-wrap{position:relative}
+.cvv-help{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:12px;cursor:help}
+.secure-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);margin-bottom:20px}
+
+/* BITCOIN FORM */
+.btc-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+.btc-step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;gap:14px;align-items:flex-start}
+.btc-step-num{width:28px;height:28px;border-radius:50%;background:rgba(255,165,0,.15);border:1px solid rgba(255,165,0,.3);color:#ffa500;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.btc-step-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.btc-step-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.btc-address-box{
+  background:rgba(255,165,0,.05);border:1px solid rgba(255,165,0,.2);
+  border-radius:10px;padding:16px;margin-bottom:20px;
+}
+.btc-address-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#ffa500;margin-bottom:8px}
+.btc-address{font-family:'Courier New',monospace;font-size:13px;color:#fff;word-break:break-all;margin-bottom:10px;line-height:1.6}
+.btn-copy-address{display:flex;align-items:center;gap:6px;background:rgba(255,165,0,.1);border:1px solid rgba(255,165,0,.3);color:#ffa500;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .2s}
+.btn-copy-address:hover{background:rgba(255,165,0,.2)}
+.btc-qr{width:120px;height:120px;background:rgba(255,255,255,.9);border-radius:10px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#000;font-weight:600;text-align:center;padding:8px}
+.btc-timer{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text2);margin-bottom:20px}
+.btc-timer-count{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ffa500;letter-spacing:1px}
+.btc-pending{background:rgba(255,165,0,.07);border:1px solid rgba(255,165,0,.2);border-radius:10px;padding:14px;text-align:center;font-size:13px;color:var(--text2);margin-bottom:20px}
+.btc-pending-dot{width:8px;height:8px;background:#ffa500;border-radius:50%;display:inline-block;margin-right:6px;animation:pulse 1.5s infinite}
+
+/* SUBMIT BUTTON */
+.btn-pay{
+  width:100%;padding:15px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--pink),#c41060);
+  color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;transition:all .25s;letter-spacing:.3px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-pay:hover{transform:translateY(-2px);box-shadow:0 10px 32px var(--pink-glow)}
+.btn-pay:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-pay-btc{background:linear-gradient(135deg,#ffa500,#e67e00)}
+.btn-pay-btc:hover{box-shadow:0 10px 32px rgba(255,165,0,.3)}
+
+/* ORDER SUMMARY SIDEBAR */
+.order-summary{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:16px;padding:24px;position:sticky;top:84px;
+}
+.os-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:18px}
+.os-plan{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.os-plan-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,45,120,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
+.os-plan-name{font-size:14px;font-weight:700}
+.os-plan-billing{font-size:12px;color:var(--text3)}
+.os-rows{margin-bottom:16px}
+.os-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px}
+.os-row.total{font-size:16px;font-weight:700;padding-top:14px;border-top:1px solid var(--border)}
+.os-row .label{color:var(--text2)}
+.os-row.total .label{color:#fff}
+.os-row .val{font-weight:600}
+.os-row.total .val{color:var(--pink);font-size:18px}
+.os-perks{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.os-perk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);margin-bottom:8px}
+.os-perk::before{content:'✓';color:var(--pink);font-weight:700;font-size:11px}
+.os-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* PAYMENT SUCCESS PAGE */
+#page-pay-success{min-height:100vh;padding-top:64px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(0,200,120,.08),transparent 60%),var(--bg)}
+.pay-success-wrap{max-width:520px;width:100%;padding:40px 20px;text-align:center}
+.pay-success-icon{width:80px;height:80px;border-radius:50%;background:rgba(0,200,120,.12);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 24px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
+.pay-success-title{font-size:28px;font-weight:700;margin-bottom:10px}
+.pay-success-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:28px}
+.pay-receipt{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;text-align:left;margin-bottom:28px}
+.pay-receipt-row{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)}
+.pay-receipt-row:last-child{border-bottom:none}
+.pay-receipt-row .rl{color:var(--text2)}
+.pay-receipt-row .rv{font-weight:600}
+.btn-start-watching{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px 40px;border-radius:25px;cursor:pointer;transition:all .25s}
+.btn-start-watching:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 8px 28px var(--pink-glow)}
+@media(max-width:768px){.payment-wrap{grid-template-columns:1fr}.order-summary{display:none}.method-cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -706,7 +838,7 @@ select option{background:var(--bg3);color:var(--text)}
   <div class="nav-right">
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
     <button class="btn-nav-signup" id="btnNavSignup" onclick="goTo('signup')">Sign Up</button>
-    <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goTo('signup')">Go Premium</button>
+    <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goToPayment('premium')">Go Premium</button>
     <div class="nav-avatar" id="navAvatar">JD</div>
   </div>
 </nav>
@@ -743,7 +875,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="hero-h1-pink">Movies &<br/>Entertainment</div>
         <p class="hero-sub">Immerse yourself in a luxury cinematic experience. Stream exclusive 4K content, award-winning originals, and blockbuster hits on any device.</p>
         <div class="hero-btns">
-          <button class="btn-hero-watch" onclick="goTo('signup')">▶ Start Watching</button>
+          <button class="btn-hero-watch" onclick="goToPayment('premium')">▶ Start Watching</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
         </div>
       </div>
@@ -875,7 +1007,7 @@ select option{background:var(--bg3);color:var(--text)}
             <li class="no">No 4K quality</li>
             <li class="no">No model photos</li>
           </ul>
-          <button class="btn-tier secondary" onclick="goTo('signup')">Start Free</button>
+          <button class="btn-tier secondary" onclick="goToPayment('free')">Start Free</button>
         </div>
 
         <!-- PREMIUM $3.99 -->
@@ -892,7 +1024,7 @@ select option{background:var(--bg3);color:var(--text)}
             <li>Offline downloads</li>
             <li class="no">No model photos</li>
           </ul>
-          <button class="btn-tier primary" onclick="goTo('signup')">Get Premium</button>
+          <button class="btn-tier primary" onclick="goToPayment('premium')">Get Premium</button>
         </div>
 
         <!-- VIP $10 -->
@@ -909,7 +1041,7 @@ select option{background:var(--bg3);color:var(--text)}
             <li>VIP member badge</li>
             <li>Priority support</li>
           </ul>
-          <button class="btn-tier vip-btn" onclick="goTo('signup')">Go VIP</button>
+          <button class="btn-tier vip-btn" onclick="goToPayment('vip')">Go VIP</button>
         </div>
 
       </div>
@@ -956,8 +1088,8 @@ select option{background:var(--bg3);color:var(--text)}
         <h2 class="cta-h2">Ready to Experience<br/><span>Premium Entertainment?</span></h2>
         <p class="cta-p">Join Juice Bunny today and unlock a world of cinematic luxury. Your first 7 days are on us.</p>
         <div class="cta-btns">
-          <button class="btn-cta1" onclick="goTo('signup')">▶ Start Streaming</button>
-          <button class="btn-cta2" onclick="goTo('signup')">Get Premium</button>
+          <button class="btn-cta1" onclick="goToPayment('premium')">▶ Start Streaming</button>
+          <button class="btn-cta2" onclick="goToPayment('premium')">Get Premium</button>
         </div>
       </div>
     </div>
@@ -1212,7 +1344,7 @@ select option{background:var(--bg3);color:var(--text)}
             <div class="pw-perk-item">Download for offline viewing</div>
             <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
           </div>
-          <button class="btn-pw-main" onclick="goTo('signup')">🔥 Unlock Full Access — $3.99/mo</button>
+          <button class="btn-pw-main" onclick="goToPayment('premium')">🔥 Unlock Full Access — $3.99/mo</button>
           <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
           <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
         </div>
@@ -1277,13 +1409,243 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="si-row"><span class="si-label">Max Available</span><span class="si-val pink">4K UHD 🔒</span></div>
         <div class="si-row"><span class="si-label">Your Plan</span><span class="si-val" style="color:var(--text3)">Free</span></div>
         <div class="si-row"><span class="si-label">Bitrate</span><span class="si-val green">2 Mbps</span></div>
-        <button class="btn-upgrade-si" onclick="goTo('signup')">Upgrade to 4K →</button>
+        <button class="btn-upgrade-si" onclick="goToPayment('premium')">Upgrade to 4K →</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SCROLL TO TOP -->
+<!-- ============================================================
+     PAGE: PAYMENT
+     ============================================================ -->
+<div id="page-payment" class="page">
+  <div class="payment-wrap">
+
+    <!-- LEFT: PAYMENT FORM -->
+    <div class="payment-left">
+      <button class="payment-back" onclick="goTo('signup')">← Back</button>
+      <div class="payment-title">Complete Your Order</div>
+      <div class="payment-sub">You're one step away from unlimited premium entertainment.</div>
+
+      <!-- PLAN SUMMARY -->
+      <div class="plan-summary-badge" id="pay-plan-badge">
+        <div class="psb-left">
+          <div class="psb-icon" id="pay-plan-icon">🔥</div>
+          <div>
+            <div class="psb-name" id="pay-plan-name">Premium Plan</div>
+            <div class="psb-billing">Billed monthly · Cancel anytime</div>
+            <span class="change-plan-lnk" onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Change plan</span>
+          </div>
+        </div>
+        <div>
+          <div class="psb-price" id="pay-plan-price">$3.99<span>/mo</span></div>
+        </div>
+      </div>
+
+      <!-- METHOD SELECTOR -->
+      <div class="method-label">Choose Payment Method</div>
+      <div class="method-cards">
+        <div class="method-card selected" id="method-ccbill" onclick="selectMethod('ccbill')">
+          <span class="method-icon">💳</span>
+          <div class="method-name">Credit Card</div>
+          <div class="method-desc">Visa, Mastercard, Amex accepted</div>
+          <span class="method-badge secure">🔒 CCBill Secure</span>
+        </div>
+        <div class="method-card" id="method-btc" onclick="selectMethod('btc')">
+          <span class="method-icon">₿</span>
+          <div class="method-name">Bitcoin</div>
+          <div class="method-desc">Pay with BTC via NOWPayments</div>
+          <span class="method-badge crypto">⚡ Instant</span>
+        </div>
+      </div>
+
+      <!-- CCBILL FORM -->
+      <div class="pay-form active" id="form-ccbill">
+        <div class="ccbill-notice">
+          <span class="notice-icon">🔒</span>
+          <div>Your payment is processed securely by <strong>CCBill</strong> — the industry standard for adult content platforms. We never store your card details.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>First Name</label>
+            <input type="text" class="form-input" placeholder="John" id="cc-fname"/>
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input type="text" class="form-input" placeholder="Doe" id="cc-lname"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" class="form-input" placeholder="john@example.com" id="cc-email"/>
+        </div>
+        <div class="form-field">
+          <label>Card Number</label>
+          <div class="card-input-wrap">
+            <input type="text" class="form-input" placeholder="1234 5678 9012 3456" id="cc-number" maxlength="19" oninput="formatCard(this)"/>
+            <div class="card-icons">💳</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Expiry Date</label>
+            <input type="text" class="form-input" placeholder="MM / YY" id="cc-expiry" maxlength="7" oninput="formatExpiry(this)"/>
+          </div>
+          <div class="form-field">
+            <label>CVV</label>
+            <div class="cvv-wrap">
+              <input type="text" class="form-input" placeholder="•••" id="cc-cvv" maxlength="4"/>
+              <span class="cvv-help" title="3-4 digits on back of card">?</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Billing Country</label>
+          <select class="form-input" id="cc-country" style="padding-left:14px">
+            <option value="">Select country</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Canada</option>
+            <option>Australia</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="secure-note">
+          <span>🔒</span> 256-bit SSL encryption · Powered by CCBill · PCI DSS Compliant
+        </div>
+        <button class="btn-pay" id="btn-pay-ccbill" onclick="processCardPayment()">
+          <span>🔒</span> <span id="btn-pay-ccbill-txt">Subscribe Now — <span id="cc-price-display">$3.99</span>/mo</span>
+        </button>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
+          By subscribing you agree to our <a onclick="void(0)" style="color:var(--pink);cursor:pointer">Terms of Service</a> and confirm you are 18+. Cancel anytime.
+        </div>
+      </div>
+
+      <!-- BITCOIN FORM -->
+      <div class="pay-form" id="form-btc">
+        <div class="btc-steps">
+          <div class="btc-step">
+            <div class="btc-step-num">1</div>
+            <div>
+              <div class="btc-step-title">Send exact Bitcoin amount</div>
+              <div class="btc-step-desc">Copy the wallet address below and send the exact BTC amount from your Bitcoin wallet.</div>
+            </div>
+          </div>
+          <div class="btc-step">
+            <div class="btc-step-num">2</div>
+            <div>
+              <div class="btc-step-title">Wait for confirmation</div>
+              <div class="btc-step-desc">Bitcoin payments typically confirm within 10-30 minutes. Your account will activate automatically.</div>
+            </div>
+          </div>
+          <div class="btc-step">
+            <div class="btc-step-num">3</div>
+            <div>
+              <div class="btc-step-title">Start watching</div>
+              <div class="btc-step-desc">Once confirmed, you'll receive an email and your premium access will be unlocked instantly.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btc-address-box">
+          <div class="btc-address-label">Bitcoin Payment Address</div>
+          <div class="btc-address" id="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn-copy-address" onclick="copyBtcAddress()">📋 Copy Address</button>
+            <div style="font-size:12px;color:var(--text3)">Amount: <strong style="color:#ffa500" id="btc-amount">0.000062 BTC</strong></div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Scan QR code with your Bitcoin wallet</div>
+          <div class="btc-qr">QR Code<br/>(Generated on<br/>payment)</div>
+        </div>
+
+        <div class="btc-timer">
+          <span>⏱ Address expires in:</span>
+          <span class="btc-timer-count" id="btc-countdown">29:59</span>
+        </div>
+
+        <div class="btc-pending" id="btc-status">
+          <span class="btc-pending-dot"></span>
+          Waiting for payment · Address active for 30 minutes
+        </div>
+
+        <div class="form-field">
+          <label>Your Email (for confirmation)</label>
+          <input type="email" class="form-input" placeholder="your@email.com" id="btc-email"/>
+        </div>
+
+        <button class="btn-pay btn-pay-btc" onclick="processBtcPayment()">
+          ₿ I've Sent the Bitcoin Payment
+        </button>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
+          Powered by NOWPayments · Non-custodial · Payments go directly to merchant wallet
+        </div>
+        <div style="font-size:11px;color:#ffa500;text-align:center;margin-top:8px;background:rgba(255,165,0,.06);border:1px solid rgba(255,165,0,.15);border-radius:8px;padding:8px">
+          ⚠️ Send only Bitcoin (BTC) to this address. Sending other coins will result in permanent loss.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="order-summary">
+      <div class="os-title">Order Summary</div>
+      <div class="os-plan">
+        <div class="os-plan-icon" id="os-icon">🔥</div>
+        <div>
+          <div class="os-plan-name" id="os-name">Premium Plan</div>
+          <div class="os-plan-billing">Monthly · Cancel anytime</div>
+        </div>
+      </div>
+      <div class="os-rows">
+        <div class="os-row"><span class="label">Subscription</span><span class="val" id="os-subtotal">$3.99</span></div>
+        <div class="os-row"><span class="label">Trial period</span><span class="val" style="color:var(--success)">7 days FREE</span></div>
+        <div class="os-row"><span class="label">Tax</span><span class="val">$0.00</span></div>
+        <div class="os-row total"><span class="label">Total today</span><span class="val" id="os-total">$0.00</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Then <span id="os-then-price" style="color:var(--text2);font-weight:600">$3.99/mo</span> after trial</div>
+      </div>
+      <div class="os-perks" id="os-perks">
+        <div class="os-perk">4K Ultra HD streaming</div>
+        <div class="os-perk">Full exclusive content library</div>
+        <div class="os-perk">New drops every week</div>
+        <div class="os-perk">Offline downloads</div>
+        <div class="os-perk">Cancel anytime</div>
+      </div>
+      <div class="os-secure">
+        <span>🔒</span> Secured by CCBill & NOWPayments
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE: PAYMENT SUCCESS
+     ============================================================ -->
+<div id="page-pay-success" class="page">
+  <div class="pay-success-wrap">
+    <div class="pay-success-icon">✓</div>
+    <h2 class="pay-success-title">Payment Successful! 🐰</h2>
+    <p class="pay-success-sub">Welcome to Juice Bunny Premium! Your account has been activated. A confirmation has been sent to your email.</p>
+    <div class="pay-receipt" id="pay-receipt">
+      <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">Premium</span></div>
+      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$3.99/mo</span></div>
+      <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">Credit Card</span></div>
+      <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">JB-2025-001</span></div>
+      <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">Jun 16, 2025</span></div>
+      <div class="pay-receipt-row"><span class="rl">Status</span><span class="rv" style="color:var(--success)">✓ Active</span></div>
+    </div>
+    <button class="btn-start-watching" onclick="goTo('home');updateNavLoggedIn()">
+      ▶ Start Watching Now
+    </button>
+    <div style="font-size:12px;color:var(--text3);margin-top:16px">
+      Manage your subscription anytime in <span style="color:var(--pink);cursor:pointer">Account Settings</span>
+    </div>
+  </div>
+</div>
 <button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- ADMIN BROADCAST BTN (visible after login as admin) -->
@@ -1480,7 +1842,8 @@ function goTo(page) {
   window.scrollTo(0,0);
   if(page === 'home') initReveal();
   if(page === 'player') { vpBuildUpNext(); vpUpdateTime(); }
-  if(page === 'unsub') { unsubGoStep(1); }
+  if(page === 'payment') { /* payment page ready */ }
+  if(page === 'pay-success') { /* success page ready */ }
 }
 
 /* ============================================================
@@ -2014,6 +2377,152 @@ function unsubSelectReason(card,reason){
 function unsubGoHome(){
   showToast('Welcome back! 🐰 So glad you stayed!');
   setTimeout(()=>goTo('home'),1200);
+}
+
+/* ============================================================
+   PHASE 4 — PAYMENT LOGIC
+   ============================================================ */
+
+// Plans config — swap in real CCBill/NOWPayments keys here
+const PLANS = {
+  free:    { name:'Free Plan',    icon:'🐰', price:0,    priceStr:'$0',    btcAmount:'0.000000', perks:['480p SD streaming','Limited free library'] },
+  premium: { name:'Premium Plan', icon:'🔥', price:3.99, priceStr:'$3.99', btcAmount:'0.000062', perks:['4K Ultra HD streaming','Full exclusive library','New drops weekly','Offline downloads','Cancel anytime'] },
+  vip:     { name:'VIP Plan',     icon:'✨', price:10,   priceStr:'$10',   btcAmount:'0.000156', perks:['Everything in Premium','📸 Monthly model photos','Early access drops','VIP badge','Priority support'] },
+};
+
+let currentPlan = 'premium';
+let currentMethod = 'ccbill';
+let btcTimerInterval = null;
+let btcSeconds = 29 * 60 + 59;
+
+function goToPayment(planKey) {
+  currentPlan = planKey || 'premium';
+  const plan = PLANS[currentPlan];
+  // Update plan badge
+  document.getElementById('pay-plan-icon').textContent = plan.icon;
+  document.getElementById('pay-plan-name').textContent = plan.name;
+  document.getElementById('pay-plan-price').innerHTML = plan.priceStr + '<span>/mo</span>';
+  document.getElementById('cc-price-display').textContent = plan.priceStr;
+  // Update order summary
+  document.getElementById('os-icon').textContent = plan.icon;
+  document.getElementById('os-name').textContent = plan.name;
+  document.getElementById('os-subtotal').textContent = plan.priceStr;
+  document.getElementById('os-total').textContent = '$0.00';
+  document.getElementById('os-then-price').textContent = plan.priceStr + '/mo';
+  document.getElementById('btc-amount').textContent = plan.btcAmount + ' BTC';
+  // Update perks
+  document.getElementById('os-perks').innerHTML = plan.perks.map(p=>`<div class="os-perk">${p}</div>`).join('');
+  // Reset method
+  selectMethod('ccbill');
+  goTo('payment');
+}
+
+function selectMethod(method) {
+  currentMethod = method;
+  document.getElementById('method-ccbill').classList.toggle('selected', method==='ccbill');
+  document.getElementById('method-btc').classList.toggle('selected', method==='btc');
+  document.querySelectorAll('.pay-form').forEach(f=>f.classList.remove('active'));
+  document.getElementById('form-'+method).classList.add('active');
+  if(method === 'btc') startBtcTimer();
+  else stopBtcTimer();
+}
+
+function formatCard(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,16);
+  input.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function formatExpiry(input) {
+  let v = input.value.replace(/\D/g,'');
+  if(v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2,4);
+  input.value = v;
+}
+
+function processCardPayment() {
+  const fname = document.getElementById('cc-fname').value.trim();
+  const lname = document.getElementById('cc-lname').value.trim();
+  const email = document.getElementById('cc-email').value.trim();
+  const card = document.getElementById('cc-number').value.trim();
+  const expiry = document.getElementById('cc-expiry').value.trim();
+  const cvv = document.getElementById('cc-cvv').value.trim();
+  const country = document.getElementById('cc-country').value;
+
+  if(!fname||!lname||!email||!card||!expiry||!cvv||!country) {
+    showToast('Please fill in all fields', true); return;
+  }
+  if(card.replace(/\s/g,'').length < 16) { showToast('Enter a valid card number', true); return; }
+
+  const btn = document.getElementById('btn-pay-ccbill');
+  btn.disabled = true;
+  document.getElementById('btn-pay-ccbill-txt').textContent = 'Processing...';
+
+  // 🔑 REAL INTEGRATION: Replace this timeout with actual CCBill API call
+  // CCBill FlexForms URL: https://api.ccbill.com/wap-frontflex/flexforms/YOUR_FLEXFORM_ID
+  // Pass: clientAccnum, clientSubacc, currencyCode, formPrice, formPeriod
+
+  setTimeout(() => {
+    showPaymentSuccess('ccbill', email);
+  }, 2500);
+}
+
+function processBtcPayment() {
+  const email = document.getElementById('btc-email').value.trim();
+  if(!email) { showToast('Please enter your email', true); return; }
+
+  const btn = document.querySelector('.btn-pay-btc');
+  btn.disabled = true;
+  btn.textContent = '⏳ Verifying payment...';
+  document.getElementById('btc-status').innerHTML = '<span class="btc-pending-dot"></span> Checking blockchain confirmation...';
+
+  // 🔑 REAL INTEGRATION: Replace with NOWPayments API call
+  // POST https://api.nowpayments.io/v1/payment
+  // Headers: x-api-key: YOUR_NOWPAYMENTS_API_KEY
+  // Body: { price_amount: plan.price, price_currency: 'usd', pay_currency: 'btc', order_id: 'JB-'+Date.now() }
+
+  setTimeout(() => {
+    showPaymentSuccess('btc', email);
+  }, 3000);
+}
+
+function showPaymentSuccess(method, email) {
+  stopBtcTimer();
+  const plan = PLANS[currentPlan];
+  const txId = 'JB-' + Date.now().toString().slice(-8);
+  const nextDate = new Date();
+  nextDate.setMonth(nextDate.getMonth() + 1);
+  document.getElementById('receipt-plan').textContent = plan.name;
+  document.getElementById('receipt-amount').textContent = plan.priceStr + '/mo';
+  document.getElementById('receipt-method').textContent = method === 'ccbill' ? 'Credit Card (CCBill)' : 'Bitcoin (NOWPayments)';
+  document.getElementById('receipt-txid').textContent = txId;
+  document.getElementById('receipt-next').textContent = nextDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  goTo('pay-success');
+  updateNavLoggedIn();
+}
+
+function startBtcTimer() {
+  stopBtcTimer();
+  btcSeconds = 29 * 60 + 59;
+  btcTimerInterval = setInterval(() => {
+    btcSeconds--;
+    const m = Math.floor(btcSeconds / 60);
+    const s = btcSeconds % 60;
+    const el = document.getElementById('btc-countdown');
+    if(el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(btcSeconds <= 0) {
+      stopBtcTimer();
+      if(el) el.textContent = 'EXPIRED';
+      const status = document.getElementById('btc-status');
+      if(status) status.innerHTML = '⚠️ Address expired. Please refresh to generate a new one.';
+    }
+  }, 1000);
+}
+function stopBtcTimer() {
+  clearInterval(btcTimerInterval);
+}
+
+function copyBtcAddress() {
+  const addr = document.getElementById('btc-address').textContent;
+  navigator.clipboard && navigator.clipboard.writeText(addr);
+  showToast('✓ Bitcoin address copied!');
 }
 
 /* ============================================================
