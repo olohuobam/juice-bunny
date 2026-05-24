@@ -2380,53 +2380,80 @@ function unsubGoHome(){
 }
 
 /* ============================================================
-   PHASE 4 — PAYMENT LOGIC
+   PHASE 4 — PAYMENT LOGIC (REAL NOWPAYMENTS INTEGRATION)
    ============================================================ */
 
-// Plans config — swap in real CCBill/NOWPayments keys here
+// ── CONFIG ──────────────────────────────────────────────────
+const NP_API_KEY  = 'RQ4GT49-JR048PS-JBHHXF4-CZ4TDC9';
+const NP_IPN_KEY  = 'i+cuF4QZstNRJMiLoWnHz/F0xvaeL+px';
+const SITE_URL    = 'https://juice-bunny.vercel.app';
+const NP_BASE     = 'https://api.nowpayments.io/v1';
+
+// ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
-  free:    { name:'Free Plan',    icon:'🐰', price:0,    priceStr:'$0',    btcAmount:'0.000000', perks:['480p SD streaming','Limited free library'] },
-  premium: { name:'Premium Plan', icon:'🔥', price:3.99, priceStr:'$3.99', btcAmount:'0.000062', perks:['4K Ultra HD streaming','Full exclusive library','New drops weekly','Offline downloads','Cancel anytime'] },
-  vip:     { name:'VIP Plan',     icon:'✨', price:10,   priceStr:'$10',   btcAmount:'0.000156', perks:['Everything in Premium','📸 Monthly model photos','Early access drops','VIP badge','Priority support'] },
+  free:    { name:'Free Plan',    icon:'🐰', price:0,    priceStr:'$0',    perks:['480p SD streaming','Limited free library'] },
+  premium: { name:'Premium Plan', icon:'🔥', price:3.99, priceStr:'$3.99', perks:['4K Ultra HD streaming','Full exclusive library','New drops weekly','Offline downloads','Cancel anytime'] },
+  vip:     { name:'VIP Plan',     icon:'✨', price:10,   priceStr:'$10',   perks:['Everything in Premium','📸 Monthly model photos','Early access drops','VIP badge','Priority support'] },
 };
 
-let currentPlan = 'premium';
-let currentMethod = 'ccbill';
+let currentPlan      = 'premium';
+let currentMethod    = 'ccbill';
 let btcTimerInterval = null;
-let btcSeconds = 29 * 60 + 59;
+let btcSeconds       = 29 * 60 + 59;
+let currentPaymentId = null;
+let paymentPollInterval = null;
 
+// ── NAVIGATION ───────────────────────────────────────────────
 function goToPayment(planKey) {
   currentPlan = planKey || 'premium';
-  const plan = PLANS[currentPlan];
-  // Update plan badge
-  document.getElementById('pay-plan-icon').textContent = plan.icon;
-  document.getElementById('pay-plan-name').textContent = plan.name;
-  document.getElementById('pay-plan-price').innerHTML = plan.priceStr + '<span>/mo</span>';
-  document.getElementById('cc-price-display').textContent = plan.priceStr;
-  // Update order summary
-  document.getElementById('os-icon').textContent = plan.icon;
-  document.getElementById('os-name').textContent = plan.name;
-  document.getElementById('os-subtotal').textContent = plan.priceStr;
-  document.getElementById('os-total').textContent = '$0.00';
-  document.getElementById('os-then-price').textContent = plan.priceStr + '/mo';
-  document.getElementById('btc-amount').textContent = plan.btcAmount + ' BTC';
-  // Update perks
-  document.getElementById('os-perks').innerHTML = plan.perks.map(p=>`<div class="os-perk">${p}</div>`).join('');
-  // Reset method
+  const plan  = PLANS[currentPlan];
+
+  document.getElementById('pay-plan-icon').textContent        = plan.icon;
+  document.getElementById('pay-plan-name').textContent        = plan.name;
+  document.getElementById('pay-plan-price').innerHTML         = plan.priceStr + '<span>/mo</span>';
+  document.getElementById('cc-price-display').textContent     = plan.priceStr;
+  document.getElementById('os-icon').textContent              = plan.icon;
+  document.getElementById('os-name').textContent              = plan.name;
+  document.getElementById('os-subtotal').textContent          = plan.priceStr;
+  document.getElementById('os-total').textContent             = '$0.00';
+  document.getElementById('os-then-price').textContent        = plan.priceStr + '/mo';
+  document.getElementById('btc-amount').textContent           = 'Calculating...';
+  document.getElementById('os-perks').innerHTML               = plan.perks.map(p=>`<div class="os-perk">${p}</div>`).join('');
+
   selectMethod('ccbill');
   goTo('payment');
+
+  // Pre-fetch BTC estimate for display
+  if(plan.price > 0) fetchBtcEstimate(plan.price);
 }
 
+// ── BTC ESTIMATE ─────────────────────────────────────────────
+async function fetchBtcEstimate(usdAmount) {
+  try {
+    const res  = await fetch(`${NP_BASE}/estimate?amount=${usdAmount}&currency_from=usd&currency_to=btc`, {
+      headers: { 'x-api-key': NP_API_KEY }
+    });
+    const data = await res.json();
+    if(data.estimated_amount) {
+      document.getElementById('btc-amount').textContent = parseFloat(data.estimated_amount).toFixed(8) + ' BTC';
+    }
+  } catch(e) {
+    document.getElementById('btc-amount').textContent = '— BTC (fetch error)';
+  }
+}
+
+// ── METHOD SELECTOR ──────────────────────────────────────────
 function selectMethod(method) {
   currentMethod = method;
   document.getElementById('method-ccbill').classList.toggle('selected', method==='ccbill');
   document.getElementById('method-btc').classList.toggle('selected', method==='btc');
   document.querySelectorAll('.pay-form').forEach(f=>f.classList.remove('active'));
   document.getElementById('form-'+method).classList.add('active');
-  if(method === 'btc') startBtcTimer();
-  else stopBtcTimer();
+  if(method === 'btc') initBtcPayment();
+  else { stopBtcTimer(); stopPaymentPoll(); }
 }
 
+// ── CARD FORMATTING ──────────────────────────────────────────
 function formatCard(input) {
   let v = input.value.replace(/\D/g,'').substring(0,16);
   input.value = v.replace(/(.{4})/g,'$1 ').trim();
@@ -2437,93 +2464,278 @@ function formatExpiry(input) {
   input.value = v;
 }
 
+// ── CREDIT CARD (CCBill placeholder — wire when keys arrive) ─
 function processCardPayment() {
-  const fname = document.getElementById('cc-fname').value.trim();
-  const lname = document.getElementById('cc-lname').value.trim();
-  const email = document.getElementById('cc-email').value.trim();
-  const card = document.getElementById('cc-number').value.trim();
-  const expiry = document.getElementById('cc-expiry').value.trim();
-  const cvv = document.getElementById('cc-cvv').value.trim();
+  const fname   = document.getElementById('cc-fname').value.trim();
+  const lname   = document.getElementById('cc-lname').value.trim();
+  const email   = document.getElementById('cc-email').value.trim();
+  const card    = document.getElementById('cc-number').value.trim();
+  const expiry  = document.getElementById('cc-expiry').value.trim();
+  const cvv     = document.getElementById('cc-cvv').value.trim();
   const country = document.getElementById('cc-country').value;
 
   if(!fname||!lname||!email||!card||!expiry||!cvv||!country) {
     showToast('Please fill in all fields', true); return;
   }
-  if(card.replace(/\s/g,'').length < 16) { showToast('Enter a valid card number', true); return; }
+  if(card.replace(/\s/g,'').length < 16) {
+    showToast('Enter a valid card number', true); return;
+  }
 
   const btn = document.getElementById('btn-pay-ccbill');
   btn.disabled = true;
   document.getElementById('btn-pay-ccbill-txt').textContent = 'Processing...';
 
-  // 🔑 REAL INTEGRATION: Replace this timeout with actual CCBill API call
-  // CCBill FlexForms URL: https://api.ccbill.com/wap-frontflex/flexforms/YOUR_FLEXFORM_ID
-  // Pass: clientAccnum, clientSubacc, currencyCode, formPrice, formPeriod
+  // ── Wire CCBill here when FlexForm ID is ready ──
+  // window.location.href = `https://api.ccbill.com/wap-frontflex/flexforms/YOUR_FLEXFORM_ID
+  //   ?clientAccnum=XXXXX&clientSubacc=XXXX&currencyCode=840
+  //   &formPrice=${PLANS[currentPlan].price}&formPeriod=30`;
 
   setTimeout(() => {
     showPaymentSuccess('ccbill', email);
-  }, 2500);
+  }, 2000);
 }
 
-function processBtcPayment() {
+// ── BITCOIN — CREATE REAL NOWPAYMENTS INVOICE ────────────────
+async function initBtcPayment() {
+  const plan = PLANS[currentPlan];
+  if(plan.price === 0) {
+    document.getElementById('btc-status').innerHTML = '✓ Free plan — no payment required';
+    return;
+  }
+
+  stopBtcTimer();
+  stopPaymentPoll();
+
+  document.getElementById('btc-address').textContent = 'Generating address...';
+  document.getElementById('btc-status').innerHTML    = '<span class="btc-pending-dot"></span> Creating payment invoice...';
+
+  try {
+    const orderId = 'JB-' + Date.now();
+
+    // Create real payment invoice via NOWPayments
+    const res  = await fetch(`${NP_BASE}/invoice`, {
+      method: 'POST',
+      headers: {
+        'x-api-key':    NP_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        price_amount:      plan.price,
+        price_currency:    'usd',
+        pay_currency:      'btc',
+        order_id:          orderId,
+        order_description: `Juice Bunny ${plan.name} - Monthly Subscription`,
+        success_url:       `${SITE_URL}?payment=success&order=${orderId}`,
+        cancel_url:        `${SITE_URL}?payment=cancelled`,
+        ipn_callback_url:  `${SITE_URL}/api/nowpayments-webhook`
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.id && data.invoice_url) {
+      currentPaymentId = data.id;
+
+      // Option A — redirect to NOWPayments hosted page (simplest)
+      // window.location.href = data.invoice_url;
+
+      // Option B — show address in UI (better UX)
+      // Now create a direct payment to get the BTC address
+      await createDirectPayment(plan, orderId);
+
+    } else {
+      throw new Error(data.message || 'Invoice creation failed');
+    }
+
+  } catch(err) {
+    console.error('NOWPayments error:', err);
+    document.getElementById('btc-address').textContent = 'Error generating address';
+    document.getElementById('btc-status').innerHTML    = '⚠️ Could not create payment. Please try again.';
+    showToast('Payment error: ' + err.message, true);
+  }
+}
+
+async function createDirectPayment(plan, orderId) {
+  try {
+    const res  = await fetch(`${NP_BASE}/payment`, {
+      method: 'POST',
+      headers: {
+        'x-api-key':    NP_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        price_amount:      plan.price,
+        price_currency:    'usd',
+        pay_currency:      'btc',
+        order_id:          orderId,
+        order_description: `Juice Bunny ${plan.name}`,
+        ipn_callback_url:  `${SITE_URL}/api/nowpayments-webhook`
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.payment_id && data.pay_address) {
+      currentPaymentId = data.payment_id;
+
+      // Update UI with real address and amount
+      document.getElementById('btc-address').textContent = data.pay_address;
+      document.getElementById('btc-amount').textContent  = parseFloat(data.pay_amount).toFixed(8) + ' BTC';
+      document.getElementById('btc-status').innerHTML    = '<span class="btc-pending-dot"></span> Waiting for payment · Send exact BTC amount above';
+
+      // Start countdown timer
+      startBtcTimer();
+
+      // Start polling payment status every 10 seconds
+      startPaymentPoll(data.payment_id);
+
+    } else {
+      throw new Error(data.message || 'Could not get payment address');
+    }
+
+  } catch(err) {
+    document.getElementById('btc-address').textContent = 'Error — please retry';
+    document.getElementById('btc-status').innerHTML    = '⚠️ ' + (err.message || 'Unknown error');
+  }
+}
+
+// ── PAYMENT STATUS POLLING ───────────────────────────────────
+function startPaymentPoll(paymentId) {
+  stopPaymentPoll();
+  paymentPollInterval = setInterval(async () => {
+    try {
+      const res  = await fetch(`${NP_BASE}/payment/${paymentId}`, {
+        headers: { 'x-api-key': NP_API_KEY }
+      });
+      const data = await res.json();
+
+      updatePaymentStatus(data.payment_status, data);
+
+      if(['finished','confirmed'].includes(data.payment_status)) {
+        stopPaymentPoll();
+        stopBtcTimer();
+        const email = document.getElementById('btc-email').value || '';
+        setTimeout(() => showPaymentSuccess('btc', email, data), 1500);
+      }
+      if(['failed','expired'].includes(data.payment_status)) {
+        stopPaymentPoll();
+        stopBtcTimer();
+        document.getElementById('btc-status').innerHTML = '❌ Payment ' + data.payment_status + '. Please try again.';
+      }
+
+    } catch(e) { console.error('Poll error:', e); }
+  }, 10000); // check every 10 seconds
+}
+
+function stopPaymentPoll() {
+  clearInterval(paymentPollInterval);
+}
+
+function updatePaymentStatus(status, data) {
+  const statusMap = {
+    waiting:    '<span class="btc-pending-dot"></span> Waiting for payment...',
+    confirming: '⏳ Payment received! Confirming on blockchain...',
+    confirmed:  '✅ Confirmed! Activating your account...',
+    finished:   '✅ Payment complete! Activating your account...',
+    failed:     '❌ Payment failed. Please try again.',
+    expired:    '⚠️ Payment window expired. Please refresh.',
+  };
+  const el = document.getElementById('btc-status');
+  if(el && statusMap[status]) el.innerHTML = statusMap[status];
+}
+
+// ── MANUAL CONFIRM BUTTON ────────────────────────────────────
+async function processBtcPayment() {
   const email = document.getElementById('btc-email').value.trim();
   if(!email) { showToast('Please enter your email', true); return; }
 
+  if(!currentPaymentId) {
+    showToast('Please wait for payment address to generate', true); return;
+  }
+
   const btn = document.querySelector('.btn-pay-btc');
   btn.disabled = true;
-  btn.textContent = '⏳ Verifying payment...';
-  document.getElementById('btc-status').innerHTML = '<span class="btc-pending-dot"></span> Checking blockchain confirmation...';
+  btn.textContent = '⏳ Checking payment...';
 
-  // 🔑 REAL INTEGRATION: Replace with NOWPayments API call
-  // POST https://api.nowpayments.io/v1/payment
-  // Headers: x-api-key: YOUR_NOWPAYMENTS_API_KEY
-  // Body: { price_amount: plan.price, price_currency: 'usd', pay_currency: 'btc', order_id: 'JB-'+Date.now() }
+  try {
+    const res  = await fetch(`${NP_BASE}/payment/${currentPaymentId}`, {
+      headers: { 'x-api-key': NP_API_KEY }
+    });
+    const data = await res.json();
 
-  setTimeout(() => {
-    showPaymentSuccess('btc', email);
-  }, 3000);
+    if(['finished','confirmed'].includes(data.payment_status)) {
+      showPaymentSuccess('btc', email, data);
+    } else {
+      showToast(`Payment status: ${data.payment_status || 'pending'} — please wait`, true);
+      btn.disabled = false;
+      btn.textContent = '₿ I\'ve Sent the Bitcoin Payment';
+    }
+  } catch(e) {
+    showToast('Could not verify payment. Please wait for auto-confirmation.', true);
+    btn.disabled = false;
+    btn.textContent = '₿ I\'ve Sent the Bitcoin Payment';
+  }
 }
 
-function showPaymentSuccess(method, email) {
+// ── SUCCESS PAGE ─────────────────────────────────────────────
+function showPaymentSuccess(method, email, npData) {
   stopBtcTimer();
-  const plan = PLANS[currentPlan];
-  const txId = 'JB-' + Date.now().toString().slice(-8);
+  stopPaymentPoll();
+  const plan    = PLANS[currentPlan];
+  const txId    = npData?.payment_id || ('JB-' + Date.now().toString().slice(-8));
   const nextDate = new Date();
   nextDate.setMonth(nextDate.getMonth() + 1);
-  document.getElementById('receipt-plan').textContent = plan.name;
+
+  document.getElementById('receipt-plan').textContent   = plan.name;
   document.getElementById('receipt-amount').textContent = plan.priceStr + '/mo';
   document.getElementById('receipt-method').textContent = method === 'ccbill' ? 'Credit Card (CCBill)' : 'Bitcoin (NOWPayments)';
-  document.getElementById('receipt-txid').textContent = txId;
-  document.getElementById('receipt-next').textContent = nextDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('receipt-txid').textContent   = txId;
+  document.getElementById('receipt-next').textContent   = nextDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
   goTo('pay-success');
   updateNavLoggedIn();
 }
 
+// ── BTC COUNTDOWN TIMER ──────────────────────────────────────
 function startBtcTimer() {
   stopBtcTimer();
   btcSeconds = 29 * 60 + 59;
   btcTimerInterval = setInterval(() => {
     btcSeconds--;
-    const m = Math.floor(btcSeconds / 60);
-    const s = btcSeconds % 60;
+    const m  = Math.floor(btcSeconds / 60);
+    const s  = btcSeconds % 60;
     const el = document.getElementById('btc-countdown');
     if(el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     if(btcSeconds <= 0) {
       stopBtcTimer();
       if(el) el.textContent = 'EXPIRED';
       const status = document.getElementById('btc-status');
-      if(status) status.innerHTML = '⚠️ Address expired. Please refresh to generate a new one.';
+      if(status) status.innerHTML = '⚠️ Address expired. Click Bitcoin tab again to regenerate.';
     }
   }, 1000);
 }
-function stopBtcTimer() {
-  clearInterval(btcTimerInterval);
-}
+function stopBtcTimer() { clearInterval(btcTimerInterval); }
 
 function copyBtcAddress() {
   const addr = document.getElementById('btc-address').textContent;
-  navigator.clipboard && navigator.clipboard.writeText(addr);
-  showToast('✓ Bitcoin address copied!');
+  if(addr && addr !== 'Generating address...') {
+    navigator.clipboard && navigator.clipboard.writeText(addr);
+    showToast('✓ Bitcoin address copied!');
+  }
 }
+
+// ── CHECK URL PARAMS ON LOAD (handle redirect back from NOWPayments) ──
+function checkPaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('payment') === 'success') {
+    showPaymentSuccess('btc', '', { payment_id: params.get('order') });
+  }
+  if(params.get('payment') === 'cancelled') {
+    goTo('payment');
+    showToast('Payment cancelled. Please try again.', true);
+  }
+}
+
 
 /* ============================================================
    INIT
@@ -2533,6 +2745,7 @@ buildFreeGrid();
 buildPremGrid();
 buildFAQ();
 setTimeout(initReveal,100);
+checkPaymentReturn();
 </script>
 </body>
 </html>
