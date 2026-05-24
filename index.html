@@ -2506,14 +2506,15 @@ async function initBtcPayment() {
   stopBtcTimer();
   stopPaymentPoll();
 
-  document.getElementById('btc-address').textContent = 'Generating address...';
+  document.getElementById('btc-address').textContent = 'Generating invoice...';
   document.getElementById('btc-status').innerHTML    = '<span class="btc-pending-dot"></span> Creating payment invoice...';
+  document.getElementById('btc-amount').textContent  = 'Calculating...';
 
   try {
     const orderId = 'JB-' + Date.now();
 
-    // Create real payment invoice via NOWPayments
-    const res  = await fetch(`${NP_BASE}/invoice`, {
+    // Use invoice endpoint — more reliable, handles minimums automatically
+    const res = await fetch(`${NP_BASE}/invoice`, {
       method: 'POST',
       headers: {
         'x-api-key':    NP_API_KEY,
@@ -2533,70 +2534,50 @@ async function initBtcPayment() {
 
     const data = await res.json();
 
-    if(data.id && data.invoice_url) {
+    if(data.invoice_url) {
       currentPaymentId = data.id;
 
-      // Option A — redirect to NOWPayments hosted page (simplest)
-      // window.location.href = data.invoice_url;
+      // Show invoice URL button in UI
+      document.getElementById('btc-address').textContent = 'Invoice ready — click button below';
+      document.getElementById('btc-status').innerHTML    = '✅ Invoice created! Click below to complete payment.';
+      document.getElementById('btc-amount').textContent  = plan.priceStr + ' USD → BTC';
 
-      // Option B — show address in UI (better UX)
-      // Now create a direct payment to get the BTC address
-      await createDirectPayment(plan, orderId);
+      // Update the pay button to redirect to NOWPayments invoice
+      const btn = document.querySelector('.btn-pay-btc');
+      btn.textContent = '₿ Pay with Bitcoin →';
+      btn.onclick = () => window.open(data.invoice_url, '_blank');
+
+      // Also show the direct link
+      const statusEl = document.getElementById('btc-status');
+      statusEl.innerHTML = `
+        ✅ Invoice ready!
+        <br/><br/>
+        <a href="${data.invoice_url}" target="_blank"
+           style="display:inline-block;background:rgba(255,165,0,.15);border:1px solid rgba(255,165,0,.4);
+           color:#ffa500;padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-top:4px">
+          ₿ Open Bitcoin Payment Page →
+        </a>
+        <br/><br/>
+        <span style="font-size:12px;color:var(--text3)">A new tab will open with your secure Bitcoin payment page powered by NOWPayments.</span>
+      `;
+
+      startBtcTimer();
 
     } else {
-      throw new Error(data.message || 'Invoice creation failed');
+      throw new Error(data.message || 'Could not create invoice');
     }
 
   } catch(err) {
-    console.error('NOWPayments error:', err);
-    document.getElementById('btc-address').textContent = 'Error generating address';
-    document.getElementById('btc-status').innerHTML    = '⚠️ Could not create payment. Please try again.';
-    showToast('Payment error: ' + err.message, true);
+    console.error('NOWPayments invoice error:', err);
+    document.getElementById('btc-address').textContent = 'Error — please retry';
+    document.getElementById('btc-status').innerHTML    = `⚠️ ${err.message || 'Could not create payment. Please try again.'}`;
+    showToast('Payment error: ' + (err.message || 'Unknown'), true);
   }
 }
 
 async function createDirectPayment(plan, orderId) {
-  try {
-    const res  = await fetch(`${NP_BASE}/payment`, {
-      method: 'POST',
-      headers: {
-        'x-api-key':    NP_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        price_amount:      plan.price,
-        price_currency:    'usd',
-        pay_currency:      'btc',
-        order_id:          orderId,
-        order_description: `Juice Bunny ${plan.name}`,
-        ipn_callback_url:  `${SITE_URL}/api/nowpayments-webhook`
-      })
-    });
-
-    const data = await res.json();
-
-    if(data.payment_id && data.pay_address) {
-      currentPaymentId = data.payment_id;
-
-      // Update UI with real address and amount
-      document.getElementById('btc-address').textContent = data.pay_address;
-      document.getElementById('btc-amount').textContent  = parseFloat(data.pay_amount).toFixed(8) + ' BTC';
-      document.getElementById('btc-status').innerHTML    = '<span class="btc-pending-dot"></span> Waiting for payment · Send exact BTC amount above';
-
-      // Start countdown timer
-      startBtcTimer();
-
-      // Start polling payment status every 10 seconds
-      startPaymentPoll(data.payment_id);
-
-    } else {
-      throw new Error(data.message || 'Could not get payment address');
-    }
-
-  } catch(err) {
-    document.getElementById('btc-address').textContent = 'Error — please retry';
-    document.getElementById('btc-status').innerHTML    = '⚠️ ' + (err.message || 'Unknown error');
-  }
+  // Kept for future use when minimum amounts are met
+  console.log('Direct payment skipped — using invoice flow');
 }
 
 // ── PAYMENT STATUS POLLING ───────────────────────────────────
