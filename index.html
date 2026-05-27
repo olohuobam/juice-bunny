@@ -289,6 +289,35 @@ footer{background:var(--bg2);padding:52px 40px 28px;border-top:1px solid var(--b
 .scroll-top-btn:hover{background:var(--pink2);transform:translateY(-2px)}
 @media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}}
 
+/* BILLING TOGGLE */
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:25px;padding:4px;max-width:380px;margin:0 auto 32px}
+.btog-btn{flex:1;padding:9px 16px;border-radius:20px;border:none;background:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btog-btn.active{background:var(--pink);color:#fff}
+.btog-save{background:rgba(255,200,50,.2);color:#ffc832;font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;margin-left:4px;vertical-align:middle}
+
+/* LIVE CALL BOOKING */
+#page-booking{min-height:100vh;padding-top:64px;background:radial-gradient(ellipse 60% 50% at 50% 20%,rgba(180,20,100,.12),transparent 60%),var(--bg)}
+.booking-wrap{max-width:900px;margin:0 auto;padding:48px 20px 80px}
+.booking-title{font-size:28px;font-weight:700;margin-bottom:6px}
+.booking-sub{font-size:14px;color:var(--text2);margin-bottom:32px}
+.model-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:40px}
+.model-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s}
+.model-card:hover{transform:translateY(-4px);border-color:rgba(255,45,120,.4)}
+.model-card.selected{border-color:var(--pink);background:rgba(255,45,120,.06)}
+.model-avatar{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,#1a0510,#2d0a1a)}
+.model-name{font-size:14px;font-weight:700;padding:10px 14px 4px}
+.model-tag{font-size:11px;color:var(--text3);padding:0 14px 10px}
+.model-status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:10px;margin:0 14px 12px}
+.model-status-badge.online{background:rgba(0,200,120,.1);color:var(--success)}
+.model-status-badge.busy{background:rgba(255,165,0,.1);color:#ffa500}
+.slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:24px}
+.time-slot{padding:10px;border:1px solid var(--border2);border-radius:8px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.time-slot:hover{border-color:var(--pink);color:var(--pink)}
+.time-slot.sel{background:var(--pink);border-color:var(--pink);color:#fff}
+.time-slot.taken{opacity:.3;cursor:not-allowed}
+.btn-book{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px 40px;border-radius:25px;cursor:pointer;transition:all .25s}
+.btn-book:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 8px 28px var(--pink-glow)}
+
 /* PRICING TIERS */
 .pricing-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto}
 .tier-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:32px 28px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
@@ -803,7 +832,17 @@ select option{background:var(--bg3);color:var(--text)}
 .os-perk::before{content:'✓';color:var(--pink);font-weight:700;font-size:11px}
 .os-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 
-/* PAYMENT SUCCESS PAGE */
+/* CRYPTO SELECTOR */
+.crypto-selector{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.crypto-opt{border:1.5px solid var(--border2);border-radius:10px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .2s;background:rgba(255,255,255,.02)}
+.crypto-opt:hover{border-color:rgba(255,165,0,.4);background:rgba(255,165,0,.04)}
+.crypto-opt.selected{border-color:#ffa500;background:rgba(255,165,0,.08)}
+.crypto-icon{font-size:22px;display:block;margin-bottom:4px}
+.crypto-name{font-size:11px;font-weight:600;color:#fff;margin-bottom:2px}
+.crypto-ticker{font-size:10px;color:#ffa500;font-weight:700;margin-bottom:2px}
+.crypto-min{font-size:9px;color:var(--text3)}
+@media(max-width:520px){.crypto-selector{grid-template-columns:repeat(3,1fr)}}
+
 #page-pay-success{min-height:100vh;padding-top:64px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(0,200,120,.08),transparent 60%),var(--bg)}
 .pay-success-wrap{max-width:520px;width:100%;padding:40px 20px;text-align:center}
 .pay-success-icon{width:80px;height:80px;border-radius:50%;background:rgba(0,200,120,.12);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 24px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
@@ -851,18 +890,22 @@ select option{background:var(--bg3);color:var(--text)}
   <!-- TICKER -->
   <div class="ticker">
     <div class="ticker-track">
-      <span class="ticker-item"><span class="t-star">★</span>ANYTIME</span>
-      <span class="ticker-item"><span class="t-star">★</span>NO ADS EVER</span>
-      <span class="ticker-item"><span class="t-star">★</span>NEW DROPS WEEKLY</span>
-      <span class="ticker-item"><span class="t-star">★</span>SUBSCRIBE FOR FULL ACCESS</span>
-      <span class="ticker-item"><span class="t-star">★</span>BITCOIN & CCBILL ACCEPTED</span>
-      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD QUALITY</span>
-      <span class="ticker-item"><span class="t-star">★</span>ANYTIME</span>
-      <span class="ticker-item"><span class="t-star">★</span>NO ADS EVER</span>
-      <span class="ticker-item"><span class="t-star">★</span>NEW DROPS WEEKLY</span>
-      <span class="ticker-item"><span class="t-star">★</span>SUBSCRIBE FOR FULL ACCESS</span>
-      <span class="ticker-item"><span class="t-star">★</span>BITCOIN & CCBILL ACCEPTED</span>
-      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD QUALITY</span>
+      <span class="ticker-item"><span class="t-star">★</span>100% EXPLICIT CONTENT</span>
+      <span class="ticker-item"><span class="t-star">★</span>ZERO ADS EVER</span>
+      <span class="ticker-item"><span class="t-star">★</span>FRESH DROPS DAILY</span>
+      <span class="ticker-item"><span class="t-star">★</span>LIVE MODEL CALLS</span>
+      <span class="ticker-item"><span class="t-star">★</span>BTC · ETH · USDT · LTC · XRP ACCEPTED</span>
+      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD</span>
+      <span class="ticker-item"><span class="t-star">★</span>100% PRIVATE</span>
+      <span class="ticker-item"><span class="t-star">★</span>18+ ONLY</span>
+      <span class="ticker-item"><span class="t-star">★</span>100% EXPLICIT CONTENT</span>
+      <span class="ticker-item"><span class="t-star">★</span>ZERO ADS EVER</span>
+      <span class="ticker-item"><span class="t-star">★</span>FRESH DROPS DAILY</span>
+      <span class="ticker-item"><span class="t-star">★</span>LIVE MODEL CALLS</span>
+      <span class="ticker-item"><span class="t-star">★</span>BTC · ETH · USDT · LTC · XRP ACCEPTED</span>
+      <span class="ticker-item"><span class="t-star">★</span>4K ULTRA HD</span>
+      <span class="ticker-item"><span class="t-star">★</span>100% PRIVATE</span>
+      <span class="ticker-item"><span class="t-star">★</span>18+ ONLY</span>
     </div>
   </div>
 
@@ -871,11 +914,11 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="hero-grid-bg"></div>
     <div class="hero-inner">
       <div>
-        <div class="hero-h1">Unlimited Premium</div>
-        <div class="hero-h1-pink">Movies &<br/>Entertainment</div>
-        <p class="hero-sub">Immerse yourself in a luxury cinematic experience. Stream exclusive 4K content, award-winning originals, and blockbuster hits on any device.</p>
+        <div class="hero-h1">Unlimited Naughty</div>
+        <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
+        <p class="hero-sub">Indulge in the most explicit, steamy, and seductive content online. Stream exclusive 4K adult videos, live model calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
-          <button class="btn-hero-watch" onclick="goToPayment('premium')">▶ Start Watching</button>
+          <button class="btn-hero-watch" onclick="goToPayment('basic')">🔥 Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
         </div>
       </div>
@@ -894,10 +937,10 @@ select option{background:var(--bg3);color:var(--text)}
   <!-- STATS -->
   <div class="stats-bar">
     <div class="stats-inner">
-      <div class="stat reveal"><div class="stat-num">10K+</div><div class="stat-lbl">Videos</div></div>
+      <div class="stat reveal"><div class="stat-num">10K+</div><div class="stat-lbl">Hot Videos</div></div>
       <div class="stat reveal reveal-d1"><div class="stat-num">4K</div><div class="stat-lbl">Ultra HD</div></div>
-      <div class="stat reveal reveal-d2"><div class="stat-num">50K+</div><div class="stat-lbl">Members</div></div>
-      <div class="stat reveal reveal-d3"><div class="stat-num">New</div><div class="stat-lbl">Weekly Drops</div></div>
+      <div class="stat reveal reveal-d2"><div class="stat-num">50K+</div><div class="stat-lbl">Horny Members</div></div>
+      <div class="stat reveal reveal-d3"><div class="stat-num">Daily</div><div class="stat-lbl">Fresh Drops</div></div>
     </div>
   </div>
 
@@ -906,17 +949,17 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="sec-inner">
       <div class="trending-head">
         <div>
-          <span class="sec-label reveal">Popular</span>
-          <h2 class="sec-title reveal">Trending <span>Now</span></h2>
-          <p class="sec-sub reveal">Discover the most popular movies and shows.</p>
+          <span class="sec-label reveal">Hottest Right Now</span>
+          <h2 class="sec-title reveal">Trending <span>& Steamy</span></h2>
+          <p class="sec-sub reveal">The filthiest, most watched content on Juice Bunny right now.</p>
         </div>
         <div class="filter-tabs reveal">
-          <button class="ftab active" onclick="filterMovies(this,'all')">Trending</button>
-          <button class="ftab" onclick="filterMovies(this,'new')">New Releases</button>
-          <button class="ftab" onclick="filterMovies(this,'action')">Action</button>
-          <button class="ftab" onclick="filterMovies(this,'romance')">Romance</button>
-          <button class="ftab" onclick="filterMovies(this,'anime')">Anime</button>
-          <button class="ftab" onclick="filterMovies(this,'originals')">Originals</button>
+          <button class="ftab active" onclick="filterMovies(this,'all')">🔥 Trending</button>
+          <button class="ftab" onclick="filterMovies(this,'new')">💦 New Drops</button>
+          <button class="ftab" onclick="filterMovies(this,'action')">😈 Naughty</button>
+          <button class="ftab" onclick="filterMovies(this,'romance')">💋 Romantic</button>
+          <button class="ftab" onclick="filterMovies(this,'anime')">🎌 Hentai</button>
+          <button class="ftab" onclick="filterMovies(this,'originals')">⭐ Originals</button>
         </div>
       </div>
       <div class="movie-grid" id="movieGrid"></div>
@@ -927,16 +970,16 @@ select option{background:var(--bg3);color:var(--text)}
   <section class="section bg2-section" id="features">
     <div class="sec-inner">
       <div class="feat-center reveal">
-        <h2 class="sec-title">The Premium Viewing <span>Experience</span></h2>
-        <p class="sec-sub">Everything you need for the ultimate entertainment setup, beautifully designed and expertly engineered.</p>
+        <h2 class="sec-title">Why You'll Never <span>Leave</span></h2>
+        <p class="sec-sub">Built for pleasure-seekers who demand the best. Explicit, private, and dripping in quality.</p>
       </div>
       <div class="feats-grid">
-        <div class="feat-card reveal"><span class="feat-icon">📺</span><div class="feat-title">4K Ultra HD Streaming</div><div class="feat-desc">Experience cinema-quality visuals with our advanced streaming technology.</div></div>
-        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🖥️</span><div class="feat-title">Watch Anywhere</div><div class="feat-desc">Seamlessly transition between your TV, phone, tablet, and desktop.</div></div>
-        <div class="feat-card reveal reveal-d2"><span class="feat-icon">⬇️</span><div class="feat-title">Offline Downloads</div><div class="feat-desc">Download your favorite shows and watch them without an internet connection.</div></div>
-        <div class="feat-card reveal"><span class="feat-icon">✨</span><div class="feat-title">Personalized Picks</div><div class="feat-desc">Curated content tailored exactly to your unique viewing preferences.</div></div>
-        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🤖</span><div class="feat-title">AI Suggestions</div><div class="feat-desc">Our smart AI learns what you love to suggest your next binge.</div></div>
-        <div class="feat-card reveal reveal-d2"><span class="feat-icon">🔒</span><div class="feat-title">100% Private</div><div class="feat-desc">No tracking, no ads, no data selling. Your viewing history is yours alone.</div></div>
+        <div class="feat-card reveal"><span class="feat-icon">📺</span><div class="feat-title">Crystal Clear 4K Filth</div><div class="feat-desc">Every dirty detail in razor-sharp 4K Ultra HD. See every curve, every expression, every moment in stunning clarity.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🔒</span><div class="feat-title">Your Secrets Stay Secret</div><div class="feat-desc">Zero tracking, zero ads, zero data selling. What you watch is nobody's business but yours. Complete privacy guaranteed.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon">💦</span><div class="feat-title">Fresh Content Daily</div><div class="feat-desc">New explicit drops every single day. Sexy originals, steamy exclusives, and nasty surprises you won't find anywhere else.</div></div>
+        <div class="feat-card reveal"><span class="feat-icon">📱</span><div class="feat-title">Pleasure On Any Device</div><div class="feat-desc">In bed, on the couch, in the bathroom — stream seamlessly on your phone, tablet, laptop or smart TV. Anywhere the mood strikes.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon">📞</span><div class="feat-title">Live Calls With Models</div><div class="feat-desc" style="cursor:pointer" onclick="goTo('booking')">BunnyWorld members get exclusive live video calls with the models in our videos. Face-to-face fantasies, no filters.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon">⬇️</span><div class="feat-title">Download & Get Off Later</div><div class="feat-desc">Save your favorites for offline viewing. No Wi-Fi? No problem. Your filthy downloads go wherever you go.</div></div>
       </div>
     </div>
   </section>
@@ -945,7 +988,7 @@ select option{background:var(--bg3);color:var(--text)}
   <section class="section" id="free-content">
     <div class="sec-inner">
       <div class="reveal">
-        <div style="font-size:11px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Sample the vault — no sign up required</div>
+        <div style="font-size:11px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Taste the naughtiness — no sign up required</div>
         <div class="free-label-big">FREE CONTENT</div>
       </div>
       <div class="free-grid" id="freeGrid"></div>
@@ -956,9 +999,9 @@ select option{background:var(--bg3);color:var(--text)}
   <section class="section" style="padding-top:0" id="premium-content">
     <div class="sec-inner">
       <div class="reveal">
-        <div class="members-bdg">Members Only</div>
+        <div class="members-bdg">Members Only 🔞</div>
         <div class="prem-title-big">PREMIUM CONTENT</div>
-        <div class="prem-sublabel">Exclusive Drops — Unlock with $3.99/mo</div>
+        <div class="prem-sublabel">The filthiest exclusives — unlock with Basic or BunnyWorld</div>
       </div>
       <div class="prem-grid" id="premGrid"></div>
     </div>
@@ -988,67 +1031,77 @@ select option{background:var(--bg3);color:var(--text)}
   <!-- PRICING -->
   <section class="section" id="pricing">
     <div class="sec-inner">
-      <div style="text-align:center;margin-bottom:48px" class="reveal">
-        <h2 class="sec-title">Choose Your <span>Plan</span></h2>
-        <p class="sec-sub" style="margin:8px auto 0">No hidden fees. Cancel anytime. Pay with CCBill or Bitcoin.</p>
+      <div style="text-align:center;margin-bottom:32px" class="reveal">
+        <h2 class="sec-title">Pick Your <span>Pleasure</span></h2>
+        <p class="sec-sub" style="margin:8px auto 0">No judgement. No hidden fees. Cancel whenever. Pay with card or crypto.</p>
       </div>
+
+      <!-- BILLING TOGGLE -->
+      <div class="billing-toggle reveal" id="billingToggle">
+        <button class="btog-btn active" onclick="setBilling('weekly',this)">Weekly</button>
+        <button class="btog-btn" onclick="setBilling('monthly',this)">Monthly</button>
+        <button class="btog-btn" onclick="setBilling('sixmonth',this)">6 Months <span class="btog-save">Best Value</span></button>
+      </div>
+
       <div class="pricing-tiers reveal">
 
         <!-- FREE -->
         <div class="tier-card">
           <div class="tier-name">Free</div>
-          <div class="tier-price"><sup>$</sup>0<sub>/mo</sub></div>
-          <div class="tier-desc">Get a taste of Juice Bunny at no cost.</div>
+          <div class="tier-price"><sup>$</sup>0<sub>/forever</sub></div>
+          <div class="tier-desc">Dip your toes in. Get a free taste of what Juice Bunny has to offer — no card needed.</div>
           <ul class="tier-perks">
-            <li>480p SD streaming</li>
-            <li>Limited free library</li>
-            <li>Stereo audio</li>
-            <li class="no">No exclusive content</li>
-            <li class="no">No 4K quality</li>
-            <li class="no">No model photos</li>
+            <li>480p SD teaser content</li>
+            <li>Limited free video library</li>
+            <li>Browse all categories</li>
+            <li class="no">No HD or 4K content</li>
+            <li class="no">No exclusive drops</li>
+            <li class="no">No live model calls</li>
           </ul>
           <button class="btn-tier secondary" onclick="goToPayment('free')">Start Free</button>
         </div>
 
-        <!-- PREMIUM $3.99 -->
+        <!-- BASIC -->
         <div class="tier-card featured">
           <div class="tier-hot">Most Popular</div>
-          <div class="tier-name">Premium</div>
-          <div class="tier-price"><sup>$</sup>3.99<sub>/mo</sub></div>
-          <div class="tier-desc">Full access to all exclusive adult content in stunning 4K.</div>
+          <div class="tier-name">Basic</div>
+          <div class="tier-price" id="basic-price"><sup>$</sup>3.99<sub>/week</sub></div>
+          <div class="tier-desc" id="basic-desc">Unlock the full vault of explicit 4K content. Stream everything, download anything, zero ads.</div>
           <ul class="tier-perks">
-            <li>4K Ultra HD streaming</li>
-            <li>Full content library</li>
-            <li>Dolby audio</li>
-            <li>All exclusive drops</li>
-            <li>Offline downloads</li>
-            <li class="no">No model photos</li>
+            <li>🔥 Full 4K explicit library</li>
+            <li>💦 Daily fresh drops</li>
+            <li>📥 Unlimited downloads</li>
+            <li>🔒 100% private viewing</li>
+            <li>📱 All devices included</li>
+            <li class="no">No live model calls</li>
           </ul>
-          <button class="btn-tier primary" onclick="goToPayment('premium')">Get Premium</button>
+          <button class="btn-tier primary" id="basic-btn" onclick="goToPayment('basic_weekly')">Get Basic</button>
         </div>
 
-        <!-- VIP $10 -->
+        <!-- BUNNYWORLD -->
         <div class="tier-card vip">
-          <div class="tier-hot vip-hot">✦ VIP</div>
-          <div class="tier-name">VIP Access</div>
-          <div class="tier-price"><sup>$</sup>10<sub>/mo</sub></div>
-          <div class="tier-desc">Everything in Premium plus complimentary model photos every month.</div>
+          <div class="tier-hot vip-hot">🐰 BunnyWorld</div>
+          <div class="tier-name">BunnyWorld</div>
+          <div class="tier-price" id="bunny-price"><sup>$</sup>9.99<sub>/week</sub></div>
+          <div class="tier-desc" id="bunny-desc">The full fantasy package. Everything in Basic plus live video calls with the actual models in our videos.</div>
           <ul class="tier-perks">
-            <li>Everything in Premium</li>
-            <li>4K Ultra HD streaming</li>
-            <li>📸 Complimentary model photos</li>
-            <li>Early access to new drops</li>
-            <li>VIP member badge</li>
-            <li>Priority support</li>
+            <li>Everything in Basic</li>
+            <li>📞 Live calls with models</li>
+            <li>📸 Exclusive model photos</li>
+            <li>⭐ Early access to new drops</li>
+            <li>💬 Direct model messaging</li>
+            <li>🏆 BunnyWorld VIP badge</li>
           </ul>
-          <button class="btn-tier vip-btn" onclick="goToPayment('vip')">Go VIP</button>
+          <button class="btn-tier vip-btn" id="bunny-btn" onclick="goToPayment('bunny_weekly')">Enter BunnyWorld</button>
         </div>
 
       </div>
       <div class="pay-badges reveal" style="margin-top:28px;justify-content:center;display:flex;gap:10px;flex-wrap:wrap">
         <span class="pay-badge">💳 CCBill</span>
-        <span class="pay-badge">₿ Bitcoin</span>
-        <span class="pay-badge">🔒 256-bit SSL</span>
+        <span class="pay-badge">₿ BTC</span>
+        <span class="pay-badge">⟠ ETH</span>
+        <span class="pay-badge">₮ USDT</span>
+        <span class="pay-badge">🔒 SSL Secured</span>
         <span class="pay-badge">↩ Cancel Anytime</span>
       </div>
     </div>
@@ -1058,13 +1111,13 @@ select option{background:var(--bg3);color:var(--text)}
   <section class="section bg2-section">
     <div class="sec-inner">
       <div style="text-align:center;margin-bottom:44px" class="reveal">
-        <h2 class="sec-title">Loved by <span>Viewers</span></h2>
-        <p class="sec-sub" style="margin:8px auto 0">Join thousands of satisfied subscribers worldwide.</p>
+        <h2 class="sec-title">They Came. They <span>Stayed.</span></h2>
+        <p class="sec-sub" style="margin:8px auto 0">Don't take our word for it — hear from our satisfied, very satisfied members.</p>
       </div>
       <div class="test-grid">
-        <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-quote">"The streaming quality is absolutely unmatched. The 4K originals feel like I'm sitting in a private theater. Worth every penny."</p><div class="test-author"><div class="test-av">SJ</div><div><div class="test-name">Sarah Jenkins</div><div class="test-role">Movie Enthusiast</div></div></div></div>
-        <div class="test-card reveal reveal-d1"><div class="test-stars">★★★★★</div><p class="test-quote">"Juice Bunny's UI is a masterpiece. It's so smooth, finding something to watch is actually fun instead of a chore."</p><div class="test-author"><div class="test-av">MC</div><div><div class="test-name">Michael Chen</div><div class="test-role">Tech Reviewer</div></div></div></div>
-        <div class="test-card reveal reveal-d2"><div class="test-stars">★★★★☆</div><p class="test-quote">"The personalized recommendations are spot on. I've discovered so many amazing films I wouldn't have found otherwise."</p><div class="test-author"><div class="test-av">ED</div><div><div class="test-name">Emma Davis</div><div class="test-role">Daily Streamer</div></div></div></div>
+        <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-quote">"I've tried every adult site out there. Juice Bunny is on a completely different level. The 4K quality makes it feel like they're right there with you. Worth every single penny."</p><div class="test-author"><div class="test-av">JR</div><div><div class="test-name">Jake R.</div><div class="test-role">BunnyWorld Member</div></div></div></div>
+        <div class="test-card reveal reveal-d1"><div class="test-stars">★★★★★</div><p class="test-quote">"The live model calls on BunnyWorld are insane. I was talking to the actual girl from the video I watched. My jaw dropped. Best upgrade I've ever made."</p><div class="test-author"><div class="test-av">MT</div><div><div class="test-name">Marcus T.</div><div class="test-role">BunnyWorld Member</div></div></div></div>
+        <div class="test-card reveal reveal-d2"><div class="test-stars">★★★★★</div><p class="test-quote">"Finally a site that respects my privacy. No ads, no creepy tracking, no spam. Just pure filthy content when I want it. The Basic plan alone is a steal."</p><div class="test-author"><div class="test-av">AS</div><div><div class="test-name">Alex S.</div><div class="test-role">Basic Member</div></div></div></div>
       </div>
     </div>
   </section>
@@ -1085,11 +1138,11 @@ select option{background:var(--bg3);color:var(--text)}
     <div class="cta-card reveal">
       <img src="juice-bunny-logo.png" class="cta-bunny" alt="" style="border-radius:0;object-fit:contain"/>
       <div class="cta-inner">
-        <h2 class="cta-h2">Ready to Experience<br/><span>Premium Entertainment?</span></h2>
-        <p class="cta-p">Join Juice Bunny today and unlock a world of cinematic luxury. Your first 7 days are on us.</p>
+        <h2 class="cta-h2">Ready to Get <span>Naughty?</span></h2>
+        <p class="cta-p">Join Juice Bunny today and dive into the most explicit, steamy content online. Your fantasies are waiting.</p>
         <div class="cta-btns">
-          <button class="btn-cta1" onclick="goToPayment('premium')">▶ Start Streaming</button>
-          <button class="btn-cta2" onclick="goToPayment('premium')">Get Premium</button>
+          <button class="btn-cta1" onclick="goToPayment('basic_monthly')">🔥 Get Access Now</button>
+          <button class="btn-cta2" onclick="goToPayment('bunny_monthly')">🐰 Enter BunnyWorld</button>
         </div>
       </div>
     </div>
@@ -1523,69 +1576,103 @@ select option{background:var(--bg3);color:var(--text)}
         </div>
       </div>
 
-      <!-- BITCOIN FORM -->
+      <!-- CRYPTO MULTI-CURRENCY FORM -->
       <div class="pay-form" id="form-btc">
+
+        <!-- CURRENCY SELECTOR -->
+        <div style="margin-bottom:20px">
+          <div class="method-label" style="margin-bottom:12px">Choose Cryptocurrency</div>
+          <div class="crypto-selector" id="cryptoSelector">
+            <div class="crypto-opt selected" onclick="selectCrypto(this,'btc')" data-min="20.24">
+              <span class="crypto-icon">₿</span>
+              <div class="crypto-name">Bitcoin</div>
+              <div class="crypto-ticker">BTC</div>
+              <div class="crypto-min">Min ~$20.24</div>
+            </div>
+            <div class="crypto-opt" onclick="selectCrypto(this,'eth')" data-min="2.00">
+              <span class="crypto-icon">⟠</span>
+              <div class="crypto-name">Ethereum</div>
+              <div class="crypto-ticker">ETH</div>
+              <div class="crypto-min">Min ~$2.00</div>
+            </div>
+            <div class="crypto-opt" onclick="selectCrypto(this,'usdttrc20')" data-min="1.00">
+              <span class="crypto-icon">₮</span>
+              <div class="crypto-name">Tether</div>
+              <div class="crypto-ticker">USDT TRC20</div>
+              <div class="crypto-min">Min ~$1.00</div>
+            </div>
+            <div class="crypto-opt" onclick="selectCrypto(this,'ltc')" data-min="0.50">
+              <span class="crypto-icon">Ł</span>
+              <div class="crypto-name">Litecoin</div>
+              <div class="crypto-ticker">LTC</div>
+              <div class="crypto-min">Min ~$0.50</div>
+            </div>
+            <div class="crypto-opt" onclick="selectCrypto(this,'xrp')" data-min="0.20">
+              <span class="crypto-icon">✕</span>
+              <div class="crypto-name">Ripple</div>
+              <div class="crypto-ticker">XRP</div>
+              <div class="crypto-min">Min ~$0.20</div>
+            </div>
+          </div>
+          <!-- Min amount warning -->
+          <div id="crypto-min-warn" style="display:none;margin-top:10px;background:rgba(255,165,0,.08);border:1px solid rgba(255,165,0,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#ffa500">
+            ⚠️ <span id="crypto-min-warn-txt"></span>
+          </div>
+        </div>
+
+        <!-- STEPS -->
         <div class="btc-steps">
           <div class="btc-step">
             <div class="btc-step-num">1</div>
             <div>
-              <div class="btc-step-title">Send exact Bitcoin amount</div>
-              <div class="btc-step-desc">Copy the wallet address below and send the exact BTC amount from your Bitcoin wallet.</div>
+              <div class="btc-step-title">Select your cryptocurrency above</div>
+              <div class="btc-step-desc">Choose whichever crypto you have. USDT, LTC and XRP work for all plan prices.</div>
             </div>
           </div>
           <div class="btc-step">
             <div class="btc-step-num">2</div>
             <div>
-              <div class="btc-step-title">Wait for confirmation</div>
-              <div class="btc-step-desc">Bitcoin payments typically confirm within 10-30 minutes. Your account will activate automatically.</div>
+              <div class="btc-step-title">Send the exact amount</div>
+              <div class="btc-step-desc">A secure NOWPayments checkout will open. Send the exact amount shown to activate your account.</div>
             </div>
           </div>
           <div class="btc-step">
             <div class="btc-step-num">3</div>
             <div>
-              <div class="btc-step-title">Start watching</div>
-              <div class="btc-step-desc">Once confirmed, you'll receive an email and your premium access will be unlocked instantly.</div>
+              <div class="btc-step-title">Account activates automatically</div>
+              <div class="btc-step-desc">Once payment confirms on the blockchain you'll be redirected back and your access will be unlocked.</div>
             </div>
           </div>
         </div>
 
+        <!-- AMOUNT DISPLAY -->
         <div class="btc-address-box">
-          <div class="btc-address-label">Bitcoin Payment Address</div>
-          <div class="btc-address" id="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-            <button class="btn-copy-address" onclick="copyBtcAddress()">📋 Copy Address</button>
-            <div style="font-size:12px;color:var(--text3)">Amount: <strong style="color:#ffa500" id="btc-amount">0.000062 BTC</strong></div>
-          </div>
+          <div class="btc-address-label" id="crypto-amount-label">Estimated Amount</div>
+          <div style="font-size:24px;font-weight:700;color:#ffa500;margin-bottom:8px" id="btc-amount">Calculating...</div>
+          <div style="font-size:12px;color:var(--text3)">≈ <span id="pay-plan-usd-amt">$3.99</span> USD · Rate updates in real time</div>
         </div>
 
-        <div style="text-align:center;margin-bottom:16px">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Scan QR code with your Bitcoin wallet</div>
-          <div class="btc-qr">QR Code<br/>(Generated on<br/>payment)</div>
-        </div>
-
+        <!-- STATUS -->
         <div class="btc-timer">
-          <span>⏱ Address expires in:</span>
-          <span class="btc-timer-count" id="btc-countdown">29:59</span>
+          <span>⏱ Invoice expires in:</span>
+          <span class="btc-timer-count" id="btc-countdown">--:--</span>
         </div>
-
         <div class="btc-pending" id="btc-status">
           <span class="btc-pending-dot"></span>
-          Waiting for payment · Address active for 30 minutes
+          Select a currency and click Pay to generate your invoice
         </div>
 
-        <div class="form-field">
+        <!-- EMAIL -->
+        <div class="form-field" style="margin-top:16px">
           <label>Your Email (for confirmation)</label>
           <input type="email" class="form-input" placeholder="your@email.com" id="btc-email"/>
         </div>
 
-        <button class="btn-pay btn-pay-btc" onclick="processBtcPayment()">
-          ₿ I've Sent the Bitcoin Payment
+        <button class="btn-pay btn-pay-btc" id="btn-pay-btc" onclick="processBtcPayment()">
+          ⚡ Pay with Crypto
         </button>
         <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
-          Powered by NOWPayments · Non-custodial · Payments go directly to merchant wallet
-        </div>
-        <div style="font-size:11px;color:#ffa500;text-align:center;margin-top:8px;background:rgba(255,165,0,.06);border:1px solid rgba(255,165,0,.15);border-radius:8px;padding:8px">
-          ⚠️ Send only Bitcoin (BTC) to this address. Sending other coins will result in permanent loss.
+          Powered by NOWPayments · Non-custodial · Funds go directly to merchant
         </div>
       </div>
     </div>
@@ -1733,6 +1820,54 @@ select option{background:var(--bg3);color:var(--text)}
 <!-- ============================================================
      PAGE: UNSUBSCRIBE RETENTION
      ============================================================ -->
+<!-- ============================================================
+     PAGE: LIVE CALL BOOKING
+     ============================================================ -->
+<div id="page-booking" class="page">
+  <div class="booking-wrap">
+    <button class="payment-back" onclick="goTo('home')">← Back</button>
+    <div class="booking-title">📞 Book a Live Call</div>
+    <div class="booking-sub">Pick your model, choose a time slot, and get ready for a private one-on-one session. BunnyWorld members only. 🔥</div>
+    <div style="margin-bottom:24px">
+      <div class="method-label">Choose Your Model</div>
+      <div class="model-grid" id="modelGrid"></div>
+    </div>
+    <div id="slot-section" style="display:none">
+      <div class="method-label">Available Time Slots</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:14px">All times in your local timezone. Each session is <strong style="color:#fff">30 minutes</strong>.</div>
+      <div class="slot-grid" id="slotGrid"></div>
+    </div>
+    <div id="booking-summary" style="display:none;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;margin-bottom:24px">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:14px">Booking Summary</div>
+      <div style="font-size:14px;margin-bottom:8px">🐰 Model: <strong id="sum-model" style="color:var(--pink)">—</strong></div>
+      <div style="font-size:14px;margin-bottom:8px">🕐 Time: <strong id="sum-time" style="color:#fff">—</strong></div>
+      <div style="font-size:14px;margin-bottom:8px">⏱ Duration: <strong style="color:#fff">30 minutes</strong></div>
+      <div style="font-size:14px">✅ Included in: <strong style="color:#ffc832">BunnyWorld Plan</strong></div>
+    </div>
+    <div id="booking-form" style="display:none">
+      <div class="form-field">
+        <label>Your Name</label>
+        <input type="text" class="form-input" id="book-name" placeholder="What should she call you?"/>
+      </div>
+      <div class="form-field">
+        <label>Your Email</label>
+        <input type="email" class="form-input" id="book-email" placeholder="For calendar invite & call link"/>
+      </div>
+      <div class="form-field">
+        <label>Special Requests (Optional)</label>
+        <textarea class="form-input" id="book-note" rows="3" placeholder="Anything you'd like her to know beforehand..." style="resize:vertical"></textarea>
+      </div>
+      <button class="btn-book" onclick="confirmBooking()">🔥 Confirm My Booking</button>
+    </div>
+    <div id="booking-success" style="display:none;text-align:center;padding:40px 20px">
+      <div style="font-size:60px;margin-bottom:16px">🎉</div>
+      <div style="font-size:24px;font-weight:700;margin-bottom:10px">You're Booked, Baby!</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Your live call is confirmed. Check your email for the calendar invite and private video call link. She can't wait. 🔥</div>
+      <button class="btn-book" onclick="goTo('home')">Back to Juice Bunny</button>
+    </div>
+  </div>
+</div>
+
 <div id="page-unsub" class="page">
   <div class="unsub-wrap">
 
@@ -1844,6 +1979,7 @@ function goTo(page) {
   if(page === 'player') { vpBuildUpNext(); vpUpdateTime(); }
   if(page === 'payment') { /* payment page ready */ }
   if(page === 'pay-success') { /* success page ready */ }
+  if(page === 'booking') { buildModelGrid(); }
 }
 
 /* ============================================================
@@ -2388,15 +2524,42 @@ const NP_API_KEY  = 'RQ4GT49-JR048PS-JBHHXF4-CZ4TDC9';
 const NP_IPN_KEY  = 'i+cuF4QZstNRJMiLoWnHz/F0xvaeL+px';
 const SITE_URL    = 'https://juice-bunny.vercel.app';
 const NP_BASE     = 'https://api.nowpayments.io/v1';
+const ETH_WALLET  = '0x10262524f5b146c328883DdB9152Ea85B72a1c24';
+const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 
 // ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
-  free:    { name:'Free Plan',    icon:'🐰', price:0,    priceStr:'$0',    perks:['480p SD streaming','Limited free library'] },
-  premium: { name:'Premium Plan', icon:'🔥', price:3.99, priceStr:'$3.99', perks:['4K Ultra HD streaming','Full exclusive library','New drops weekly','Offline downloads','Cancel anytime'] },
-  vip:     { name:'VIP Plan',     icon:'✨', price:10,   priceStr:'$10',   perks:['Everything in Premium','📸 Monthly model photos','Early access drops','VIP badge','Priority support'] },
+  free:          { name:'Free',              icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['480p SD teaser content','Limited free library','Browse all categories'] },
+  basic_weekly:  { name:'Basic',             icon:'🔥', price:3.99,  priceStr:'$3.99',  period:'week',    perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices'] },
+  basic_monthly: { name:'Basic',             icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'month',   perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices'] },
+  basic_6month:  { name:'Basic',             icon:'🔥', price:39.99, priceStr:'$39.99', period:'6 months',perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices','💰 Best value — save 33%'] },
+  bunny_weekly:  { name:'BunnyWorld',        icon:'🐰', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge'] },
+  bunny_monthly: { name:'BunnyWorld',        icon:'🐰', price:15.99, priceStr:'$15.99', period:'month',   perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge'] },
+  bunny_6month:  { name:'BunnyWorld',        icon:'🐰', price:39.99, priceStr:'$39.99', period:'6 months',perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge','💰 Best value — save 58%'] },
 };
 
-let currentPlan      = 'premium';
+// ── BILLING TOGGLE ───────────────────────────────────────────
+let currentBilling = 'weekly';
+const billingPrices = {
+  weekly:   { basic:{ price:3.99,  str:'$3.99',  sub:'/week'   }, bunny:{ price:9.99,  str:'$9.99',  sub:'/week'   } },
+  monthly:  { basic:{ price:9.99,  str:'$9.99',  sub:'/month'  }, bunny:{ price:15.99, str:'$15.99', sub:'/month'  } },
+  sixmonth: { basic:{ price:39.99, str:'$39.99', sub:'/6 mos'  }, bunny:{ price:39.99, str:'$39.99', sub:'/6 mos'  } },
+};
+
+function setBilling(period, btn) {
+  currentBilling = period;
+  document.querySelectorAll('.btog-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const prices = billingPrices[period];
+  document.getElementById('basic-price').innerHTML = `<sup>$</sup>${prices.basic.str.replace('$','')}<sub>${prices.basic.sub}</sub>`;
+  document.getElementById('bunny-price').innerHTML = `<sup>$</sup>${prices.bunny.str.replace('$','')}<sub>${prices.bunny.sub}</sub>`;
+  const basicKey  = period === 'weekly' ? 'basic_weekly'  : period === 'monthly' ? 'basic_monthly'  : 'basic_6month';
+  const bunnyKey  = period === 'weekly' ? 'bunny_weekly'  : period === 'monthly' ? 'bunny_monthly'  : 'bunny_6month';
+  document.getElementById('basic-btn').onclick  = () => goToPayment(basicKey);
+  document.getElementById('bunny-btn').onclick  = () => goToPayment(bunnyKey);
+}
+
+let currentPlan      = 'basic_weekly';
 let currentMethod    = 'ccbill';
 let btcTimerInterval = null;
 let btcSeconds       = 29 * 60 + 59;
@@ -2427,20 +2590,53 @@ function goToPayment(planKey) {
   if(plan.price > 0) fetchBtcEstimate(plan.price);
 }
 
-// ── BTC ESTIMATE ─────────────────────────────────────────────
+// ── CRYPTO CURRENCY SELECTION ────────────────────────────────
+let selectedCrypto = 'btc';
+const cryptoMins = { btc: 20.24, eth: 2.00, usdttrc20: 1.00, ltc: 0.50, xrp: 0.20 };
+const cryptoNames = { btc:'Bitcoin (BTC)', eth:'Ethereum (ETH)', usdttrc20:'Tether USDT TRC20', ltc:'Litecoin (LTC)', xrp:'Ripple (XRP)' };
+
+function selectCrypto(el, currency) {
+  selectedCrypto = currency;
+  document.querySelectorAll('.crypto-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const plan   = PLANS[currentPlan];
+  const minAmt = cryptoMins[currency];
+  const warn   = document.getElementById('crypto-min-warn');
+  const warnTxt= document.getElementById('crypto-min-warn-txt');
+
+  if(plan.price < minAmt) {
+    warn.style.display = 'block';
+    warnTxt.textContent = `${cryptoNames[currency]} requires a minimum of ~$${minAmt} USD. Your plan is $${plan.price}. Please choose USDT, LTC or XRP for this plan price, or upgrade to a higher plan.`;
+  } else {
+    warn.style.display = 'none';
+  }
+
+  // Update estimate for selected currency
+  if(plan.price > 0) fetchCryptoEstimate(plan.price, currency);
+}
+
 async function fetchBtcEstimate(usdAmount) {
+  await fetchCryptoEstimate(usdAmount, selectedCrypto);
+}
+
+async function fetchCryptoEstimate(usdAmount, currency) {
   try {
-    const res  = await fetch(`${NP_BASE}/estimate?amount=${usdAmount}&currency_from=usd&currency_to=btc`, {
+    document.getElementById('btc-amount').textContent = 'Calculating...';
+    const res  = await fetch(`${NP_BASE}/estimate?amount=${usdAmount}&currency_from=usd&currency_to=${currency}`, {
       headers: { 'x-api-key': NP_API_KEY }
     });
     const data = await res.json();
     if(data.estimated_amount) {
-      document.getElementById('btc-amount').textContent = parseFloat(data.estimated_amount).toFixed(8) + ' BTC';
+      const ticker = currency === 'usdttrc20' ? 'USDT' : currency.toUpperCase();
+      document.getElementById('btc-amount').textContent = parseFloat(data.estimated_amount).toFixed(6) + ' ' + ticker;
+      document.getElementById('crypto-amount-label').textContent = `Estimated ${ticker} Amount`;
     }
   } catch(e) {
-    document.getElementById('btc-amount').textContent = '— BTC (fetch error)';
+    document.getElementById('btc-amount').textContent = '— (fetch error)';
   }
 }
+
 
 // ── METHOD SELECTOR ──────────────────────────────────────────
 function selectMethod(method) {
@@ -2449,8 +2645,15 @@ function selectMethod(method) {
   document.getElementById('method-btc').classList.toggle('selected', method==='btc');
   document.querySelectorAll('.pay-form').forEach(f=>f.classList.remove('active'));
   document.getElementById('form-'+method).classList.add('active');
-  if(method === 'btc') initBtcPayment();
-  else { stopBtcTimer(); stopPaymentPoll(); }
+  if(method === 'btc') {
+    selectedCrypto = 'btc';
+    const plan = PLANS[currentPlan];
+    if(plan.price > 0) fetchCryptoEstimate(plan.price, 'btc');
+    document.getElementById('pay-plan-usd-amt').textContent = plan.priceStr;
+  } else {
+    stopBtcTimer();
+    stopPaymentPoll();
+  }
 }
 
 // ── CARD FORMATTING ──────────────────────────────────────────
@@ -2497,33 +2700,36 @@ function processCardPayment() {
 
 // ── BITCOIN — CREATE REAL NOWPAYMENTS INVOICE ────────────────
 async function initBtcPayment() {
-  const plan = PLANS[currentPlan];
+  const plan   = PLANS[currentPlan];
+  const minAmt = cryptoMins[selectedCrypto];
+
   if(plan.price === 0) {
     document.getElementById('btc-status').innerHTML = '✓ Free plan — no payment required';
+    return;
+  }
+
+  // Warn if below minimum but don't block — NOWPayments will handle it
+  if(plan.price < minAmt) {
+    document.getElementById('btc-status').innerHTML = `⚠️ Please select USDT, LTC or XRP for $${plan.price} plan — BTC/ETH minimum is higher.`;
     return;
   }
 
   stopBtcTimer();
   stopPaymentPoll();
 
-  document.getElementById('btc-address').textContent = 'Generating invoice...';
-  document.getElementById('btc-status').innerHTML    = '<span class="btc-pending-dot"></span> Creating payment invoice...';
-  document.getElementById('btc-amount').textContent  = 'Calculating...';
+  const ticker = selectedCrypto === 'usdttrc20' ? 'USDT' : selectedCrypto.toUpperCase();
+  document.getElementById('btc-status').innerHTML = `<span class="btc-pending-dot"></span> Creating ${ticker} invoice...`;
 
   try {
     const orderId = 'JB-' + Date.now();
 
-    // Use invoice endpoint — more reliable, handles minimums automatically
     const res = await fetch(`${NP_BASE}/invoice`, {
       method: 'POST',
-      headers: {
-        'x-api-key':    NP_API_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'x-api-key': NP_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         price_amount:      plan.price,
         price_currency:    'usd',
-        pay_currency:      'btc',
+        pay_currency:      selectedCrypto,
         order_id:          orderId,
         order_description: `Juice Bunny ${plan.name} - Monthly Subscription`,
         success_url:       `${SITE_URL}?payment=success&order=${orderId}`,
@@ -2536,48 +2742,35 @@ async function initBtcPayment() {
 
     if(data.invoice_url) {
       currentPaymentId = data.id;
+      startBtcTimer();
 
-      // Show invoice URL button in UI
-      document.getElementById('btc-address').textContent = 'Invoice ready — click button below';
-      document.getElementById('btc-status').innerHTML    = '✅ Invoice created! Click below to complete payment.';
-      document.getElementById('btc-amount').textContent  = plan.priceStr + ' USD → BTC';
-
-      // Update the pay button to redirect to NOWPayments invoice
-      const btn = document.querySelector('.btn-pay-btc');
-      btn.textContent = '₿ Pay with Bitcoin →';
-      btn.onclick = () => window.open(data.invoice_url, '_blank');
-
-      // Also show the direct link
-      const statusEl = document.getElementById('btc-status');
-      statusEl.innerHTML = `
-        ✅ Invoice ready!
+      document.getElementById('btc-status').innerHTML = `
+        ✅ ${ticker} invoice ready!
         <br/><br/>
         <a href="${data.invoice_url}" target="_blank"
-           style="display:inline-block;background:rgba(255,165,0,.15);border:1px solid rgba(255,165,0,.4);
-           color:#ffa500;padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-top:4px">
-          ₿ Open Bitcoin Payment Page →
+           style="display:inline-flex;align-items:center;gap:8px;
+           background:rgba(255,165,0,.12);border:1px solid rgba(255,165,0,.4);
+           color:#ffa500;padding:12px 22px;border-radius:10px;
+           font-weight:700;font-size:14px;text-decoration:none;margin-top:4px">
+          ⚡ Open ${ticker} Payment Page →
         </a>
         <br/><br/>
-        <span style="font-size:12px;color:var(--text3)">A new tab will open with your secure Bitcoin payment page powered by NOWPayments.</span>
+        <span style="font-size:12px;color:var(--text3)">Secure payment page powered by NOWPayments. Opens in a new tab.</span>
       `;
 
-      startBtcTimer();
+      // Update pay button
+      const btn = document.getElementById('btn-pay-btc');
+      btn.textContent = `⚡ Pay with ${ticker} →`;
+      btn.onclick = () => window.open(data.invoice_url, '_blank');
 
     } else {
       throw new Error(data.message || 'Could not create invoice');
     }
 
   } catch(err) {
-    console.error('NOWPayments invoice error:', err);
-    document.getElementById('btc-address').textContent = 'Error — please retry';
-    document.getElementById('btc-status').innerHTML    = `⚠️ ${err.message || 'Could not create payment. Please try again.'}`;
+    document.getElementById('btc-status').innerHTML = `⚠️ ${err.message || 'Error creating invoice. Please try again.'}`;
     showToast('Payment error: ' + (err.message || 'Unknown'), true);
   }
-}
-
-async function createDirectPayment(plan, orderId) {
-  // Kept for future use when minimum amounts are met
-  console.log('Direct payment skipped — using invoice flow');
 }
 
 // ── PAYMENT STATUS POLLING ───────────────────────────────────
@@ -2625,37 +2818,16 @@ function updatePaymentStatus(status, data) {
   if(el && statusMap[status]) el.innerHTML = statusMap[status];
 }
 
-// ── MANUAL CONFIRM BUTTON ────────────────────────────────────
 async function processBtcPayment() {
   const email = document.getElementById('btc-email').value.trim();
-  if(!email) { showToast('Please enter your email', true); return; }
-
-  if(!currentPaymentId) {
-    showToast('Please wait for payment address to generate', true); return;
+  if(!email) { showToast('Please enter your email first', true); return; }
+  const plan   = PLANS[currentPlan];
+  const minAmt = cryptoMins[selectedCrypto];
+  if(plan.price < minAmt) {
+    showToast(`Please select USDT, LTC or XRP for $${plan.price} plan`, true);
+    return;
   }
-
-  const btn = document.querySelector('.btn-pay-btc');
-  btn.disabled = true;
-  btn.textContent = '⏳ Checking payment...';
-
-  try {
-    const res  = await fetch(`${NP_BASE}/payment/${currentPaymentId}`, {
-      headers: { 'x-api-key': NP_API_KEY }
-    });
-    const data = await res.json();
-
-    if(['finished','confirmed'].includes(data.payment_status)) {
-      showPaymentSuccess('btc', email, data);
-    } else {
-      showToast(`Payment status: ${data.payment_status || 'pending'} — please wait`, true);
-      btn.disabled = false;
-      btn.textContent = '₿ I\'ve Sent the Bitcoin Payment';
-    }
-  } catch(e) {
-    showToast('Could not verify payment. Please wait for auto-confirmation.', true);
-    btn.disabled = false;
-    btn.textContent = '₿ I\'ve Sent the Bitcoin Payment';
-  }
+  await initBtcPayment();
 }
 
 // ── SUCCESS PAGE ─────────────────────────────────────────────
@@ -2719,13 +2891,91 @@ function checkPaymentReturn() {
 
 
 /* ============================================================
+   LIVE CALL BOOKING
+   ============================================================ */
+const modelsData = [
+  {name:'Scarlett',tag:'Naughty & Playful',emoji:'👩‍🦰',status:'online'},
+  {name:'Luna',tag:'Sweet & Seductive',emoji:'👱‍♀️',status:'online'},
+  {name:'Jade',tag:'Wild & Dominant',emoji:'👩‍🦱',status:'busy'},
+  {name:'Roxy',tag:'Innocent & Teasing',emoji:'👩‍🦳',status:'online'},
+];
+const timeSlots = ['9:00 AM','9:30 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:30 PM','4:00 PM','5:00 PM','6:00 PM','7:30 PM','8:00 PM'];
+const takenSlots = ['10:00 AM','2:00 PM','6:00 PM'];
+let selectedModel = null;
+let selectedSlot  = null;
+
+function buildModelGrid() {
+  const grid = document.getElementById('modelGrid');
+  if(!grid) return;
+  grid.innerHTML = modelsData.map((m,i) => `
+    <div class="model-card" onclick="selectModel(${i})" id="mc-${i}">
+      <div class="model-avatar">${m.emoji}</div>
+      <div class="model-name">${m.name}</div>
+      <div class="model-tag">${m.tag}</div>
+      <span class="model-status-badge ${m.status}">${m.status === 'online' ? '🟢 Available Now' : '🟡 Busy — Check Back'}</span>
+    </div>`).join('');
+}
+
+function selectModel(i) {
+  selectedModel = modelsData[i];
+  document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('mc-'+i).classList.add('selected');
+  document.getElementById('slot-section').style.display = 'block';
+  buildSlotGrid();
+  document.getElementById('slot-section').scrollIntoView({behavior:'smooth'});
+}
+
+function buildSlotGrid() {
+  document.getElementById('slotGrid').innerHTML = timeSlots.map(t => `
+    <div class="time-slot ${takenSlots.includes(t)?'taken':''}" onclick="${takenSlots.includes(t)?'void(0)':'selectSlot(this,\''+t+'\')'}">${t}${takenSlots.includes(t)?'<br/><span style="font-size:9px">Booked</span>':''}</div>`).join('');
+}
+
+function selectSlot(el, time) {
+  selectedSlot = time;
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('sum-model').textContent = selectedModel.name;
+  document.getElementById('sum-time').textContent  = time;
+  document.getElementById('booking-summary').style.display = 'block';
+  document.getElementById('booking-form').style.display    = 'block';
+  document.getElementById('booking-summary').scrollIntoView({behavior:'smooth'});
+}
+
+function confirmBooking() {
+  const name  = document.getElementById('book-name').value.trim();
+  const email = document.getElementById('book-email').value.trim();
+  if(!name || !email) { showToast('Please fill in your name and email', true); return; }
+  if(!selectedModel || !selectedSlot) { showToast('Please select a model and time slot', true); return; }
+  document.getElementById('booking-form').style.display    = 'none';
+  document.getElementById('booking-summary').style.display = 'none';
+  document.getElementById('slot-section').style.display    = 'none';
+  document.getElementById('booking-success').style.display = 'block';
+  document.getElementById('booking-success').scrollIntoView({behavior:'smooth'});
+}
+
+/* ============================================================
+   FAQ DATA
+   ============================================================ */
+const faqData = [
+  {q:'Is this site really 100% private?',a:'Absolutely. Zero tracking, zero ads, zero data selling. We don\'t log what you watch, who you watch, or when. Your pleasure is your business — not ours.'},
+  {q:'What\'s the difference between Basic and BunnyWorld?',a:'Basic gives you full access to our entire 4K explicit video library with daily fresh drops. BunnyWorld adds live video calls with the actual models in our videos, exclusive photos, early access, and direct model messaging. It\'s the full fantasy package.'},
+  {q:'How do live model calls work?',a:'Go to "Book a Call" in your account, pick your model, choose a time slot, and confirm. You\'ll get a private video call link via email. Each session is 30 minutes, fully private, and included in your BunnyWorld plan.'},
+  {q:'Can I cancel anytime?',a:'Yes — cancel instantly from your account settings. No questions, no guilt, no hidden fees. Your access continues until the end of your current billing period.'},
+  {q:'What payment methods do you accept?',a:'We accept credit/debit cards via CCBill (the industry standard for adult platforms) and cryptocurrency including Bitcoin (BTC), Ethereum (ETH), Tether (USDT TRC20), Litecoin (LTC), and XRP.'},
+  {q:'Is there a free trial?',a:'Yes — your first 7 days are on us with any paid plan. Cancel before the trial ends and you won\'t be charged a thing.'},
+  {q:'What video quality can I expect?',a:'Basic and BunnyWorld members get full 4K Ultra HD streaming. Free members get 480p SD preview content. The difference is... significant. 😏'},
+  {q:'How old do I need to be?',a:'You must be 18 years of age or older to access Juice Bunny. We verify age on signup and strictly enforce this. 18 U.S.C. § 2257 records are maintained for all content.'},
+];
+
+/* ============================================================
    INIT
    ============================================================ */
 buildMovieGrid();
 buildFreeGrid();
 buildPremGrid();
 buildFAQ();
-setTimeout(initReveal,100);
+buildModelGrid();
+setTimeout(initReveal, 100);
 checkPaymentReturn();
 </script>
 </body>
