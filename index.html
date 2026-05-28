@@ -41,7 +41,7 @@ a{text-decoration:none;color:inherit}
   border-bottom:1px solid var(--border);
 }
 .nav-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
-.logo-spin{width:52px;height:52px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,45,120,.6))}
+.logo-spin{width:38px;height:38px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,45,120,.5))}
 @keyframes logoSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .logo-name{font-family:'Dancing Script',cursive;font-size:22px;font-weight:700;color:#fff}
 .nav-links{display:flex;gap:30px}
@@ -865,7 +865,7 @@ select option{background:var(--bg3);color:var(--text)}
      ============================================================ -->
 <nav class="main-nav">
   <div class="nav-logo" onclick="goTo('home')">
-    <img src="juice-bunny-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <span class="logo-spin" style="display:inline-flex;align-items:center;justify-content:center;font-size:28px;width:38px;height:38px">🐰</span>
     <span class="logo-name">Juice Bunny</span>
   </div>
   <div class="nav-links" id="navLinks">
@@ -1154,7 +1154,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="footer-top">
         <div>
           <div class="footer-logo" onclick="goTo('home')">
-            <img src="juice-bunny-logo.png" style="width:40px;height:40px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,45,120,.5))" alt=""/>
+            <span style="font-size:28px;display:inline-block;animation:logoSpin 28s linear infinite">🐰</span>
             <span class="logo-name">Juice Bunny</span>
           </div>
           <div class="footer-tagline">RETRO · EXCLUSIVE · UNFILTERED.<br/>YOUR STREAMING PLATFORM<br/>FOR THE BOLD AND CURIOUS.</div>
@@ -1296,7 +1296,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="login-left">
         <div class="ll-inner">
           <div class="ll-brand" onclick="goTo('home')">
-            <img src="juice-bunny-logo.png" style="width:50px;height:50px;border-radius:0;animation:logoSpin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,45,120,.5))" alt=""/>
+            <span style="font-size:32px;display:inline-block;animation:logoSpin 28s linear infinite">🐰</span>
             <span class="logo-name">Juice Bunny</span>
           </div>
           <div class="ll-headline">Welcome back<br/>to <span>Juice Bunny</span></div>
@@ -2031,15 +2031,6 @@ const premData = [
   {bg:'linear-gradient(135deg,#0a0a1a,#1a0a2a)',emoji:'⚡',yr:'2023'},
   {bg:'linear-gradient(135deg,#1a0a1a,#2a0a2a)',emoji:'💋',yr:'2024'},
 ];
-const faqData = [
-  {q:'Can I cancel anytime?',a:'Yes, cancel at any time with no hidden fees. Your premium access continues until the end of your billing cycle.'},
-  {q:'Is offline viewing supported?',a:'Yes! Premium subscribers can download content and watch offline on mobile and tablet.'},
-  {q:'How many devices are allowed?',a:'Stream on up to 3 devices simultaneously with a single premium subscription.'},
-  {q:'Is there a free trial?',a:'Yes! Enjoy your first 7 days completely free. No charge until your trial ends.'},
-  {q:'What payment methods are accepted?',a:'We accept credit cards via CCBill and Bitcoin through our secure crypto gateway.'},
-  {q:'What video quality is included?',a:'Free users get 480p SD. Premium unlocks 720p, 1080p FHD, and 4K Ultra HD.'},
-];
-
 function buildMovieGrid(filter='all') {
   const grid = document.getElementById('movieGrid');
   const list = filter==='all' ? moviesData : moviesData.filter(m=>m.cat===filter||m.cat==='all');
