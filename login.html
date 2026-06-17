@@ -381,7 +381,13 @@ input::placeholder{color:var(--text3)}
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ── Supabase config ───────────────────────────────────────
+const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Tul6AysR5ZZ2qhM4WxASKQ_J3BVY1hH';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 function togglePass() {
   const inp = document.getElementById('loginPass');
   const btn = document.querySelector('.eye-toggle');
@@ -393,9 +399,9 @@ function clearError() {
   document.getElementById('errorBanner').classList.remove('show');
 }
 
-function doLogin() {
+async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
+  const pass  = document.getElementById('loginPass').value;
   let ok = true;
 
   const ef = document.getElementById('f-email');
@@ -410,18 +416,55 @@ function doLogin() {
   btn.disabled = true;
   document.getElementById('loginBtnText').textContent = 'Signing in...';
 
-  setTimeout(() => {
-    // Simulate: demo@juicebunny.com / password123 works
-    if(email === 'demo@juicebunny.com' && pass === 'password123') {
-      showToast('✓ Signed in successfully! Redirecting...');
-      setTimeout(() => { window.location.href = 'juicy-bunny.html'; }, 1500);
-    } else {
-      document.getElementById('errorBanner').classList.add('show');
-      document.getElementById('errorMsg').textContent = 'Invalid email or password. Try demo@juicebunny.com / password123';
-      btn.disabled = false;
-      document.getElementById('loginBtnText').textContent = 'Sign In →';
-    }
-  }, 1200);
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+
+    if (error) throw error;
+
+    // Check if admin — redirect to admin panel
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, plan')
+      .eq('id', data.user.id)
+      .single();
+
+    showToast('✓ Signed in! Redirecting...');
+
+    setTimeout(() => {
+      if (profile?.role === 'admin') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }, 1200);
+
+  } catch(err) {
+    let msg = err.message || 'Invalid email or password.';
+    if (msg.includes('Invalid login')) msg = 'Invalid email or password. Please try again.';
+    if (msg.includes('Email not confirmed')) msg = 'Please confirm your email first — check your inbox.';
+    document.getElementById('errorBanner').classList.add('show');
+    document.getElementById('errorMsg').textContent = msg;
+    btn.disabled = false;
+    document.getElementById('loginBtnText').textContent = 'Sign In →';
+  }
+}
+
+// ── Google OAuth ──────────────────────────────────────────
+async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/index.html' }
+  });
+  if (error) console.error(error);
+}
+
+// ── Facebook OAuth ────────────────────────────────────────
+async function signInWithFacebook() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: { redirectTo: window.location.origin + '/index.html' }
+  });
+  if (error) console.error(error);
 }
 
 function showForgot(e) {
@@ -435,17 +478,24 @@ function showLogin() {
   document.getElementById('mainPanel').classList.remove('hidden');
 }
 
-function doReset() {
+async function doReset() {
   const email = document.getElementById('resetEmail').value.trim();
   const f = document.getElementById('f-reset');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){f.classList.add('error');return}
   f.classList.remove('error');
   document.getElementById('resetBtnText').textContent = 'Sending...';
-  setTimeout(() => {
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/reset-password.html'
+  });
+
+  if (error) {
+    showToast('⚠ ' + error.message);
+  } else {
     showToast('✓ Reset link sent! Check your inbox.');
     setTimeout(showLogin, 2000);
-    document.getElementById('resetBtnText').textContent = 'Send Reset Link →';
-  }, 1200);
+  }
+  document.getElementById('resetBtnText').textContent = 'Send Reset Link →';
 }
 
 function showToast(msg) {
@@ -454,6 +504,13 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3500);
 }
+
+// Allow Enter key to submit
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('mainPanel').classList.contains('hidden') === false) {
+    doLogin();
+  }
+});
 </script>
 </body>
 </html>

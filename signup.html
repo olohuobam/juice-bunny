@@ -502,7 +502,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="success-anim">✓</div>
         <div class="success-title">Welcome to Juice Bunny! 🐰</div>
         <div class="success-text">Your account has been created successfully.<br/>Time to explore exclusive content made just for you.</div>
-        <a href="juicy-bunny.html" class="btn-goto">Start Watching →</a>
+        <a href="index.html" class="btn-goto">Start Watching →</a>
       </div>
 
     </div>
@@ -514,8 +514,14 @@ select option{background:var(--bg3);color:var(--text)}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let selectedPlan = 'premium';
+// ── Supabase config ───────────────────────────────────────
+const SUPABASE_URL  = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_Tul6AysR5ZZ2qhM4WxASKQ_J3BVY1hH';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let selectedPlan = 'basic';
 
 function goPanel(n) {
   document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
@@ -652,21 +658,106 @@ function selectPlan(plan) {
   }
 }
 
-function createAccount() {
+async function createAccount() {
   const btn = document.getElementById('createBtn');
   btn.disabled = true;
   document.getElementById('createBtnText').textContent = 'Creating account...';
-  setTimeout(() => {
+
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('pass').value;
+  const fname    = document.getElementById('fname').value.trim();
+  const lname    = document.getElementById('lname').value.trim();
+  const dob      = document.getElementById('dob').value;
+  const country  = document.getElementById('country').value;
+  const plan     = selectedPlan;
+
+  try {
+    // 1. Sign up with Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fname + ' ' + lname,
+          plan,
+          date_of_birth: dob,
+          country
+        }
+      }
+    });
+
+    if (error) throw error;
+
+    // 2. Update profile with plan + extra info
+    // (profile row auto-created by DB trigger, just update it)
+    if (data.user) {
+      await supabase.from('profiles').update({
+        full_name:     fname + ' ' + lname,
+        plan,
+        date_of_birth: dob,
+        country
+      }).eq('id', data.user.id);
+
+      // 3. Insert subscription record
+      let expiresAt = null;
+      if (plan !== 'free') {
+        const d = new Date();
+        d.setMonth(d.getMonth() + 1);
+        expiresAt = d.toISOString();
+      }
+      await supabase.from('subscriptions').insert({
+        user_id:        data.user.id,
+        plan,
+        billing_period: 'monthly',
+        status:         'active',
+        expires_at:     expiresAt
+      });
+    }
+
+    // 4. Show success
     document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('stepsBar').style.display = 'none';
     document.querySelector('.auth-header').style.display = 'none';
     document.getElementById('successPanel').style.display = 'block';
-    // mark all steps done
     for(let i=1;i<=3;i++){
       const s = document.getElementById('step'+i);
-      s.classList.remove('active');s.classList.add('done');
+      s.classList.remove('active'); s.classList.add('done');
     }
-  }, 1800);
+
+  } catch(err) {
+    console.error(err);
+    // Show error under create button
+    let msg = err.message || 'Something went wrong. Please try again.';
+    if (msg.includes('already registered')) msg = 'This email is already registered. Try logging in.';
+    let errEl = document.getElementById('signup-error');
+    if (!errEl) {
+      errEl = document.createElement('div');
+      errEl.id = 'signup-error';
+      errEl.style.cssText = 'color:#ff4757;font-size:13px;text-align:center;margin-top:12px;padding:10px;background:rgba(255,71,87,.1);border-radius:8px;border:1px solid rgba(255,71,87,.25)';
+      btn.parentNode.insertBefore(errEl, btn.nextSibling);
+    }
+    errEl.textContent = '⚠ ' + msg;
+    btn.disabled = false;
+    document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+  }
+}
+
+// ── Google OAuth ──────────────────────────────────────────
+async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/index.html' }
+  });
+  if (error) console.error(error);
+}
+
+// ── Facebook OAuth ────────────────────────────────────────
+async function signInWithFacebook() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: { redirectTo: window.location.origin + '/index.html' }
+  });
+  if (error) console.error(error);
 }
 </script>
 </body>

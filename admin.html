@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Juice Bunny — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
+  --text:#fff;--text2:#a0a0b0;--text3:#606070;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --card:#16161f;--success:#00c878;--error:#ff4757;--warn:#ffb300;--radius:12px;
+  --sidebar:240px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--pink)}
+a{text-decoration:none;color:inherit}
+
+/* ── LOGIN SCREEN ─────────────────────────────────────────── */
+#admin-login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(180,20,100,.15),transparent 70%),var(--bg);
+}
+.login-card{
+  width:100%;max-width:400px;background:var(--bg2);
+  border:1px solid var(--border2);border-radius:20px;padding:48px 40px;
+  animation:popIn .4s both;
+}
+@keyframes popIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.login-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px}
+.login-logo-img{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,45,120,.5))}
+.login-logo-name{font-family:'Dancing Script',cursive;font-size:26px;font-weight:700}
+.login-eyebrow{text-align:center;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:28px}
+.login-field{margin-bottom:16px}
+.login-field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.login-field input{
+  width:100%;padding:12px 16px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;
+  transition:border-color .2s;
+}
+.login-field input:focus{border-color:var(--pink)}
+.login-field input::placeholder{color:var(--text3)}
+.btn-admin-login{
+  width:100%;padding:13px;background:var(--pink);color:#fff;
+  border:none;border-radius:25px;font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;
+  transition:all .25s;letter-spacing:.5px;margin-top:8px;
+}
+.btn-admin-login:hover{background:var(--pink2);transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.login-hint{text-align:center;font-size:12px;color:var(--text3);margin-top:16px}
+
+/* ── ADMIN SHELL ──────────────────────────────────────────── */
+#admin-shell{display:none;min-height:100vh}
+
+/* SIDEBAR */
+.admin-sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:200;
+  overflow-y:auto;
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:9px;padding:22px 20px 18px;
+  border-bottom:1px solid var(--border);cursor:pointer;
+}
+.sidebar-logo-img{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(255,45,120,.5))}
+.sidebar-logo-name{font-family:'Dancing Script',cursive;font-size:19px;font-weight:700}
+.sidebar-badge{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--pink);background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.25);padding:2px 7px;border-radius:4px;margin-left:auto}
+.sidebar-nav{padding:16px 0;flex:1}
+.nav-section-label{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);padding:10px 20px 4px}
+.nav-item{
+  display:flex;align-items:center;gap:11px;padding:10px 20px;
+  font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;
+  transition:all .15s;border-left:2px solid transparent;
+  user-select:none;
+}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.04)}
+.nav-item.active{color:#fff;background:rgba(255,45,120,.1);border-left-color:var(--pink)}
+.nav-item .nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.nav-item .nav-badge{margin-left:auto;background:var(--pink);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+.admin-user{display:flex;align-items:center;gap:10px}
+.admin-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.admin-name{font-size:13px;font-weight:600}
+.admin-role{font-size:11px;color:var(--text3)}
+.btn-logout{background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:0;transition:color .2s;margin-left:auto}
+.btn-logout:hover{color:var(--error)}
+
+/* MAIN AREA */
+.admin-main{margin-left:var(--sidebar);min-height:100vh}
+.admin-topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,13,18,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-time{font-size:12px;color:var(--text3)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;box-shadow:0 0 6px var(--success)}
+
+/* PANELS */
+.admin-panel{display:none;padding:28px 32px 60px}
+.admin-panel.active{display:block}
+
+/* ── DASHBOARD ─────────────────────────────────────────────── */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px 20px;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+}
+.stat-card:hover{border-color:rgba(255,45,120,.3);transform:translateY(-2px)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--stat-color,var(--pink))}
+.stat-icon{font-size:22px;margin-bottom:10px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:#fff;line-height:1}
+.stat-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+.stat-delta{font-size:11px;margin-top:8px}
+.stat-delta.up{color:var(--success)}
+.stat-delta.down{color:var(--error)}
+
+.dash-row{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.dash-card-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.dash-card-title span{color:var(--pink);font-size:11px;letter-spacing:1px;cursor:pointer}
+
+/* Mini revenue chart bars */
+.rev-chart{display:flex;align-items:flex-end;gap:6px;height:80px}
+.rev-bar{flex:1;background:rgba(255,45,120,.25);border-radius:4px 4px 0 0;position:relative;transition:background .2s;cursor:pointer}
+.rev-bar:hover{background:var(--pink)}
+.rev-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text3);white-space:nowrap}
+.rev-bar-val{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text2);white-space:nowrap;opacity:0;transition:opacity .2s}
+.rev-bar:hover .rev-bar-val{opacity:1}
+
+/* Recent signups */
+.signup-list{display:flex;flex-direction:column;gap:10px}
+.signup-row{display:flex;align-items:center;gap:12px}
+.su-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.su-name{font-size:13px;font-weight:500;flex:1}
+.su-plan{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px}
+.su-plan.bunnyworld{background:rgba(255,45,120,.2);color:var(--pink)}
+.su-plan.basic{background:rgba(0,200,120,.15);color:var(--success)}
+.su-plan.free{background:rgba(255,255,255,.07);color:var(--text3)}
+.su-time{font-size:11px;color:var(--text3)}
+
+/* ── VIDEOS ─────────────────────────────────────────────────── */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px}
+.btn-primary{display:flex;align-items:center;gap:7px;background:var(--pink);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:var(--pink2);transform:translateY(-1px)}
+.btn-secondary{background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:9px 18px;border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{background:rgba(255,255,255,.1);color:#fff}
+.btn-danger{background:rgba(255,71,87,.12);color:var(--error);border:1px solid rgba(255,71,87,.25);padding:7px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:rgba(255,71,87,.22)}
+.btn-edit{background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border);padding:7px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-edit:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* Upload zone */
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:14px;padding:48px 32px;
+  text-align:center;margin-bottom:24px;cursor:pointer;
+  transition:all .2s;background:rgba(255,45,120,.02);
+}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--pink);background:rgba(255,45,120,.06)}
+.upload-icon{font-size:36px;margin-bottom:12px}
+.upload-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text3)}
+.upload-sub span{color:var(--pink);cursor:pointer}
+#file-input{display:none}
+
+/* Upload form */
+.upload-form{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:24px;display:none}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-field{margin-bottom:0}
+.form-field.full{grid-column:1/-1}
+.form-field label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.form-field input,.form-field select,.form-field textarea{
+  width:100%;padding:10px 14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);border-radius:9px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13px;
+  outline:none;transition:border-color .2s;
+}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--pink)}
+.form-field input::placeholder,.form-field textarea::placeholder{color:var(--text3)}
+.form-field select option{background:var(--bg2)}
+.form-field textarea{resize:vertical;min-height:72px}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px}
+.toggle-lbl{font-size:13px;font-weight:500;flex:1}
+.toggle{position:relative;width:42px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border2);border-radius:12px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked + .toggle-slider{background:var(--pink)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(18px)}
+.progress-wrap{margin-top:16px;display:none}
+.progress-bar{height:6px;background:var(--border2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--pink);border-radius:3px;transition:width .3s;width:0}
+.progress-lbl{font-size:11px;color:var(--text3);margin-top:6px}
+.form-actions{display:flex;gap:10px;margin-top:20px}
+
+/* Video table */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.table-toolbar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.search-input{
+  flex:1;min-width:180px;padding:8px 14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--pink)}
+.search-input::placeholder{color:var(--text3)}
+.filter-select{padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none;cursor:pointer}
+.filter-select option{background:var(--bg2)}
+table{width:100%;border-collapse:collapse}
+thead{background:rgba(255,255,255,.03)}
+th{padding:11px 16px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.thumb-cell{display:flex;align-items:center;gap:12px}
+.vid-thumb{width:54px;height:36px;border-radius:6px;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.vid-title{font-size:13px;font-weight:600}
+.vid-dur{font-size:11px;color:var(--text3);margin-top:1px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.badge-premium{background:rgba(255,45,120,.15);color:var(--pink);border:1px solid rgba(255,45,120,.25)}
+.badge-free{background:rgba(0,200,120,.12);color:var(--success);border:1px solid rgba(0,200,120,.2)}
+.badge-active{background:rgba(0,200,120,.12);color:var(--success)}
+.badge-inactive{background:rgba(255,255,255,.07);color:var(--text3)}
+.badge-bunnyworld{background:rgba(255,45,120,.15);color:var(--pink)}
+.badge-basic{background:rgba(0,200,120,.12);color:var(--success)}
+.badge-pending{background:rgba(255,179,0,.12);color:var(--warn)}
+.badge-failed{background:rgba(255,71,87,.12);color:var(--error)}
+.td-actions{display:flex;gap:8px;align-items:center}
+
+/* ── USERS ──────────────────────────────────────────────────── */
+.user-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+
+/* ── REVENUE ────────────────────────────────────────────────── */
+.rev-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.rev-chart-big{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.rev-chart-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:20px}
+.big-chart{display:flex;align-items:flex-end;gap:8px;height:140px}
+.big-bar{flex:1;border-radius:4px 4px 0 0;position:relative;cursor:pointer;transition:opacity .2s}
+.big-bar:hover{opacity:.85}
+.big-bar-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--text3);white-space:nowrap}
+.big-bar-val{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--text2);white-space:nowrap}
+.crypto-split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.split-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.split-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px}
+.crypto-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.crypto-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.crypto-name{flex:1;font-size:13px;font-weight:500}
+.crypto-amt{font-size:13px;font-weight:600;color:#fff}
+.crypto-pct{font-size:11px;color:var(--text3);margin-top:1px}
+.pct-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:6px;overflow:hidden}
+.pct-fill{height:100%;border-radius:2px;background:var(--pink)}
+
+/* ── BROADCAST ──────────────────────────────────────────────── */
+.broadcast-wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+.bc-composer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px}
+.bc-title{font-size:14px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.bc-type-tabs{display:flex;gap:8px;margin-bottom:20px}
+.bc-tab{flex:1;padding:9px;border-radius:9px;border:1px solid var(--border2);background:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+.bc-tab.active{background:var(--pink);border-color:var(--pink);color:#fff}
+.bc-audience{margin-bottom:16px}
+.bc-audience label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.audience-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aud-opt{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s;font-size:13px}
+.aud-opt:hover{border-color:var(--border2)}
+.aud-opt input{accent-color:var(--pink)}
+.bc-preview{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px}
+.bc-prev-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.bc-prev-email{background:var(--card);border-radius:10px;padding:18px}
+.bc-prev-from{font-size:11px;color:var(--text3);margin-bottom:8px}
+.bc-prev-subject{font-size:14px;font-weight:600;margin-bottom:10px}
+.bc-prev-body{font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap}
+.bc-prev-sms{background:var(--card);border-radius:10px;padding:18px}
+.sms-bubble{background:rgba(255,45,120,.15);border:1px solid rgba(255,45,120,.2);border-radius:14px 14px 4px 14px;padding:12px 16px;font-size:13px;color:var(--text);line-height:1.6;max-width:260px;white-space:pre-wrap}
+.bc-stats-wrap{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.bc-stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.bc-stat-row:last-child{border-bottom:none}
+.bc-stat-lbl{color:var(--text3)}
+.bc-stat-val{font-weight:600}
+.btn-broadcast{
+  width:100%;padding:14px;background:linear-gradient(135deg,var(--pink),#a01050);
+  color:#fff;border:none;border-radius:25px;font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;
+  letter-spacing:.5px;text-transform:uppercase;margin-top:20px;
+  box-shadow:0 4px 20px rgba(255,45,120,.3);
+}
+.btn-broadcast:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,45,120,.4)}
+.broadcast-history{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-top:20px}
+
+/* ── TOAST ──────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;pointer-events:none}
+.toast.error{background:var(--error)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:28px;width:90%;max-width:440px;animation:popIn .25s both}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media(max-width:900px){
+  :root{--sidebar:0px}
+  .admin-sidebar{transform:translateX(-240px);transition:transform .3s;width:240px}
+  .admin-sidebar.open{transform:translateX(0)}
+  .admin-main{margin-left:0}
+  .dash-stats,.rev-summary{grid-template-columns:1fr 1fr}
+  .dash-row,.broadcast-wrap,.crypto-split{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-field.full{grid-column:1}
+}
+@media(max-width:600px){
+  .admin-panel{padding:20px 16px 60px}
+  .dash-stats,.user-stats{grid-template-columns:1fr 1fr}
+  .rev-summary{grid-template-columns:1fr 1fr}
+  .audience-options{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ADMIN LOGIN
+════════════════════════════════════════════════════════════ -->
+<div id="admin-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="white-rabbit-logo.png" alt="logo" class="login-logo-img" onerror="this.style.display='none'"/>
+      <span class="login-logo-name">Juice Bunny</span>
+    </div>
+    <div class="login-eyebrow">Admin Panel</div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="adm-email" placeholder="admin@juicebunny.com" value="admin@juicebunny.com"/>
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="adm-pass" placeholder="••••••••" value="admin123"/>
+    </div>
+    <button class="btn-admin-login" onclick="adminLogin()">Sign In to Admin</button>
+    <p class="login-hint">Demo: admin@juicebunny.com / admin123</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ADMIN SHELL
+════════════════════════════════════════════════════════════ -->
+<div id="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo">
+      <img src="white-rabbit-logo.png" alt="logo" class="sidebar-logo-img" onerror="this.style.display='none'"/>
+      <span class="sidebar-logo-name">Juice Bunny</span>
+      <span class="sidebar-badge">ADMIN</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" onclick="showPanel('dashboard',this)">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+
+      <div class="nav-section-label">Content</div>
+      <div class="nav-item" onclick="showPanel('videos',this)">
+        <span class="nav-icon">🎬</span> Videos
+        <span class="nav-badge" id="vid-count-badge">24</span>
+      </div>
+
+      <div class="nav-section-label">Members</div>
+      <div class="nav-item" onclick="showPanel('users',this)">
+        <span class="nav-icon">👥</span> Subscribers
+        <span class="nav-badge" id="usr-count-badge">1.2K</span>
+      </div>
+
+      <div class="nav-section-label">Finance</div>
+      <div class="nav-item" onclick="showPanel('revenue',this)">
+        <span class="nav-icon">💰</span> Revenue
+      </div>
+
+      <div class="nav-section-label">Marketing</div>
+      <div class="nav-item" onclick="showPanel('broadcast',this)">
+        <span class="nav-icon">📣</span> Broadcast
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-av">K</div>
+        <div>
+          <div class="admin-name">Kimoni</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+        <button class="btn-logout" onclick="adminLogout()" title="Sign out">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button onclick="toggleSidebar()" style="display:none;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:0" id="menu-btn">☰</button>
+        <span class="topbar-title" id="topbar-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="status-dot"></span>
+        <span class="topbar-time" id="topbar-clock"></span>
+        <a href="index.html" target="_blank" style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text3)'">↗ View Site</a>
+      </div>
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <div class="dash-stats">
+        <div class="stat-card" style="--stat-color:#FF2D78">
+          <div class="stat-icon">💰</div>
+          <div class="stat-val">$4,280</div>
+          <div class="stat-lbl">Revenue This Month</div>
+          <div class="stat-delta up">↑ 18% vs last month</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#00c878">
+          <div class="stat-icon">👥</div>
+          <div class="stat-val">1,247</div>
+          <div class="stat-lbl">Active Subscribers</div>
+          <div class="stat-delta up">↑ 94 new this week</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#8b00ff">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-val">24</div>
+          <div class="stat-lbl">Total Videos</div>
+          <div class="stat-delta up">↑ 3 added this week</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#ffb300">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-val">8,340</div>
+          <div class="stat-lbl">Views Today</div>
+          <div class="stat-delta up">↑ 12% vs yesterday</div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <div class="dash-card">
+          <div class="dash-card-title">Revenue — Last 7 Days <span onclick="showPanel('revenue',null)">See full report →</span></div>
+          <div class="rev-chart" id="mini-rev-chart"></div>
+          <div style="margin-top:28px"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Recent Signups <span onclick="showPanel('users',null)">View all →</span></div>
+          <div class="signup-list" id="recent-signups"></div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <div class="dash-card">
+          <div class="dash-card-title">Plan Distribution</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px">
+            <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)">312</div>
+              <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">BunnyWorld</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--success)">580</div>
+              <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Basic</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text3)">355</div>
+              <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Free</div>
+            </div>
+          </div>
+          <div style="height:6px;border-radius:3px;overflow:hidden;display:flex">
+            <div style="width:25%;background:var(--pink)"></div>
+            <div style="width:46.5%;background:var(--success)"></div>
+            <div style="width:28.5%;background:var(--bg3)"></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <button class="btn-primary" style="justify-content:center" onclick="showPanel('videos',null);setTimeout(()=>document.getElementById('upload-form-wrap').style.display='block',100)">＋ Upload New Video</button>
+            <button class="btn-secondary" onclick="showPanel('broadcast',null)">📣 Send Broadcast</button>
+            <button class="btn-secondary" onclick="showPanel('users',null)">👥 Manage Subscribers</button>
+            <button class="btn-secondary" onclick="showPanel('revenue',null)">💰 View Revenue Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── VIDEOS ─── -->
+    <div class="admin-panel" id="panel-videos">
+      <div class="section-head">
+        <span class="section-h2">Videos</span>
+        <button class="btn-primary" onclick="toggleUploadForm()">＋ Upload Video</button>
+      </div>
+
+      <div id="upload-form-wrap">
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+          <input type="file" id="file-input" accept="video/*" onchange="handleFileSelect(this)"/>
+          <div class="upload-icon">🎬</div>
+          <div class="upload-title">Drop video here or <span>browse files</span></div>
+          <div class="upload-sub">MP4, MOV, AVI — up to 4GB per file</div>
+        </div>
+
+        <div class="upload-form" id="vid-upload-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Video Title</label>
+              <input type="text" id="vid-title" placeholder="Enter title..."/>
+            </div>
+            <div class="form-field">
+              <label>Category</label>
+              <select id="vid-cat">
+                <option>Action</option>
+                <option>Romance</option>
+                <option>Anime</option>
+                <option>Originals</option>
+                <option>Steamy</option>
+                <option>Live Call</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label>Description</label>
+              <textarea id="vid-desc" placeholder="Short description of the video..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>Duration</label>
+              <input type="text" id="vid-dur" placeholder="e.g. 24:38"/>
+            </div>
+            <div class="form-field">
+              <label>Thumbnail Emoji / URL</label>
+              <input type="text" id="vid-thumb" placeholder="🔥 or https://..."/>
+            </div>
+            <div class="form-field full">
+              <div style="display:flex;gap:12px">
+                <div class="toggle-row" style="flex:1">
+                  <span class="toggle-lbl">🔒 Premium Content</span>
+                  <label class="toggle"><input type="checkbox" id="vid-premium" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="toggle-row" style="flex:1">
+                  <span class="toggle-lbl">🌟 Feature on Homepage</span>
+                  <label class="toggle"><input type="checkbox" id="vid-featured"/><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress-wrap" id="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="progress-lbl" id="progress-lbl">Uploading...</div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="submitVideo()">✓ Save Video</button>
+            <button class="btn-secondary" onclick="cancelUpload()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="🔍 Search videos..." oninput="filterVideos(this.value)"/>
+          <select class="filter-select" onchange="filterVideosByType(this.value)">
+            <option value="all">All Videos</option>
+            <option value="premium">Premium</option>
+            <option value="free">Free</option>
+          </select>
+          <span style="font-size:12px;color:var(--text3)" id="vid-count-lbl">24 videos</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Video</th>
+              <th>Category</th>
+              <th>Access</th>
+              <th>Views</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="videos-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── USERS ─── -->
+    <div class="admin-panel" id="panel-users">
+      <div class="section-head">
+        <span class="section-h2">Subscribers</span>
+        <div style="display:flex;gap:10px">
+          <button class="btn-secondary" onclick="exportUsers()">↓ Export CSV</button>
+        </div>
+      </div>
+      <div class="user-stats">
+        <div class="stat-card" style="--stat-color:#FF2D78">
+          <div class="stat-icon">👑</div>
+          <div class="stat-val">312</div>
+          <div class="stat-lbl">BunnyWorld</div>
+          <div class="stat-delta up">↑ 28 this week</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#00c878">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-val">580</div>
+          <div class="stat-lbl">Basic</div>
+          <div class="stat-delta up">↑ 51 this week</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#606070">
+          <div class="stat-icon">🆓</div>
+          <div class="stat-val">355</div>
+          <div class="stat-lbl">Free</div>
+          <div class="stat-delta up">↑ 15 this week</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="🔍 Search by name or email..." oninput="filterUsers(this.value)"/>
+          <select class="filter-select" onchange="filterUsersByPlan(this.value)">
+            <option value="all">All Plans</option>
+            <option value="bunnyworld">BunnyWorld</option>
+            <option value="basic">Basic</option>
+            <option value="free">Free</option>
+          </select>
+          <span style="font-size:12px;color:var(--text3)" id="usr-count-lbl">1,247 subscribers</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Plan</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Last Active</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── REVENUE ─── -->
+    <div class="admin-panel" id="panel-revenue">
+      <div class="section-head">
+        <span class="section-h2">Revenue</span>
+        <button class="btn-secondary" onclick="exportRevenue()">↓ Export Report</button>
+      </div>
+      <div class="rev-summary">
+        <div class="stat-card" style="--stat-color:#FF2D78">
+          <div class="stat-icon">💰</div>
+          <div class="stat-val">$4,280</div>
+          <div class="stat-lbl">This Month</div>
+          <div class="stat-delta up">↑ 18% vs last month</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#00c878">
+          <div class="stat-icon">📆</div>
+          <div class="stat-val">$142</div>
+          <div class="stat-lbl">Today</div>
+          <div class="stat-delta up">↑ 3 transactions</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#8b00ff">
+          <div class="stat-icon">📈</div>
+          <div class="stat-val">$18.4K</div>
+          <div class="stat-lbl">All Time</div>
+          <div class="stat-delta up">Since launch</div>
+        </div>
+        <div class="stat-card" style="--stat-color:#ffb300">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-val">94%</div>
+          <div class="stat-lbl">Renewal Rate</div>
+          <div class="stat-delta up">↑ 2% vs last month</div>
+        </div>
+      </div>
+
+      <div class="rev-chart-big">
+        <div class="rev-chart-title">Monthly Revenue — 2026</div>
+        <div class="big-chart" id="big-rev-chart"></div>
+        <div style="margin-top:28px"></div>
+      </div>
+
+      <div class="crypto-split">
+        <div class="split-card">
+          <div class="split-title">Revenue by Crypto</div>
+          <div id="crypto-breakdown"></div>
+        </div>
+        <div class="split-card">
+          <div class="split-title">Recent Transactions</div>
+          <div id="recent-txns"></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="🔍 Search transactions..." oninput="filterTxns(this.value)"/>
+          <select class="filter-select" onchange="filterTxnsByStatus(this.value)">
+            <option value="all">All Status</option>
+            <option value="finished">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Member</th>
+              <th>Plan</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="txns-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── BROADCAST ─── -->
+    <div class="admin-panel" id="panel-broadcast">
+      <div class="section-head">
+        <span class="section-h2">Broadcast</span>
+      </div>
+      <div class="broadcast-wrap">
+        <div>
+          <div class="bc-composer">
+            <div class="bc-title">✉️ Compose Message</div>
+            <div class="bc-type-tabs">
+              <button class="bc-tab active" id="tab-email" onclick="setBcType('email')">📧 Email</button>
+              <button class="bc-tab" id="tab-sms" onclick="setBcType('sms')">💬 SMS</button>
+            </div>
+            <div class="bc-audience">
+              <label>Send to</label>
+              <div class="audience-options">
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> 🌍 All Members <small style="color:var(--text3);margin-left:auto">1,247</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/> 👑 BunnyWorld <small style="color:var(--text3);margin-left:auto">312</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> ⭐ Basic <small style="color:var(--text3);margin-left:auto">580</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> 🆓 Free <small style="color:var(--text3);margin-left:auto">355</small></label>
+              </div>
+            </div>
+            <div id="email-fields">
+              <div class="form-field" style="margin-bottom:12px">
+                <label>Subject Line</label>
+                <input type="text" id="bc-subject" placeholder="🔥 New content just dropped..." oninput="updatePreview()"/>
+              </div>
+            </div>
+            <div class="form-field">
+              <label id="bc-body-label">Message</label>
+              <textarea id="bc-body" rows="5" placeholder="Hey [name], we just uploaded something you'll love..." oninput="updatePreview()"></textarea>
+            </div>
+            <button class="btn-broadcast" onclick="sendBroadcast()">🚀 Send Broadcast</button>
+          </div>
+
+          <div class="broadcast-history">
+            <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px">Recent Broadcasts</div>
+            <div id="bc-history"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="bc-preview">
+            <div class="bc-prev-title">Preview</div>
+            <div id="email-preview">
+              <div class="bc-prev-email">
+                <div class="bc-prev-from">From: Juice Bunny &lt;hello@juicebunnytv.com&gt;</div>
+                <div class="bc-prev-subject" id="prev-subject">Subject line will appear here</div>
+                <div class="bc-prev-body" id="prev-body">Your message will appear here...</div>
+              </div>
+            </div>
+            <div id="sms-preview" style="display:none">
+              <div class="bc-prev-sms">
+                <div class="sms-bubble" id="prev-sms-body">Your SMS will appear here...</div>
+              </div>
+            </div>
+          </div>
+          <div class="bc-stats-wrap">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Send Summary</div>
+            <div class="bc-stat-row"><span class="bc-stat-lbl">Recipients</span><span class="bc-stat-val" id="bc-stat-recipients">1,247</span></div>
+            <div class="bc-stat-row"><span class="bc-stat-lbl">Channel</span><span class="bc-stat-val" id="bc-stat-channel">Email</span></div>
+            <div class="bc-stat-row"><span class="bc-stat-lbl">Est. Open Rate</span><span class="bc-stat-val" style="color:var(--success)">~38%</span></div>
+            <div class="bc-stat-row"><span class="bc-stat-lbl">Est. Delivered</span><span class="bc-stat-val" id="bc-stat-delivered">1,196</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <div class="modal-title">Delete Video?</div>
+    <div class="modal-sub" id="delete-modal-sub">This will permanently remove the video and all its data. This cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-danger" onclick="confirmDelete()">Delete Forever</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+let videosData = [
+  {id:1,title:'Midnight Desires',cat:'Romance',thumb:'🌙',dur:'22:14',premium:true,featured:true,views:4820,date:'Jun 08 2026'},
+  {id:2,title:'Neon Nights',cat:'Action',thumb:'⚡',dur:'18:40',premium:true,featured:false,views:3210,date:'Jun 06 2026'},
+  {id:3,title:'Cherry Blossom Dreams',cat:'Anime',thumb:'🌸',dur:'31:05',premium:false,featured:true,views:8940,date:'Jun 04 2026'},
+  {id:4,title:'Dark Temptation',cat:'Originals',thumb:'🖤',dur:'25:22',premium:true,featured:false,views:2660,date:'Jun 01 2026'},
+  {id:5,title:'Velvet Underground',cat:'Steamy',thumb:'🍷',dur:'19:58',premium:true,featured:true,views:5430,date:'May 28 2026'},
+  {id:6,title:'Free Preview Pack',cat:'Action',thumb:'🎁',dur:'05:00',premium:false,featured:false,views:12400,date:'May 25 2026'},
+  {id:7,title:'Starlight Sessions',cat:'Romance',thumb:'✨',dur:'28:17',premium:true,featured:false,views:1870,date:'May 20 2026'},
+  {id:8,title:'Tokyo Fantasy',cat:'Anime',thumb:'🗼',dur:'33:44',premium:true,featured:true,views:6120,date:'May 15 2026'},
+];
+
+let usersData = [
+  {id:1,name:'Jessica M.',email:'jessica@email.com',plan:'bunnyworld',status:'active',joined:'Jun 01 2026',lastActive:'2 hours ago'},
+  {id:2,name:'Ryan K.',email:'ryank@email.com',plan:'basic',status:'active',joined:'May 28 2026',lastActive:'1 day ago'},
+  {id:3,name:'Samantha L.',email:'sam@email.com',plan:'bunnyworld',status:'active',joined:'May 25 2026',lastActive:'5 hours ago'},
+  {id:4,name:'Marcus T.',email:'marcus@email.com',plan:'free',status:'active',joined:'May 20 2026',lastActive:'3 days ago'},
+  {id:5,name:'Priya N.',email:'priya@email.com',plan:'basic',status:'active',joined:'May 15 2026',lastActive:'12 hours ago'},
+  {id:6,name:'Tyler B.',email:'tyler@email.com',plan:'bunnyworld',status:'active',joined:'May 10 2026',lastActive:'Just now'},
+  {id:7,name:'Camille R.',email:'camille@email.com',plan:'basic',status:'inactive',joined:'Apr 28 2026',lastActive:'2 weeks ago'},
+  {id:8,name:'Devon W.',email:'devon@email.com',plan:'free',status:'active',joined:'Apr 20 2026',lastActive:'4 days ago'},
+];
+
+let txnsData = [
+  {id:'JB-8821049',user:'Jessica M.',plan:'BunnyWorld',amount:'$15.99',method:'BTC',status:'finished',date:'Jun 08 2026'},
+  {id:'JB-8820884',user:'Tyler B.',plan:'BunnyWorld',amount:'$15.99',method:'ETH',status:'finished',date:'Jun 08 2026'},
+  {id:'JB-8820541',user:'Samantha L.',plan:'Basic',amount:'$9.99',method:'USDT',status:'finished',date:'Jun 07 2026'},
+  {id:'JB-8820122',user:'Priya N.',plan:'Basic',amount:'$9.99',method:'LTC',status:'finished',date:'Jun 07 2026'},
+  {id:'JB-8819871',user:'Ryan K.',plan:'Basic',amount:'$9.99',method:'XRP',status:'pending',date:'Jun 06 2026'},
+  {id:'JB-8819344',user:'Marcus T.',plan:'Basic',amount:'$9.99',method:'BTC',status:'failed',date:'Jun 05 2026'},
+  {id:'JB-8818990',user:'Camille R.',plan:'BunnyWorld',amount:'$15.99',method:'ETH',status:'finished',date:'Jun 04 2026'},
+  {id:'JB-8818433',user:'Devon W.',plan:'Basic',amount:'$9.99',method:'USDT',status:'finished',date:'Jun 03 2026'},
+];
+
+const recentSignupsData = [
+  {init:'J',name:'Jessica M.',plan:'bunnyworld',time:'2h ago'},
+  {init:'T',name:'Tyler B.',plan:'bunnyworld',time:'4h ago'},
+  {init:'P',name:'Priya N.',plan:'basic',time:'8h ago'},
+  {init:'D',name:'Devon W.',plan:'free',time:'12h ago'},
+];
+
+const bcHistory = [
+  {type:'email',audience:'All Members',subject:'🔥 New Drop: Neon Nights is LIVE',sent:'1,247',date:'Jun 06 2026',openRate:'42%'},
+  {type:'sms',audience:'BunnyWorld',subject:'Exclusive content just for you 👑',sent:'312',date:'Jun 01 2026',openRate:'91%'},
+  {type:'email',audience:'Basic',subject:'Upgrade to BunnyWorld — 50% off today',sent:'580',date:'May 28 2026',openRate:'38%'},
+];
+
+let currentBcType = 'email';
+let deleteTargetId = null;
+let filteredVideos = [...videosData];
+let filteredUsers  = [...usersData];
+let filteredTxns   = [...txnsData];
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════════════════ */
+function adminLogin() {
+  const email = document.getElementById('adm-email').value.trim();
+  const pass  = document.getElementById('adm-pass').value;
+  if(email === 'admin@juicebunny.com' && pass === 'admin123') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-shell').style.display = 'block';
+    initAdmin();
+    showToast('✓ Welcome back, Kimoni!');
+  } else {
+    showToast('Invalid credentials', true);
+  }
+}
+document.getElementById('adm-pass').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+
+function adminLogout() {
+  document.getElementById('admin-shell').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'flex';
+  showToast('Signed out');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+const panelTitles = {dashboard:'Dashboard',videos:'Videos',users:'Subscribers',revenue:'Revenue',broadcast:'Broadcast'};
+
+function showPanel(name, navEl) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'")) n.classList.add('active');
+    });
+  }
+  document.getElementById('topbar-title').textContent = panelTitles[name]||name;
+  if(window.innerWidth<=900) document.getElementById('adminSidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('adminSidebar').classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CLOCK
+═══════════════════════════════════════════════════════════ */
+function updateClock() {
+  document.getElementById('topbar-clock').textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+function initAdmin() {
+  buildMiniRevChart();
+  buildRecentSignups();
+  buildVideosTable();
+  buildUsersTable();
+  buildBigRevChart();
+  buildCryptoBreakdown();
+  buildRecentTxns();
+  buildTxnsTable();
+  buildBcHistory();
+  document.getElementById('menu-btn').style.display = window.innerWidth<=900 ? 'block' : 'none';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD CHARTS
+═══════════════════════════════════════════════════════════ */
+const miniRevData = [
+  {day:'Mon',val:420},{day:'Tue',val:680},{day:'Wed',val:310},{day:'Thu',val:590},
+  {day:'Fri',val:870},{day:'Sat',val:940},{day:'Sun',val:470}
+];
+
+function buildMiniRevChart() {
+  const max = Math.max(...miniRevData.map(d=>d.val));
+  document.getElementById('mini-rev-chart').innerHTML = miniRevData.map(d=>`
+    <div class="rev-bar" style="height:${(d.val/max)*100}%" title="$${d.val}">
+      <span class="rev-bar-val">$${d.val}</span>
+      <span class="rev-bar-label">${d.day}</span>
+    </div>`).join('');
+}
+
+function buildRecentSignups() {
+  document.getElementById('recent-signups').innerHTML = recentSignupsData.map(u=>`
+    <div class="signup-row">
+      <div class="su-av">${u.init}</div>
+      <div class="su-name">${u.name}</div>
+      <span class="su-plan ${u.plan}">${u.plan}</span>
+      <span class="su-time">${u.time}</span>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VIDEOS
+═══════════════════════════════════════════════════════════ */
+function buildVideosTable(data) {
+  const rows = data || videosData;
+  document.getElementById('vid-count-lbl').textContent = rows.length + ' video' + (rows.length===1?'':'s');
+  document.getElementById('vid-count-badge').textContent = videosData.length;
+  document.getElementById('videos-tbody').innerHTML = rows.map(v=>`
+    <tr id="vrow-${v.id}">
+      <td>
+        <div class="thumb-cell">
+          <div class="vid-thumb">${v.thumb}</div>
+          <div>
+            <div class="vid-title">${v.title}</div>
+            <div class="vid-dur">${v.dur} ${v.featured?'· 🌟 Featured':''}</div>
+          </div>
+        </div>
+      </td>
+      <td><span style="color:var(--text2);font-size:12px">${v.cat}</span></td>
+      <td><span class="badge ${v.premium?'badge-premium':'badge-free'}">${v.premium?'Premium':'Free'}</span></td>
+      <td><span style="font-size:13px;font-weight:600">${v.views.toLocaleString()}</span></td>
+      <td style="color:var(--text3);font-size:12px">${v.date}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-edit" onclick="togglePremium(${v.id})">${v.premium?'Set Free':'Set Premium'}</button>
+          <button class="btn-danger" onclick="openDeleteModal(${v.id},'${v.title}')">Delete</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterVideos(q) {
+  const f = videosData.filter(v=>v.title.toLowerCase().includes(q.toLowerCase())||v.cat.toLowerCase().includes(q.toLowerCase()));
+  buildVideosTable(f);
+}
+
+function filterVideosByType(type) {
+  if(type==='all') buildVideosTable();
+  else if(type==='premium') buildVideosTable(videosData.filter(v=>v.premium));
+  else buildVideosTable(videosData.filter(v=>!v.premium));
+}
+
+function togglePremium(id) {
+  const v = videosData.find(v=>v.id===id);
+  if(!v) return;
+  v.premium = !v.premium;
+  buildVideosTable();
+  showToast(`"${v.title}" set to ${v.premium?'Premium':'Free'}`);
+}
+
+function toggleUploadForm() {
+  const wrap = document.getElementById('upload-form-wrap');
+  wrap.style.display = wrap.style.display==='none' ? 'block' : 'none';
+}
+
+function handleFileSelect(input) {
+  if(input.files[0]) showUploadForm(input.files[0].name);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  if(e.dataTransfer.files[0]) showUploadForm(e.dataTransfer.files[0].name);
+}
+
+function showUploadForm(filename) {
+  document.getElementById('vid-upload-form').style.display = 'block';
+  document.getElementById('vid-title').placeholder = filename.replace(/\.[^.]+$/,'');
+  document.getElementById('upload-zone').style.display = 'none';
+}
+
+function cancelUpload() {
+  document.getElementById('vid-upload-form').style.display = 'none';
+  document.getElementById('upload-zone').style.display = 'block';
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  document.getElementById('file-input').value = '';
+}
+
+function submitVideo() {
+  const title = document.getElementById('vid-title').value.trim();
+  if(!title){ showToast('Please enter a title', true); return; }
+  const pw = document.getElementById('progress-wrap');
+  pw.style.display = 'block';
+  let pct = 0;
+  const fill = document.getElementById('progress-fill');
+  const lbl  = document.getElementById('progress-lbl');
+  const iv = setInterval(()=>{
+    pct += Math.random()*18;
+    if(pct>=100){
+      pct=100; clearInterval(iv);
+      fill.style.width='100%';
+      lbl.textContent='✓ Upload complete!';
+      const newVid = {
+        id: videosData.length+1,
+        title,
+        cat:   document.getElementById('vid-cat').value,
+        thumb: document.getElementById('vid-thumb').value || '🎬',
+        dur:   document.getElementById('vid-dur').value || '00:00',
+        premium: document.getElementById('vid-premium').checked,
+        featured:document.getElementById('vid-featured').checked,
+        views: 0,
+        date: new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'})
+      };
+      videosData.unshift(newVid);
+      setTimeout(()=>{
+        buildVideosTable();
+        cancelUpload();
+        pw.style.display='none';
+        fill.style.width='0';
+        document.getElementById('vid-title').value='';
+        document.getElementById('vid-desc').value='';
+        document.getElementById('vid-dur').value='';
+        document.getElementById('vid-thumb').value='';
+        showToast('✓ Video added successfully!');
+      },600);
+    } else {
+      fill.style.width=pct+'%';
+      lbl.textContent=`Uploading... ${Math.floor(pct)}%`;
+    }
+  },120);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   USERS
+═══════════════════════════════════════════════════════════ */
+function buildUsersTable(data) {
+  const rows = data || usersData;
+  document.getElementById('usr-count-lbl').textContent = '1,247 subscribers';
+  document.getElementById('usr-count-badge').textContent = '1.2K';
+  document.getElementById('users-tbody').innerHTML = rows.map(u=>`
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="su-av">${u.name[0]}</div>
+          <div>
+            <div style="font-size:13px;font-weight:600">${u.name}</div>
+            <div style="font-size:11px;color:var(--text3)">${u.email}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge badge-${u.plan}">${u.plan==='bunnyworld'?'BunnyWorld':u.plan.charAt(0).toUpperCase()+u.plan.slice(1)}</span></td>
+      <td><span class="badge ${u.status==='active'?'badge-active':'badge-inactive'}">${u.status}</span></td>
+      <td style="color:var(--text3);font-size:12px">${u.joined}</td>
+      <td style="color:var(--text3);font-size:12px">${u.lastActive}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-edit" onclick="showToast('Feature coming with Supabase backend')">View</button>
+          <button class="btn-danger" onclick="showToast('Feature coming with Supabase backend')">Ban</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterUsers(q) {
+  const f = usersData.filter(u=>u.name.toLowerCase().includes(q.toLowerCase())||u.email.toLowerCase().includes(q.toLowerCase()));
+  buildUsersTable(f);
+}
+function filterUsersByPlan(plan) {
+  if(plan==='all') buildUsersTable();
+  else buildUsersTable(usersData.filter(u=>u.plan===plan));
+}
+function exportUsers() {
+  showToast('CSV export ready — connect Supabase to pull live data');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REVENUE
+═══════════════════════════════════════════════════════════ */
+const monthlyRev = [
+  {m:'Jan',val:1200},{m:'Feb',val:1850},{m:'Mar',val:2100},{m:'Apr',val:2600},
+  {m:'May',val:3420},{m:'Jun',val:4280},{m:'Jul',val:0},{m:'Aug',val:0},
+  {m:'Sep',val:0},{m:'Oct',val:0},{m:'Nov',val:0},{m:'Dec',val:0}
+];
+
+function buildBigRevChart() {
+  const max = Math.max(...monthlyRev.filter(m=>m.val>0).map(m=>m.val));
+  document.getElementById('big-rev-chart').innerHTML = monthlyRev.map(m=>`
+    <div class="big-bar" style="height:${m.val>0?(m.val/max)*100:4}%;background:${m.val>0?'rgba(255,45,120,.35)':'rgba(255,255,255,.04)'}" title="$${m.val}">
+      ${m.val>0?`<span class="big-bar-val">$${m.val.toLocaleString()}</span>`:''}
+      <span class="big-bar-label">${m.m}</span>
+    </div>`).join('');
+}
+
+function buildCryptoBreakdown() {
+  const cryptos = [
+    {icon:'₿',name:'Bitcoin (BTC)',color:'#f7931a',amt:'$1,840',pct:43},
+    {icon:'Ξ',name:'Ethereum (ETH)',color:'#627eea',amt:'$1,200',pct:28},
+    {icon:'₮',name:'USDT TRC20',color:'#26a17b',amt:'$820',pct:19},
+    {icon:'Ł',name:'Litecoin (LTC)',color:'#bfbbbb',amt:'$280',pct:7},
+    {icon:'✕',name:'XRP',color:'#346aa9',amt:'$140',pct:3},
+  ];
+  document.getElementById('crypto-breakdown').innerHTML = cryptos.map(c=>`
+    <div class="crypto-row">
+      <div class="crypto-icon" style="background:${c.color}22;color:${c.color}">${c.icon}</div>
+      <div style="flex:1">
+        <div class="crypto-name">${c.name}</div>
+        <div class="pct-bar"><div class="pct-fill" style="width:${c.pct}%;background:${c.color}"></div></div>
+      </div>
+      <div style="text-align:right">
+        <div class="crypto-amt">${c.amt}</div>
+        <div class="crypto-pct">${c.pct}%</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildRecentTxns() {
+  document.getElementById('recent-txns').innerHTML = txnsData.slice(0,5).map(t=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <div>
+        <div style="font-weight:600">${t.user}</div>
+        <div style="color:var(--text3)">${t.id}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:600">${t.amount}</div>
+        <span class="badge badge-${t.status}">${t.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+function buildTxnsTable(data) {
+  const rows = data || txnsData;
+  document.getElementById('txns-tbody').innerHTML = rows.map(t=>`
+    <tr>
+      <td style="font-size:12px;color:var(--text3);font-family:monospace">${t.id}</td>
+      <td style="font-size:13px;font-weight:500">${t.user}</td>
+      <td><span class="badge badge-${t.plan.toLowerCase().replace(' ','')}">${t.plan}</span></td>
+      <td style="font-weight:700;color:var(--success)">${t.amount}</td>
+      <td><span style="font-size:11px;color:var(--text2)">${t.method}</span></td>
+      <td><span class="badge badge-${t.status}">${t.status}</span></td>
+      <td style="color:var(--text3);font-size:12px">${t.date}</td>
+    </tr>`).join('');
+}
+
+function filterTxns(q) {
+  const f = txnsData.filter(t=>t.user.toLowerCase().includes(q.toLowerCase())||t.id.includes(q));
+  buildTxnsTable(f);
+}
+function filterTxnsByStatus(s) {
+  if(s==='all') buildTxnsTable();
+  else buildTxnsTable(txnsData.filter(t=>t.status===s));
+}
+function exportRevenue() {
+  showToast('Revenue report — connect Supabase for live export');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BROADCAST
+═══════════════════════════════════════════════════════════ */
+function setBcType(type) {
+  currentBcType = type;
+  document.getElementById('tab-email').classList.toggle('active', type==='email');
+  document.getElementById('tab-sms').classList.toggle('active', type==='sms');
+  document.getElementById('email-fields').style.display = type==='email'?'block':'none';
+  document.getElementById('email-preview').style.display = type==='email'?'block':'none';
+  document.getElementById('sms-preview').style.display = type==='sms'?'block':'none';
+  document.getElementById('bc-body-label').textContent = type==='email'?'Message Body':'SMS Text (160 chars)';
+  document.getElementById('bc-stat-channel').textContent = type==='email'?'Email':'SMS';
+  updatePreview();
+}
+
+function updatePreview() {
+  const subj = document.getElementById('bc-subject').value || 'Subject line will appear here';
+  const body = document.getElementById('bc-body').value || 'Your message will appear here...';
+  document.getElementById('prev-subject').textContent = subj;
+  document.getElementById('prev-body').textContent = body;
+  document.getElementById('prev-sms-body').textContent = body;
+}
+
+function updateBcStats() {
+  const counts = {all:1247,bunnyworld:312,basic:580,free:355};
+  const sel = document.querySelector('input[name="bc-audience"]:checked').value;
+  const n = counts[sel];
+  document.getElementById('bc-stat-recipients').textContent = n.toLocaleString();
+  document.getElementById('bc-stat-delivered').textContent = Math.floor(n*.96).toLocaleString();
+}
+
+function sendBroadcast() {
+  const body = document.getElementById('bc-body').value.trim();
+  if(!body){ showToast('Please write a message first', true); return; }
+  showToast('🚀 Broadcast sent! — wire to SendGrid/Twilio for live sends');
+  const audience = document.querySelector('input[name="bc-audience"]:checked').value;
+  const counts = {all:1247,bunnyworld:312,basic:580,free:355};
+  bcHistory.unshift({
+    type:currentBcType,
+    audience: audience==='all'?'All Members':audience.charAt(0).toUpperCase()+audience.slice(1),
+    subject: document.getElementById('bc-subject').value || body.substring(0,40),
+    sent: counts[audience].toLocaleString(),
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}),
+    openRate:'—'
+  });
+  buildBcHistory();
+  document.getElementById('bc-body').value='';
+  document.getElementById('bc-subject').value='';
+  updatePreview();
+}
+
+function buildBcHistory() {
+  document.getElementById('bc-history').innerHTML = bcHistory.map(b=>`
+    <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:600">${b.subject}</span>
+        <span style="font-size:10px;color:var(--text3)">${b.date}</span>
+      </div>
+      <div style="display:flex;gap:10px;font-size:11px;color:var(--text3)">
+        <span>${b.type==='email'?'📧':'💬'} ${b.type}</span>
+        <span>· ${b.audience}</span>
+        <span>· ${b.sent} sent</span>
+        ${b.openRate!=='—'?`<span style="color:var(--success)">· ${b.openRate} open rate</span>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DELETE MODAL
+═══════════════════════════════════════════════════════════ */
+function openDeleteModal(id, title) {
+  deleteTargetId = id;
+  document.getElementById('delete-modal-sub').textContent = `This will permanently remove "${title}" and all its data. This cannot be undone.`;
+  document.getElementById('delete-modal').classList.add('open');
+}
+function closeDeleteModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+  deleteTargetId = null;
+}
+function confirmDelete() {
+  if(!deleteTargetId) return;
+  videosData = videosData.filter(v=>v.id!==deleteTargetId);
+  buildVideosTable();
+  closeDeleteModal();
+  showToast('Video deleted');
+}
+document.getElementById('delete-modal').addEventListener('click', e=>{
+  if(e.target===e.currentTarget) closeDeleteModal();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError?' error':'');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+/* ── Responsive menu button ──────────────────────────────── */
+window.addEventListener('resize', ()=>{
+  document.getElementById('menu-btn').style.display = window.innerWidth<=900?'block':'none';
+});
+</script>
+</body>
+</html>
