@@ -519,7 +519,8 @@ select option{background:var(--bg3);color:var(--text)}
 // ── Supabase config ───────────────────────────────────────
 const SUPABASE_URL  = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable_Tul6AysR5ZZ2qhM4WxASKQ_J3BVY1hH';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let selectedPlan = 'basic';
 
@@ -673,7 +674,7 @@ async function createAccount() {
 
   try {
     // 1. Sign up with Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await sb.auth.signUp({
       email,
       password,
       options: {
@@ -691,7 +692,7 @@ async function createAccount() {
     // 2. Update profile with plan + extra info
     // (profile row auto-created by DB trigger, just update it)
     if (data.user) {
-      await supabase.from('profiles').update({
+      await sb.from('profiles').update({
         full_name:     fname + ' ' + lname,
         plan,
         date_of_birth: dob,
@@ -705,7 +706,7 @@ async function createAccount() {
         d.setMonth(d.getMonth() + 1);
         expiresAt = d.toISOString();
       }
-      await supabase.from('subscriptions').insert({
+      await sb.from('subscriptions').insert({
         user_id:        data.user.id,
         plan,
         billing_period: 'monthly',
@@ -744,7 +745,7 @@ async function createAccount() {
 
 // ── Google OAuth ──────────────────────────────────────────
 async function signInWithGoogle() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin + '/index.html' }
   });
@@ -753,7 +754,7 @@ async function signInWithGoogle() {
 
 // ── Facebook OAuth ────────────────────────────────────────
 async function signInWithFacebook() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await sb.auth.signInWithOAuth({
     provider: 'facebook',
     options: { redirectTo: window.location.origin + '/index.html' }
   });

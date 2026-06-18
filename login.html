@@ -386,7 +386,8 @@ input::placeholder{color:var(--text3)}
 // ── Supabase config ───────────────────────────────────────
 const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Tul6AysR5ZZ2qhM4WxASKQ_J3BVY1hH';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function togglePass() {
   const inp = document.getElementById('loginPass');
@@ -417,7 +418,7 @@ async function doLogin() {
   document.getElementById('loginBtnText').textContent = 'Signing in...';
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
 
     if (error) throw error;
 
@@ -451,7 +452,7 @@ async function doLogin() {
 
 // ── Google OAuth ──────────────────────────────────────────
 async function signInWithGoogle() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin + '/index.html' }
   });
@@ -460,7 +461,7 @@ async function signInWithGoogle() {
 
 // ── Facebook OAuth ────────────────────────────────────────
 async function signInWithFacebook() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await sb.auth.signInWithOAuth({
     provider: 'facebook',
     options: { redirectTo: window.location.origin + '/index.html' }
   });
@@ -485,7 +486,7 @@ async function doReset() {
   f.classList.remove('error');
   document.getElementById('resetBtnText').textContent = 'Sending...';
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + '/reset-password.html'
   });
 
