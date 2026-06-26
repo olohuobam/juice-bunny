@@ -518,9 +518,9 @@ select option{background:var(--bg3);color:var(--text)}
 <script>
 // ── Supabase config ───────────────────────────────────────
 const SUPABASE_URL  = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_Tul6AysR5ZZ2qhM4WxASKQ_J3BVY1hH';
-const { createClient } = window.supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+console.log('✅ Supabase client ready:', sb ? 'connected' : 'FAILED');
 
 let selectedPlan = 'basic';
 
