@@ -2904,6 +2904,36 @@ function checkPaymentReturn() {
     goTo('payment');
     showToast('Payment cancelled. Please try again.', true);
   }
+  // Handle OAuth redirect back from Google/Facebook
+  const oauthMode = params.get('oauth');
+  if(oauthMode) {
+    loadSupabase(async (sb) => {
+      const { data: { session } } = await sb.auth.getSession();
+      if(session) {
+        if(oauthMode === 'signup') {
+          // New user via OAuth — send to age verify step
+          const meta = session.user.user_metadata;
+          const name = (meta.full_name || meta.name || '').split(' ');
+          if(document.getElementById('su-fname')) document.getElementById('su-fname').value = name[0] || '';
+          if(document.getElementById('su-lname')) document.getElementById('su-lname').value = name.slice(1).join(' ') || '';
+          if(document.getElementById('su-email')) document.getElementById('su-email').value = session.user.email || '';
+          const pwField = document.getElementById('fw-pass');
+          const cfField = document.getElementById('fw-conf');
+          if(pwField) pwField.style.display = 'none';
+          if(cfField) cfField.style.display = 'none';
+          _socialAuthSession = session;
+          goTo('signup');
+          suGoPanel(2);
+          showToast('✓ Google sign-in successful — complete your profile');
+        } else {
+          // Returning user — go straight to home
+          updateNavLoggedIn();
+          goTo('home');
+          showToast('✓ Welcome back! 🐰');
+        }
+      }
+    });
+  }
 }
 
 
@@ -2993,73 +3023,36 @@ const GOOGLE_CLIENT_ID  = '215156479497-m3ko1o2d7h42pr0md07bbuh7eeml12pm.apps.go
 const FACEBOOK_APP_ID     = '1293034019653380';
 const FACEBOOK_APP_SECRET = 'd15f5cf60d3e23892d155abedc2c5890';
 
-// ── GOOGLE SIGN IN ────────────────────────────────────────────
+// ── GOOGLE SIGN IN (via Supabase OAuth) ──────────────────────
 function signInWithGoogle(mode) {
-  if(GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE')) {
-    showToast('⚙️ Google login — add Client ID to activate', true);
-    return;
-  }
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: (response) => handleGoogleResponse(response, mode),
-    auto_select: false,
-  });
-  google.accounts.id.prompt((notification) => {
-    if(notification.isNotDisplayed()) {
-      // Fallback: open Google OAuth popup
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-        `client_id=${GOOGLE_CLIENT_ID}` +
-        `&redirect_uri=${encodeURIComponent(SITE_URL)}` +
-        `&response_type=token` +
-        `&scope=email%20profile`;
-      window.open(authUrl, '_blank', 'width=500,height=600');
-    }
+  loadSupabase(async (sb) => {
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: mode === 'signup'
+          ? window.location.origin + '/index.html?oauth=signup'
+          : window.location.origin + '/index.html?oauth=login'
+      }
+    });
+    if(error) showToast('Google login error: ' + error.message, true);
   });
 }
 
-function handleGoogleResponse(response, mode) {
-  // Decode JWT token to get user info
-  const payload = JSON.parse(atob(response.credential.split('.')[1]));
-  const user = {
-    name:  payload.name,
-    email: payload.email,
-    photo: payload.picture,
-    provider: 'google'
-  };
-  handleSocialAuthSuccess(user, mode);
-}
-
-// ── FACEBOOK SIGN IN ──────────────────────────────────────────
-function initFacebook() {
-  if(FACEBOOK_APP_ID.includes('YOUR_FACEBOOK')) return;
-  FB.init({
-    appId:   FACEBOOK_APP_ID,
-    cookie:  true,
-    xfbml:   true,
-    version: 'v18.0'
-  });
-}
+// ── FACEBOOK SIGN IN (via Supabase OAuth) ────────────────────
+function initFacebook() {} // no longer needed — Supabase handles it
 
 function signInWithFacebook(mode) {
-  if(FACEBOOK_APP_ID.includes('YOUR_FACEBOOK')) {
-    showToast('⚙️ Facebook login — add App ID to activate', true);
-    return;
-  }
-  FB.login((response) => {
-    if(response.authResponse) {
-      FB.api('/me', {fields: 'name,email,picture'}, (userData) => {
-        const user = {
-          name:  userData.name,
-          email: userData.email || '',
-          photo: userData.picture?.data?.url || '',
-          provider: 'facebook'
-        };
-        handleSocialAuthSuccess(user, mode);
-      });
-    } else {
-      showToast('Facebook login cancelled', true);
-    }
-  }, {scope: 'email,public_profile'});
+  loadSupabase(async (sb) => {
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: mode === 'signup'
+          ? window.location.origin + '/index.html?oauth=signup'
+          : window.location.origin + '/index.html?oauth=login'
+      }
+    });
+    if(error) showToast('Facebook login error: ' + error.message, true);
+  });
 }
 
 // ── HANDLE SOCIAL AUTH SUCCESS ────────────────────────────────
@@ -3068,15 +3061,25 @@ function handleSocialAuthSuccess(user, mode) {
   const lastName  = user.name.split(' ').slice(1).join(' ') || '';
 
   if(mode === 'signup') {
-    // Pre-fill signup form and jump to step 2 (age verify)
+    // Store session so suCreateAccount skips password signup
+    _socialAuthSession = user.session || { user: { id: user.id } };
+
+    // Pre-fill name fields
     if(document.getElementById('su-fname')) document.getElementById('su-fname').value = firstName;
     if(document.getElementById('su-lname')) document.getElementById('su-lname').value = lastName;
-    if(document.getElementById('su-email')) document.getElementById('su-email').value = user.email;
-    // Mark fields as valid
+    if(document.getElementById('su-email')) document.getElementById('su-email').value = user.email || '';
+
+    // Hide password fields — not needed for social auth
+    const pwField = document.getElementById('fw-pass');
+    const cfField = document.getElementById('fw-conf');
+    if(pwField) pwField.style.display = 'none';
+    if(cfField) cfField.style.display = 'none';
+
     ['fw-fname','fw-lname','fw-email'].forEach(id => {
       const el = document.getElementById(id);
       if(el) { el.classList.remove('err'); el.classList.add('ok'); }
     });
+
     showToast(`✓ Signed in with ${user.provider === 'google' ? 'Google' : 'Facebook'} — complete your profile`);
     suGoPanel(2);
   } else {
@@ -3109,41 +3112,53 @@ function loadSupabase(cb) {
 }
 
 // ── REAL SIGNUP ──────────────────────────────────────────────
+// social auth session tracker
+let _socialAuthSession = null;
+
 async function suCreateAccount() {
   const btn = document.getElementById('su-createbtn');
   btn.disabled = true;
   document.getElementById('su-createtxt').textContent = 'Creating account...';
 
-  const email    = document.getElementById('su-email').value.trim();
-  const password = document.getElementById('su-pass').value;
-  const fname    = document.getElementById('su-fname').value.trim();
-  const lname    = document.getElementById('su-lname').value.trim();
-  const dob      = document.getElementById('su-dob').value;
-  const country  = document.getElementById('su-country').value;
-  const planEls  = document.querySelectorAll('input[name="plan"]');
+  const fname   = document.getElementById('su-fname').value.trim();
+  const lname   = document.getElementById('su-lname').value.trim();
+  const dob     = document.getElementById('su-dob').value;
+  const country = document.getElementById('su-country').value;
+  const planEls = document.querySelectorAll('input[name="plan"]');
   let plan = 'free';
   planEls.forEach(el => { if(el.checked) plan = el.value === 'premium' ? 'basic' : el.value; });
 
   loadSupabase(async (sb) => {
     try {
-      const { data, error } = await sb.auth.signUp({
-        email, password,
-        options: { data: { full_name: fname + ' ' + lname, plan, date_of_birth: dob, country } }
-      });
-      if(error) throw error;
+      let userId = null;
 
-      if(data.user) {
-        await sb.from('profiles').update({ full_name: fname+' '+lname, plan, date_of_birth: dob, country }).eq('id', data.user.id);
-        const exp = new Date(); exp.setMonth(exp.getMonth()+1);
-        await sb.from('subscriptions').insert({ user_id: data.user.id, plan, billing_period:'monthly', status:'active', expires_at: plan!=='free'?exp.toISOString():null });
+      if(_socialAuthSession) {
+        // Google/Facebook user — already authenticated
+        userId = _socialAuthSession.user.id;
+      } else {
+        // Email/password signup
+        const email    = document.getElementById('su-email').value.trim();
+        const password = document.getElementById('su-pass').value;
+        const { data, error } = await sb.auth.signUp({
+          email, password,
+          options: { data: { full_name: fname+' '+lname, plan, date_of_birth: dob, country } }
+        });
+        if(error) throw error;
+        userId = data.user?.id;
       }
 
-      // Show success
+      if(userId) {
+        await sb.from('profiles').update({ full_name: fname+' '+lname, plan, date_of_birth: dob, country }).eq('id', userId);
+        const exp = new Date(); exp.setMonth(exp.getMonth()+1);
+        await sb.from('subscriptions').insert({ user_id: userId, plan, billing_period:'monthly', status:'active', expires_at: plan!=='free'?exp.toISOString():null });
+      }
+
       document.querySelectorAll('#page-signup .form-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('su-steps').style.display = 'none';
       document.getElementById('su-header').style.display = 'none';
       document.getElementById('su-success').style.display = 'block';
       updateNavLoggedIn();
+      _socialAuthSession = null;
 
     } catch(err) {
       btn.disabled = false;
