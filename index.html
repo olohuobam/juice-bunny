@@ -861,6 +861,111 @@ select option{background:var(--bg3);color:var(--text)}
 .btn-start-watching{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px 40px;border-radius:25px;cursor:pointer;transition:all .25s}
 .btn-start-watching:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 8px 28px var(--pink-glow)}
 @media(max-width:768px){.payment-wrap{grid-template-columns:1fr}.order-summary{display:none}.method-cards{grid-template-columns:1fr}}
+
+/* ============================================================
+   AI SUPPORT CHATBOT
+   ============================================================ */
+.chatbot-fab{
+  position:fixed;bottom:28px;right:28px;z-index:400;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),#c41060);
+  border:none;cursor:pointer;box-shadow:0 6px 24px var(--pink-glow);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  transition:all .25s;animation:fabPulse 3s ease-in-out infinite;
+}
+.chatbot-fab:hover{transform:scale(1.08);box-shadow:0 10px 32px var(--pink-glow)}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 24px var(--pink-glow)}50%{box-shadow:0 6px 36px rgba(255,45,120,.6)}}
+.chatbot-fab .fab-badge{
+  position:absolute;top:-3px;right:-3px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--success);border:2px solid var(--bg);
+  font-size:9px;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.chatbot-window{
+  position:fixed;bottom:96px;right:28px;z-index:400;
+  width:360px;max-height:520px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:20px;display:none;flex-direction:column;
+  overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:chatSlideIn .3s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes chatSlideIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.chatbot-window.open{display:flex}
+.chatbot-window::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+
+.cbot-head{
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.cbot-av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),#8b00ff);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.cbot-name{font-size:14px;font-weight:700}
+.cbot-status{font-size:11px;color:var(--success);display:flex;align-items:center;gap:4px}
+.cbot-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block}
+.cbot-close{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;margin-left:auto;transition:color .2s;padding:2px}
+.cbot-close:hover{color:#fff}
+
+.cbot-msgs{
+  flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;
+  min-height:200px;
+}
+.cbot-msgs::-webkit-scrollbar{width:2px}
+.cbot-msgs::-webkit-scrollbar-thumb{background:var(--border2)}
+
+.cbot-msg{display:flex;gap:8px;align-items:flex-end;animation:msgIn .2s ease}
+.cbot-msg.user{flex-direction:row-reverse}
+.cbot-bubble{
+  max-width:82%;padding:9px 13px;border-radius:14px;
+  font-size:13px;line-height:1.55;word-break:break-word;
+}
+.cbot-msg.bot .cbot-bubble{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px}
+.cbot-msg.user .cbot-bubble{background:linear-gradient(135deg,var(--pink),#c41060);color:#fff;border-bottom-right-radius:4px}
+.cbot-msg-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.cbot-msg.bot .cbot-msg-av{background:linear-gradient(135deg,var(--pink),#8b00ff)}
+.cbot-msg.user .cbot-msg-av{background:rgba(255,255,255,.1);color:var(--text2);font-size:10px}
+
+.cbot-typing{display:flex;gap:4px;padding:9px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;width:fit-content}
+.cbot-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:pulse 1.2s infinite}
+.cbot-dot:nth-child(2){animation-delay:.2s}
+.cbot-dot:nth-child(3){animation-delay:.4s}
+
+.cbot-quick-replies{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;flex-shrink:0}
+.cbot-qr{
+  background:rgba(255,45,120,.08);border:1px solid rgba(255,45,120,.2);
+  color:var(--pink);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  padding:6px 12px;border-radius:14px;cursor:pointer;transition:all .2s;
+}
+.cbot-qr:hover{background:rgba(255,45,120,.18);border-color:var(--pink)}
+
+.cbot-input-row{
+  display:flex;align-items:center;gap:8px;padding:10px 12px;
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.cbot-input{
+  flex:1;padding:9px 14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:20px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13px;
+  outline:none;transition:border-color .2s;
+}
+.cbot-input:focus{border-color:var(--pink)}
+.cbot-input::placeholder{color:var(--text3)}
+.cbot-send{
+  width:34px;height:34px;border-radius:50%;background:var(--pink);
+  border:none;color:#fff;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;
+}
+.cbot-send:hover{background:var(--pink2)}
+.cbot-send:disabled{background:var(--border2);cursor:not-allowed}
+
+@media(max-width:480px){
+  .chatbot-window{width:calc(100vw - 24px);right:12px;bottom:80px}
+  .chatbot-fab{bottom:20px;right:16px}
+}
 </style>
 </head>
 <body>
@@ -879,6 +984,7 @@ select option{background:var(--bg3);color:var(--text)}
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100)">Premium</a>
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Pricing</a>
     <a href="model-apply.html" style="color:var(--pink);font-weight:600">Become a Model</a>
+    <a href="chat.html">💬 Chat</a>
   </div>
   <div class="nav-right">
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
@@ -3353,5 +3459,184 @@ setTimeout(initReveal, 100);
 checkPaymentReturn();
 checkSession();
 </script>
+
+<!-- ============================================================
+     AI SUPPORT CHATBOT
+     ============================================================ -->
+<button class="chatbot-fab" id="chatbotFab" onclick="toggleChatbot()" title="Chat with Bunny AI Support">
+  🐰
+  <span class="fab-badge">AI</span>
+</button>
+
+<div class="chatbot-window" id="chatbotWindow">
+  <div class="cbot-head">
+    <div class="cbot-av">🐰</div>
+    <div>
+      <div class="cbot-name">Bunny AI Support</div>
+      <div class="cbot-status">Online 24/7</div>
+    </div>
+    <button class="cbot-close" onclick="toggleChatbot()">✕</button>
+  </div>
+  <div class="cbot-msgs" id="cbotMsgs"></div>
+  <div class="cbot-quick-replies" id="cbotQR"></div>
+  <div class="cbot-input-row">
+    <input class="cbot-input" id="cbotInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendCbotMsg()"/>
+    <button class="cbot-send" id="cbotSend" onclick="sendCbotMsg()">➤</button>
+  </div>
+</div>
+
+<script>
+// ── SMART CHATBOT ─────────────────────────────────────────────
+const cbotResponses = [
+  { match:['price','pricing','cost','how much','plan','plans','subscription','subscribe','weekly','monthly'],
+    reply:'We have three plans 🐰 Free (SD video, no models), Weekly at $9.99/wk (full access + models), and Monthly at $24.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
+    qr:[{label:'📅 Weekly $9.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $24.99',msg:'Tell me about the monthly plan'},{label:'₿ Crypto payments?',msg:'What crypto do you accept?'}]},
+  { match:['weekly','9.99'],
+    reply:'The Weekly plan is $9.99/week 🔥 Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
+    qr:[{label:'📆 Monthly instead?',msg:'Tell me about the monthly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+  { match:['monthly','24.99'],
+    reply:'The Monthly plan is $24.99/month — 37% saving vs weekly 💰 Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
+    qr:[{label:'📅 Weekly instead?',msg:'Tell me about the weekly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+  { match:['live call','call','calls','video call','minute','per min'],
+    reply:'Live calls are $3/minute 📞 You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
+    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the models?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
+  { match:['model','models','girls','who are'],
+    reply:'Our models are real verified females handpicked by Juice Bunny 🌟 They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
+    qr:[{label:'📞 Book a call',msg:'How do live calls work?'},{label:'🐰 Become a model',msg:'How do I become a model?'},{label:'💰 Pricing',msg:'What are the subscription plans?'}]},
+  { match:['become a model','apply','model application','join as model'],
+    reply:'We\'d love to have you! 🐰 Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
+    qr:[{label:'💰 Earn how much?',msg:'How much do models earn?'},{label:'📝 Apply now',msg:'Where is the model application?'}]},
+  { match:['earn','earning','payout','money','income'],
+    reply:'Models earn $0.60 per live call minute 💰 That\'s $36 per hour! Payouts weekly via BTC, ETH or bank transfer. No hidden fees.',
+    qr:[{label:'🐰 Apply to model',msg:'How do I become a model?'},{label:'📞 How calls work',msg:'How do live calls work?'}]},
+  { match:['crypto','bitcoin','btc','eth','usdt','ltc','xrp'],
+    reply:'We accept BTC, ETH, USDT TRC20, Litecoin and XRP via NOWPayments ₿ Fast, private payments. Credit/debit cards via CCBill also accepted!',
+    qr:[{label:'💳 Card payments',msg:'Do you accept credit cards?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+  { match:['card','credit','debit','visa','mastercard','ccbill'],
+    reply:'Yes! Visa, Mastercard and Amex accepted via CCBill — the industry standard for adult platforms 🔒 Your card details are never stored by us.',
+    qr:[{label:'₿ Pay with crypto',msg:'What crypto do you accept?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+  { match:['private','privacy','secure','track','anonymous','discreet'],
+    reply:'Juice Bunny is 100% private 🔒 Zero tracking, zero ads, zero data selling. 256-bit SSL on all transactions. What you watch stays between you and us.',
+    qr:[{label:'💰 View plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+  { match:['sign up','signup','register','create account','join','get started'],
+    reply:'Signing up takes 2 minutes! 🐰 Click "Sign Up" at the top, verify your age (18+ only), pick a plan and you\'re in. First 7 days free on paid plans!',
+    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'❓ Age requirement',msg:'What is the age requirement?'}]},
+  { match:['age','18','how old'],
+    reply:'Juice Bunny is strictly 18+ 🔞 Age is verified during signup as required by law for all adult content platforms.',
+    qr:[{label:'🔥 Sign up (18+)',msg:'How do I sign up?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+  { match:['cancel','cancellation','unsubscribe','stop subscription'],
+    reply:'Cancel anytime from Account Settings — no questions asked 🐰 Access continues until your billing period ends. Want to pause instead? That\'s an option too!',
+    qr:[{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Need help?',msg:'How do I contact support?'}]},
+  { match:['pause','hold','freeze'],
+    reply:'Yes! Pause your subscription for up to 3 months at no charge ⏸ Go to Account Settings → Subscription → Pause. Your library stays exactly as you left it!',
+    qr:[{label:'❌ Cancel instead',msg:'How do I cancel?'},{label:'📧 Need help?',msg:'How do I contact support?'}]},
+  { match:['refund','money back','billing issue','charge','payment issue'],
+    reply:'For billing issues or refunds, email support@juicebunnytv.com 📧 Include your account email and transaction ID. We respond within 24 hours.',
+    qr:[{label:'📧 Email support',msg:'What is the support email?'}]},
+  { match:['contact','support','help','email','reach','talk to human'],
+    reply:'Reach us at support@juicebunnytv.com 📧 We respond within 24 hours. For urgent issues add "URGENT" to the subject line!',
+    qr:[{label:'💰 View plans',msg:'What are the subscription plans?'},{label:'❌ Cancel',msg:'How do I cancel?'}]},
+  { match:['free plan','free tier','without paying','no cost'],
+    reply:'Our Free plan gives you SD video streaming, model profiles and general chat — no card needed 🐰 For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
+    qr:[{label:'💰 Paid plans',msg:'What are the paid plans?'},{label:'🔥 Upgrade',msg:'How do I upgrade?'}]},
+  { match:['download','offline'],
+    reply:'Paid subscribers can download any video for offline viewing 📥 Works on all devices. Downloads stay available while your subscription is active.',
+    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'}]},
+  { match:['device','phone','tv','tablet','laptop','mobile','iphone','android'],
+    reply:'Juice Bunny works on all devices 📱 Smartphones, tablets, laptops, desktops and Smart TVs. No app needed — everything runs in your browser!',
+    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+];
+
+const cbotFallbacks = [
+  'Great question! 🐰 For specific help with that, email support@juicebunnytv.com and we\'ll get back to you within 24 hours.',
+  'I\'m not sure about that one, but email support@juicebunnytv.com 📧 — our team replies within 24 hours!',
+  'Let me point you to our support team for that — support@juicebunnytv.com 🐰 Anything else I can help with?',
+];
+
+function getBotResponse(text) {
+  const lower = text.toLowerCase();
+  let bestMatch = null, bestScore = 0;
+  for(const r of cbotResponses) {
+    const score = r.match.filter(kw => lower.includes(kw)).length;
+    if(score > bestScore) { bestScore = score; bestMatch = r; }
+  }
+  if(bestMatch && bestScore > 0) return bestMatch;
+  return { reply: cbotFallbacks[Math.floor(Math.random()*cbotFallbacks.length)], qr:[{label:'💰 Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}] };
+}
+
+let cbotOpen=false, cbotTyping=false;
+
+const cbotQuickReplies=[
+  {label:'💰 Pricing',msg:'What are the subscription plans?'},
+  {label:'📞 Live Calls',msg:'How do live calls work?'},
+  {label:'₿ Pay with Crypto',msg:'What crypto payments do you accept?'},
+  {label:'🐰 Become a Model',msg:'How do I become a model?'},
+  {label:'❌ Cancel',msg:'How do I cancel my subscription?'},
+  {label:'🔒 Privacy',msg:'Is Juice Bunny private and secure?'},
+];
+
+function toggleChatbot(){
+  cbotOpen=!cbotOpen;
+  const win=document.getElementById('chatbotWindow');
+  win.classList.toggle('open',cbotOpen);
+  if(cbotOpen&&!document.getElementById('cbotMsgs').children.length){
+    cbotAddMsg('bot','Hey there! 🐰 I\'m Bunny, your Juice Bunny support assistant. What can I help you with today?');
+    renderCbotQR(cbotQuickReplies);
+  }
+  if(cbotOpen) setTimeout(()=>document.getElementById('cbotInput').focus(),200);
+}
+
+function cbotAddMsg(role,text){
+  const msgs=document.getElementById('cbotMsgs');
+  const div=document.createElement('div');
+  div.className='cbot-msg '+role;
+  div.innerHTML=`<div class="cbot-msg-av">${role==='bot'?'🐰':'You'}</div><div class="cbot-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function cbotShowTyping(){
+  const msgs=document.getElementById('cbotMsgs');
+  const div=document.createElement('div');
+  div.className='cbot-msg bot'; div.id='cbot-typing';
+  div.innerHTML=`<div class="cbot-msg-av">🐰</div><div class="cbot-typing"><div class="cbot-dot"></div><div class="cbot-dot"></div><div class="cbot-dot"></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function cbotHideTyping(){ document.getElementById('cbot-typing')?.remove(); }
+
+function renderCbotQR(replies){
+  document.getElementById('cbotQR').innerHTML=replies.map(r=>`<button class="cbot-qr" onclick="cbotQRClick('${r.msg.replace(/'/g,"\\'")}')">${r.label}</button>`).join('');
+}
+
+function cbotQRClick(msg){ document.getElementById('cbotQR').innerHTML=''; sendCbotMsgText(msg); }
+
+function sendCbotMsg(){
+  const input=document.getElementById('cbotInput');
+  const text=input.value.trim();
+  if(!text||cbotTyping) return;
+  input.value='';
+  sendCbotMsgText(text);
+}
+
+async function sendCbotMsgText(text){
+  if(cbotTyping) return;
+  cbotTyping=true;
+  document.getElementById('cbotSend').disabled=true;
+  document.getElementById('cbotQR').innerHTML='';
+  cbotAddMsg('user',text);
+  cbotShowTyping();
+  await new Promise(r=>setTimeout(r,700+Math.random()*600));
+  cbotHideTyping();
+  const response=getBotResponse(text);
+  cbotAddMsg('bot',response.reply);
+  if(response.qr) renderCbotQR(response.qr);
+  cbotTyping=false;
+  document.getElementById('cbotSend').disabled=false;
+  document.getElementById('cbotInput').focus();
+}
+</script>
+
 </body>
 </html>
