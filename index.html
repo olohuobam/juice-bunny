@@ -882,7 +882,7 @@ select option{background:var(--bg3);color:var(--text)}
   <div class="nav-right">
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
     <button class="btn-nav-signup" id="btnNavSignup" onclick="goTo('signup')">Sign Up</button>
-    <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goToPayment('premium')">Go Premium</button>
+    <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goToPayment('sub_weekly')">Go Premium</button>
     <div class="nav-avatar" id="navAvatar">JD</div>
   </div>
 </nav>
@@ -923,7 +923,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
         <p class="hero-sub">Indulge in the most explicit, steamy, and seductive content online. Stream exclusive 4K adult videos, live model calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
-          <button class="btn-hero-watch" onclick="goToPayment('basic')">🔥 Get Naughty Now</button>
+          <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">🔥 Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
         </div>
       </div>
@@ -1036,16 +1036,15 @@ select option{background:var(--bg3);color:var(--text)}
   <!-- PRICING -->
   <section class="section" id="pricing">
     <div class="sec-inner">
-      <div style="text-align:center;margin-bottom:32px" class="reveal">
+      <div style="text-align:center;margin-bottom:12px" class="reveal">
         <h2 class="sec-title">Pick Your <span>Pleasure</span></h2>
         <p class="sec-sub" style="margin:8px auto 0">No judgement. No hidden fees. Cancel whenever. Pay with card or crypto.</p>
       </div>
 
-      <!-- BILLING TOGGLE -->
-      <div class="billing-toggle reveal" id="billingToggle">
-        <button class="btog-btn active" onclick="setBilling('weekly',this)">Weekly</button>
-        <button class="btog-btn" onclick="setBilling('monthly',this)">Monthly</button>
-        <button class="btog-btn" onclick="setBilling('sixmonth',this)">6 Months <span class="btog-save">Best Value</span></button>
+      <!-- BILLING TOGGLE: Weekly / Monthly -->
+      <div class="billing-toggle reveal" id="billingToggle" style="max-width:280px">
+        <button class="btog-btn active" id="btog-weekly" onclick="setBilling('weekly',this)">Weekly</button>
+        <button class="btog-btn" id="btog-monthly" onclick="setBilling('monthly',this)">Monthly <span class="btog-save">Save 37%</span></button>
       </div>
 
       <div class="pricing-tiers reveal">
@@ -1054,54 +1053,70 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="tier-card">
           <div class="tier-name">Free</div>
           <div class="tier-price"><sup>$</sup>0<sub>/forever</sub></div>
-          <div class="tier-desc">Dip your toes in. Get a free taste of what Juice Bunny has to offer — no card needed.</div>
+          <div class="tier-desc">Dip your toes in. Browse content and get a taste — no card needed, ever.</div>
           <ul class="tier-perks">
-            <li>480p SD teaser content</li>
-            <li>Limited free video library</li>
+            <li>Low quality SD video streaming</li>
             <li>Browse all categories</li>
+            <li>View model profiles</li>
+            <li>General chat access</li>
             <li class="no">No HD or 4K content</li>
-            <li class="no">No exclusive drops</li>
-            <li class="no">No live model calls</li>
+            <li class="no">No live model access</li>
+            <li class="no">No model messaging</li>
           </ul>
-          <button class="btn-tier secondary" onclick="goToPayment('free')">Start Free</button>
+          <button class="btn-tier secondary" onclick="goTo('signup')">Start Free</button>
         </div>
 
-        <!-- BASIC -->
+        <!-- WEEKLY -->
         <div class="tier-card featured">
           <div class="tier-hot">Most Popular</div>
-          <div class="tier-name">Basic</div>
-          <div class="tier-price" id="basic-price"><sup>$</sup>3.99<sub>/week</sub></div>
-          <div class="tier-desc" id="basic-desc">Unlock the full vault of explicit 4K content. Stream everything, download anything, zero ads.</div>
+          <div class="tier-name" id="sub-plan-name">Weekly</div>
+          <div class="tier-price" id="sub-price"><sup>$</sup>9.99<sub>/week</sub></div>
+          <div class="tier-desc" id="sub-desc">Full access to everything — premium content, models, chat, posts and live calls.</div>
           <ul class="tier-perks">
-            <li>🔥 Full 4K explicit library</li>
+            <li>🔥 Full HD &amp; 4K explicit library</li>
             <li>💦 Daily fresh drops</li>
             <li>📥 Unlimited downloads</li>
-            <li>🔒 100% private viewing</li>
-            <li>📱 All devices included</li>
-            <li class="no">No live model calls</li>
+            <li>💬 Chat with models &amp; fans</li>
+            <li>📸 Model posts &amp; photo feeds</li>
+            <li>📞 Access to live model calls</li>
+            <li>🔒 100% private · All devices</li>
           </ul>
-          <button class="btn-tier primary" id="basic-btn" onclick="goToPayment('basic_weekly')">Get Basic</button>
+          <button class="btn-tier primary" id="sub-btn" onclick="goToPayment('sub_weekly')">Get Full Access</button>
         </div>
 
-        <!-- BUNNYWORLD -->
+        <!-- LIVE CALL ADD-ON -->
         <div class="tier-card vip">
-          <div class="tier-hot vip-hot">🐰 BunnyWorld</div>
-          <div class="tier-name">BunnyWorld</div>
-          <div class="tier-price" id="bunny-price"><sup>$</sup>9.99<sub>/week</sub></div>
-          <div class="tier-desc" id="bunny-desc">The full fantasy package. Everything in Basic plus live video calls with the actual models in our videos.</div>
+          <div class="tier-hot vip-hot">⚡ Add-On</div>
+          <div class="tier-name">Live Calls</div>
+          <div class="tier-price"><sup>$</sup>3<sub>/min</sub></div>
+          <div class="tier-desc">Go live with any model, one-on-one. Pay only for the time you use — no booking fees, no minimums.</div>
           <ul class="tier-perks">
-            <li>Everything in Basic</li>
-            <li>📞 Live calls with models</li>
-            <li>📸 Exclusive model photos</li>
-            <li>⭐ Early access to new drops</li>
-            <li>💬 Direct model messaging</li>
-            <li>🏆 BunnyWorld VIP badge</li>
+            <li>📹 Private 1-on-1 video call</li>
+            <li>⚡ Connect instantly or schedule</li>
+            <li>🎙️ Audio &amp; video, HD quality</li>
+            <li>💬 Chat during the call</li>
+            <li>⏱️ Billed per minute — $3/min</li>
+            <li>🔒 Fully private, never recorded</li>
           </ul>
-          <button class="btn-tier vip-btn" id="bunny-btn" onclick="goToPayment('bunny_weekly')">Enter BunnyWorld</button>
+          <div style="background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6">
+            ⚠️ <strong style="color:#ffc832">Subscribers only.</strong> You need an active Weekly or Monthly plan to access live calls.
+          </div>
+          <button class="btn-tier vip-btn" onclick="goTo('signup')">Start a Call</button>
         </div>
 
       </div>
-      <div class="pay-badges reveal" style="margin-top:28px;justify-content:center;display:flex;gap:10px;flex-wrap:wrap">
+
+      <!-- LIVE CALL EXPLAINER STRIP -->
+      <div class="reveal" style="margin-top:28px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:14px;padding:24px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="font-size:36px">📞</div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:15px;font-weight:700;margin-bottom:4px">How Live Calls Work</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.7">Subscribe to any paid plan → browse available models → start a live call → pay <strong style="color:#fff">$3/min</strong> only for time used. Your subscription unlocks access, calls are billed separately per session.</div>
+        </div>
+        <button class="btn-hero-watch" style="white-space:nowrap" onclick="goTo('signup')">Try It Now</button>
+      </div>
+
+      <div class="pay-badges reveal" style="margin-top:24px;justify-content:center;display:flex;gap:10px;flex-wrap:wrap">
         <span class="pay-badge">💳 CCBill</span>
         <span class="pay-badge">₿ BTC</span>
         <span class="pay-badge">⟠ ETH</span>
@@ -1146,8 +1161,8 @@ select option{background:var(--bg3);color:var(--text)}
         <h2 class="cta-h2">Ready to Get <span>Naughty?</span></h2>
         <p class="cta-p">Join Juice Bunny today and dive into the most explicit, steamy content online. Your fantasies are waiting.</p>
         <div class="cta-btns">
-          <button class="btn-cta1" onclick="goToPayment('basic_monthly')">🔥 Get Access Now</button>
-          <button class="btn-cta2" onclick="goToPayment('bunny_monthly')">🐰 Enter BunnyWorld</button>
+          <button class="btn-cta1" onclick="goToPayment('sub_monthly')">🔥 Get Access Now</button>
+          <button class="btn-cta2" onclick="goToPayment('sub_monthly')">🐰 Enter BunnyWorld</button>
         </div>
       </div>
     </div>
@@ -1174,6 +1189,7 @@ select option{background:var(--bg3);color:var(--text)}
           <a>TV Shows</a>
           <a>Originals</a>
           <a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a>
+          <a href="model-apply.html">Become a Model</a>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
@@ -1404,7 +1420,7 @@ select option{background:var(--bg3);color:var(--text)}
             <div class="pw-perk-item">Download for offline viewing</div>
             <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
           </div>
-          <button class="btn-pw-main" onclick="goToPayment('premium')">🔥 Unlock Full Access — $3.99/mo</button>
+          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $3.99/mo</button>
           <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
           <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
         </div>
@@ -1469,7 +1485,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="si-row"><span class="si-label">Max Available</span><span class="si-val pink">4K UHD 🔒</span></div>
         <div class="si-row"><span class="si-label">Your Plan</span><span class="si-val" style="color:var(--text3)">Free</span></div>
         <div class="si-row"><span class="si-label">Bitrate</span><span class="si-val green">2 Mbps</span></div>
-        <button class="btn-upgrade-si" onclick="goToPayment('premium')">Upgrade to 4K →</button>
+        <button class="btn-upgrade-si" onclick="goToPayment('sub_weekly')">Upgrade to 4K →</button>
       </div>
     </div>
   </div>
@@ -2537,34 +2553,34 @@ const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 
 // ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
-  free:          { name:'Free',              icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['480p SD teaser content','Limited free library','Browse all categories'] },
-  basic_weekly:  { name:'Basic',             icon:'🔥', price:3.99,  priceStr:'$3.99',  period:'week',    perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices'] },
-  basic_monthly: { name:'Basic',             icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'month',   perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices'] },
-  basic_6month:  { name:'Basic',             icon:'🔥', price:39.99, priceStr:'$39.99', period:'6 months',perks:['🔥 Full 4K explicit library','💦 Daily fresh drops','📥 Unlimited downloads','🔒 100% private','📱 All devices','💰 Best value — save 33%'] },
-  bunny_weekly:  { name:'BunnyWorld',        icon:'🐰', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge'] },
-  bunny_monthly: { name:'BunnyWorld',        icon:'🐰', price:15.99, priceStr:'$15.99', period:'month',   perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge'] },
-  bunny_6month:  { name:'BunnyWorld',        icon:'🐰', price:39.99, priceStr:'$39.99', period:'6 months',perks:['Everything in Basic','📞 Live calls with models','📸 Exclusive model photos','⭐ Early access drops','💬 Direct model messaging','🏆 BunnyWorld VIP badge','💰 Best value — save 58%'] },
+  free:        { name:'Free',    icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View model profiles','General chat'] },
+  sub_weekly:  { name:'Weekly',  icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with models & fans','Model posts & photo feeds','Access to live model calls ($3/min)','100% private · All devices'] },
+  sub_monthly: { name:'Monthly', icon:'🔥', price:24.99, priceStr:'$24.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with models & fans','Model posts & photo feeds','Access to live model calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
+  live_call:   { name:'Live Call', icon:'📞', price:3,   priceStr:'$3',     period:'per min', perks:['Private 1-on-1 video call','Pay only for time used','HD audio & video','Chat during the call','Fully private — never recorded'] },
 };
 
 // ── BILLING TOGGLE ───────────────────────────────────────────
 let currentBilling = 'weekly';
 const billingPrices = {
-  weekly:   { basic:{ price:3.99,  str:'$3.99',  sub:'/week'   }, bunny:{ price:9.99,  str:'$9.99',  sub:'/week'   } },
-  monthly:  { basic:{ price:9.99,  str:'$9.99',  sub:'/month'  }, bunny:{ price:15.99, str:'$15.99', sub:'/month'  } },
-  sixmonth: { basic:{ price:39.99, str:'$39.99', sub:'/6 mos'  }, bunny:{ price:39.99, str:'$39.99', sub:'/6 mos'  } },
+  weekly:  { price: 9.99,  str: '$9.99',  sub: '/week',  label: 'Weekly',  key: 'sub_weekly'  },
+  monthly: { price: 24.99, str: '$24.99', sub: '/month', label: 'Monthly', key: 'sub_monthly' },
 };
 
 function setBilling(period, btn) {
   currentBilling = period;
   document.querySelectorAll('.btog-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const prices = billingPrices[period];
-  document.getElementById('basic-price').innerHTML = `<sup>$</sup>${prices.basic.str.replace('$','')}<sub>${prices.basic.sub}</sub>`;
-  document.getElementById('bunny-price').innerHTML = `<sup>$</sup>${prices.bunny.str.replace('$','')}<sub>${prices.bunny.sub}</sub>`;
-  const basicKey  = period === 'weekly' ? 'basic_weekly'  : period === 'monthly' ? 'basic_monthly'  : 'basic_6month';
-  const bunnyKey  = period === 'weekly' ? 'bunny_weekly'  : period === 'monthly' ? 'bunny_monthly'  : 'bunny_6month';
-  document.getElementById('basic-btn').onclick  = () => goToPayment(basicKey);
-  document.getElementById('bunny-btn').onclick  = () => goToPayment(bunnyKey);
+  const p = billingPrices[period];
+  const priceEl = document.getElementById('sub-price');
+  const nameEl  = document.getElementById('sub-plan-name');
+  const descEl  = document.getElementById('sub-desc');
+  const btnEl   = document.getElementById('sub-btn');
+  if(priceEl) priceEl.innerHTML = `<sup>$</sup>${p.str.replace('$','')}<sub>${p.sub}</sub>`;
+  if(nameEl)  nameEl.textContent = p.label;
+  if(descEl)  descEl.textContent = period === 'weekly'
+    ? 'Full access to everything — premium content, models, chat, posts and live calls.'
+    : 'Best value. Full access all month — premium content, models, chat, posts and live calls.';
+  if(btnEl) btnEl.onclick = () => goToPayment(p.key);
 }
 
 let currentPlan      = 'basic_weekly';

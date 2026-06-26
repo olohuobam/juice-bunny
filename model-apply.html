@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Become a Model — Juice Bunny</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
+  --text:#fff;--text2:#a0a0b0;--text3:#606070;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --card:#16161f;--success:#00c878;--error:#ff4757;--gold:#ffc832;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--pink)}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(13,13,18,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
+.logo-spin{width:34px;height:34px;animation:spin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,45,120,.5))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-name{font-family:'Dancing Script',cursive;font-size:20px;font-weight:700}
+.nav-back{background:none;border:1px solid var(--border2);color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;padding:8px 18px;border-radius:20px;cursor:pointer;transition:all .2s}
+.nav-back:hover{border-color:var(--pink);color:#fff}
+
+/* PAGE BG */
+.page-bg{
+  position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(180,20,100,.14),transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 70%,rgba(100,0,150,.1),transparent 55%),
+    var(--bg);
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:-1;
+  background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+
+/* HERO */
+.hero{
+  padding:120px 40px 60px;
+  text-align:center;
+  max-width:720px;
+  margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.25);
+  color:var(--pink);font-size:11px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:20px;
+}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5.5rem);letter-spacing:2px;line-height:1;margin-bottom:16px}
+.hero-h1 span{color:var(--pink)}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.75;max-width:520px;margin:0 auto 32px}
+.hero-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.hbadge{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;color:var(--text2);
+}
+.hbadge .dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0}
+
+/* EARNINGS STRIP */
+.earnings-strip{
+  max-width:900px;margin:0 auto 60px;padding:0 40px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.earn-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:14px;
+  padding:24px;text-align:center;position:relative;overflow:hidden;
+  transition:border-color .25s,transform .25s;
+}
+.earn-card:hover{border-color:rgba(255,45,120,.35);transform:translateY(-3px)}
+.earn-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--line-color,var(--pink))}
+.earn-val{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--pink);line-height:1;margin-bottom:4px}
+.earn-lbl{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px}
+.earn-note{font-size:11px;color:var(--text2);margin-top:8px;line-height:1.5}
+
+/* HOW IT WORKS */
+.how-section{max-width:900px;margin:0 auto 60px;padding:0 40px}
+.section-eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:8px}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3rem);letter-spacing:1px;margin-bottom:32px}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 18px;position:relative}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(255,45,120,.2);line-height:1;margin-bottom:10px}
+.step-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* REQUIREMENTS */
+.req-section{max-width:900px;margin:0 auto 60px;padding:0 40px}
+.req-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.req-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.req-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.req-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.req-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.req-card.must{border-color:rgba(255,45,120,.2)}
+.req-card.no{border-color:rgba(255,71,87,.2)}
+.req-card.no .req-icon{filter:grayscale(1)}
+
+/* APPLICATION FORM */
+.form-section{max-width:680px;margin:0 auto 80px;padding:0 40px}
+.form-card{
+  background:rgba(22,22,31,.96);border:1px solid var(--border2);
+  border-radius:20px;padding:44px 40px;position:relative;overflow:hidden;
+}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent)}
+.form-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,45,120,.05),transparent);pointer-events:none}
+.form-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.form-sub{font-size:13px;color:var(--text2);margin-bottom:28px;line-height:1.6}
+
+/* FORM STEPS */
+.fstep{display:none}
+.fstep.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.fstep-bar{display:flex;gap:6px;margin-bottom:28px}
+.fstep-dot{flex:1;height:3px;border-radius:2px;background:var(--border2);transition:background .3s}
+.fstep-dot.done{background:var(--pink)}
+.fstep-dot.active{background:var(--pink);opacity:.5}
+
+/* FIELDS */
+.field{margin-bottom:18px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:7px}
+.field .req-star{color:var(--pink)}
+.inp-wrap{position:relative}
+.inp-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5;pointer-events:none}
+input[type=text],input[type=email],input[type=date],input[type=number],select,textarea{
+  width:100%;padding:12px 14px 12px 42px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s,background .2s;
+  -webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);background:rgba(255,45,120,.04)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+select option{background:var(--bg3)}
+textarea{resize:vertical;min-height:80px;padding-left:14px}
+.no-icon{padding-left:14px}
+.field-hint{font-size:11px;color:var(--text3);margin-top:5px}
+.field-err-msg{font-size:11px;color:var(--error);margin-top:5px;display:none}
+.field.err input,.field.err select,.field.err textarea{border-color:var(--error)}
+.field.err .field-err-msg{display:block}
+.field.ok input,.field.ok select{border-color:var(--success)}
+
+/* RADIO GROUP */
+.radio-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0}
+.radio-opt{
+  border:1.5px solid var(--border2);border-radius:10px;padding:13px 16px;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:500;
+}
+.radio-opt:hover{border-color:rgba(255,45,120,.4)}
+.radio-opt.sel{border-color:var(--pink);background:rgba(255,45,120,.07)}
+.radio-opt input{accent-color:var(--pink);flex-shrink:0}
+
+/* UPLOAD ZONE */
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:12px;padding:32px;
+  text-align:center;cursor:pointer;transition:all .2s;
+  background:rgba(255,45,120,.02);
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--pink);background:rgba(255,45,120,.06)}
+.upload-icon{font-size:30px;margin-bottom:8px}
+.upload-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text3)}
+.upload-sub span{color:var(--pink)}
+.upload-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.upload-thumb{
+  width:70px;height:70px;border-radius:8px;
+  object-fit:cover;border:1px solid var(--border2);
+}
+
+/* CHECKBOX */
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;cursor:pointer}
+.check-row input[type=checkbox]{width:17px;height:17px;border-radius:4px;flex-shrink:0;margin-top:3px;accent-color:var(--pink);cursor:pointer}
+.check-lbl{font-size:13px;color:var(--text2);line-height:1.5}
+.check-lbl a{color:var(--pink)}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;padding:14px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,var(--pink),#c41060);
+  color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .25s;letter-spacing:.3px;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-secondary{
+  width:100%;padding:13px;border-radius:10px;
+  border:1px solid var(--border2);background:none;
+  color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;
+  cursor:pointer;transition:all .2s;margin-bottom:10px;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.btn-actions{display:flex;flex-direction:column;gap:0;margin-top:8px}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:20px 0}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,45,120,.1);border:2px solid var(--pink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;margin:0 auto 20px;
+  animation:pop .5s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-size:24px;font-weight:700;margin-bottom:10px}
+.success-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto}
+.success-steps{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:20px;text-align:left;margin-bottom:24px;
+}
+.success-step{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.success-step:last-child{border-bottom:none}
+.ss-num{width:22px;height:22px;border-radius:50%;background:rgba(255,45,120,.15);border:1px solid rgba(255,45,120,.3);color:var(--pink);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ss-text{color:var(--text2);line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;pointer-events:none}
+.toast.error{background:var(--error)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav{padding:0 20px}
+  .hero{padding:100px 20px 40px}
+  .earnings-strip,.how-section,.req-section,.form-section{padding:0 20px}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .req-grid{grid-template-columns:1fr}
+  .form-card{padding:28px 20px}
+  .field-row{grid-template-columns:1fr}
+  .radio-group{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .earnings-strip{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page-bg"></div>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">
+    <img src="white-rabbit-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <span class="logo-name">Juice Bunny</span>
+  </a>
+  <button class="nav-back" onclick="window.location.href='index.html'">← Back to Site</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">🐰 Female Models Only</div>
+  <h1 class="hero-h1">Get Paid to<br/><span>Be Yourself</span></h1>
+  <p class="hero-sub">Join Juice Bunny as a model and earn real money from live calls, content, and fan interactions — on your schedule, on your terms.</p>
+  <div class="hero-badges">
+    <div class="hbadge"><span class="dot"></span> Applications Open</div>
+    <div class="hbadge">💰 $0.60 per live minute</div>
+    <div class="hbadge">🔒 100% Private & Secure</div>
+    <div class="hbadge">📱 Work from anywhere</div>
+  </div>
+</div>
+
+<!-- EARNINGS STRIP -->
+<div class="earnings-strip">
+  <div class="earn-card" style="--line-color:var(--pink)">
+    <div class="earn-val">$0.60</div>
+    <div class="earn-lbl">Per Live Minute</div>
+    <div class="earn-note">Your cut from every minute of live call time. Juice Bunny handles all billing.</div>
+  </div>
+  <div class="earn-card" style="--line-color:#ffc832">
+    <div class="earn-val" style="color:#ffc832">$36</div>
+    <div class="earn-lbl">Per Hour of Calls</div>
+    <div class="earn-note">60 minutes of live calls = $36 straight to you. No hidden deductions.</div>
+  </div>
+  <div class="earn-card" style="--line-color:var(--success)">
+    <div class="earn-val" style="color:var(--success)">20%</div>
+    <div class="earn-lbl">Your Revenue Share</div>
+    <div class="earn-note">You keep 20% of all live call revenue. Paid out directly via crypto or bank transfer.</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="section-eyebrow">Simple Process</div>
+  <h2 class="section-h2">How It Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Apply Below</div>
+      <div class="step-desc">Fill in your application. Takes about 5 minutes. We review within 48 hours.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Get Approved</div>
+      <div class="step-desc">Our team reviews your application and contacts you directly to set up your profile.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Go Live</div>
+      <div class="step-desc">Set your availability. Subscribers book live calls with you at $3/min — you earn $0.60/min.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Get Paid</div>
+      <div class="step-desc">Earnings tracked in your dashboard. Withdraw weekly via BTC, ETH, or bank transfer.</div>
+    </div>
+  </div>
+</div>
+
+<!-- REQUIREMENTS -->
+<div class="req-section">
+  <div class="section-eyebrow">Before You Apply</div>
+  <h2 class="section-h2">Requirements</h2>
+  <div class="req-grid">
+    <div class="req-card must">
+      <div class="req-icon">✅</div>
+      <div>
+        <div class="req-title">Female, 18 years or older</div>
+        <div class="req-desc">Juice Bunny only accepts female models. You must be 18+ and provide valid government-issued ID during onboarding.</div>
+      </div>
+    </div>
+    <div class="req-card must">
+      <div class="req-icon">📷</div>
+      <div>
+        <div class="req-title">Clear photos for your profile</div>
+        <div class="req-desc">You'll need at least 2 recent photos for your model profile. These are shown to subscribers before they book a call.</div>
+      </div>
+    </div>
+    <div class="req-card must">
+      <div class="req-icon">📱</div>
+      <div>
+        <div class="req-title">Stable internet & a camera</div>
+        <div class="req-desc">A smartphone or laptop with a working camera and a reliable internet connection is all you need to go live.</div>
+      </div>
+    </div>
+    <div class="req-card must">
+      <div class="req-icon">🕐</div>
+      <div>
+        <div class="req-title">Minimum 5 hours availability/week</div>
+        <div class="req-desc">We require at least 5 hours of weekly availability. You set your own schedule — we just need you to be consistent.</div>
+      </div>
+    </div>
+    <div class="req-card no">
+      <div class="req-icon">🚫</div>
+      <div>
+        <div class="req-title">No prior experience needed</div>
+        <div class="req-desc">You don't need to have worked on any platform before. We'll walk you through everything from day one.</div>
+      </div>
+    </div>
+    <div class="req-card no">
+      <div class="req-icon">🚫</div>
+      <div>
+        <div class="req-title">No subscription or sign-up fee</div>
+        <div class="req-desc">It's completely free to apply and join as a model. We only earn when you earn — no upfront costs, ever.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPLICATION FORM -->
+<div class="form-section">
+  <div class="form-card">
+
+    <!-- STEP BAR -->
+    <div class="fstep-bar">
+      <div class="fstep-dot done" id="fdot1"></div>
+      <div class="fstep-dot" id="fdot2"></div>
+      <div class="fstep-dot" id="fdot3"></div>
+    </div>
+
+    <div class="form-title">Apply to Become a Model</div>
+    <div class="form-sub">All information is kept strictly confidential. We never share your personal details with anyone.</div>
+
+    <!-- STEP 1: PERSONAL INFO -->
+    <div class="fstep active" id="fstep1">
+      <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:20px">Step 1 of 3 — Personal Details</div>
+
+      <div class="field-row">
+        <div class="field" id="ff-fname">
+          <label>First Name <span class="req-star">*</span></label>
+          <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="f-fname" placeholder="Your first name"/></div>
+          <div class="field-err-msg">Required</div>
+        </div>
+        <div class="field" id="ff-lname">
+          <label>Last Name <span class="req-star">*</span></label>
+          <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="f-lname" placeholder="Your last name"/></div>
+          <div class="field-err-msg">Required</div>
+        </div>
+      </div>
+
+      <div class="field" id="ff-email">
+        <label>Email Address <span class="req-star">*</span></label>
+        <div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="f-email" placeholder="your@email.com"/></div>
+        <div class="field-err-msg">Enter a valid email</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="ff-dob">
+          <label>Date of Birth <span class="req-star">*</span></label>
+          <div class="inp-wrap"><span class="inp-icon">📅</span><input type="date" id="f-dob"/></div>
+          <div class="field-err-msg">You must be 18 or older</div>
+        </div>
+        <div class="field" id="ff-country">
+          <label>Country <span class="req-star">*</span></label>
+          <div class="inp-wrap"><span class="inp-icon">🌍</span>
+            <select id="f-country">
+              <option value="">Select country</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
+              <option>Australia</option>
+              <option>Nigeria</option>
+              <option>South Africa</option>
+              <option>Germany</option>
+              <option>France</option>
+              <option>Netherlands</option>
+              <option>Brazil</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field-err-msg">Required</div>
+        </div>
+      </div>
+
+      <div class="field" id="ff-stage">
+        <label>Stage Name <span class="req-star">*</span></label>
+        <div class="inp-wrap"><span class="inp-icon">🌟</span><input type="text" id="f-stage" placeholder="The name subscribers will know you by"/></div>
+        <div class="field-hint">This is the public name on your profile. It does not have to be your real name.</div>
+        <div class="field-err-msg">Required</div>
+      </div>
+
+      <div class="field" id="ff-gender">
+        <label>Gender <span class="req-star">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt sel" id="ro-female" onclick="selectGender('female',this)">
+            <input type="radio" name="gender" value="female" checked/>
+            👩 Female
+          </label>
+          <label class="radio-opt" id="ro-other" onclick="selectGender('other',this)">
+            <input type="radio" name="gender" value="other"/>
+            ⚠️ Other (not eligible)
+          </label>
+        </div>
+        <div class="field-hint">Juice Bunny only accepts female models at this time.</div>
+        <div id="gender-warning" style="display:none;margin-top:10px;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--error)">
+          ⚠️ Juice Bunny currently only accepts female model applications. We are unable to process your application at this time.
+        </div>
+      </div>
+
+      <div class="btn-actions">
+        <button class="btn-primary" onclick="step1Next()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: EXPERIENCE & AVAILABILITY -->
+    <div class="fstep" id="fstep2">
+      <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:20px">Step 2 of 3 — Experience & Availability</div>
+
+      <div class="field" id="ff-experience">
+        <label>Have you worked on any adult platforms before? <span class="req-star">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt" id="ro-exp-yes" onclick="selectExp('yes',this)">
+            <input type="radio" name="experience" value="yes"/>
+            ✅ Yes
+          </label>
+          <label class="radio-opt" id="ro-exp-no" onclick="selectExp('no',this)">
+            <input type="radio" name="experience" value="no"/>
+            🆕 No, first time
+          </label>
+        </div>
+      </div>
+
+      <div class="field" id="ff-platforms" style="display:none">
+        <label>Which platforms?</label>
+        <div class="inp-wrap"><span class="inp-icon">💻</span><input type="text" id="f-platforms" placeholder="e.g. OnlyFans, Fansly, Chaturbate..."/></div>
+      </div>
+
+      <div class="field" id="ff-hours">
+        <label>Hours available per week <span class="req-star">*</span></label>
+        <div class="radio-group" style="grid-template-columns:repeat(2,1fr)">
+          <label class="radio-opt" onclick="selectHours('5-10',this)"><input type="radio" name="hours" value="5-10"/> 5–10 hrs/week</label>
+          <label class="radio-opt" onclick="selectHours('10-20',this)"><input type="radio" name="hours" value="10-20"/> 10–20 hrs/week</label>
+          <label class="radio-opt" onclick="selectHours('20-40',this)"><input type="radio" name="hours" value="20-40"/> 20–40 hrs/week</label>
+          <label class="radio-opt" onclick="selectHours('40+',this)"><input type="radio" name="hours" value="40+"/> Full time 40+</label>
+        </div>
+        <div class="field-err-msg" id="hours-err">Please select your availability</div>
+      </div>
+
+      <div class="field" id="ff-schedule">
+        <label>Preferred time slots</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" value="morning" style="accent-color:var(--pink)"/> Mornings</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" value="afternoon" style="accent-color:var(--pink)"/> Afternoons</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" value="evening" style="accent-color:var(--pink)"/> Evenings</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" value="night" style="accent-color:var(--pink)"/> Late Night</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" value="weekends" style="accent-color:var(--pink)"/> Weekends</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Payout method preference</label>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="selectPayout('crypto',this)"><input type="radio" name="payout" value="crypto"/> ₿ Crypto (BTC/ETH)</label>
+          <label class="radio-opt" onclick="selectPayout('bank',this)"><input type="radio" name="payout" value="bank"/> 🏦 Bank Transfer</label>
+        </div>
+      </div>
+
+      <div class="field" id="ff-about">
+        <label>Tell us a bit about yourself <span class="req-star">*</span></label>
+        <textarea id="f-about" class="no-icon" placeholder="Why do you want to join Juice Bunny? What makes you unique? (min. 50 characters)" rows="4"></textarea>
+        <div class="field-hint"><span id="about-count">0</span> / 50 characters minimum</div>
+        <div class="field-err-msg">Please write at least 50 characters</div>
+      </div>
+
+      <div class="btn-actions">
+        <button class="btn-primary" onclick="step2Next()">Continue →</button>
+        <button class="btn-secondary" onclick="goFStep(1)">← Back</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PHOTOS & AGREEMENT -->
+    <div class="fstep" id="fstep3">
+      <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:20px">Step 3 of 3 — Photos & Agreement</div>
+
+      <div class="field">
+        <label>Profile Photos <span class="req-star">*</span></label>
+        <div class="upload-zone" id="photo-zone"
+          onclick="document.getElementById('photo-input').click()"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handlePhotoDrop(event)">
+          <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoSelect(this)"/>
+          <div class="upload-icon">📷</div>
+          <div class="upload-title">Upload 2–5 photos</div>
+          <div class="upload-sub">Drag & drop or <span>browse files</span> · JPG, PNG — max 5MB each</div>
+          <div class="upload-preview" id="photo-preview"></div>
+        </div>
+        <div class="field-hint">These will be shown on your public model profile. Choose clear, recent photos where your face is visible.</div>
+        <div id="photo-err" style="display:none;font-size:11px;color:var(--error);margin-top:5px">Please upload at least 2 photos</div>
+      </div>
+
+      <div class="field" id="ff-social">
+        <label>Social Media / Portfolio (Optional)</label>
+        <div class="inp-wrap"><span class="inp-icon">🔗</span><input type="text" id="f-social" placeholder="Instagram, OnlyFans, Twitter/X link..."/></div>
+        <div class="field-hint">Helps us verify your identity and assess your audience.</div>
+      </div>
+
+      <div style="background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:12px;padding:20px;margin-bottom:20px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:#fff">Revenue & Terms Summary</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8">
+          💰 <strong style="color:#fff">$0.60/min</strong> — your earnings from every live call minute<br/>
+          📊 <strong style="color:#fff">20% revenue share</strong> — paid weekly, no minimum threshold<br/>
+          🔒 <strong style="color:#fff">Your identity is protected</strong> — you choose what to share publicly<br/>
+          🚫 <strong style="color:#fff">No exclusivity required</strong> — work on other platforms simultaneously<br/>
+          ❌ <strong style="color:#fff">Zero sign-up fees</strong> — free to join, always
+        </div>
+      </div>
+
+      <div class="check-row" id="chk-age-wrap">
+        <input type="checkbox" id="chk-age"/>
+        <div class="check-lbl">I confirm I am <strong>18 years of age or older</strong> and will provide valid government-issued ID during onboarding. <span class="req-star" style="color:var(--pink)">*</span></div>
+      </div>
+      <div class="check-row" id="chk-terms-wrap">
+        <input type="checkbox" id="chk-terms"/>
+        <div class="check-lbl">I agree to the <a href="#">Model Terms of Service</a>, <a href="#">Revenue Share Agreement</a>, and <a href="#">Content Policy</a>. <span class="req-star" style="color:var(--pink)">*</span></div>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="chk-exclusive"/>
+        <div class="check-lbl">I understand Juice Bunny has the right to remove my profile if I violate platform rules.</div>
+      </div>
+
+      <div id="submit-err" style="display:none;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--error);margin-bottom:14px"></div>
+
+      <div class="btn-actions">
+        <button class="btn-primary" id="submit-btn" onclick="submitApplication()">🔥 Submit Application</button>
+        <button class="btn-secondary" onclick="goFStep(2)">← Back</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="fstep" id="fstep-success">
+      <div class="success-wrap">
+        <div class="success-icon">🐰</div>
+        <div class="success-title">Application Submitted!</div>
+        <div class="success-sub">We've received your application and will review it within 48 hours. Keep an eye on your inbox.</div>
+        <div class="success-steps">
+          <div class="success-step">
+            <div class="ss-num">1</div>
+            <div class="ss-text"><strong style="color:#fff">Application review</strong> — Our team reviews your profile and photos within 48 hours.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-num">2</div>
+            <div class="ss-text"><strong style="color:#fff">ID verification</strong> — We'll email you a secure link to verify your age and identity.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-num">3</div>
+            <div class="ss-text"><strong style="color:#fff">Profile setup</strong> — Once approved, we'll set up your model profile and walkthrough getting started.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-num">4</div>
+            <div class="ss-text"><strong style="color:#fff">Go live & earn</strong> — Start taking calls at $3/min. Your $0.60/min earnings are tracked in real time.</div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='index.html'">← Back to Juice Bunny</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────
+let selectedGender  = 'female';
+let selectedExp     = null;
+let selectedHours   = null;
+let selectedPayout  = null;
+let uploadedPhotos  = [];
+
+// ── STEP NAVIGATION ───────────────────────────────────────────
+function goFStep(n) {
+  document.querySelectorAll('.fstep').forEach(s => s.classList.remove('active'));
+  const target = n === 'success' ? document.getElementById('fstep-success') : document.getElementById('fstep' + n);
+  if(target) target.classList.add('active');
+
+  // Update dots
+  const dots = document.querySelectorAll('.fstep-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('done','active');
+    if(typeof n === 'number') {
+      if(i < n - 1) d.classList.add('done');
+      if(i === n - 1) d.classList.add('active');
+    } else {
+      d.classList.add('done');
+    }
+  });
+  window.scrollTo({top: document.querySelector('.form-section').offsetTop - 80, behavior:'smooth'});
+}
+
+// ── STEP 1 ────────────────────────────────────────────────────
+function selectGender(val, el) {
+  selectedGender = val;
+  document.querySelectorAll('.radio-opt').forEach(r => {
+    if(r.id && r.id.startsWith('ro-')) {
+      if(!r.id.includes('exp') && !r.id.includes('other') && r.id !== 'ro-female') return;
+    }
+  });
+  document.getElementById('ro-female').classList.toggle('sel', val === 'female');
+  document.getElementById('ro-other').classList.toggle('sel', val === 'other');
+  document.getElementById('gender-warning').style.display = val === 'other' ? 'block' : 'none';
+}
+
+function step1Next() {
+  const fname   = document.getElementById('f-fname').value.trim();
+  const lname   = document.getElementById('f-lname').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const dob     = document.getElementById('f-dob').value;
+  const country = document.getElementById('f-country').value;
+  const stage   = document.getElementById('f-stage').value.trim();
+  let ok = true;
+
+  const setErr = (id, isErr) => {
+    document.getElementById(id).classList.toggle('err', isErr);
+  };
+
+  setErr('ff-fname', !fname);
+  setErr('ff-lname', !lname);
+  setErr('ff-email', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  setErr('ff-stage', !stage);
+  setErr('ff-country', !country);
+
+  if(!fname || !lname || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !stage || !country) ok = false;
+
+  // Age check
+  if(dob) {
+    const age = Math.floor((new Date() - new Date(dob)) / (365.25 * 24 * 3600 * 1000));
+    if(age < 18) { setErr('ff-dob', true); ok = false; }
+    else setErr('ff-dob', false);
+  } else { setErr('ff-dob', true); ok = false; }
+
+  if(selectedGender !== 'female') {
+    showToast('Only female applicants are eligible', true);
+    return;
+  }
+
+  if(ok) goFStep(2);
+  else showToast('Please fill in all required fields', true);
+}
+
+// ── STEP 2 ────────────────────────────────────────────────────
+function selectExp(val, el) {
+  selectedExp = val;
+  document.getElementById('ro-exp-yes').classList.toggle('sel', val === 'yes');
+  document.getElementById('ro-exp-no').classList.toggle('sel', val === 'no');
+  document.getElementById('ff-platforms').style.display = val === 'yes' ? 'block' : 'none';
+}
+
+function selectHours(val, el) {
+  selectedHours = val;
+  document.querySelectorAll('input[name="hours"]').forEach(r => {
+    r.closest('.radio-opt').classList.toggle('sel', r.value === val);
+  });
+}
+
+function selectPayout(val, el) {
+  selectedPayout = val;
+  document.querySelectorAll('input[name="payout"]').forEach(r => {
+    r.closest('.radio-opt').classList.toggle('sel', r.value === val);
+  });
+}
+
+document.getElementById('f-about').addEventListener('input', function() {
+  document.getElementById('about-count').textContent = this.value.length;
+});
+
+function step2Next() {
+  const about = document.getElementById('f-about').value.trim();
+  let ok = true;
+
+  if(!selectedHours) {
+    document.getElementById('hours-err').style.display = 'block';
+    ok = false;
+  } else {
+    document.getElementById('hours-err').style.display = 'none';
+  }
+
+  document.getElementById('ff-about').classList.toggle('err', about.length < 50);
+  if(about.length < 50) ok = false;
+
+  if(ok) goFStep(3);
+  else showToast('Please complete all required fields', true);
+}
+
+// ── PHOTO UPLOAD ──────────────────────────────────────────────
+function handlePhotoSelect(input) {
+  Array.from(input.files).forEach(f => addPhoto(f));
+}
+
+function handlePhotoDrop(e) {
+  e.preventDefault();
+  document.getElementById('photo-zone').classList.remove('drag');
+  Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')).forEach(f => addPhoto(f));
+}
+
+function addPhoto(file) {
+  if(uploadedPhotos.length >= 5) { showToast('Maximum 5 photos', true); return; }
+  if(file.size > 5 * 1024 * 1024) { showToast(file.name + ' is too large (max 5MB)', true); return; }
+  uploadedPhotos.push(file);
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    img.className = 'upload-thumb';
+    img.title = 'Click to remove';
+    const idx = uploadedPhotos.length - 1;
+    img.onclick = (ev) => { ev.stopPropagation(); removePhoto(idx, img); };
+    document.getElementById('photo-preview').appendChild(img);
+  };
+  reader.readAsDataURL(file);
+  document.getElementById('photo-err').style.display = 'none';
+}
+
+function removePhoto(idx, imgEl) {
+  uploadedPhotos.splice(idx, 1);
+  imgEl.remove();
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────
+function submitApplication() {
+  const ageChecked   = document.getElementById('chk-age').checked;
+  const termsChecked = document.getElementById('chk-terms').checked;
+  const errEl        = document.getElementById('submit-err');
+  let errors = [];
+
+  if(uploadedPhotos.length < 2) errors.push('Please upload at least 2 profile photos.');
+  if(!ageChecked)   errors.push('Please confirm your age.');
+  if(!termsChecked) errors.push('Please agree to the terms.');
+
+  if(errors.length) {
+    errEl.innerHTML = errors.map(e => `⚠️ ${e}`).join('<br/>');
+    errEl.style.display = 'block';
+    return;
+  }
+
+  errEl.style.display = 'none';
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  // Simulate submission (wire to Supabase in Phase 10)
+  setTimeout(() => {
+    goFStep('success');
+  }, 1800);
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' error' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+</script>
+</body>
+</html>
