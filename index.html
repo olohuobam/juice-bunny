@@ -878,12 +878,13 @@ select option{background:var(--bg3);color:var(--text)}
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100)">Movies</a>
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100)">Premium</a>
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Pricing</a>
+    <a href="model-apply.html" style="color:var(--pink);font-weight:600">Become a Model</a>
   </div>
   <div class="nav-right">
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
     <button class="btn-nav-signup" id="btnNavSignup" onclick="goTo('signup')">Sign Up</button>
     <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goToPayment('sub_weekly')">Go Premium</button>
-    <div class="nav-avatar" id="navAvatar">JD</div>
+    <div class="nav-avatar" id="navAvatar" onclick="window.location.href='profile.html'">JD</div>
   </div>
 </nav>
 
@@ -1280,9 +1281,26 @@ select option{background:var(--bg3);color:var(--text)}
         <!-- PANEL 3 -->
         <div class="form-panel" id="su-p3">
           <div style="text-align:center;margin-bottom:22px"><div style="font-size:16px;font-weight:700;margin-bottom:4px">Choose Your Plan</div><div style="font-size:13px;color:var(--text2)">Start free or go premium. Cancel anytime.</div></div>
-          <div class="plan-grid">
-            <label class="plan-opt" id="po-free" onclick="suSelectPlan('free')"><input type="radio" name="plan" value="free"/><div class="plan-opt-name">Free</div><div class="plan-opt-price">$0<small>/mo</small></div><div class="plan-opt-tag">SD Quality · Limited</div></label>
-            <label class="plan-opt sel" id="po-prem" onclick="suSelectPlan('premium')"><div class="plan-hot">Most Popular</div><input type="radio" name="plan" value="premium" checked/><div class="plan-opt-name">Premium</div><div class="plan-opt-price">$3.99<small>/mo</small></div><div class="plan-opt-tag">4K · Full Access</div></label>
+          <div class="plan-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <label class="plan-opt" id="po-free" onclick="suSelectPlan('free')">
+              <input type="radio" name="plan" value="free"/>
+              <div class="plan-opt-name">Free</div>
+              <div class="plan-opt-price">$0<small>/forever</small></div>
+              <div class="plan-opt-tag">SD Quality · Limited</div>
+            </label>
+            <label class="plan-opt sel" id="po-weekly" onclick="suSelectPlan('weekly')">
+              <div class="plan-hot">Most Popular</div>
+              <input type="radio" name="plan" value="weekly" checked/>
+              <div class="plan-opt-name">Weekly</div>
+              <div class="plan-opt-price">$9.99<small>/wk</small></div>
+              <div class="plan-opt-tag">All Features + Models</div>
+            </label>
+            <label class="plan-opt" id="po-monthly" onclick="suSelectPlan('monthly')">
+              <input type="radio" name="plan" value="monthly"/>
+              <div class="plan-opt-name">Monthly</div>
+              <div class="plan-opt-price">$24.99<small>/mo</small></div>
+              <div class="plan-opt-tag">Best Value · Save 37%</div>
+            </label>
           </div>
           <div class="perks-strip" id="su-perks">
             <div class="perks-title">What you get</div>
@@ -2213,23 +2231,33 @@ function suCheckVerifyBtn(){
 }
 function suGoStep3(){suGoPanel(3)}
 function suSelectPlan(plan){
-  document.getElementById('po-free').classList.toggle('sel',plan==='free');
-  document.getElementById('po-prem').classList.toggle('sel',plan==='premium');
-  const perks=document.getElementById('su-perks');
+  ['free','weekly','monthly'].forEach(p => {
+    const el = document.getElementById('po-'+p);
+    if(el) el.classList.toggle('sel', p===plan);
+  });
+  const perks = document.getElementById('su-perks');
+  const btn   = document.getElementById('su-createtxt');
   if(plan==='free'){
     perks.innerHTML=`<div class="perks-title">Free includes</div>
-      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">480p SD streaming only</span></div>
+      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">SD quality video only</span></div>
       <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">Limited free library</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Upgrade to Premium anytime</span></div>`;
-    document.getElementById('su-createtxt').textContent='Create Free Account';
+      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">No model access</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Upgrade anytime</span></div>`;
+    btn.textContent = 'Create Free Account';
+  } else if(plan==='weekly'){
+    perks.innerHTML=`<div class="perks-title">Weekly — $9.99/week</div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full HD & 4K library</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all models</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Chat, posts & downloads</span></div>`;
+    btn.textContent = '🔥 Create My Account';
   } else {
-    perks.innerHTML=`<div class="perks-title">What you get</div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Unlimited 4K Ultra HD streaming</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full access to all exclusive content</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">New drops every week</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Offline downloads included</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Cancel anytime, no hidden fees</span></div>`;
-    document.getElementById('su-createtxt').textContent='🔥 Create My Account';
+    perks.innerHTML=`<div class="perks-title">Monthly — $24.99/month</div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Everything in Weekly</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Save 37% vs weekly</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all models</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>`;
+    btn.textContent = '🔥 Create My Account';
   }
 }
 function suCreateAccount(){

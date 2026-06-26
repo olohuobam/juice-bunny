@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Profile — Juice Bunny</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
+  --text:#fff;--text2:#a0a0b0;--text3:#606070;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --card:#16161f;--success:#00c878;--error:#ff4757;--gold:#ffc832;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--pink)}
+a{text-decoration:none;color:inherit}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;background:rgba(13,13,18,.92);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.logo-spin{width:34px;height:34px;animation:spin 28s linear infinite;object-fit:contain;filter:drop-shadow(0 0 6px rgba(255,45,120,.5))}
+.logo-name{font-family:'Dancing Script',cursive;font-size:20px;font-weight:700}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn-nav{padding:8px 18px;border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-nav-ghost{background:none;border:1px solid var(--border2);color:var(--text2)}
+.btn-nav-ghost:hover{border-color:var(--pink);color:#fff}
+.btn-nav-pink{background:var(--pink);color:#fff}
+.btn-nav-pink:hover{background:var(--pink2)}
+@media(max-width:600px){.nav{padding:0 16px}}
+
+/* ── COVER ────────────────────────────────────────────────── */
+.cover-wrap{position:relative;height:260px;background:linear-gradient(135deg,#1a0a18,#2d0a22,#0a0a1a);overflow:hidden;margin-top:64px}
+.cover-img{width:100%;height:100%;object-fit:cover;opacity:.6}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(13,13,18,.95) 100%)}
+.cover-edit-btn{
+  position:absolute;top:16px;right:16px;
+  background:rgba(0,0,0,.5);border:1px solid var(--border2);
+  color:#fff;padding:7px 14px;border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  backdrop-filter:blur(8px);transition:all .2s;
+}
+.cover-edit-btn:hover{background:rgba(255,45,120,.2);border-color:var(--pink)}
+.cover-pattern{position:absolute;inset:0;background-image:radial-gradient(rgba(255,45,120,.08) 1px,transparent 1px);background-size:28px 28px}
+
+/* ── PROFILE HEADER ───────────────────────────────────────── */
+.profile-header{max-width:900px;margin:0 auto;padding:0 24px;position:relative}
+.avatar-wrap{
+  position:relative;width:110px;height:110px;
+  margin-top:-55px;margin-bottom:0;
+  border-radius:50%;border:4px solid var(--bg);
+  background:linear-gradient(135deg,var(--pink),#8b00ff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;font-weight:700;overflow:hidden;
+  cursor:pointer;flex-shrink:0;
+  transition:filter .2s;
+}
+.avatar-wrap:hover .avatar-edit-hint{opacity:1}
+.avatar-wrap img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avatar-edit-hint{
+  position:absolute;inset:0;border-radius:50%;
+  background:rgba(0,0,0,.5);display:flex;align-items:center;
+  justify-content:center;flex-direction:column;gap:2px;
+  opacity:0;transition:opacity .2s;font-size:10px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;color:#fff;
+}
+.avatar-badge{
+  position:absolute;bottom:4px;right:4px;
+  width:26px;height:26px;border-radius:50%;
+  border:3px solid var(--bg);display:flex;align-items:center;
+  justify-content:center;font-size:11px;
+}
+.avatar-badge.model{background:var(--pink)}
+.avatar-badge.user{background:var(--success)}
+.avatar-badge.online{background:var(--success)}
+
+.profile-meta-row{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:16px;padding:14px 0 0;flex-wrap:wrap;
+}
+.profile-left{flex:1;min-width:200px}
+.profile-name{font-size:22px;font-weight:700;line-height:1.2;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.verified-badge{background:var(--pink);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.model-tag{background:rgba(255,200,50,.12);border:1px solid rgba(255,200,50,.3);color:var(--gold);font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;letter-spacing:.5px}
+.profile-handle{font-size:14px;color:var(--text3);margin-bottom:8px}
+.profile-bio{font-size:14px;color:var(--text2);line-height:1.65;max-width:520px}
+.profile-stats{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap}
+.pstat{text-align:center}
+.pstat-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#fff;line-height:1}
+.pstat-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.profile-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:4px}
+.btn-follow{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:10px 24px;border-radius:20px;cursor:pointer;transition:all .2s}
+.btn-follow:hover{background:var(--pink2);transform:translateY(-1px)}
+.btn-follow.following{background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.3);color:var(--pink)}
+.btn-follow.following:hover{background:rgba(255,71,87,.1);border-color:var(--error);color:var(--error)}
+.btn-msg{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:10px 20px;border-radius:20px;cursor:pointer;transition:all .2s}
+.btn-msg:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.25)}
+.btn-call{background:linear-gradient(135deg,var(--gold),#ff8c00);border:none;color:#000;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:10px 22px;border-radius:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px}
+.btn-call:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,200,50,.3)}
+.btn-call.offline{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text3);cursor:not-allowed}
+.online-dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success)}
+
+/* ── EDIT PROFILE PANEL ───────────────────────────────────── */
+.edit-panel{
+  display:none;max-width:900px;margin:16px auto 0;padding:0 24px;
+  animation:fadeIn .3s ease;
+}
+.edit-panel.open{display:block}
+.edit-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:28px;position:relative}
+.edit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pink),transparent);border-radius:16px 16px 0 0}
+.edit-title{font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.edit-field{margin-bottom:0}
+.edit-field.full{grid-column:1/-1}
+.edit-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
+.edit-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.edit-input:focus{border-color:var(--pink)}
+.edit-input::placeholder{color:var(--text3)}
+textarea.edit-input{resize:vertical;min-height:80px}
+.edit-actions{display:flex;gap:10px;margin-top:20px}
+.btn-save{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:11px 28px;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-save:hover{background:var(--pink2)}
+.btn-cancel-edit{background:none;border:1px solid var(--border2);color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;padding:11px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-cancel-edit:hover{border-color:rgba(255,255,255,.25);color:#fff}
+
+/* ── TABS ─────────────────────────────────────────────────── */
+.profile-tabs-wrap{
+  max-width:900px;margin:20px auto 0;padding:0 24px;
+  border-bottom:1px solid var(--border);
+}
+.profile-tabs{display:flex;gap:0}
+.ptab{
+  padding:12px 20px;font-size:14px;font-weight:500;
+  color:var(--text3);background:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;border-bottom:2px solid transparent;
+  margin-bottom:-1px;transition:all .2s;
+}
+.ptab.active{color:#fff;border-bottom-color:var(--pink)}
+.ptab:hover:not(.active){color:var(--text2)}
+.ptab-count{font-size:11px;color:var(--text3);margin-left:4px}
+
+/* ── CONTENT AREA ─────────────────────────────────────────── */
+.profile-content{max-width:900px;margin:24px auto 80px;padding:0 24px}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .3s ease}
+
+/* ── POSTS GRID ───────────────────────────────────────────── */
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.post-thumb{
+  aspect-ratio:1;background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;cursor:pointer;position:relative;overflow:hidden;
+  transition:filter .2s;
+}
+.post-thumb:hover{filter:brightness(1.15)}
+.post-thumb.locked::after{
+  content:'🔒';position:absolute;inset:0;
+  background:rgba(0,0,0,.6);display:flex;align-items:center;
+  justify-content:center;font-size:1.8rem;
+}
+.post-thumb img{width:100%;height:100%;object-fit:cover}
+.post-meta-ov{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.7));
+  padding:20px 8px 6px;opacity:0;transition:opacity .2s;
+  display:flex;gap:12px;align-items:center;
+}
+.post-thumb:hover .post-meta-ov{opacity:1}
+.post-stat{font-size:11px;color:#fff;display:flex;align-items:center;gap:4px}
+
+/* ── NEW POST COMPOSER ────────────────────────────────────── */
+.composer{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;margin-bottom:20px}
+.composer-row{display:flex;gap:12px;align-items:flex-start}
+.composer-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.composer-body{flex:1}
+.composer-input{width:100%;background:none;border:none;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;resize:none;min-height:44px;line-height:1.6}
+.composer-input::placeholder{color:var(--text3)}
+.composer-actions{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.composer-tools{display:flex;gap:8px}
+.composer-tool{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s}
+.composer-tool:hover{background:rgba(255,255,255,.06);color:var(--text2)}
+.btn-post{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:8px 20px;border-radius:20px;cursor:pointer;transition:all .2s}
+.btn-post:hover{background:var(--pink2)}
+.composer-media-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.media-thumb-wrap{position:relative;width:72px;height:72px}
+.media-thumb{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--border2)}
+.media-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--error);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ── FEED POSTS ───────────────────────────────────────────── */
+.feed-post{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.fp-header{display:flex;align-items:center;gap:12px;padding:16px}
+.fp-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden}
+.fp-av img{width:100%;height:100%;object-fit:cover}
+.fp-name{font-size:14px;font-weight:600}
+.fp-time{font-size:12px;color:var(--text3)}
+.fp-body{padding:0 16px 14px;font-size:14px;color:var(--text2);line-height:1.65}
+.fp-media{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:4rem;overflow:hidden}
+.fp-media img{width:100%;height:100%;object-fit:cover}
+.fp-locked{
+  padding:28px 16px;text-align:center;
+  background:linear-gradient(to bottom,transparent,rgba(13,13,18,.98));
+  margin-top:-40px;position:relative;
+}
+.fp-lock-icon{font-size:32px;margin-bottom:8px}
+.fp-lock-text{font-size:13px;color:var(--text2);margin-bottom:14px}
+.btn-unlock{background:var(--pink);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:10px 24px;border-radius:20px;cursor:pointer;transition:all .2s}
+.btn-unlock:hover{background:var(--pink2)}
+.fp-actions{display:flex;gap:0;padding:0 8px 8px;border-top:1px solid var(--border)}
+.fp-act{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:none;border:none;color:var(--text3);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;border-radius:8px;transition:all .2s}
+.fp-act:hover{background:rgba(255,255,255,.04);color:var(--text2)}
+.fp-act.liked{color:var(--pink)}
+
+/* ── ABOUT TAB ────────────────────────────────────────────── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.about-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.about-val{font-size:14px;color:var(--text);font-weight:500}
+.about-val.pink{color:var(--pink)}
+.about-val.green{color:var(--success)}
+
+/* ── CALL CTA (model profiles) ────────────────────────────── */
+.call-cta{
+  background:linear-gradient(135deg,rgba(255,200,50,.08),rgba(255,140,0,.06));
+  border:1px solid rgba(255,200,50,.2);border-radius:14px;
+  padding:24px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.call-cta-left{}
+.call-cta-title{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.call-cta-sub{font-size:13px;color:var(--text2)}
+.call-rate{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold);line-height:1}
+.call-rate-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── LIVE CALL MODAL ──────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:420px;padding:32px;animation:popIn .3s both;position:relative}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:20px 20px 0 0}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;transition:color .2s}
+.modal-close:hover{color:#fff}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.call-balance{background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:14px;text-align:center;margin-bottom:20px}
+.balance-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold)}
+.balance-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.call-mins-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.mins-opt{border:1.5px solid var(--border2);border-radius:9px;padding:10px;text-align:center;cursor:pointer;transition:all .2s}
+.mins-opt:hover{border-color:rgba(255,200,50,.4)}
+.mins-opt.sel{border-color:var(--gold);background:rgba(255,200,50,.08)}
+.mins-val{font-size:18px;font-weight:700;color:#fff}
+.mins-price{font-size:11px;color:var(--text3);margin-top:2px}
+.btn-start-call{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--gold),#ff8c00);color:#000;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .25s;letter-spacing:.3px}
+.btn-start-call:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,200,50,.3)}
+.call-note{font-size:11px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.6}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--success);color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;pointer-events:none}
+.toast.error{background:var(--error)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:768px){
+  .cover-wrap{height:180px}
+  .avatar-wrap{width:88px;height:88px;margin-top:-44px;font-size:32px}
+  .profile-meta-row{flex-direction:column;align-items:flex-start;gap:12px}
+  .profile-actions{width:100%}
+  .about-grid{grid-template-columns:1fr}
+  .posts-grid{grid-template-columns:repeat(2,1fr)}
+  .edit-grid{grid-template-columns:1fr}
+  .edit-field.full{grid-column:1}
+  .call-cta{flex-direction:column}
+  .call-mins-selector{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .profile-header,.profile-tabs-wrap,.profile-content{padding:0 16px}
+  .profile-stats{gap:16px}
+  .nav{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo" onclick="window.location.href='index.html'">
+    <img src="white-rabbit-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <span class="logo-name">Juice Bunny</span>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-nav btn-nav-ghost" onclick="window.location.href='index.html'">← Home</button>
+    <button class="btn-nav btn-nav-pink" id="nav-edit-btn" onclick="toggleEditPanel()" style="display:none">✏️ Edit Profile</button>
+  </div>
+</nav>
+
+<!-- COVER -->
+<div class="cover-wrap" id="cover-wrap">
+  <div class="cover-pattern"></div>
+  <div class="cover-overlay"></div>
+  <button class="cover-edit-btn" id="cover-edit-btn" style="display:none" onclick="document.getElementById('cover-input').click()">
+    📷 Change Cover
+  </button>
+  <input type="file" id="cover-input" accept="image/*" style="display:none" onchange="handleCoverUpload(this)"/>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div style="display:flex;align-items:flex-end;gap:16px">
+    <div class="avatar-wrap" id="avatar-wrap" onclick="handleAvatarClick()">
+      <span id="avatar-initials">JD</span>
+      <div class="avatar-edit-hint" id="avatar-edit-hint" style="display:none">
+        <span>📷</span><span>Change</span>
+      </div>
+      <div class="avatar-badge online" id="avatar-badge">🟢</div>
+    </div>
+    <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)"/>
+  </div>
+
+  <div class="profile-meta-row">
+    <div class="profile-left">
+      <div class="profile-name" id="profile-name">
+        Loading...
+        <span class="verified-badge" id="verified-badge" style="display:none">✓ Verified</span>
+        <span class="model-tag" id="model-tag" style="display:none">🌟 Model</span>
+      </div>
+      <div class="profile-handle" id="profile-handle">@username</div>
+      <div class="profile-bio" id="profile-bio">Loading profile...</div>
+      <div class="profile-stats" id="profile-stats">
+        <div class="pstat"><div class="pstat-val" id="stat-posts">0</div><div class="pstat-lbl">Posts</div></div>
+        <div class="pstat"><div class="pstat-val" id="stat-followers">0</div><div class="pstat-lbl">Followers</div></div>
+        <div class="pstat"><div class="pstat-val" id="stat-following">0</div><div class="pstat-lbl">Following</div></div>
+      </div>
+    </div>
+    <div class="profile-actions" id="profile-actions">
+      <!-- Filled by JS based on view mode -->
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PANEL -->
+<div class="edit-panel" id="edit-panel">
+  <div class="edit-card">
+    <div class="edit-title">✏️ Edit Your Profile</div>
+    <div class="edit-grid">
+      <div class="edit-field">
+        <label>Display Name</label>
+        <input type="text" class="edit-input" id="edit-name" placeholder="Your name"/>
+      </div>
+      <div class="edit-field">
+        <label>Username</label>
+        <input type="text" class="edit-input" id="edit-username" placeholder="@username"/>
+      </div>
+      <div class="edit-field full">
+        <label>Bio</label>
+        <textarea class="edit-input" id="edit-bio" rows="3" placeholder="Tell people about yourself..."></textarea>
+      </div>
+      <div class="edit-field">
+        <label>Location</label>
+        <input type="text" class="edit-input" id="edit-location" placeholder="City, Country"/>
+      </div>
+      <div class="edit-field">
+        <label>Website / Social</label>
+        <input type="text" class="edit-input" id="edit-website" placeholder="https://..."/>
+      </div>
+      <!-- Model-only fields -->
+      <div class="edit-field full" id="model-rate-field" style="display:none">
+        <label>About Your Shows (Model only)</label>
+        <textarea class="edit-input" id="edit-model-about" rows="2" placeholder="Tell fans what to expect from your live calls..."></textarea>
+      </div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+      <button class="btn-cancel-edit" onclick="toggleEditPanel()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="profile-tabs-wrap">
+  <div class="profile-tabs" id="profile-tabs">
+    <button class="ptab active" onclick="switchTab('posts',this)">Posts <span class="ptab-count" id="tab-count-posts"></span></button>
+    <button class="ptab" onclick="switchTab('about',this)">About</button>
+    <button class="ptab" id="tab-media" onclick="switchTab('media',this)" style="display:none">Media <span class="ptab-count" id="tab-count-media"></span></button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="profile-content">
+
+  <!-- POSTS TAB -->
+  <div class="tab-pane active" id="tab-posts">
+    <!-- Composer (own profile only) -->
+    <div class="composer" id="post-composer" style="display:none">
+      <div class="composer-row">
+        <div class="composer-av" id="composer-av">JD</div>
+        <div class="composer-body">
+          <textarea class="composer-input" id="post-input" placeholder="Share something with your fans..." rows="3" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+          <div class="composer-media-preview" id="composer-previews"></div>
+          <div class="composer-actions">
+            <div class="composer-tools">
+              <button class="composer-tool" title="Add photo" onclick="document.getElementById('post-media-input').click()">🖼️</button>
+              <input type="file" id="post-media-input" accept="image/*,video/*" multiple style="display:none" onchange="handlePostMedia(this)"/>
+              <button class="composer-tool" title="Lock for subscribers">🔒</button>
+              <button class="composer-tool" title="Add location">📍</button>
+            </div>
+            <button class="btn-post" onclick="publishPost()">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call CTA (model profiles, subscriber view) -->
+    <div class="call-cta" id="call-cta" style="display:none">
+      <div class="call-cta-left">
+        <div class="call-cta-title">
+          <span class="online-dot" id="cta-online-dot"></span>
+          <span id="cta-model-name">Model</span> is available for a live call
+        </div>
+        <div class="call-cta-sub">Private 1-on-1 video call · HD quality · Never recorded</div>
+      </div>
+      <div style="text-align:right">
+        <div class="call-rate" id="cta-rate">$3</div>
+        <div class="call-rate-sub">per minute</div>
+        <button class="btn-call" style="margin-top:10px" onclick="openCallModal()" id="cta-call-btn">
+          <span class="online-dot"></span> Start Call
+        </button>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div id="posts-feed"></div>
+
+    <!-- Empty state -->
+    <div id="posts-empty" style="display:none;text-align:center;padding:60px 20px">
+      <div style="font-size:48px;margin-bottom:16px">📭</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px">No posts yet</div>
+      <div style="font-size:14px;color:var(--text3)">Posts will appear here</div>
+    </div>
+  </div>
+
+  <!-- ABOUT TAB -->
+  <div class="tab-pane" id="tab-about">
+    <div class="about-grid" id="about-grid"></div>
+  </div>
+
+  <!-- MEDIA TAB (grid view for models) -->
+  <div class="tab-pane" id="tab-media">
+    <div class="posts-grid" id="media-grid"></div>
+  </div>
+
+</div>
+
+<!-- LIVE CALL MODAL -->
+<div class="modal-overlay" id="call-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCallModal()">✕</button>
+    <div style="text-align:center;margin-bottom:16px;font-size:40px" id="call-modal-av">👩</div>
+    <div class="modal-title" id="call-modal-name">Start a Call</div>
+    <div class="modal-sub">Choose how many minutes you'd like. You'll only be charged for actual time used.</div>
+    <div class="call-balance">
+      <div class="balance-val">$3.00<span style="font-size:1rem;color:var(--text3)">/min</span></div>
+      <div class="balance-lbl">Rate · Billed per minute</div>
+    </div>
+    <div class="call-mins-selector" id="mins-selector">
+      <div class="mins-opt sel" onclick="selectMins(this,5)"><div class="mins-val">5</div><div class="mins-price">$15.00</div></div>
+      <div class="mins-opt" onclick="selectMins(this,10)"><div class="mins-val">10</div><div class="mins-price">$30.00</div></div>
+      <div class="mins-opt" onclick="selectMins(this,20)"><div class="mins-val">20</div><div class="mins-price">$60.00</div></div>
+      <div class="mins-opt" onclick="selectMins(this,30)"><div class="mins-val">30</div><div class="mins-price">$90.00</div></div>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;text-align:center">
+      Selected: <strong style="color:#fff" id="selected-mins-display">5 minutes</strong> — <strong style="color:var(--gold)" id="selected-price-display">$15.00</strong>
+    </div>
+    <button class="btn-start-call" onclick="startCall()">⚡ Start Call Now</button>
+    <div class="call-note">Requires active subscription. You'll be taken to a secure payment page.<br/>Unused minutes are not refunded.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+const CALL_RATE = 3; // $3/min
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let sb = null;
+let currentUser = null;      // logged in user
+let viewedProfile = null;    // profile being viewed
+let isOwnProfile = false;
+let isModel = false;
+let selectedCallMins = 5;
+let composerMediaFiles = [];
+let posts = [];
+let following = false;
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+async function init() {
+  // Load Supabase
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  script.onload = async () => {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    await loadProfile();
+  };
+  document.head.appendChild(script);
+}
+
+async function loadProfile() {
+  // Get profile ID from URL params
+  const params = new URLSearchParams(window.location.search);
+  const profileId = params.get('id');
+
+  // Get current session
+  const { data: { session } } = await sb.auth.getSession();
+  currentUser = session?.user || null;
+
+  // Load profile data
+  let profileData = null;
+
+  if(profileId) {
+    // Viewing someone else's profile
+    const { data } = await sb.from('profiles').select('*').eq('id', profileId).single();
+    profileData = data;
+  } else if(currentUser) {
+    // Own profile
+    const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+    profileData = data;
+  } else {
+    // Not logged in — show demo profile
+    profileData = getDemoProfile();
+  }
+
+  if(!profileData) {
+    profileData = getDemoProfile();
+  }
+
+  viewedProfile = profileData;
+  isOwnProfile = currentUser && (!profileId || profileId === currentUser.id);
+  isModel = profileData.role === 'model';
+
+  renderProfile(profileData);
+}
+
+function getDemoProfile() {
+  return {
+    id: 'demo',
+    full_name: 'Scarlett Rose',
+    email: 'demo@juicebunny.com',
+    role: 'model',
+    plan: 'model',
+    bio: 'Your favorite Juice Bunny model 🐰 Live calls available daily. DM me anytime 💋',
+    avatar_url: null,
+    cover_url: null,
+    username: 'scarlett',
+    location: 'Los Angeles, CA',
+    website: null,
+    followers_count: 2840,
+    following_count: 12,
+    posts_count: 47,
+    is_online: true,
+    verified: true,
+    created_at: new Date().toISOString(),
+  };
+}
+
+function renderProfile(p) {
+  // Page title
+  document.title = (p.full_name || p.username || 'Profile') + ' — Juice Bunny';
+
+  // Avatar
+  const initials = (p.full_name || p.email || 'JD').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('avatar-initials').textContent = initials;
+  document.getElementById('composer-av').textContent = initials;
+  if(p.avatar_url) {
+    const img = document.createElement('img');
+    img.src = p.avatar_url;
+    img.alt = p.full_name;
+    document.getElementById('avatar-wrap').prepend(img);
+    document.getElementById('avatar-initials').style.display = 'none';
+  }
+
+  // Cover background based on model/user
+  const cover = document.getElementById('cover-wrap');
+  if(isModel) {
+    cover.style.background = 'linear-gradient(135deg,#2a0a18,#3d0a25,#1a0a2a)';
+  }
+
+  // Name & badges
+  document.getElementById('profile-name').childNodes[0].textContent = p.full_name || p.username || 'User';
+  if(p.verified) document.getElementById('verified-badge').style.display = '';
+  if(isModel)    document.getElementById('model-tag').style.display = '';
+
+  // Handle & bio
+  document.getElementById('profile-handle').textContent = '@' + (p.username || p.email?.split('@')[0] || 'user');
+  document.getElementById('profile-bio').textContent = p.bio || 'No bio yet.';
+
+  // Stats
+  document.getElementById('stat-posts').textContent     = formatNum(p.posts_count || 0);
+  document.getElementById('stat-followers').textContent = formatNum(p.followers_count || 0);
+  document.getElementById('stat-following').textContent = formatNum(p.following_count || 0);
+  document.getElementById('tab-count-posts').textContent = p.posts_count ? `(${p.posts_count})` : '';
+
+  // Actions
+  renderActions(p);
+
+  // Edit controls (own profile)
+  if(isOwnProfile) {
+    document.getElementById('nav-edit-btn').style.display = 'flex';
+    document.getElementById('cover-edit-btn').style.display = 'flex';
+    document.getElementById('avatar-edit-hint').style.display = 'flex';
+    document.getElementById('post-composer').style.display = 'block';
+    if(isModel) document.getElementById('tab-media').style.display = '';
+    populateEditForm(p);
+  }
+
+  // Model tabs
+  if(isModel) {
+    document.getElementById('tab-media').style.display = '';
+    if(currentUser && !isOwnProfile) {
+      document.getElementById('call-cta').style.display = 'flex';
+      document.getElementById('cta-model-name').textContent = p.full_name?.split(' ')[0] || 'Model';
+      document.getElementById('call-modal-name').textContent = 'Call ' + (p.full_name?.split(' ')[0] || 'Model');
+      if(!p.is_online) {
+        document.getElementById('cta-call-btn').className = 'btn-call offline';
+        document.getElementById('cta-call-btn').textContent = 'Currently Offline';
+        document.getElementById('cta-online-dot').style.background = 'var(--text3)';
+      }
+    }
+  }
+
+  // About tab
+  buildAboutTab(p);
+
+  // Load posts
+  loadPosts(p);
+
+  // Media grid
+  if(isModel) buildMediaGrid();
+}
+
+function renderActions(p) {
+  const actionsEl = document.getElementById('profile-actions');
+  if(isOwnProfile) {
+    actionsEl.innerHTML = `
+      <button class="btn-follow" style="background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text2)" onclick="window.location.href='index.html'">← Back to Home</button>
+    `;
+  } else if(currentUser) {
+    actionsEl.innerHTML = `
+      <button class="btn-follow ${following?'following':''}" id="follow-btn" onclick="toggleFollow()">
+        ${following ? '✓ Following' : '+ Follow'}
+      </button>
+      <button class="btn-msg" onclick="openMessage()">💬 Message</button>
+      ${isModel ? `<button class="btn-call" onclick="openCallModal()"><span class="online-dot"></span> Live Call</button>` : ''}
+    `;
+  } else {
+    actionsEl.innerHTML = `
+      <button class="btn-follow" onclick="window.location.href='index.html'">🔥 Join to Follow</button>
+    `;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  POSTS
+// ═══════════════════════════════════════════════════════
+function loadPosts(p) {
+  // Demo posts
+  const demoPosts = isModel ? [
+    { id:1, text:'New content just dropped 🔥 Check it out!', media:'🌹', locked:false, likes:284, comments:32, time:'2h ago' },
+    { id:2, text:'Tonight at 9PM EST I\'m going live 💋 Book your slot now before they fill up!', media:null, locked:false, likes:156, comments:18, time:'5h ago' },
+    { id:3, text:'Exclusive photo set 📸', media:'💋', locked:true, likes:430, comments:67, time:'1d ago' },
+    { id:4, text:'Good morning beautiful people ☀️', media:'🌸', locked:false, likes:98, comments:11, time:'2d ago' },
+  ] : [
+    { id:1, text:'Just joined Juice Bunny! 🐰 This place is amazing', media:null, locked:false, likes:12, comments:3, time:'1d ago' },
+  ];
+
+  posts = demoPosts;
+  renderPosts();
+}
+
+function renderPosts() {
+  const feed = document.getElementById('posts-feed');
+  const empty = document.getElementById('posts-empty');
+  if(!posts.length) { empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  const initials = document.getElementById('avatar-initials').textContent;
+  feed.innerHTML = posts.map(post => `
+    <div class="feed-post" id="post-${post.id}">
+      <div class="fp-header">
+        <div class="fp-av">${initials}</div>
+        <div>
+          <div class="fp-name">${viewedProfile?.full_name || 'User'}</div>
+          <div class="fp-time">${post.time}</div>
+        </div>
+      </div>
+      ${post.text ? `<div class="fp-body">${post.text}</div>` : ''}
+      ${post.media ? `
+        <div class="fp-media" style="background:linear-gradient(135deg,#1a0a18,#2d0a22)">
+          ${post.locked && !isOwnProfile && !currentUser?.subscribed ? `
+            <div style="font-size:5rem;filter:blur(8px);user-select:none">${post.media}</div>
+          ` : `<div style="font-size:5rem">${post.media}</div>`}
+        </div>
+        ${post.locked && !isOwnProfile ? `
+          <div class="fp-locked">
+            <div class="fp-lock-icon">🔒</div>
+            <div class="fp-lock-text">Subscribe to unlock this post</div>
+            <button class="btn-unlock" onclick="window.location.href='index.html#pricing'">Unlock — Subscribe Now</button>
+          </div>
+        ` : ''}
+      ` : ''}
+      <div class="fp-actions">
+        <button class="fp-act ${post.liked?'liked':''}" onclick="likePost(${post.id},this)">
+          ${post.liked?'♥':'♡'} <span id="likes-${post.id}">${post.likes}</span>
+        </button>
+        <button class="fp-act" onclick="commentPost(${post.id})">💬 ${post.comments}</button>
+        <button class="fp-act" onclick="sharePost(${post.id})">↗ Share</button>
+        ${isOwnProfile ? `<button class="fp-act" onclick="deletePost(${post.id})" style="color:var(--error)">🗑</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function likePost(id, btn) {
+  const post = posts.find(p => p.id === id);
+  if(!post) return;
+  post.liked = !post.liked;
+  post.likes += post.liked ? 1 : -1;
+  btn.classList.toggle('liked', post.liked);
+  btn.innerHTML = `${post.liked?'♥':'♡'} <span id="likes-${id}">${post.likes}</span>`;
+  if(post.liked) showToast('❤️ Liked!');
+}
+
+function commentPost(id) { showToast('💬 Comments coming soon!') }
+function sharePost(id) { navigator.clipboard?.writeText(window.location.href); showToast('🔗 Link copied!') }
+function deletePost(id) {
+  posts = posts.filter(p => p.id !== id);
+  document.getElementById('post-'+id)?.remove();
+  showToast('Post deleted');
+}
+
+// ── Composer ──────────────────────────────────────────
+function handlePostMedia(input) {
+  Array.from(input.files).forEach(file => {
+    composerMediaFiles.push(file);
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrap = document.createElement('div');
+      wrap.className = 'media-thumb-wrap';
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'media-thumb';
+      const rm = document.createElement('button');
+      rm.className = 'media-remove';
+      rm.textContent = '✕';
+      const idx = composerMediaFiles.length - 1;
+      rm.onclick = () => { composerMediaFiles.splice(idx,1); wrap.remove(); };
+      wrap.appendChild(img);
+      wrap.appendChild(rm);
+      document.getElementById('composer-previews').appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function publishPost() {
+  const text = document.getElementById('post-input').value.trim();
+  if(!text && !composerMediaFiles.length) { showToast('Write something first', true); return; }
+
+  const newPost = {
+    id: Date.now(),
+    text,
+    media: composerMediaFiles.length ? '🖼️' : null,
+    locked: false,
+    likes: 0,
+    comments: 0,
+    time: 'Just now',
+    liked: false,
+  };
+  posts.unshift(newPost);
+  renderPosts();
+  document.getElementById('post-input').value = '';
+  document.getElementById('composer-previews').innerHTML = '';
+  composerMediaFiles = [];
+  showToast('✓ Post published!');
+}
+
+// ═══════════════════════════════════════════════════════
+//  ABOUT TAB
+// ═══════════════════════════════════════════════════════
+function buildAboutTab(p) {
+  const items = [
+    { label:'Member Since', val: new Date(p.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'}), class:'' },
+    { label:'Account Type', val: isModel ? '🌟 Model' : '👤 Subscriber', class: isModel ? 'pink' : '' },
+    { label:'Subscription', val: p.plan ? p.plan.charAt(0).toUpperCase()+p.plan.slice(1) : 'Free', class: p.plan && p.plan!=='free' ? 'green' : '' },
+    { label:'Location', val: p.location || '—', class:'' },
+    { label:'Posts', val: formatNum(p.posts_count || 0), class:'' },
+    { label:'Followers', val: formatNum(p.followers_count || 0), class:'pink' },
+  ];
+  if(isModel) {
+    items.push({ label:'Live Call Rate', val:'$3.00 / minute', class:'pink' });
+    items.push({ label:'Availability', val: p.is_online ? '🟢 Online Now' : '⚫ Offline', class: p.is_online ? 'green' : '' });
+  }
+  document.getElementById('about-grid').innerHTML = items.map(i => `
+    <div class="about-card">
+      <div class="about-label">${i.label}</div>
+      <div class="about-val ${i.class}">${i.val}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  MEDIA GRID
+// ═══════════════════════════════════════════════════════
+function buildMediaGrid() {
+  const emojis = ['🌹','💋','✨','🌸','🔥','💄','👠','🌙','💎','🐰','⚡','🌺'];
+  document.getElementById('media-grid').innerHTML = emojis.map((e,i) => `
+    <div class="post-thumb ${i>5&&!isOwnProfile?'locked':''}" style="background:linear-gradient(135deg,#1a0a18,#2d0a22)">
+      <span>${e}</span>
+      <div class="post-meta-ov">
+        <span class="post-stat">♥ ${Math.floor(Math.random()*500+50)}</span>
+        <span class="post-stat">💬 ${Math.floor(Math.random()*50+5)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  FOLLOW
+// ═══════════════════════════════════════════════════════
+function toggleFollow() {
+  if(!currentUser) { window.location.href = 'index.html'; return; }
+  following = !following;
+  const btn = document.getElementById('follow-btn');
+  if(btn) {
+    btn.classList.toggle('following', following);
+    btn.textContent = following ? '✓ Following' : '+ Follow';
+  }
+  const count = parseInt(document.getElementById('stat-followers').textContent.replace('K','000').replace('.','')) || 0;
+  document.getElementById('stat-followers').textContent = formatNum(following ? count+1 : count-1);
+  showToast(following ? '✓ Following!' : 'Unfollowed');
+}
+
+function openMessage() {
+  showToast('💬 Chat coming soon!');
+}
+
+// ═══════════════════════════════════════════════════════
+//  LIVE CALL MODAL
+// ═══════════════════════════════════════════════════════
+function openCallModal() {
+  if(!currentUser) { window.location.href = 'index.html'; return; }
+  document.getElementById('call-modal').classList.add('open');
+}
+function closeCallModal() { document.getElementById('call-modal').classList.remove('open') }
+document.getElementById('call-modal').addEventListener('click', e => { if(e.target === e.currentTarget) closeCallModal(); });
+
+function selectMins(el, mins) {
+  selectedCallMins = mins;
+  document.querySelectorAll('.mins-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('selected-mins-display').textContent = mins + ' minutes';
+  document.getElementById('selected-price-display').textContent = '$' + (mins * CALL_RATE).toFixed(2);
+}
+
+function startCall() {
+  const total = (selectedCallMins * CALL_RATE).toFixed(2);
+  closeCallModal();
+  showToast(`⚡ Starting ${selectedCallMins}-minute call — $${total} — Live calls coming with Daily.co integration!`);
+}
+
+// ═══════════════════════════════════════════════════════
+//  EDIT PROFILE
+// ═══════════════════════════════════════════════════════
+function toggleEditPanel() {
+  document.getElementById('edit-panel').classList.toggle('open');
+}
+
+function populateEditForm(p) {
+  document.getElementById('edit-name').value     = p.full_name || '';
+  document.getElementById('edit-username').value = p.username || '';
+  document.getElementById('edit-bio').value      = p.bio || '';
+  document.getElementById('edit-location').value = p.location || '';
+  document.getElementById('edit-website').value  = p.website || '';
+  if(isModel) document.getElementById('model-rate-field').style.display = 'block';
+}
+
+async function saveProfile() {
+  const name     = document.getElementById('edit-name').value.trim();
+  const username = document.getElementById('edit-username').value.trim().replace('@','');
+  const bio      = document.getElementById('edit-bio').value.trim();
+  const location = document.getElementById('edit-location').value.trim();
+  const website  = document.getElementById('edit-website').value.trim();
+
+  if(!name) { showToast('Display name is required', true); return; }
+
+  // Update UI immediately
+  document.getElementById('profile-name').childNodes[0].textContent = name;
+  document.getElementById('profile-handle').textContent = '@' + (username || 'user');
+  document.getElementById('profile-bio').textContent = bio || 'No bio yet.';
+
+  // Save to Supabase if logged in
+  if(sb && currentUser) {
+    const { error } = await sb.from('profiles').update({ full_name:name, username, bio, location, website }).eq('id', currentUser.id);
+    if(error) { showToast('⚠ Could not save: ' + error.message, true); return; }
+  }
+
+  toggleEditPanel();
+  showToast('✓ Profile updated!');
+}
+
+// ═══════════════════════════════════════════════════════
+//  AVATAR & COVER UPLOAD
+// ═══════════════════════════════════════════════════════
+function handleAvatarClick() {
+  if(isOwnProfile) document.getElementById('avatar-input').click();
+}
+
+function handleAvatarUpload(input) {
+  if(!input.files[0]) return;
+  const file = input.files[0];
+  if(file.size > 5 * 1024 * 1024) { showToast('Max 5MB', true); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const wrap = document.getElementById('avatar-wrap');
+    let img = wrap.querySelector('img');
+    if(!img) { img = document.createElement('img'); wrap.prepend(img); }
+    img.src = e.target.result;
+    img.alt = 'Avatar';
+    document.getElementById('avatar-initials').style.display = 'none';
+    document.getElementById('composer-av').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+    showToast('✓ Profile photo updated!');
+    // In production: upload to Supabase Storage here
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleCoverUpload(input) {
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const cover = document.getElementById('cover-wrap');
+    cover.style.backgroundImage = `url(${e.target.result})`;
+    cover.style.backgroundSize = 'cover';
+    cover.style.backgroundPosition = 'center';
+    showToast('✓ Cover updated!');
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ═══════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════
+function formatNum(n) {
+  if(n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if(n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return String(n);
+}
+
+let toastTimer;
+function showToast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' error' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
