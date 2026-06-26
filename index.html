@@ -1001,6 +1001,27 @@ select option{background:var(--bg3);color:var(--text)}
     </div>
   </section>
 
+
+  <!-- MODELS -->
+  <section class="section bg2-section" id="models-section">
+    <div class="sec-inner">
+      <div class="trending-head reveal">
+        <div>
+          <span class="sec-label">Live & Available</span>
+          <h2 class="sec-title">Meet Our <span>Models</span></h2>
+          <p class="sec-sub">Real people, real connections. Subscribe to start a live call with any model — $3/min.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success)"><span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;box-shadow:0 0 6px var(--success)"></span> Models Online Now</span>
+        </div>
+      </div>
+      <div class="model-grid reveal" id="landingModelGrid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"></div>
+      <div style="text-align:center;margin-top:24px" class="reveal">
+        <button class="btn-hero-plans" onclick="goTo('booking')">Browse All Models →</button>
+      </div>
+    </div>
+  </section>
+
   <!-- PREMIUM CONTENT -->
   <section class="section" style="padding-top:0" id="premium-content">
     <div class="sec-inner">
@@ -2027,12 +2048,19 @@ function goTo(page) {
    NAV STATE
    ============================================================ */
 let isLoggedIn = false;
-function updateNavLoggedIn() {
+function updateNavLoggedIn(userData) {
   isLoggedIn = true;
   document.getElementById('btnNavLogin').style.display = 'none';
   document.getElementById('btnNavSignup').style.display = 'none';
   document.getElementById('btnNavUpgrade').style.display = 'block';
-  document.getElementById('navAvatar').style.display = 'flex';
+  const av = document.getElementById('navAvatar');
+  av.style.display = 'flex';
+  // Set initials from user data
+  if(userData) {
+    const name = userData.full_name || userData.email || 'JD';
+    const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    av.textContent = initials;
+  }
   // Show broadcast button for admin
   const bc = document.getElementById('broadcastBtn');
   bc.style.display = 'flex';
@@ -2995,6 +3023,31 @@ const takenSlots = ['10:00 AM','2:00 PM','6:00 PM'];
 let selectedModel = null;
 let selectedSlot  = null;
 
+function buildLandingModelGrid() {
+  const grid = document.getElementById('landingModelGrid');
+  if(!grid) return;
+  const featured = modelsData.filter(m => m.status === 'online').concat(modelsData.filter(m => m.status !== 'online')).slice(0,4);
+  grid.innerHTML = featured.map((m,i) => `
+    <div style="background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(255,45,120,.4)'" onmouseout="this.style.transform='';this.style.borderColor=''" onclick="window.location.href='profile.html?id=demo'">
+      <div style="height:180px;background:linear-gradient(135deg,#1a0a18,#2d0a22,#0a1a2a);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative">
+        ${m.emoji}
+        <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;backdrop-filter:blur(8px)">
+          <span style="width:7px;height:7px;border-radius:50%;background:${m.status==='online'?'var(--success)':'#666'};display:inline-block"></span>
+          ${m.status==='online'?'Online':'Busy'}
+        </div>
+        <div style="position:absolute;bottom:10px;right:10px;background:rgba(255,200,50,.15);border:1px solid rgba(255,200,50,.3);color:#ffc832;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px">$3/min</div>
+      </div>
+      <div style="padding:14px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:2px">${m.name}</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${m.tag}</div>
+        <button style="width:100%;padding:9px;border-radius:20px;border:none;background:${m.status==='online'?'var(--pink)':'rgba(255,255,255,.06)'};color:${m.status==='online'?'#fff':'var(--text3)'};font-family:Inter,sans-serif;font-size:13px;font-weight:700;cursor:${m.status==='online'?'pointer':'not-allowed'};transition:all .2s" onclick="event.stopPropagation();${m.status==='online'?'goToPayment('sub_weekly')':'void(0)'}">
+          ${m.status==='online'?'📞 Call Now':'Currently Offline'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
 function buildModelGrid() {
   const grid = document.getElementById('modelGrid');
   if(!grid) return;
@@ -3273,7 +3326,17 @@ async function liDoReset() {
 function checkSession() {
   loadSupabase(async (sb) => {
     const { data: { session } } = await sb.auth.getSession();
-    if(session) updateNavLoggedIn();
+    if(session) {
+      // Get profile data for initials
+      const { data: profile } = await sb.from('profiles').select('full_name,email,role').eq('id', session.user.id).single();
+      updateNavLoggedIn(profile || { email: session.user.email });
+      // Redirect admin if on login page
+      if(profile?.role === 'admin') {
+        const av = document.getElementById('navAvatar');
+        av.title = 'Admin — Click for Admin Panel';
+        av.onclick = () => window.location.href = 'admin.html';
+      }
+    }
   });
 }
 
@@ -3285,6 +3348,7 @@ buildFreeGrid();
 buildPremGrid();
 buildFAQ();
 buildModelGrid();
+buildLandingModelGrid();
 setTimeout(initReveal, 100);
 checkPaymentReturn();
 checkSession();
