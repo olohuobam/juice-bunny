@@ -318,12 +318,21 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 /* MOBILE */
 @media(max-width:700px){
   :root{--sidebar-w:100%}
-  .chat-sidebar{position:fixed;inset:56px 0 0;z-index:100;transform:translateX(-100%);transition:transform .3s}
+  .chat-sidebar{
+    position:fixed;top:56px;left:0;right:0;bottom:0;
+    z-index:200;transform:translateX(-100%);
+    transition:transform .3s ease;width:100%;
+  }
   .chat-sidebar.mobile-open{transform:translateX(0)}
   .chat-main{width:100%}
   .back-mobile{display:flex!important}
+  .mobile-menu-btn{display:flex!important}
+  .messages-area{padding:12px}
+  .chatbot-fab{bottom:16px;right:16px;width:48px;height:48px;font-size:20px}
+  .chatbot-window{width:calc(100vw - 16px);right:8px;bottom:72px;max-height:70vh}
 }
-.back-mobile{display:none;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;margin-right:4px}
+.back-mobile{display:none;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:4px 8px;margin-right:4px;line-height:1}
+.mobile-menu-btn{display:none;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:4px 8px;line-height:1}
 </style>
 </head>
 <body>
@@ -335,6 +344,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
     <span class="logo-name">Juice Bunny</span>
   </a>
   <div class="nav-right">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
     <div class="online-count"><span class="online-dot"></span><span id="online-count-txt">4 online</span></div>
     <button class="btn-nav btn-back" onclick="window.location.href='index.html'">← Home</button>
   </div>
@@ -883,6 +893,18 @@ function showSidebar() {
   document.getElementById('chat-empty').style.display = 'flex';
   document.getElementById('active-chat').style.display = 'none';
 }
+
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('chatSidebar');
+  sidebar.classList.toggle('mobile-open');
+}
+
+// Show sidebar by default on mobile
+window.addEventListener('load', () => {
+  if(window.innerWidth <= 700) {
+    document.getElementById('chatSidebar').classList.add('mobile-open');
+  }
+});
 
 // ═══════════════════════════════════════════════════════
 //  TOAST
