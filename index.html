@@ -3128,25 +3128,38 @@ function buildLandingModelGrid() {
   const grid = document.getElementById('landingModelGrid');
   if(!grid) return;
   const featured = modelsData.filter(m => m.status === 'online').concat(modelsData.filter(m => m.status !== 'online')).slice(0,4);
-  grid.innerHTML = featured.map((m,i) => `
+  grid.innerHTML = featured.map((m,i) => {
+    const isOnline = m.status === 'online';
+    return `
     <div style="background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(255,45,120,.4)'" onmouseout="this.style.transform='';this.style.borderColor=''" onclick="window.location.href='profile.html?id=demo'">
       <div style="height:180px;background:linear-gradient(135deg,#1a0a18,#2d0a22,#0a1a2a);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative">
         ${m.emoji}
         <div style="position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;backdrop-filter:blur(8px)">
-          <span style="width:7px;height:7px;border-radius:50%;background:${m.status==='online'?'var(--success)':'#666'};display:inline-block"></span>
-          ${m.status==='online'?'Online':'Busy'}
+          <span style="width:7px;height:7px;border-radius:50%;background:${isOnline ? 'var(--success)' : '#666'};display:inline-block"></span>
+          ${isOnline ? 'Online' : 'Busy'}
         </div>
         <div style="position:absolute;bottom:10px;right:10px;background:rgba(255,200,50,.15);border:1px solid rgba(255,200,50,.3);color:#ffc832;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px">$3/min</div>
       </div>
       <div style="padding:14px">
         <div style="font-size:15px;font-weight:700;margin-bottom:2px">${m.name}</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${m.tag}</div>
-        <button style="width:100%;padding:9px;border-radius:20px;border:none;background:${m.status==='online'?'var(--pink)':'rgba(255,255,255,.06)'};color:${m.status==='online'?'#fff':'var(--text3)'};font-family:Inter,sans-serif;font-size:13px;font-weight:700;cursor:${m.status==='online'?'pointer':'not-allowed'};transition:all .2s" onclick="event.stopPropagation();${m.status==='online'?'goToPayment('sub_weekly')':'void(0)'}">
-          ${m.status==='online'?'📞 Call Now':'Currently Offline'}
+        <button id="call-btn-${i}" style="width:100%;padding:9px;border-radius:20px;border:none;background:${isOnline ? 'var(--pink)' : 'rgba(255,255,255,.06)'};color:${isOnline ? '#fff' : 'var(--text3)'};font-family:Inter,sans-serif;font-size:13px;font-weight:700;cursor:${isOnline ? 'pointer' : 'not-allowed'};transition:all .2s">
+          ${isOnline ? '📞 Call Now' : 'Currently Offline'}
         </button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
+
+  // Wire call buttons after render
+  featured.forEach((m, i) => {
+    const btn = document.getElementById('call-btn-' + i);
+    if(btn && m.status === 'online') {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        goToPayment('sub_weekly');
+      });
+    }
+  });
 }
 
 function buildModelGrid() {
@@ -3333,14 +3346,24 @@ function checkSession() {
 /* ============================================================
    INIT
    ============================================================ */
-buildMovieGrid();
-buildFreeGrid();
-buildPremGrid();
-buildFAQ();
-buildLandingModelGrid();
-setTimeout(initReveal, 100);
-checkPaymentReturn();
-checkSession();
+// Catch any JS errors silently so page still renders
+window.onerror = function(msg, src, line) {
+  console.error('JB Error:', msg, 'at', src, line);
+  return true;
+};
+
+try {
+  buildMovieGrid();
+  buildFreeGrid();
+  buildPremGrid();
+  buildFAQ();
+  buildLandingModelGrid();
+  setTimeout(initReveal, 100);
+  checkPaymentReturn();
+  checkSession();
+} catch(e) {
+  console.error('Init error:', e);
+}
 </script>
 
 <!-- ============================================================
