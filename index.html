@@ -424,16 +424,9 @@ footer{background:var(--bg2);padding:52px 40px 28px;border-top:1px solid var(--b
 /* UNSUBSCRIBE RETENTION */
 #page-unsub{min-height:100vh;padding-top:64px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(180,20,100,.12),transparent 60%),var(--bg)}
 .unsub-wrap{max-width:640px;width:100%;padding:40px 20px;text-align:center}
-.unsub-step{
-  display:none;position:fixed;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(180,20,100,.15),transparent 60%),var(--bg);
-  z-index:50;overflow-y:auto;padding-top:80px;
-}
-.unsub-step.active{
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  animation:unsubSlide .4s cubic-bezier(.25,.46,.45,.94);
-}
-@keyframes unsubSlide{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.unsub-step{display:none}
+.unsub-step.active{display:block;animation:unsubSlide .4s ease}
+@keyframes unsubSlide{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 .unsub-bunny{font-size:80px;margin-bottom:20px;display:block;animation:floatY 4s ease-in-out infinite}
 .unsub-title{font-size:30px;font-weight:700;margin-bottom:12px;line-height:1.2}
 .unsub-title span{color:var(--pink)}
@@ -2142,7 +2135,7 @@ select option{background:var(--bg3);color:var(--text)}
 </div>
 
 <div id="page-unsub" class="page">
-  <div class="unsub-wrap" style="position:relative;min-height:100vh">
+  <div class="unsub-wrap">
 
     <!-- STEP 1: First offer -->
     <div class="unsub-step active" id="unsub-s1">
