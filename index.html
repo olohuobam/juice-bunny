@@ -147,8 +147,9 @@ a{text-decoration:none;color:inherit}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
 .bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
-.bunny-img{width:260px;height:300px;object-fit:contain;filter:drop-shadow(0 0 50px rgba(255,45,120,.6)) drop-shadow(0 0 20px rgba(255,45,120,.3));animation:floatY 5s ease-in-out infinite;position:relative;z-index:1;border-radius:0}
-@media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:200px;height:220px}.bunny-img{width:140px;height:160px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
+.bunny-img{width:340px;height:380px;object-fit:contain;filter:drop-shadow(0 0 60px rgba(255,45,120,.7)) drop-shadow(0 0 30px rgba(255,45,120,.4));animation:heroSpinY 3s linear infinite;position:relative;z-index:1;border-radius:0;transform-style:preserve-3d}
+@keyframes heroSpinY{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
+@media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:240px;height:260px}.bunny-img{width:180px;height:200px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
 
 /* STATS */
 .stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 40px}
@@ -1066,7 +1067,7 @@ select option{background:var(--bg3);color:var(--text)}
      ============================================================ -->
 <nav class="main-nav">
   <div class="nav-logo" onclick="goTo('home')">
-    <img src="juice-bunny-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <img src="white-rabbit-logo.png" class="logo-spin" alt="Juice Bunny"/>
     <span class="logo-name">Juice Bunny</span>
   </div>
   <div class="nav-links" id="navLinks">
@@ -1132,7 +1133,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div>
         <div class="hero-h1">Unlimited Naughty</div>
         <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
-        <p class="hero-sub">Indulge in the most explicit, steamy, and seductive content online. Stream exclusive 4K adult videos, live model calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
+        <p class="hero-sub">Indulge in the most explicit, steamy, and seductive content online. Stream exclusive 4K adult videos, live creator calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
           <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">🔥 Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
@@ -1179,14 +1180,50 @@ select option{background:var(--bg3);color:var(--text)}
       </div>
       <div class="movie-grid reveal" id="movieGrid"></div>
 
+      <!-- HOVER PREVIEW POPUP -->
+      <div id="video-preview-popup" style="
+        display:none;position:fixed;z-index:9000;
+        background:var(--bg2);border:1px solid var(--border2);
+        border-radius:16px;padding:0;overflow:hidden;
+        width:320px;box-shadow:0 24px 60px rgba(0,0,0,.8),0 0 30px rgba(255,45,120,.2);
+        pointer-events:none;transition:opacity .15s;
+      ">
+        <div id="pvp-thumb" style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;background:linear-gradient(135deg,#1a0a18,#2d0a22)">
+          <span id="pvp-emoji">🎬</span>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+            <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,45,120,.9);display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>
+          </div>
+          <span id="pvp-badge" style="position:absolute;top:10px;left:10px;font-size:9px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:1px;text-transform:uppercase"></span>
+        </div>
+        <div style="padding:14px">
+          <div id="pvp-title" style="font-size:15px;font-weight:700;margin-bottom:4px"></div>
+          <div id="pvp-meta" style="font-size:12px;color:var(--text3);margin-bottom:10px"></div>
+          <div id="pvp-desc" style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(255,255,255,.05);border-radius:8px;padding:8px;text-align:center;font-size:11px;color:var(--text3)">
+              <div style="font-size:15px;font-weight:700;color:#fff" id="pvp-rating">⭐ 4.9</div>
+              <div>Rating</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,.05);border-radius:8px;padding:8px;text-align:center;font-size:11px;color:var(--text3)">
+              <div style="font-size:15px;font-weight:700;color:#fff" id="pvp-dur">28 min</div>
+              <div>Duration</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,.05);border-radius:8px;padding:8px;text-align:center;font-size:11px;color:var(--text3)">
+              <div style="font-size:15px;font-weight:700;color:#fff" id="pvp-views">4.8K</div>
+              <div>Views</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- DIVIDER -->
       <div style="height:1px;background:var(--border);margin:48px 0"></div>
 
       <!-- MODELS ALONGSIDE -->
       <div class="trending-head reveal">
         <div>
-          <span class="sec-label">Live & Available</span>
-          <h2 class="sec-title">Meet Our <span>Models</span></h2>
+          <span class="sec-label">Creators & Live</span>
+          <h2 class="sec-title">Meet Our <span>Creators</span></h2>
           <p class="sec-sub">Real people, real connections. Subscribe to start a live call — $3/min.</p>
         </div>
         <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success);font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;box-shadow:0 0 6px var(--success)"></span> Models Online Now</span>
@@ -1208,33 +1245,9 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="feat-card reveal reveal-d1"><span class="feat-icon">🔒</span><div class="feat-title">Your Secrets Stay Secret</div><div class="feat-desc">Zero tracking, zero ads, zero data selling. What you watch is nobody's business but yours. Complete privacy guaranteed.</div></div>
         <div class="feat-card reveal reveal-d2"><span class="feat-icon">💦</span><div class="feat-title">Fresh Content Daily</div><div class="feat-desc">New explicit drops every single day. Sexy originals, steamy exclusives, and nasty surprises you won't find anywhere else.</div></div>
         <div class="feat-card reveal"><span class="feat-icon">📱</span><div class="feat-title">Pleasure On Any Device</div><div class="feat-desc">In bed, on the couch, in the bathroom — stream seamlessly on your phone, tablet, laptop or smart TV. Anywhere the mood strikes.</div></div>
-        <div class="feat-card reveal reveal-d1"><span class="feat-icon">📞</span><div class="feat-title">Live Calls With Models</div><div class="feat-desc" style="cursor:pointer" onclick="goTo('booking')">BunnyWorld members get exclusive live video calls with the models in our videos. Face-to-face fantasies, no filters.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon">📞</span><div class="feat-title">Live Calls With Models</div><div class="feat-desc" style="cursor:pointer" onclick="goTo('booking')">BunnyWorld members get exclusive live video calls with the creators in our videos. Face-to-face fantasies, no filters.</div></div>
         <div class="feat-card reveal reveal-d2"><span class="feat-icon">⬇️</span><div class="feat-title">Download & Get Off Later</div><div class="feat-desc">Save your favorites for offline viewing. No Wi-Fi? No problem. Your filthy downloads go wherever you go.</div></div>
       </div>
-    </div>
-  </section>
-
-  <!-- FREE CONTENT -->
-  <section class="section" id="free-content">
-    <div class="sec-inner">
-      <div class="reveal">
-        <div style="font-size:11px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Taste the naughtiness — no sign up required</div>
-        <div class="free-label-big">FREE CONTENT</div>
-      </div>
-      <div class="free-grid" id="freeGrid"></div>
-    </div>
-  </section>
-
-
-  <!-- PREMIUM CONTENT -->
-  <section class="section" style="padding-top:0" id="premium-content">
-    <div class="sec-inner">
-      <div class="reveal">
-        <div class="members-bdg">Members Only 🔞</div>
-        <div class="prem-title-big">PREMIUM CONTENT</div>
-        <div class="prem-sublabel">The filthiest exclusives — unlock with Basic or BunnyWorld</div>
-      </div>
-      <div class="prem-grid" id="premGrid"></div>
     </div>
   </section>
 
@@ -1283,10 +1296,10 @@ select option{background:var(--bg3);color:var(--text)}
           <ul class="tier-perks">
             <li>Low quality SD video streaming</li>
             <li>Browse all categories</li>
-            <li>View model profiles</li>
+            <li>View creator profiles</li>
             <li>General chat access</li>
             <li class="no">No HD or 4K content</li>
-            <li class="no">No live model access</li>
+            <li class="no">No live creator access</li>
             <li class="no">No model messaging</li>
           </ul>
           <button class="btn-tier secondary" onclick="goTo('signup')">Start Free</button>
@@ -1302,9 +1315,9 @@ select option{background:var(--bg3);color:var(--text)}
             <li>🔥 Full HD &amp; 4K explicit library</li>
             <li>💦 Daily fresh drops</li>
             <li>📥 Unlimited downloads</li>
-            <li>💬 Chat with models &amp; fans</li>
+            <li>💬 Chat with creators &amp; fans</li>
             <li>📸 Model posts &amp; photo feeds</li>
-            <li>📞 Access to live model calls</li>
+            <li>📞 Access to live creator calls</li>
             <li>🔒 100% private · All devices</li>
           </ul>
           <button class="btn-tier primary" id="sub-btn" onclick="goToPayment('sub_weekly')">Get Full Access</button>
@@ -1362,7 +1375,7 @@ select option{background:var(--bg3);color:var(--text)}
       </div>
       <div class="test-grid">
         <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-quote">"I've tried every adult site out there. Juice Bunny is on a completely different level. The 4K quality makes it feel like they're right there with you. Worth every single penny."</p><div class="test-author"><div class="test-av">JR</div><div><div class="test-name">Jake R.</div><div class="test-role">BunnyWorld Member</div></div></div></div>
-        <div class="test-card reveal reveal-d1"><div class="test-stars">★★★★★</div><p class="test-quote">"The live model calls on BunnyWorld are insane. I was talking to the actual girl from the video I watched. My jaw dropped. Best upgrade I've ever made."</p><div class="test-author"><div class="test-av">MT</div><div><div class="test-name">Marcus T.</div><div class="test-role">BunnyWorld Member</div></div></div></div>
+        <div class="test-card reveal reveal-d1"><div class="test-stars">★★★★★</div><p class="test-quote">"The live creator calls on BunnyWorld are insane. I was talking to the actual girl from the video I watched. My jaw dropped. Best upgrade I've ever made."</p><div class="test-author"><div class="test-av">MT</div><div><div class="test-name">Marcus T.</div><div class="test-role">BunnyWorld Member</div></div></div></div>
         <div class="test-card reveal reveal-d2"><div class="test-stars">★★★★★</div><p class="test-quote">"Finally a site that respects my privacy. No ads, no creepy tracking, no spam. Just pure filthy content when I want it. The Basic plan alone is a steal."</p><div class="test-author"><div class="test-av">AS</div><div><div class="test-name">Alex S.</div><div class="test-role">Basic Member</div></div></div></div>
       </div>
     </div>
@@ -2327,15 +2340,70 @@ const premData = [
   {bg:'linear-gradient(135deg,#0a0a1a,#1a0a2a)',emoji:'⚡',yr:'2023'},
   {bg:'linear-gradient(135deg,#1a0a1a,#2a0a2a)',emoji:'💋',yr:'2024'},
 ];
-function buildMovieGrid(filter='all') {
+// All videos combined (free + members)
+const allVideosData = [
+  {title:'Neon Dreams',rating:'4.9',genre:'Sci-Fi',premium:true,bg:'linear-gradient(135deg,#3a0a1a,#6a1a3a)',emoji:'\u{1F469}\u200D\u{1F3A4}',cat:'all',dur:'22 min',views:'4.8K',desc:'A hypnotic journey through neon-drenched dreamscapes.'},
+  {title:'Velocity',rating:'4.7',genre:'Action',premium:false,bg:'linear-gradient(135deg,#0a0a1a,#1a1a3a)',emoji:'\u{1F3D9}\uFE0F',cat:'action',dur:'18 min',views:'3.2K',desc:'High-octane thrills in the city that never sleeps.'},
+  {title:'Cyber City',rating:'4.8',genre:'Cyberpunk',premium:true,bg:'linear-gradient(135deg,#0a1a2a,#0a2a3a)',emoji:'\u{1F306}',cat:'action',dur:'25 min',views:'5.1K',desc:'The future is now and it is filthy.'},
+  {title:'Midnight Romance',rating:'4.5',genre:'Romance',premium:false,bg:'linear-gradient(135deg,#1a0a0a,#2a0a1a)',emoji:'\u{1F319}',cat:'romance',dur:'31 min',views:'8.9K',desc:'Sweet, sensual and completely irresistible.'},
+  {title:'Shadow Protocol',rating:'4.6',genre:'Thriller',premium:true,bg:'linear-gradient(135deg,#0a0a0a,#1a0a1a)',emoji:'\u{1F575}\uFE0F',cat:'originals',dur:'19 min',views:'2.6K',desc:'Nothing is what it seems in this steamy thriller.'},
+  {title:'Scarlet Moon',rating:'4.9',genre:'Romance',premium:true,bg:'linear-gradient(135deg,#2a0a1a,#3a0a2a)',emoji:'\u{1F339}',cat:'romance',dur:'28 min',views:'5.4K',desc:'Passion ignites under the scarlet moon.'},
+  {title:'Uprising',rating:'4.4',genre:'Action',premium:false,bg:'linear-gradient(135deg,#1a0a0a,#2a0a0a)',emoji:'\u{1F4A5}',cat:'action',dur:'15 min',views:'12.4K',desc:'Free taste of our most explosive content.'},
+  {title:'Phantom Signal',rating:'4.7',genre:'Hentai',premium:true,bg:'linear-gradient(135deg,#0a1a0a,#1a2a1a)',emoji:'\u26A1',cat:'anime',dur:'33 min',views:'6.1K',desc:'Animated fantasy beyond your imagination.'},
+  {title:'Cherry Blossom',rating:'4.8',genre:'Anime',premium:false,bg:'linear-gradient(135deg,#2a0a1a,#1a0a2a)',emoji:'\u{1F338}',cat:'anime',dur:'11 min',views:'9.2K',desc:'Free anime preview - subscribe for the full series.'},
+  {title:'Tape Loop No.7',rating:'4.3',genre:'Originals',premium:false,bg:'linear-gradient(135deg,#0d0a0a,#1a0a0a)',emoji:'\u{1F3B8}',cat:'originals',dur:'15 min',views:'7.1K',desc:'Our most unique original - watch free.'},
+  {title:'Dark Temptation',rating:'4.6',genre:'Originals',premium:true,bg:'linear-gradient(135deg,#1a0a10,#2a0a18)',emoji:'\u{1F5A4}',cat:'originals',dur:'25 min',views:'3.4K',desc:'Give in to your darkest desires.'},
+  {title:'Tokyo Fantasy',rating:'4.8',genre:'Hentai',premium:true,bg:'linear-gradient(135deg,#0a0a2a,#1a0a3a)',emoji:'\u{1F5FC}',cat:'anime',dur:'29 min',views:'4.7K',desc:'An animated Tokyo adventure unlike any other.'},
+];
+
+let previewTimeout;
+function showVideoPreview(e, m) {
+  clearTimeout(previewTimeout);
+  const popup = document.getElementById('video-preview-popup');
+  if(!popup) return;
+  document.getElementById('pvp-emoji').textContent = m.emoji;
+  document.getElementById('pvp-title').textContent = m.title;
+  document.getElementById('pvp-meta').textContent = m.genre + ' · ' + (m.dur||'');
+  document.getElementById('pvp-desc').textContent = m.desc || '';
+  document.getElementById('pvp-rating').textContent = '\u2B50 ' + m.rating;
+  document.getElementById('pvp-dur').textContent = m.dur || '-';
+  document.getElementById('pvp-views').textContent = m.views || '-';
+  const badge = document.getElementById('pvp-badge');
+  if(badge) { badge.textContent = m.premium ? 'Members' : 'Free'; badge.style.background = m.premium ? 'var(--pink)' : 'rgba(0,200,120,.9)'; badge.style.color = '#fff'; }
+  const thumb = document.getElementById('pvp-thumb');
+  if(thumb) thumb.style.background = m.bg;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const popupW = 300;
+  let left = rect.right + 10;
+  if(left + popupW > window.innerWidth) left = rect.left - popupW - 10;
+  let top = rect.top;
+  if(top + 380 > window.innerHeight) top = window.innerHeight - 390;
+  popup.style.left = left + 'px';
+  popup.style.top = Math.max(10, top) + 'px';
+  popup.style.opacity = '0'; popup.style.display = 'block';
+  requestAnimationFrame(() => popup.style.opacity = '1');
+}
+function hideVideoPreview() {
+  previewTimeout = setTimeout(() => {
+    const popup = document.getElementById('video-preview-popup');
+    if(popup) { popup.style.opacity = '0'; setTimeout(() => popup.style.display = 'none', 150); }
+  }, 200);
+}
+
+function buildMovieGrid(filter) {
+  filter = filter || 'all';
   const grid = document.getElementById('movieGrid');
-  const list = filter==='all' ? moviesData : moviesData.filter(m=>m.cat===filter||m.cat==='all');
-  grid.innerHTML = list.map(m=>`
-    <div class="movie-card" onclick="${m.premium ? 'openPremiumVideo()' : 'goTo(\'player\')'}">
-      <div class="movie-thumb" style="background:${m.bg}">${m.emoji}</div>
-      ${m.premium?'<span class="movie-badge">Premium</span>':'<span class="movie-badge free-badge">Free</span>'}
-      <div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta-r"><span class="star-g">★</span>${m.rating}<span class="dot3"></span>${m.genre}</div></div>
-    </div>`).join('');
+  if(!grid) return;
+  const list = filter==='all' ? allVideosData : allVideosData.filter(m=>m.cat===filter);
+  grid.innerHTML = list.map((m,i)=>{
+    const isPrem = m.premium;
+    return '<div class="movie-card" onclick="' + (isPrem ? 'openPremiumVideo()' : "goTo('player')") + '" onmouseenter="showVideoPreview(event,' + JSON.stringify(m).replace(/'/g,"\'") + ')" onmouseleave="hideVideoPreview()">'
+    + '<div class="movie-thumb" style="background:' + m.bg + '">' + m.emoji + '</div>'
+    + (isPrem ? '<span class="movie-badge">Members</span>' : '<span class="movie-badge free-badge">Free</span>')
+    + '<div class="movie-info"><div class="movie-title">' + m.title + '</div>'
+    + '<div class="movie-meta-r"><span class="star-g">\u2605</span>' + m.rating + '<span class="dot3"></span>' + m.genre + '<span class="dot3"></span>' + (m.dur||'') + '</div></div>'
+    + '</div>';
+  }).join('');
 }
 function buildFreeGrid() {
   document.getElementById('freeGrid').innerHTML = freeData.map(v=>`
@@ -2382,7 +2450,7 @@ function toggleFaq(i) {
 function filterMovies(btn,cat) {
   document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  buildMovieGrid(cat);
+  buildMovieGrid(cat==='all'?'all':cat==='new'?'all':cat);
 }
 function subscribeNewsletter() {
   const inp=document.getElementById('nlEmail');
@@ -2496,13 +2564,13 @@ function suSelectPlan(plan){
     perks.innerHTML=`<div class="perks-title">Free includes</div>
       <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">SD quality video only</span></div>
       <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">Limited free library</span></div>
-      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">No model access</span></div>
+      <div class="perk-item"><span class="perk-dot-s" style="background:var(--text3)"></span><span class="perk-text" style="color:var(--text3)">No creator access</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Upgrade anytime</span></div>`;
     btn.textContent = 'Create Free Account';
   } else if(plan==='weekly'){
     perks.innerHTML=`<div class="perks-title">Weekly — $9.99/week</div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full HD & 4K library</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all models</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Chat, posts & downloads</span></div>`;
     btn.textContent = '🔥 Create My Account';
@@ -2510,7 +2578,7 @@ function suSelectPlan(plan){
     perks.innerHTML=`<div class="perks-title">Monthly — $24.99/month</div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Everything in Weekly</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Save 37% vs weekly</span></div>
-      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all models</span></div>
+      <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>`;
     btn.textContent = '🔥 Create My Account';
   }
@@ -2836,9 +2904,9 @@ const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 
 // ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
-  free:        { name:'Free',    icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View model profiles','General chat'] },
-  sub_weekly:  { name:'Weekly',  icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with models & fans','Model posts & photo feeds','Access to live model calls ($3/min)','100% private · All devices'] },
-  sub_monthly: { name:'Monthly', icon:'🔥', price:24.99, priceStr:'$24.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with models & fans','Model posts & photo feeds','Access to live model calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
+  free:        { name:'Free',    icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View creator profiles','General chat'] },
+  sub_weekly:  { name:'Weekly',  icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices'] },
+  sub_monthly: { name:'Monthly', icon:'🔥', price:24.99, priceStr:'$24.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
   live_call:   { name:'Live Call', icon:'📞', price:3,   priceStr:'$3',     period:'per min', perks:['Private 1-on-1 video call','Pay only for time used','HD audio & video','Chat during the call','Fully private — never recorded'] },
 };
 
@@ -3343,7 +3411,7 @@ function confirmBooking() {
 const faqData = [
   {q:'Is this site really 100% private?',a:'Absolutely. Zero tracking, zero ads, zero data selling. We don\'t log what you watch, who you watch, or when. Your pleasure is your business — not ours.'},
   {q:'What\'s the difference between Basic and BunnyWorld?',a:'Basic gives you full access to our entire 4K explicit video library with daily fresh drops. BunnyWorld adds live video calls with the actual models in our videos, exclusive photos, early access, and direct model messaging. It\'s the full fantasy package.'},
-  {q:'How do live model calls work?',a:'Go to "Book a Call" in your account, pick your model, choose a time slot, and confirm. You\'ll get a private video call link via email. Each session is 30 minutes, fully private, and included in your BunnyWorld plan.'},
+  {q:'How do live creator calls work?',a:'Go to "Book a Call" in your account, pick your model, choose a time slot, and confirm. You\'ll get a private video call link via email. Each session is 30 minutes, fully private, and included in your BunnyWorld plan.'},
   {q:'Can I cancel anytime?',a:'Yes — cancel instantly from your account settings. No questions, no guilt, no hidden fees. Your access continues until the end of your current billing period.'},
   {q:'What payment methods do you accept?',a:'We accept credit/debit cards via CCBill (the industry standard for adult platforms) and cryptocurrency including Bitcoin (BTC), Ethereum (ETH), Tether (USDT TRC20), Litecoin (LTC), and XRP.'},
   {q:'Is there a free trial?',a:'Yes — your first 7 days are on us with any paid plan. Cancel before the trial ends and you won\'t be charged a thing.'},
@@ -3511,9 +3579,9 @@ const cbotResponses = [
     qr:[{label:'📅 Weekly instead?',msg:'Tell me about the weekly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
   { match:['live call','call','calls','video call','minute','per min'],
     reply:'Live calls are $3/minute 📞 You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
-    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the models?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
-  { match:['model','models','girls','who are'],
-    reply:'Our models are real verified females handpicked by Juice Bunny 🌟 They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
+    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the creators?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
+  { match:['model','creators','girls','who are'],
+    reply:'Our creators are real verified females handpicked by Juice Bunny 🌟 They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
     qr:[{label:'📞 Book a call',msg:'How do live calls work?'},{label:'🐰 Become a model',msg:'How do I become a model?'},{label:'💰 Pricing',msg:'What are the subscription plans?'}]},
   { match:['become a model','apply','model application','join as model'],
     reply:'We\'d love to have you! 🐰 Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
@@ -3549,7 +3617,7 @@ const cbotResponses = [
     reply:'Reach us at support@juicebunnytv.com 📧 We respond within 24 hours. For urgent issues add "URGENT" to the subject line!',
     qr:[{label:'💰 View plans',msg:'What are the subscription plans?'},{label:'❌ Cancel',msg:'How do I cancel?'}]},
   { match:['free plan','free tier','without paying','no cost'],
-    reply:'Our Free plan gives you SD video streaming, model profiles and general chat — no card needed 🐰 For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
+    reply:'Our Free plan gives you SD video streaming, creator profiles and general chat — no card needed 🐰 For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
     qr:[{label:'💰 Paid plans',msg:'What are the paid plans?'},{label:'🔥 Upgrade',msg:'How do I upgrade?'}]},
   { match:['download','offline'],
     reply:'Paid subscribers can download any video for offline viewing 📥 Works on all devices. Downloads stay available while your subscription is active.',

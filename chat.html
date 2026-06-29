@@ -97,7 +97,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   font-size:16px;font-weight:700;position:relative;overflow:hidden;
 }
 .conv-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.conv-av.model-av{background:linear-gradient(135deg,#2a0a18,#6a0a3a)}
+.conv-av.creator-av{background:linear-gradient(135deg,#2a0a18,#6a0a3a)}
 .conv-online{
   position:absolute;bottom:1px;right:1px;
   width:11px;height:11px;border-radius:50%;
@@ -114,7 +114,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   display:flex;align-items:center;justify-content:center;padding:0 5px;
   flex-shrink:0;
 }
-.conv-model-tag{
+.conv-creator-tag{
   font-size:9px;font-weight:700;color:var(--pink);
   background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.2);
   padding:1px 6px;border-radius:6px;margin-left:4px;
@@ -266,7 +266,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .send-btn:disabled{background:var(--border2);cursor:not-allowed;transform:none}
 .input-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:8px}
 
-/* CALL RATE BAR (model chats) */
+/* CALL RATE BAR (creator chats) */
 .call-rate-bar{
   padding:10px 16px;background:rgba(255,200,50,.06);
   border-bottom:1px solid rgba(255,200,50,.15);
@@ -340,7 +340,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 <!-- NAV -->
 <nav class="nav">
   <a class="nav-logo" href="index.html">
-    <img src="white-rabbit-logo.png" class="logo-spin" alt=""/>
+    <img src="juice-bunny-logo.png" class="logo-spin" alt=""/>
     <span class="logo-name">Juice Bunny</span>
   </a>
   <div class="nav-right">
@@ -365,7 +365,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 
     <div class="sidebar-tabs">
       <button class="stab active" id="stab-all" onclick="switchSideTab('all',this)">All</button>
-      <button class="stab" id="stab-models" onclick="switchSideTab('models',this)">Models</button>
+      <button class="stab" id="stab-creators" onclick="switchSideTab('creators',this)">creators</button>
       <button class="stab" id="stab-fans" onclick="switchSideTab('fans',this)">Fans</button>
     </div>
 
@@ -379,7 +379,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
     <div class="chat-empty" id="chat-empty">
       <div class="chat-empty-icon">💬</div>
       <div class="chat-empty-title">Your Messages</div>
-      <div class="chat-empty-sub">Select a conversation or start a new one to begin chatting with fans and models.</div>
+      <div class="chat-empty-sub">Select a conversation or start a new one to begin chatting with fans and creators.</div>
     </div>
 
     <!-- Active chat (hidden until selected) -->
@@ -398,11 +398,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
         <div class="chat-header-actions" id="ch-actions"></div>
       </div>
 
-      <!-- Call rate bar (model chats only) -->
+      <!-- Call rate bar (creator chats only) -->
       <div class="call-rate-bar" id="call-rate-bar" style="display:none">
         <div class="crb-left">
           <span>📞</span>
-          <span id="crb-name">Model</span> is available for a live call
+          <span id="crb-name">creator</span> is available for a live call
         </div>
         <div style="display:flex;align-items:center;gap:12px">
           <span class="crb-rate">$3/min</span>
@@ -439,7 +439,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   <div class="modal-box">
     <button class="modal-close" onclick="closeNewChat()">✕</button>
     <div class="modal-title">New Message</div>
-    <div class="modal-sub">Search for a fan or model to start chatting</div>
+    <div class="modal-sub">Search for a fan or creator to start chatting</div>
     <input class="user-search-input" id="user-search" placeholder="Search by name or username..." oninput="searchUsers(this.value)"/>
     <div class="user-search-results" id="user-search-results"></div>
   </div>
@@ -465,7 +465,7 @@ let typingTimer = null;
 // ── DEMO DATA ─────────────────────────────────────────
 const demoConversations = [
   {
-    id:'conv-1', type:'model', isOnline:true, unread:3,
+    id:'conv-1', type:'creator', isOnline:true, unread:3,
     user:{ name:'Scarlett Rose', handle:'scarlett', initials:'SR', color:'linear-gradient(135deg,#6a0a3a,#2a0a18)' },
     lastMsg:'Hey babe 😘 just posted something special for you...', lastTime:'2m ago',
     messages:[
@@ -475,7 +475,7 @@ const demoConversations = [
     ]
   },
   {
-    id:'conv-2', type:'model', isOnline:true, unread:0,
+    id:'conv-2', type:'creator', isOnline:true, unread:0,
     user:{ name:'Luna Starr', handle:'luna', initials:'LS', color:'linear-gradient(135deg,#0a0a3a,#1a0a4a)' },
     lastMsg:'I\'ll be live at 9PM EST tonight! 🌙', lastTime:'1h ago',
     messages:[
@@ -497,14 +497,14 @@ const demoConversations = [
   {
     id:'conv-4', type:'fan', isOnline:true, unread:0,
     user:{ name:'Marcus T.', handle:'marcust', initials:'MT', color:'linear-gradient(135deg,#1a0a0a,#2a0a0a)' },
-    lastMsg:'Which model do you recommend for calls?', lastTime:'5h ago',
+    lastMsg:'Which creator do you recommend for calls?', lastTime:'5h ago',
     messages:[
-      { id:1, from:'them', text:'Hey bro which model do you recommend for calls?', time:'5h ago', read:true },
+      { id:1, from:'them', text:'Hey bro which creator do you recommend for calls?', time:'5h ago', read:true },
       { id:2, from:'me', text:'Definitely Scarlett or Luna, both are amazing', time:'5h ago', read:true },
     ]
   },
   {
-    id:'conv-5', type:'model', isOnline:false, unread:0,
+    id:'conv-5', type:'creator', isOnline:false, unread:0,
     user:{ name:'Jade Storm', handle:'jade', initials:'JS', color:'linear-gradient(135deg,#0a2a1a,#0a1a0a)' },
     lastMsg:'Thanks for the call last night! 💚', lastTime:'1d ago',
     messages:[
@@ -516,10 +516,10 @@ const demoConversations = [
 ];
 
 const allUsers = [
-  { id:'u1', name:'Scarlett Rose', handle:'scarlett', type:'model', initials:'SR', isOnline:true },
-  { id:'u2', name:'Luna Starr', handle:'luna', type:'model', initials:'LS', isOnline:true },
-  { id:'u3', name:'Jade Storm', handle:'jade', type:'model', initials:'JS', isOnline:false },
-  { id:'u4', name:'Roxy Fire', handle:'roxy', type:'model', initials:'RF', isOnline:true },
+  { id:'u1', name:'Scarlett Rose', handle:'scarlett', type:'creator', initials:'SR', isOnline:true },
+  { id:'u2', name:'Luna Starr', handle:'luna', type:'creator', initials:'LS', isOnline:true },
+  { id:'u3', name:'Jade Storm', handle:'jade', type:'creator', initials:'JS', isOnline:false },
+  { id:'u4', name:'Roxy Fire', handle:'roxy', type:'creator', initials:'RF', isOnline:true },
   { id:'u5', name:'Jake R.', handle:'jaker', type:'fan', initials:'JR', isOnline:false },
   { id:'u6', name:'Marcus T.', handle:'marcust', type:'fan', initials:'MT', isOnline:true },
   { id:'u7', name:'Alex S.', handle:'alexs', type:'fan', initials:'AS', isOnline:false },
@@ -557,7 +557,7 @@ function renderConvList(convs) {
   }
   list.innerHTML = convs.map(c => `
     <div class="conv-item ${c.id === currentConvId ? 'active' : ''}" onclick="openConv('${c.id}')" id="ci-${c.id}">
-      <div class="conv-av ${c.type==='model'?'model-av':''}" style="background:${c.user.color}">
+      <div class="conv-av ${c.type==='creator'?'creator-av':''}" style="background:${c.user.color}">
         ${c.user.initials}
         ${c.isOnline ? '<div class="conv-online"></div>' : ''}
       </div>
@@ -565,7 +565,7 @@ function renderConvList(convs) {
         <div class="conv-name-row">
           <div class="conv-name">
             ${c.user.name}
-            ${c.type==='model' ? '<span class="conv-model-tag">MODEL</span>' : ''}
+            ${c.type==='creator' ? '<span class="conv-creator-tag">creator</span>' : ''}
           </div>
           <span class="conv-time">${c.lastTime}</span>
         </div>
@@ -589,7 +589,7 @@ function switchSideTab(tab, btn) {
   document.querySelectorAll('.stab').forEach(s => s.classList.remove('active'));
   btn.classList.add('active');
   const filtered = tab === 'all' ? allConversations :
-    allConversations.filter(c => c.type === (tab === 'models' ? 'model' : 'fan'));
+    allConversations.filter(c => c.type === (tab === 'creators' ? 'creator' : 'fan'));
   renderConvList(filtered);
 }
 
@@ -624,12 +624,12 @@ function openConv(id) {
   const actionsEl = document.getElementById('ch-actions');
   actionsEl.innerHTML = `
     <button class="chat-act-btn" onclick="viewProfile()">👤 Profile</button>
-    ${currentConvData.type==='model' ? `<button class="chat-act-btn call" onclick="startCallFromChat()">⚡ $3/min Call</button>` : ''}
+    ${currentConvData.type==='creator' ? `<button class="chat-act-btn call" onclick="startCallFromChat()">⚡ $3/min Call</button>` : ''}
   `;
 
-  // Call rate bar for model chats
+  // Call rate bar for creator chats
   const callBar = document.getElementById('call-rate-bar');
-  if(currentConvData.type === 'model' && currentConvData.isOnline) {
+  if(currentConvData.type === 'creator' && currentConvData.isOnline) {
     callBar.style.display = 'flex';
     document.getElementById('crb-name').textContent = currentConvData.user.name.split(' ')[0];
   } else {
@@ -638,7 +638,7 @@ function openConv(id) {
 
   // Input hint
   document.getElementById('input-hint').textContent =
-    currentConvData.type === 'model' ? '💡 Subscribers can chat with models' : '';
+    currentConvData.type === 'creator' ? '💡 Subscribers can chat with creators' : '';
 
   // Render messages
   renderMessages(currentConvData.messages);
@@ -717,8 +717,8 @@ function sendMessage() {
   renderMessages(currentConvData.messages);
   renderConvList(allConversations);
 
-  // Simulate reply from model/fan after delay
-  if(currentConvData.type === 'model') {
+  // Simulate reply from creator/fan after delay
+  if(currentConvData.type === 'creator') {
     simulateTyping();
   }
 }
@@ -824,9 +824,9 @@ function searchUsers(q) {
 function renderUserResults(users) {
   document.getElementById('user-search-results').innerHTML = users.map(u => `
     <div class="user-result" onclick="startNewConv('${u.id}')">
-      <div class="ur-av" style="background:${u.type==='model'?'linear-gradient(135deg,#6a0a3a,#2a0a18)':'linear-gradient(135deg,var(--pink),#8b00ff)'}">${u.initials}</div>
+      <div class="ur-av" style="background:${u.type==='creator'?'linear-gradient(135deg,#6a0a3a,#2a0a18)':'linear-gradient(135deg,var(--pink),#8b00ff)'}">${u.initials}</div>
       <div>
-        <div class="ur-name">${u.name} ${u.type==='model'?'<span style="font-size:10px;color:var(--pink);margin-left:4px">MODEL</span>':''}</div>
+        <div class="ur-name">${u.name} ${u.type==='creator'?'<span style="font-size:10px;color:var(--pink);margin-left:4px">creator</span>':''}</div>
         <div class="ur-type">@${u.handle} · ${u.isOnline?'<span style="color:var(--success)">Online</span>':'Offline'}</div>
       </div>
     </div>
@@ -847,7 +847,7 @@ function startNewConv(userId) {
     type: user.type,
     isOnline: user.isOnline,
     unread: 0,
-    user: { name: user.name, handle: user.handle, initials: user.initials, color: user.type==='model'?'linear-gradient(135deg,#6a0a3a,#2a0a18)':'linear-gradient(135deg,var(--pink),#8b00ff)' },
+    user: { name: user.name, handle: user.handle, initials: user.initials, color: user.type==='creator'?'linear-gradient(135deg,#6a0a3a,#2a0a18)':'linear-gradient(135deg,var(--pink),#8b00ff)' },
     lastMsg: 'Start a conversation...',
     lastTime: 'Now',
     messages: [],

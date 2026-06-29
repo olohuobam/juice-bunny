@@ -83,7 +83,7 @@ a{text-decoration:none;color:inherit}
   border:3px solid var(--bg);display:flex;align-items:center;
   justify-content:center;font-size:11px;
 }
-.avatar-badge.model{background:var(--pink)}
+.avatar-badge.creator{background:var(--pink)}
 .avatar-badge.user{background:var(--success)}
 .avatar-badge.online{background:var(--success)}
 
@@ -94,7 +94,7 @@ a{text-decoration:none;color:inherit}
 .profile-left{flex:1;min-width:200px}
 .profile-name{font-size:22px;font-weight:700;line-height:1.2;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .verified-badge{background:var(--pink);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
-.model-tag{background:rgba(255,200,50,.12);border:1px solid rgba(255,200,50,.3);color:var(--gold);font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;letter-spacing:.5px}
+.creator-tag{background:rgba(255,200,50,.12);border:1px solid rgba(255,200,50,.3);color:var(--gold);font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;letter-spacing:.5px}
 .profile-handle{font-size:14px;color:var(--text3);margin-bottom:8px}
 .profile-bio{font-size:14px;color:var(--text2);line-height:1.65;max-width:520px}
 .profile-stats{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap}
@@ -232,7 +232,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
 .about-val.pink{color:var(--pink)}
 .about-val.green{color:var(--success)}
 
-/* ── CALL CTA (model profiles) ────────────────────────────── */
+/* ── CALL CTA (creator profiles) ────────────────────────────── */
 .call-cta{
   background:linear-gradient(135deg,rgba(255,200,50,.08),rgba(255,140,0,.06));
   border:1px solid rgba(255,200,50,.2);border-radius:14px;
@@ -334,7 +334,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
       <div class="profile-name" id="profile-name">
         Loading...
         <span class="verified-badge" id="verified-badge" style="display:none">✓ Verified</span>
-        <span class="model-tag" id="model-tag" style="display:none">🌟 Model</span>
+        <span class="creator-tag" id="creator-tag" style="display:none">🌟 creator</span>
       </div>
       <div class="profile-handle" id="profile-handle">@username</div>
       <div class="profile-bio" id="profile-bio">Loading profile...</div>
@@ -375,10 +375,10 @@ textarea.edit-input{resize:vertical;min-height:80px}
         <label>Website / Social</label>
         <input type="text" class="edit-input" id="edit-website" placeholder="https://..."/>
       </div>
-      <!-- Model-only fields -->
-      <div class="edit-field full" id="model-rate-field" style="display:none">
-        <label>About Your Shows (Model only)</label>
-        <textarea class="edit-input" id="edit-model-about" rows="2" placeholder="Tell fans what to expect from your live calls..."></textarea>
+      <!-- creator-only fields -->
+      <div class="edit-field full" id="creator-rate-field" style="display:none">
+        <label>About Your Shows (creator only)</label>
+        <textarea class="edit-input" id="edit-creator-about" rows="2" placeholder="Tell fans what to expect from your live calls..."></textarea>
       </div>
     </div>
     <div class="edit-actions">
@@ -422,12 +422,12 @@ textarea.edit-input{resize:vertical;min-height:80px}
       </div>
     </div>
 
-    <!-- Call CTA (model profiles, subscriber view) -->
+    <!-- Call CTA (creator profiles, subscriber view) -->
     <div class="call-cta" id="call-cta" style="display:none">
       <div class="call-cta-left">
         <div class="call-cta-title">
           <span class="online-dot" id="cta-online-dot"></span>
-          <span id="cta-model-name">Model</span> is available for a live call
+          <span id="cta-creator-name">creator</span> is available for a live call
         </div>
         <div class="call-cta-sub">Private 1-on-1 video call · HD quality · Never recorded</div>
       </div>
@@ -456,7 +456,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
     <div class="about-grid" id="about-grid"></div>
   </div>
 
-  <!-- MEDIA TAB (grid view for models) -->
+  <!-- MEDIA TAB (grid view for creators) -->
   <div class="tab-pane" id="tab-media">
     <div class="posts-grid" id="media-grid"></div>
   </div>
@@ -505,7 +505,7 @@ let sb = null;
 let currentUser = null;      // logged in user
 let viewedProfile = null;    // profile being viewed
 let isOwnProfile = false;
-let isModel = false;
+let iscreator = false;
 let selectedCallMins = 5;
 let composerMediaFiles = [];
 let posts = [];
@@ -556,7 +556,7 @@ async function loadProfile() {
 
   viewedProfile = profileData;
   isOwnProfile = currentUser && (!profileId || profileId === currentUser.id);
-  isModel = profileData.role === 'model';
+  iscreator = profileData.role === 'creator';
 
   renderProfile(profileData);
 }
@@ -566,9 +566,9 @@ function getDemoProfile() {
     id: 'demo',
     full_name: 'Scarlett Rose',
     email: 'demo@juicebunny.com',
-    role: 'model',
-    plan: 'model',
-    bio: 'Your favorite Juice Bunny model 🐰 Live calls available daily. DM me anytime 💋',
+    role: 'creator',
+    plan: 'creator',
+    bio: 'Your favorite Juice Bunny creator 🐰 Live calls available daily. DM me anytime 💋',
     avatar_url: null,
     cover_url: null,
     username: 'scarlett',
@@ -599,16 +599,16 @@ function renderProfile(p) {
     document.getElementById('avatar-initials').style.display = 'none';
   }
 
-  // Cover background based on model/user
+  // Cover background based on creator/user
   const cover = document.getElementById('cover-wrap');
-  if(isModel) {
+  if(iscreator) {
     cover.style.background = 'linear-gradient(135deg,#2a0a18,#3d0a25,#1a0a2a)';
   }
 
   // Name & badges
   document.getElementById('profile-name').childNodes[0].textContent = p.full_name || p.username || 'User';
   if(p.verified) document.getElementById('verified-badge').style.display = '';
-  if(isModel)    document.getElementById('model-tag').style.display = '';
+  if(iscreator)    document.getElementById('creator-tag').style.display = '';
 
   // Handle & bio
   document.getElementById('profile-handle').textContent = '@' + (p.username || p.email?.split('@')[0] || 'user');
@@ -629,17 +629,17 @@ function renderProfile(p) {
     document.getElementById('cover-edit-btn').style.display = 'flex';
     document.getElementById('avatar-edit-hint').style.display = 'flex';
     document.getElementById('post-composer').style.display = 'block';
-    if(isModel) document.getElementById('tab-media').style.display = '';
+    if(iscreator) document.getElementById('tab-media').style.display = '';
     populateEditForm(p);
   }
 
-  // Model tabs
-  if(isModel) {
+  // creator tabs
+  if(iscreator) {
     document.getElementById('tab-media').style.display = '';
     if(currentUser && !isOwnProfile) {
       document.getElementById('call-cta').style.display = 'flex';
-      document.getElementById('cta-model-name').textContent = p.full_name?.split(' ')[0] || 'Model';
-      document.getElementById('call-modal-name').textContent = 'Call ' + (p.full_name?.split(' ')[0] || 'Model');
+      document.getElementById('cta-creator-name').textContent = p.full_name?.split(' ')[0] || 'creator';
+      document.getElementById('call-modal-name').textContent = 'Call ' + (p.full_name?.split(' ')[0] || 'creator');
       if(!p.is_online) {
         document.getElementById('cta-call-btn').className = 'btn-call offline';
         document.getElementById('cta-call-btn').textContent = 'Currently Offline';
@@ -655,7 +655,7 @@ function renderProfile(p) {
   loadPosts(p);
 
   // Media grid
-  if(isModel) buildMediaGrid();
+  if(iscreator) buildMediaGrid();
 }
 
 function renderActions(p) {
@@ -670,7 +670,7 @@ function renderActions(p) {
         ${following ? '✓ Following' : '+ Follow'}
       </button>
       <button class="btn-msg" onclick="openMessage()">💬 Message</button>
-      ${isModel ? `<button class="btn-call" onclick="openCallModal()"><span class="online-dot"></span> Live Call</button>` : ''}
+      ${iscreator ? `<button class="btn-call" onclick="openCallModal()"><span class="online-dot"></span> Live Call</button>` : ''}
     `;
   } else {
     actionsEl.innerHTML = `
@@ -684,7 +684,7 @@ function renderActions(p) {
 // ═══════════════════════════════════════════════════════
 function loadPosts(p) {
   // Demo posts
-  const demoPosts = isModel ? [
+  const demoPosts = iscreator ? [
     { id:1, text:'New content just dropped 🔥 Check it out!', media:'🌹', locked:false, likes:284, comments:32, time:'2h ago' },
     { id:2, text:'Tonight at 9PM EST I\'m going live 💋 Book your slot now before they fill up!', media:null, locked:false, likes:156, comments:18, time:'5h ago' },
     { id:3, text:'Exclusive photo set 📸', media:'💋', locked:true, likes:430, comments:67, time:'1d ago' },
@@ -810,13 +810,13 @@ function publishPost() {
 function buildAboutTab(p) {
   const items = [
     { label:'Member Since', val: new Date(p.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'}), class:'' },
-    { label:'Account Type', val: isModel ? '🌟 Model' : '👤 Subscriber', class: isModel ? 'pink' : '' },
+    { label:'Account Type', val: iscreator ? '🌟 creator' : '👤 Subscriber', class: iscreator ? 'pink' : '' },
     { label:'Subscription', val: p.plan ? p.plan.charAt(0).toUpperCase()+p.plan.slice(1) : 'Free', class: p.plan && p.plan!=='free' ? 'green' : '' },
     { label:'Location', val: p.location || '—', class:'' },
     { label:'Posts', val: formatNum(p.posts_count || 0), class:'' },
     { label:'Followers', val: formatNum(p.followers_count || 0), class:'pink' },
   ];
-  if(isModel) {
+  if(iscreator) {
     items.push({ label:'Live Call Rate', val:'$3.00 / minute', class:'pink' });
     items.push({ label:'Availability', val: p.is_online ? '🟢 Online Now' : '⚫ Offline', class: p.is_online ? 'green' : '' });
   }
@@ -901,7 +901,7 @@ function populateEditForm(p) {
   document.getElementById('edit-bio').value      = p.bio || '';
   document.getElementById('edit-location').value = p.location || '';
   document.getElementById('edit-website').value  = p.website || '';
-  if(isModel) document.getElementById('model-rate-field').style.display = 'block';
+  if(iscreator) document.getElementById('creator-rate-field').style.display = 'block';
 }
 
 async function saveProfile() {
