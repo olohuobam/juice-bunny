@@ -2414,7 +2414,7 @@ function buildMovieGrid(filter) {
 }
 
 function buildFreeGrid() {
-  document.getElementById('freeGrid').innerHTML = freeData.map(v=>`
+  const _fg=document.getElementById('freeGrid'); if(!_fg) return; _fg.innerHTML = freeData.map(v=>`
     <div class="free-card" onclick="goTo('player')">
       <div class="free-thumb" style="background:${v.bg}">${v.emoji}
         <span class="free-bdg">Free</span><span class="free-dur">${v.dur}</span>
@@ -2424,7 +2424,7 @@ function buildFreeGrid() {
     </div>`).join('');
 }
 function buildPremGrid() {
-  document.getElementById('premGrid').innerHTML = premData.map(v=>`
+  const _pg=document.getElementById('premGrid'); if(!_pg) return; _pg.innerHTML = premData.map(v=>`
     <div class="prem-card" onclick="openPremiumVideo()">
       <div class="prem-thumb" style="background:${v.bg}">${v.emoji}
         <span class="prem-bdg">Members</span><span class="prem-yr">${v.yr}</span>
@@ -3536,8 +3536,6 @@ window.onerror = function(msg, src, line) {
 
 try {
   buildMovieGrid();
-  buildFreeGrid();
-  buildPremGrid();
   buildFAQ();
   buildLandingModelGrid();
   setTimeout(initReveal, 100);
