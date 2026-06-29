@@ -147,8 +147,7 @@ a{text-decoration:none;color:inherit}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
 .bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
-.bunny-img{width:260px;height:300px;object-fit:contain;filter:drop-shadow(0 0 50px rgba(255,45,120,.6)) drop-shadow(0 0 20px rgba(255,45,120,.3));animation:heroSpin 12s linear infinite;position:relative;z-index:1;border-radius:0}
-@keyframes heroSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.bunny-img{width:260px;height:300px;object-fit:contain;filter:drop-shadow(0 0 50px rgba(255,45,120,.6)) drop-shadow(0 0 20px rgba(255,45,120,.3));animation:floatY 5s ease-in-out infinite;position:relative;z-index:1;border-radius:0}
 @media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:200px;height:220px}.bunny-img{width:140px;height:160px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
 
 /* STATS */
@@ -425,15 +424,28 @@ footer{background:var(--bg2);padding:52px 40px 28px;border-top:1px solid var(--b
 /* UNSUBSCRIBE RETENTION */
 #page-unsub{min-height:100vh;padding-top:64px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(180,20,100,.12),transparent 60%),var(--bg)}
 .unsub-wrap{max-width:640px;width:100%;padding:40px 20px;text-align:center}
-.unsub-step{display:none}
-.unsub-step.active{display:block;animation:fadeIn .4s ease}
+.unsub-step{
+  display:none;position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(180,20,100,.15),transparent 60%),var(--bg);
+  z-index:50;overflow-y:auto;padding-top:80px;
+}
+.unsub-step.active{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  animation:unsubSlide .4s cubic-bezier(.25,.46,.45,.94);
+}
+@keyframes unsubSlide{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 .unsub-bunny{font-size:80px;margin-bottom:20px;display:block;animation:floatY 4s ease-in-out infinite}
 .unsub-title{font-size:30px;font-weight:700;margin-bottom:12px;line-height:1.2}
 .unsub-title span{color:var(--pink)}
 .unsub-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
-.unsub-offers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px;text-align:left}
-.offer-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;transition:border-color .3s,transform .3s;cursor:pointer}
-.offer-card:hover{border-color:var(--pink);transform:translateY(-3px)}
+.unsub-offers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px;text-align:left;width:100%;max-width:580px}
+.offer-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:18px;
+  padding:28px 24px;transition:all .3s;cursor:pointer;position:relative;overflow:hidden;
+}
+.offer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--pink);opacity:0;transition:opacity .3s}
+.offer-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 16px 40px rgba(255,45,120,.2)}
+.offer-card:hover::before{opacity:1}
 .offer-icon{font-size:28px;margin-bottom:10px;display:block}
 .offer-title{font-size:14px;font-weight:700;margin-bottom:4px}
 .offer-desc{font-size:12px;color:var(--text2);line-height:1.5}
@@ -1000,6 +1012,58 @@ select option{background:var(--bg3);color:var(--text)}
   .chatbot-window{width:calc(100vw - 24px);right:12px;bottom:80px}
   .chatbot-fab{bottom:20px;right:16px}
 }
+
+/* ── ENHANCED ANIMATIONS ───────────────────────────────────── */
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(255,45,120,.3)}50%{box-shadow:0 0 40px rgba(255,45,120,.6)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+/* Movie cards hover */
+.movie-card{transition:transform .3s cubic-bezier(.25,.46,.45,.94),box-shadow .3s}
+.movie-card:hover{transform:translateY(-8px) scale(1.02)!important;box-shadow:0 24px 60px rgba(0,0,0,.7),0 0 30px rgba(255,45,120,.2)!important}
+
+/* Feature cards */
+.feat-card{transition:border-color .3s,transform .3s,box-shadow .3s}
+.feat-card:hover{transform:translateY(-6px)!important;box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 20px rgba(255,45,120,.15)!important}
+
+/* Tier cards */
+.tier-card{transition:transform .3s cubic-bezier(.25,.46,.45,.94),box-shadow .3s}
+
+/* Buttons pulse on hover */
+.btn-hero-watch{position:relative;overflow:hidden}
+.btn-hero-watch::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);opacity:0;transition:opacity .2s}
+.btn-hero-watch:hover::after{opacity:1}
+
+/* Stat numbers */
+.stat-num{animation:countUp .6s ease both}
+
+/* Pink glow on signup btn */
+.btn-nav-signup{animation:glowPulse 3s ease-in-out infinite}
+
+/* Smooth page transitions */
+.page.active{animation:fadeIn .4s ease}
+
+/* Mobile nav slide */
+.mobile-nav{animation:slideInRight .25s ease}
+
+/* Ticker smooth */
+.ticker-track{will-change:transform}
+
+/* Pricing cards entrance */
+.pricing-tiers .tier-card:nth-child(1){animation-delay:.1s}
+.pricing-tiers .tier-card:nth-child(2){animation-delay:.2s}
+.pricing-tiers .tier-card:nth-child(3){animation-delay:.3s}
+
+/* Free/prem grid */
+.free-card,.prem-card{transition:transform .3s cubic-bezier(.25,.46,.45,.94)}
+.free-card:hover,.prem-card:hover{transform:translateY(-6px) scale(1.01)!important}
+
+/* Chatbot FAB */
+.chatbot-fab{transition:transform .25s cubic-bezier(.175,.885,.32,1.275),box-shadow .25s}
+
 </style>
 </head>
 <body>
@@ -1009,7 +1073,7 @@ select option{background:var(--bg3);color:var(--text)}
      ============================================================ -->
 <nav class="main-nav">
   <div class="nav-logo" onclick="goTo('home')">
-    <img src="white-rabbit-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <img src="juice-bunny-logo.png" class="logo-spin" alt="Juice Bunny"/>
     <span class="logo-name">Juice Bunny</span>
   </div>
   <div class="nav-links" id="navLinks">
@@ -1343,7 +1407,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="footer-top">
         <div>
           <div class="footer-logo" onclick="goTo('home')">
-            <img src="white-rabbit-logo.png" style="width:36px;height:36px;animation:logoSpin 28s linear infinite;object-fit:contain" alt=""/>
+            <img src="juice-bunny-logo.png" style="width:36px;height:36px;animation:logoSpin 28s linear infinite;object-fit:contain" alt=""/>
             <span class="logo-name">Juice Bunny</span>
           </div>
           <div class="footer-tagline">RETRO · EXCLUSIVE · UNFILTERED.<br/>YOUR STREAMING PLATFORM<br/>FOR THE BOLD AND CURIOUS.</div>
@@ -1505,7 +1569,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="login-left">
         <div class="ll-inner">
           <div class="ll-brand" onclick="goTo('home')">
-            <img src="white-rabbit-logo.png" style="width:42px;height:42px;animation:logoSpin 28s linear infinite;object-fit:contain" alt=""/>
+            <img src="juice-bunny-logo.png" style="width:42px;height:42px;animation:logoSpin 28s linear infinite;object-fit:contain" alt=""/>
             <span class="logo-name">Juice Bunny</span>
           </div>
           <div class="ll-headline">Welcome back<br/>to <span>Juice Bunny</span></div>
@@ -1546,7 +1610,7 @@ select option{background:var(--bg3);color:var(--text)}
           <div class="remember-row"><input type="checkbox" id="li-remember"/><label for="li-remember">Keep me signed in</label></div>
           <button class="btn-submit" id="li-btn" onclick="liDoLogin()"><span id="li-btn-txt">Sign In →</span></button>
           <div class="auth-foot-txt">New to Juice Bunny? <a onclick="goTo('signup')">Create an account</a></div>
-          <div class="auth-foot-txt" style="margin-top:8px;font-size:11px;color:var(--text3)">🔒 Try: demo@juicebunny.com / password123</div>
+          
         </div>
         <!-- FORGOT -->
         <div class="login-forgot" id="li-forgot">
@@ -1606,7 +1670,7 @@ select option{background:var(--bg3);color:var(--text)}
             <div class="pw-perk-item">Download for offline viewing</div>
             <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
           </div>
-          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $3.99/mo</button>
+          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $9.99/week</button>
           <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
           <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
         </div>
@@ -1700,7 +1764,7 @@ select option{background:var(--bg3);color:var(--text)}
           </div>
         </div>
         <div>
-          <div class="psb-price" id="pay-plan-price">$3.99<span>/mo</span></div>
+          <div class="psb-price" id="pay-plan-price">$9.99<span>/week</span></div>
         </div>
       </div>
 
@@ -1901,7 +1965,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="os-row"><span class="label">Trial period</span><span class="val" style="color:var(--success)">7 days FREE</span></div>
         <div class="os-row"><span class="label">Tax</span><span class="val">$0.00</span></div>
         <div class="os-row total"><span class="label">Total today</span><span class="val" id="os-total">$0.00</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px">Then <span id="os-then-price" style="color:var(--text2);font-weight:600">$3.99/mo</span> after trial</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Then <span id="os-then-price" style="color:var(--text2);font-weight:600">$9.99/week</span> after trial</div>
       </div>
       <div class="os-perks" id="os-perks">
         <div class="os-perk">4K Ultra HD streaming</div>
@@ -1925,10 +1989,10 @@ select option{background:var(--bg3);color:var(--text)}
   <div class="pay-success-wrap">
     <div class="pay-success-icon">✓</div>
     <h2 class="pay-success-title">Payment Successful! 🐰</h2>
-    <p class="pay-success-sub">Welcome to Juice Bunny Premium! Your account has been activated. A confirmation has been sent to your email.</p>
+    <p class="pay-success-sub">Welcome to Juice Bunny! Your subscription has been activated. Check your email for confirmation.</p>
     <div class="pay-receipt" id="pay-receipt">
       <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">Premium</span></div>
-      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$3.99/mo</span></div>
+      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$9.99/week</span></div>
       <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">Credit Card</span></div>
       <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">JB-2025-001</span></div>
       <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">Jun 16, 2025</span></div>
@@ -1973,10 +2037,10 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="bc-field">
           <span class="bc-label">Send to</span>
           <div class="seg-btns">
-            <button class="seg-btn active" onclick="bcSelectSeg(this,'all')">All Members (1,240)</button>
-            <button class="seg-btn" onclick="bcSelectSeg(this,'premium')">Premium (820)</button>
-            <button class="seg-btn" onclick="bcSelectSeg(this,'vip')">VIP (180)</button>
-            <button class="seg-btn" onclick="bcSelectSeg(this,'free')">Free (240)</button>
+            <button class="seg-btn active" onclick="bcSelectSeg(this,'all')">All Members</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'premium')">Subscribed</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'vip')">Weekly</button>
+            <button class="seg-btn" onclick="bcSelectSeg(this,'free')">Free</button>
           </div>
         </div>
         <div class="bc-field">
@@ -1989,7 +2053,7 @@ select option{background:var(--bg3);color:var(--text)}
           <div class="bc-hint">Personalization tags: {first_name}, {plan_name}</div>
         </div>
         <div class="bc-recipients">
-          Sending to: <span class="bc-count" id="bc-email-count">1,240 subscribers</span>
+          Sending to: <span class="bc-count" id="bc-email-count">All subscribers</span>
         </div>
         <button class="btn-send" id="bc-email-send" onclick="bcSendEmail()">
           <span>✉️</span> Send Email Now
@@ -2001,9 +2065,9 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="bc-field">
           <span class="bc-label">Send to</span>
           <div class="seg-btns">
-            <button class="seg-btn active" onclick="bcSelectSmsSeg(this,'all')">All Members (1,240)</button>
-            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'premium')">Premium (820)</button>
-            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'vip')">VIP (180)</button>
+            <button class="seg-btn active" onclick="bcSelectSmsSeg(this,'all')">All Members</button>
+            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'premium')">Subscribed</button>
+            <button class="seg-btn" onclick="bcSelectSmsSeg(this,'vip')">Weekly</button>
           </div>
         </div>
         <div class="bc-field">
@@ -2016,7 +2080,7 @@ select option{background:var(--bg3);color:var(--text)}
           <div style="font-size:12px;color:var(--text2)">Add your Twilio Account SID and Auth Token in Settings to activate SMS sending.</div>
         </div>
         <div class="bc-recipients">
-          Sending to: <span class="bc-count" id="bc-sms-count">1,240 subscribers</span>
+          Sending to: <span class="bc-count" id="bc-sms-count">All subscribers</span>
         </div>
         <button class="btn-send" id="bc-sms-send" onclick="bcSendSMS()">
           <span>📱</span> Send Text Now
@@ -2078,11 +2142,11 @@ select option{background:var(--bg3);color:var(--text)}
 </div>
 
 <div id="page-unsub" class="page">
-  <div class="unsub-wrap">
+  <div class="unsub-wrap" style="position:relative;min-height:100vh">
 
     <!-- STEP 1: First offer -->
     <div class="unsub-step active" id="unsub-s1">
-      <span class="unsub-bunny">🐰</span>
+      <img src="juice-bunny-logo.png" style="width:80px;height:80px;object-fit:contain;animation:floatY 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,45,120,.5));margin-bottom:16px" alt=""/>
       <h2 class="unsub-title">Wait — don't go <span>just yet!</span></h2>
       <p class="unsub-sub">We'd hate to see you leave. Before you cancel, here are some exclusive offers we've put together just for you.</p>
       <div class="unsub-offers">
@@ -2119,7 +2183,7 @@ select option{background:var(--bg3);color:var(--text)}
 
     <!-- STEP 2: Second offer / feedback -->
     <div class="unsub-step" id="unsub-s2">
-      <span class="unsub-bunny">😢</span>
+      <img src="juice-bunny-logo.png" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,45,120,.5));margin-bottom:16px;opacity:.7" alt=""/>
       <h2 class="unsub-title">Help us <span>do better</span></h2>
       <p class="unsub-sub">Tell us why you're leaving and we'll do our best to fix it. Your feedback shapes what we build next.</p>
       <div class="unsub-offers" style="grid-template-columns:1fr 1fr 1fr">
@@ -2695,7 +2759,7 @@ function switchBcTab(name,btn){
   document.getElementById('bc-'+name).classList.add('active');
 }
 
-const segCounts={all:'1,240 subscribers',premium:'820 subscribers',vip:'180 subscribers',free:'240 subscribers'};
+const segCounts={all:'All subscribers',premium:'820 subscribers',vip:'180 subscribers',free:'240 subscribers'};
 function bcSelectSeg(btn,seg){
   btn.closest('.seg-btns').querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -2952,8 +3016,8 @@ function processCardPayment() {
   // ── CCBill account not yet set up — show message ──
   setTimeout(() => {
     btn.disabled = false;
-    document.getElementById('btn-pay-ccbill-txt').textContent = `Subscribe Now — ${PLANS[currentPlan]?.priceStr || ''}/mo`;
-    showToast('💳 Card payments coming soon — please use crypto for now', true);
+    document.getElementById('btn-pay-ccbill-txt').textContent = `Subscribe Now — ${PLANS[currentPlan]?.priceStr || ''}`;
+    showToast('💳 Card payments activating soon — use crypto in the meantime!', true);
   }, 1500);
 }
 
@@ -3575,18 +3639,54 @@ function sendCbotMsg(){
   sendCbotMsgText(text);
 }
 
+let cbotMsgHistory = [];
+
 async function sendCbotMsgText(text){
   if(cbotTyping) return;
   cbotTyping=true;
   document.getElementById('cbotSend').disabled=true;
   document.getElementById('cbotQR').innerHTML='';
   cbotAddMsg('user',text);
+  cbotMsgHistory.push({role:'user', content:text});
   cbotShowTyping();
-  await new Promise(r=>setTimeout(r,700+Math.random()*600));
-  cbotHideTyping();
-  const response=getBotResponse(text);
-  cbotAddMsg('bot',response.reply);
-  if(response.qr) renderCbotQR(response.qr);
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: cbotMsgHistory })
+    });
+    const data = await res.json();
+    cbotHideTyping();
+
+    if(data.reply) {
+      cbotAddMsg('bot', data.reply);
+      cbotMsgHistory.push({role:'assistant', content:data.reply});
+      // Show contextual quick replies
+      const lower = text.toLowerCase();
+      if(lower.includes('pric')||lower.includes('plan')||lower.includes('cost')){
+        renderCbotQR([{label:'📅 Weekly $9.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $24.99',msg:'Tell me about the monthly plan'},{label:'₿ Pay with crypto',msg:'What crypto do you accept?'}]);
+      } else if(lower.includes('call')||lower.includes('model')){
+        renderCbotQR([{label:'💰 How much?',msg:'How much do live calls cost?'},{label:'🐰 Become a model',msg:'How do I become a model?'}]);
+      } else if(lower.includes('cancel')||lower.includes('refund')){
+        renderCbotQR([{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Contact support',msg:'How do I contact support?'}]);
+      } else {
+        renderCbotQR([{label:'💰 Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}]);
+      }
+    } else {
+      // Fallback to smart responses if API fails
+      const response=getBotResponse(text);
+      cbotAddMsg('bot',response.reply);
+      if(response.qr) renderCbotQR(response.qr);
+    }
+  } catch(err) {
+    cbotHideTyping();
+    // Fallback to smart responses
+    const response=getBotResponse(text);
+    cbotAddMsg('bot',response.reply);
+    if(response.qr) renderCbotQR(response.qr);
+  }
+
   cbotTyping=false;
   document.getElementById('cbotSend').disabled=false;
   document.getElementById('cbotInput').focus();
