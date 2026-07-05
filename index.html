@@ -141,15 +141,15 @@ a{text-decoration:none;color:inherit}
 .btn-hero-plans{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:13px 26px;border-radius:25px;font-family:'Inter',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
 .btn-hero-plans:hover{background:rgba(255,255,255,.1);color:#fff}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
-.bunny-wrap{width:320px;height:340px;display:flex;align-items:center;justify-content:center;position:relative}
+.bunny-wrap{width:620px;height:680px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
 .bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
-.bunny-img{width:480px;height:540px;object-fit:contain;filter:drop-shadow(0 0 60px rgba(255,45,120,.7)) drop-shadow(0 0 30px rgba(255,45,120,.4));position:relative;z-index:1;border-radius:0;background:transparent}
+.bunny-img{width:620px;height:680px;object-fit:cover;filter:drop-shadow(0 0 40px rgba(0,0,0,1)) drop-shadow(0 0 80px rgba(0,0,0,1));position:relative;z-index:1;border-radius:20px}
 @keyframes heroSpinY{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
-@media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:320px;height:360px}.bunny-img{width:280px;height:320px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
+@media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:340px;height:380px}.bunny-img{width:340px;height:380px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
 
 /* STATS */
 .stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 40px}
@@ -1142,7 +1142,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="hero-visual">
         <div class="bunny-wrap">
           <div class="bunny-glow"></div>
-          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.05.11%20AM.mp4" class="bunny-img" autoplay loop muted playsinline style="border-radius:0;object-fit:contain;background:transparent;mix-blend-mode:screen"></video>
+          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline style="object-fit:cover"></video>
         </div>
       </div>
     </div>
