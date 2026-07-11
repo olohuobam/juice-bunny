@@ -130,7 +130,7 @@ a{text-decoration:none;color:inherit}
              radial-gradient(ellipse 50% 50% at 10% 90%,rgba(100,0,60,.12) 0%,transparent 50%),var(--bg);
   position:relative;overflow:hidden;
 }
-.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 80%)}
+.hero-grid-bg{display:none}
 .hero-inner{max-width:1160px;margin:0 auto;padding:60px 40px;width:100%;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;position:relative;z-index:1}
 .hero-h1{font-size:clamp(40px,6vw,60px);font-weight:700;line-height:1.05;margin-bottom:4px;animation:fadeUp .7s .1s both}
 .hero-h1-pink{font-size:clamp(40px,6vw,60px);font-weight:700;line-height:1.05;color:var(--pink);margin-bottom:4px;animation:fadeUp .7s .2s both}
@@ -141,11 +141,10 @@ a{text-decoration:none;color:inherit}
 .btn-hero-plans{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:13px 26px;border-radius:25px;font-family:'Inter',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
 .btn-hero-plans:hover{background:rgba(255,255,255,.1);color:#fff}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
-.bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative}
 .bunny-wrap::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:
-  linear-gradient(to bottom, #0d0d12 0%, transparent 25%, transparent 75%, #0d0d12 100%),
-  linear-gradient(to right, #0d0d12 0%, transparent 25%, transparent 75%, #0d0d12 100%)}
-.bunny-wrap::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 75% 75% at 55% 50%, transparent 40%, rgba(13,13,18,0.85) 70%, #0d0d12 100%)}
+  linear-gradient(to bottom, #0d0d12 0%, transparent 20%, transparent 80%, #0d0d12 100%),
+  linear-gradient(to right, #0d0d12 0%, transparent 20%, transparent 80%, #0d0d12 100%)}
 .bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
@@ -1146,7 +1145,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="hero-visual">
         <div class="bunny-wrap">
           <div class="bunny-glow"></div>
-          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline style="object-fit:cover"></video>
+          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline style="object-fit:cover;mix-blend-mode:screen"></video>
         </div>
       </div>
     </div>
