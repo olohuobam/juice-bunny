@@ -142,6 +142,7 @@ a{text-decoration:none;color:inherit}
 .btn-hero-plans:hover{background:rgba(255,255,255,.1);color:#fff}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
 .bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative}
+.bunny-wrap::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, rgba(13,13,18,0.6) 55%, rgba(13,13,18,0.92) 72%, #0d0d12 88%)}
 .bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
