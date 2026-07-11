@@ -143,8 +143,9 @@ a{text-decoration:none;color:inherit}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
 .bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative}
 .bunny-wrap::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:
-  linear-gradient(to bottom, #0d0d12 0%, transparent 20%, transparent 80%, #0d0d12 100%),
-  linear-gradient(to right, #0d0d12 0%, transparent 20%, transparent 80%, #0d0d12 100%)}
+  linear-gradient(to bottom, rgba(120,0,60,0.95) 0%, rgba(80,0,40,0.4) 18%, transparent 35%, transparent 65%, rgba(80,0,40,0.4) 82%, rgba(120,0,60,0.95) 100%),
+  linear-gradient(to right, rgba(120,0,60,0.95) 0%, rgba(80,0,40,0.4) 18%, transparent 35%, transparent 65%, rgba(80,0,40,0.4) 82%, rgba(120,0,60,0.95) 100%)}
+.bunny-wrap::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 60% 60% at 50% 50%, transparent 40%, rgba(100,0,50,0.5) 65%, rgba(120,0,60,0.9) 85%)}
 .bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
@@ -1070,7 +1071,7 @@ select option{background:var(--bg3);color:var(--text)}
      ============================================================ -->
 <nav class="main-nav">
   <div class="nav-logo" onclick="goTo('home')">
-    <img src="white-rabbit-logo.png" class="logo-spin" alt="Juice Bunny"/>
+    <img src="juice-bunny-logo.png" class="logo-spin" alt="Juice Bunny"/>
     <span class="logo-name">Juice Bunny</span>
   </div>
   <div class="nav-links" id="navLinks">
@@ -1136,7 +1137,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div>
         <div class="hero-h1">Unlimited Naughty</div>
         <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
-        <p class="hero-sub">Indulge in the most explicit, steamy, and seductive content online. Stream exclusive 4K adult videos, live creator calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
+        <p class="hero-sub">Hop into your wildest fantasy. Stream exclusive 4K adult videos, live creator calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
           <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">🔥 Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
