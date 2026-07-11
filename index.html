@@ -141,7 +141,11 @@ a{text-decoration:none;color:inherit}
 .btn-hero-plans{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:13px 26px;border-radius:25px;font-family:'Inter',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
 .btn-hero-plans:hover{background:rgba(255,255,255,.1);color:#fff}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
-.bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.bunny-wrap::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 80px 60px #0d0d12;z-index:2;pointer-events:none;border-radius:0}
+.bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.bunny-wrap::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:
+  linear-gradient(to bottom, #0d0d12 0%, transparent 25%, transparent 75%, #0d0d12 100%),
+  linear-gradient(to right, #0d0d12 0%, transparent 25%, transparent 75%, #0d0d12 100%)}
+.bunny-wrap::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 75% 75% at 55% 50%, transparent 40%, rgba(13,13,18,0.85) 70%, #0d0d12 100%)}
 .bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
