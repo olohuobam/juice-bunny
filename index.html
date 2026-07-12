@@ -2592,16 +2592,71 @@ function suSelectPlan(plan){
     btn.textContent = '🔥 Create My Account';
   }
 }
-function suCreateAccount(){
+async function suCreateAccount(){
   const btn=document.getElementById('su-createbtn');
   btn.disabled=true;
   document.getElementById('su-createtxt').textContent='Creating account...';
-  setTimeout(()=>{
-    document.querySelectorAll('#page-signup .form-panel').forEach(p=>p.classList.remove('active'));
-    document.getElementById('su-steps').style.display='none';
-    document.getElementById('su-header').style.display='none';
-    document.getElementById('su-success').style.display='block';
-  },1800);
+
+  const email    = document.getElementById('su-email').value.trim();
+  const password = document.getElementById('su-pass').value;
+  const fname    = document.getElementById('su-fname').value.trim();
+  const lname    = document.getElementById('su-lname').value.trim();
+  const plan     = document.querySelector('input[name="plan"]:checked')?.value || 'free';
+  const country  = document.getElementById('su-country').value;
+  const dob      = document.getElementById('su-dob').value;
+
+  loadSupabase(async (sb) => {
+    try {
+      // 1. Sign up with Supabase Auth
+      const { data, error } = await sb.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fname + ' ' + lname,
+            plan,
+            country,
+            date_of_birth: dob,
+          },
+          emailRedirectTo: 'https://juicebunnytv.com'
+        }
+      });
+
+      if(error) throw error;
+
+      // 2. Update profile with extra info (trigger auto-creates the row)
+      if(data.user) {
+        await sb.from('profiles').upsert({
+          id: data.user.id,
+          email,
+          full_name: fname + ' ' + lname,
+          plan,
+          country,
+          date_of_birth: dob,
+          status: 'active'
+        });
+      }
+
+      // 3. Show success
+      document.querySelectorAll('#page-signup .form-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('su-steps').style.display='none';
+      document.getElementById('su-header').style.display='none';
+      const successPanel = document.getElementById('su-success');
+      successPanel.style.display='block';
+
+      // Update success message if email confirmation is required
+      if(data.user && !data.session) {
+        successPanel.querySelector('.success-title').textContent = 'Check your email! 📧';
+        successPanel.querySelector('.success-txt').textContent = 'We sent a confirmation link to ' + email + '. Click it to activate your account and start watching.';
+        successPanel.querySelector('.btn-goto').style.display = 'none';
+      }
+
+    } catch(err) {
+      showToast(err.message || 'Signup failed. Please try again.', true);
+      btn.disabled = false;
+      document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+    }
+  });
 }
 
 /* ============================================================
@@ -2613,7 +2668,7 @@ function liTogglePass(){
   inp.type=inp.type==='password'?'text':'password';
   if(btn) btn.textContent=inp.type==='password'?'👁':'🙈';
 }
-function liDoLogin(){
+async function liDoLogin(){
   const email=document.getElementById('li-email').value.trim();
   const pass=document.getElementById('li-pass').value;
   let ok=true;
@@ -2622,21 +2677,44 @@ function liDoLogin(){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('li-fw-email').classList.add('err');ok=false}
   if(!pass){document.getElementById('li-fw-pass').classList.add('err');ok=false}
   if(!ok) return;
+
   const btn=document.getElementById('li-btn');
   btn.disabled=true;
   document.getElementById('li-btn-txt').textContent='Signing in...';
-  setTimeout(()=>{
-    if(email==='demo@juicebunny.com'&&pass==='password123'){
-      showToast('✓ Signed in! Welcome back.');
-      updateNavLoggedIn();
-      setTimeout(()=>goTo('home'),1200);
-    } else {
-      document.getElementById('li-err').classList.add('show');
-      document.getElementById('li-err-msg').textContent='Invalid email or password. Try demo@juicebunny.com / password123';
+
+  loadSupabase(async (sb) => {
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if(error) throw error;
+
+      // Get profile
+      const { data: profile } = await sb.from('profiles').select('*').eq('id', data.user.id).single();
+
+      showToast('✓ Welcome back' + (profile?.full_name ? ', ' + profile.full_name.split(' ')[0] : '') + '! 🐰');
+      updateNavLoggedIn(profile || { email });
+
+      // Redirect admin to admin panel
+      if(profile?.role === 'admin') {
+        setTimeout(() => window.location.href = 'admin.html', 1000);
+      } else {
+        setTimeout(() => goTo('home'), 800);
+      }
+
+    } catch(err) {
+      const errEl = document.getElementById('li-err');
+      const msgEl = document.getElementById('li-err-msg');
+      errEl.classList.add('show');
+      if(err.message?.includes('Email not confirmed')) {
+        msgEl.textContent = 'Please confirm your email first. Check your inbox!';
+      } else if(err.message?.includes('Invalid login')) {
+        msgEl.textContent = 'Invalid email or password. Please try again.';
+      } else {
+        msgEl.textContent = err.message || 'Login failed. Please try again.';
+      }
       btn.disabled=false;
       document.getElementById('li-btn-txt').textContent='Sign In →';
     }
-  },1200);
+  });
 }
 function liShowForgot(){
   document.getElementById('li-main').classList.add('hidden');
@@ -2646,17 +2724,27 @@ function liShowMain(){
   document.getElementById('li-forgot').classList.remove('show');
   document.getElementById('li-main').classList.remove('hidden');
 }
-function liDoReset(){
+async function liDoReset(){
   const email=document.getElementById('li-reset-email').value.trim();
   const f=document.getElementById('li-fw-reset');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){f.classList.add('err');return}
   f.classList.remove('err');
   document.getElementById('li-reset-txt').textContent='Sending...';
-  setTimeout(()=>{
-    showToast('✓ Reset link sent! Check your inbox.');
-    setTimeout(liShowMain,1800);
-    document.getElementById('li-reset-txt').textContent='Send Reset Link →';
-  },1200);
+
+  loadSupabase(async (sb) => {
+    try {
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://juicebunnytv.com'
+      });
+      if(error) throw error;
+      showToast('✓ Reset link sent! Check your inbox.');
+      setTimeout(liShowMain, 1800);
+    } catch(err) {
+      showToast(err.message || 'Error sending reset email', true);
+    } finally {
+      document.getElementById('li-reset-txt').textContent='Send Reset Link →';
+    }
+  });
 }
 
 /* ============================================================
