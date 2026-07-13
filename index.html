@@ -3538,7 +3538,7 @@ async function signInWithGoogle(mode) {
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '?oauth=' + mode,
+        redirectTo: 'https://juicebunnytv.com?oauth=' + mode,
         queryParams: { access_type: 'offline', prompt: 'consent' }
       }
     });
