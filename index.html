@@ -7,8 +7,7 @@
 <meta name="google-signin-client_id" content="215156479497-m3ko1o2d7h42pr0md07bbuh7eeml12pm.apps.googleusercontent.com"/>
 <!-- Google OAuth -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<!-- Facebook OAuth -->
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
 <style>
 /* ============================================================
@@ -3588,8 +3587,8 @@ function handleSocialAuthSuccess(user, mode) {
   }
 }
 
-// Init Facebook SDK when page loads
-window.fbAsyncInit = initFacebook;
+// Facebook SDK removed - using Twitter instead
+window.fbAsyncInit = function() {};
 
 /* ============================================================
    SUPABASE AUTH
