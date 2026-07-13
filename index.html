@@ -1143,7 +1143,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="hero-visual">
         <div class="bunny-wrap">
           <div class="bunny-glow"></div>
-          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline style="object-fit:cover;mix-blend-mode:multiply"></video>
+          <video src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline webkit-playsinline style="object-fit:cover"></video>
         </div>
       </div>
     </div>
@@ -2474,10 +2474,16 @@ function subscribeNewsletter() {
 
 /* SCROLL REVEAL */
 function initReveal() {
+  const els = document.querySelectorAll('#page-home .reveal');
+  if(!('IntersectionObserver' in window)) {
+    // Safari fallback - just show everything
+    els.forEach(el => el.classList.add('visible'));
+    return;
+  }
   const io = new IntersectionObserver(entries=>{
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}});
-  },{threshold:.1});
-  document.querySelectorAll('#page-home .reveal').forEach(el=>{if(!el.classList.contains('visible'))io.observe(el)});
+  },{threshold:.05, rootMargin:'0px 0px -50px 0px'});
+  els.forEach(el=>{if(!el.classList.contains('visible'))io.observe(el)});
 }
 window.addEventListener('scroll',()=>{
   document.getElementById('scrollTopBtn').classList.toggle('show',window.scrollY>400);
@@ -3526,17 +3532,21 @@ const FACEBOOK_APP_ID     = '1293034019653380';
 const FACEBOOK_APP_SECRET = 'd15f5cf60d3e23892d155abedc2c5890';
 
 // ── GOOGLE SIGN IN ───────────────────────────────────────────
-function signInWithGoogle(mode) {
-  loadSupabase(async (sb) => {
+async function signInWithGoogle(mode) {
+  try {
+    await new Promise(resolve => loadSupabase(resolve));
+    const sb = window._sbClient;
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://juicebunnytv.com?oauth=' + mode,
+        redirectTo: window.location.origin + '?oauth=' + mode,
         queryParams: { access_type: 'offline', prompt: 'consent' }
       }
     });
     if(error) showToast(error.message, true);
-  });
+  } catch(err) {
+    showToast('Google sign in failed. Please try again.', true);
+  }
 }
 
 function signInWithTwitter(mode) {
@@ -3633,6 +3643,8 @@ try {
   buildMovieGrid();
   buildFAQ();
   buildLandingModelGrid();
+  // Make all sections visible immediately (fix blank page on Safari)
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
   setTimeout(initReveal, 100);
   checkPaymentReturn();
   checkSession();
