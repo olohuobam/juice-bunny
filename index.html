@@ -1059,6 +1059,20 @@ select option{background:var(--bg3);color:var(--text)}
 .chatbot-fab{transition:transform .25s cubic-bezier(.175,.885,.32,1.275),box-shadow .25s}
 
 
+/* === UI tweaks: smaller filter tabs, logo chatbot, standalone Cams link === */
+.ftab{padding:5px 14px;font-size:12px}
+.chatbot-fab .fab-logo{width:40px;height:40px;object-fit:contain;pointer-events:none}
+.cbot-av-logo{width:26px;height:26px;object-fit:contain}
+.nav-cams{
+  margin-left:42px;display:flex;align-items:center;gap:7px;
+  padding:6px 16px;border:1px solid rgba(255,45,120,.5);border-radius:18px;
+  color:#fff !important;font-weight:600;background:rgba(255,45,120,.08);
+}
+.nav-cams:hover{background:var(--pink);border-color:var(--pink)}
+.cams-dot{width:8px;height:8px;border-radius:50%;background:var(--error,#ff4444);
+  box-shadow:0 0 8px rgba(255,68,68,.9);animation:camsPulse 1.6s ease-in-out infinite}
+@keyframes camsPulse{0%,100%{opacity:1}50%{opacity:.4}}
+
 /* === Dancing Script headings (site-wide) === */
 .hero-h1,.hero-h1-pink,.sec-title,.free-label-big,.prem-title-big,.dev-h2,.cta-h2,.unsub-title,.booking-title,.auth-title,.success-title,.pw-title,.modal-title,.pay-success-title{font-family:'Dancing Script',cursive;font-weight:700;letter-spacing:0;text-transform:none}
 .hero-h1,.hero-h1-pink{font-size:clamp(46px,7vw,72px)}
@@ -1091,6 +1105,7 @@ select option{background:var(--bg3);color:var(--text)}
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Pricing</a>
     <a href="model-apply.html" style="color:var(--pink);font-weight:600">Become a Model</a>
     <a href="chat.html">💬 Chat</a>
+    <a class="nav-cams" onclick="goTo('home');setTimeout(()=>document.getElementById('cams').scrollIntoView({behavior:'smooth'}),100)"><span class="cams-dot"></span>Cams</a>
   </div>
   <div class="nav-right">
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
@@ -1107,6 +1122,7 @@ select option{background:var(--bg3);color:var(--text)}
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">🎬 Movies</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">⭐ Premium</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">💰 Pricing</a>
+  <a onclick="goTo('home');setTimeout(()=>document.getElementById('cams').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">🎥 Cams</a>
   <a href="model-apply.html" class="mobile-model-link">🐰 Become a Model</a>
   <a href="chat.html">💬 Chat</a>
   <a onclick="goTo('login');closeMobileNav()">🔑 Login</a>
@@ -1184,12 +1200,8 @@ select option{background:var(--bg3);color:var(--text)}
           <p class="sec-sub reveal">The filthiest, most watched content on Juice Bunny right now.</p>
         </div>
         <div class="filter-tabs reveal">
-          <button class="ftab active" onclick="filterMovies(this,'all')">🔥 Trending</button>
-          <button class="ftab" onclick="filterMovies(this,'new')">💦 New Drops</button>
-          <button class="ftab" onclick="filterMovies(this,'action')">😈 Naughty</button>
-          <button class="ftab" onclick="filterMovies(this,'romance')">💋 Romantic</button>
-          <button class="ftab" onclick="filterMovies(this,'anime')">🎌 Hentai</button>
-          <button class="ftab" onclick="filterMovies(this,'originals')">⭐ Originals</button>
+          <button class="ftab active" onclick="filterMovies(this,'all')">Trending</button>
+          <button class="ftab" onclick="filterMovies(this,'new')">New Drops</button>
         </div>
       </div>
       <div class="movie-grid reveal" id="movieGrid"></div>
@@ -1234,7 +1246,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div style="height:1px;background:var(--border);margin:48px 0"></div>
 
       <!-- MODELS ALONGSIDE -->
-      <div class="trending-head reveal">
+      <div class="trending-head reveal" id="cams">
         <div>
           <span class="sec-label">Creators & Live</span>
           <h2 class="sec-title">Meet Our <span>Creators</span></h2>
@@ -3670,13 +3682,13 @@ try {
      AI SUPPORT CHATBOT
      ============================================================ -->
 <button class="chatbot-fab" id="chatbotFab" onclick="toggleChatbot()" title="Chat with Bunny AI Support">
-  🐰
+  <img src="juice-bunny-logo.png" alt="Bunny AI" class="fab-logo"/>
   <span class="fab-badge">AI</span>
 </button>
 
 <div class="chatbot-window" id="chatbotWindow">
   <div class="cbot-head">
-    <div class="cbot-av">🐰</div>
+    <div class="cbot-av"><img src="juice-bunny-logo.png" alt="" class="cbot-av-logo"/></div>
     <div>
       <div class="cbot-name">Bunny AI Support</div>
       <div class="cbot-status">Online 24/7</div>

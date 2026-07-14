@@ -545,12 +545,28 @@ async function loadProfile() {
 
   if(profileId) {
     // Viewing someone else's profile
-    const { data } = await sb.from('profiles').select('*').eq('id', profileId).single();
+    const { data } = await sb.from('profiles').select('*').eq('id', profileId).maybeSingle();
     profileData = data;
   } else if(currentUser) {
     // Own profile
-    const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+    const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
     profileData = data;
+
+    if(!profileData) {
+      // Profile row missing (account created before the signup trigger existed).
+      // Try to create it, and render from session data either way — NEVER the demo.
+      const meta = currentUser.user_metadata || {};
+      const selfProfile = {
+        id: currentUser.id,
+        email: currentUser.email,
+        full_name: meta.full_name || meta.name || currentUser.email.split('@')[0],
+        avatar_url: meta.avatar_url || meta.picture || null,
+        role: 'user',
+        plan: 'free',
+      };
+      const { data: created } = await sb.from('profiles').upsert(selfProfile).select().maybeSingle();
+      profileData = created || selfProfile;
+    }
   } else {
     // Not logged in — show demo profile
     profileData = getDemoProfile();
@@ -562,7 +578,7 @@ async function loadProfile() {
 
   viewedProfile = profileData;
   isOwnProfile = currentUser && (!profileId || profileId === currentUser.id);
-  iscreator = profileData.role === 'creator';
+  iscreator = profileData.role === 'creator' || profileData.role === 'model';
 
   renderProfile(profileData);
 }
