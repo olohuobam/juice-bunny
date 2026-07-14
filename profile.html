@@ -623,7 +623,11 @@ function renderProfile(p) {
 
   // Cover background based on creator/user
   const cover = document.getElementById('cover-wrap');
-  if(iscreator) {
+  if(p.cover_url) {
+    cover.style.backgroundImage = `url(${p.cover_url})`;
+    cover.style.backgroundSize = 'cover';
+    cover.style.backgroundPosition = 'center';
+  } else if(iscreator) {
     cover.style.background = 'linear-gradient(135deg,#2a0a18,#3d0a25,#1a0a2a)';
   }
 
@@ -970,23 +974,54 @@ function handleAvatarUpload(input) {
     img.alt = 'Avatar';
     document.getElementById('avatar-initials').style.display = 'none';
     document.getElementById('composer-av').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
-    showToast('✓ Profile photo updated!');
-    // In production: upload to Supabase Storage here
   };
   reader.readAsDataURL(file);
+  saveProfileImage(file, 'avatar');   // persist to Supabase
 }
 
 function handleCoverUpload(input) {
   if(!input.files[0]) return;
+  const file = input.files[0];
+  if(file.size > 8 * 1024 * 1024) { showToast('Max 8MB', true); return; }
   const reader = new FileReader();
   reader.onload = e => {
     const cover = document.getElementById('cover-wrap');
     cover.style.backgroundImage = `url(${e.target.result})`;
     cover.style.backgroundSize = 'cover';
     cover.style.backgroundPosition = 'center';
-    showToast('✓ Cover updated!');
   };
-  reader.readAsDataURL(input.files[0]);
+  reader.readAsDataURL(file);
+  saveProfileImage(file, 'cover');    // persist to Supabase
+}
+
+// Upload image to Supabase Storage (bucket: "asset") and save URL on the profile row
+async function saveProfileImage(file, kind) {
+  if(!sb || !currentUser || !isOwnProfile) {
+    showToast('Log in to save your ' + kind, true);
+    return;
+  }
+  try {
+    const ext  = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = `${kind}s/${currentUser.id}.${ext}`;
+
+    const { error: upErr } = await sb.storage.from('asset')
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if(upErr) throw upErr;
+
+    const { data: pub } = sb.storage.from('asset').getPublicUrl(path);
+    const url = pub.publicUrl + '?v=' + Date.now();   // cache-bust so new image shows immediately
+
+    const col = kind === 'avatar' ? 'avatar_url' : 'cover_url';
+    const { error: dbErr } = await sb.from('profiles')
+      .update({ [col]: url }).eq('id', currentUser.id);
+    if(dbErr) throw dbErr;
+
+    if(profileData) profileData[col] = url;
+    showToast(kind === 'avatar' ? '✓ Profile photo saved!' : '✓ Cover saved!');
+  } catch(err) {
+    console.error('saveProfileImage:', err);
+    showToast('Could not save ' + kind + ' — ' + (err.message || 'try again'), true);
+  }
 }
 
 // ═══════════════════════════════════════════════════════

@@ -2655,6 +2655,16 @@ async function suCreateAccount(){
 
       if(error) throw error;
 
+      // Supabase returns a fake success for existing emails (anti-enumeration) —
+      // detectable because identities comes back empty
+      if(data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        showToast('An account with this email already exists — please log in instead', true);
+        btn.disabled = false;
+        document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+        setTimeout(() => goTo('login'), 1500);
+        return;
+      }
+
       // 2. Update profile with extra info (trigger auto-creates the row)
       if(data.user) {
         await sb.from('profiles').upsert({
