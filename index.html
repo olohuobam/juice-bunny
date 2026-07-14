@@ -1335,7 +1335,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="tier-card featured">
           <div class="tier-hot">Most Popular</div>
           <div class="tier-name" id="sub-plan-name">Weekly</div>
-          <div class="tier-price" id="sub-price"><sup>$</sup>9.99<sub>/week</sub></div>
+          <div class="tier-price" id="sub-price"><sup>$</sup>3.99<sub>/week</sub></div>
           <div class="tier-desc" id="sub-desc">Full access to everything — premium content, models, chat, posts and live calls.</div>
           <ul class="tier-perks">
             <li>🔥 Full HD &amp; 4K explicit library</li>
@@ -1556,13 +1556,13 @@ select option{background:var(--bg3);color:var(--text)}
               <div class="plan-hot">Most Popular</div>
               <input type="radio" name="plan" value="weekly" checked/>
               <div class="plan-opt-name">Weekly</div>
-              <div class="plan-opt-price">$9.99<small>/wk</small></div>
+              <div class="plan-opt-price">$3.99<small>/wk</small></div>
               <div class="plan-opt-tag">All Features + Models</div>
             </label>
             <label class="plan-opt" id="po-monthly" onclick="suSelectPlan('monthly')">
               <input type="radio" name="plan" value="monthly"/>
               <div class="plan-opt-name">Monthly</div>
-              <div class="plan-opt-price">$24.99<small>/mo</small></div>
+              <div class="plan-opt-price">$9.99<small>/mo</small></div>
               <div class="plan-opt-tag">Best Value · Save 37%</div>
             </label>
           </div>
@@ -1694,7 +1694,7 @@ select option{background:var(--bg3);color:var(--text)}
           <span class="pw-ico">🔒</span>
           <div class="pw-title">Members Only Content</div>
           <div class="pw-sub">You've watched your free preview. Subscribe to continue watching this and all exclusive content.</div>
-          <div class="pw-price-big">$3.99<span>/month</span></div>
+          <div class="pw-price-big">$3.99<span>/week</span></div>
           <div class="pw-perk-list">
             <div class="pw-perk-item">Unlimited 4K Ultra HD streaming</div>
             <div class="pw-perk-item">Full access to all exclusive content</div>
@@ -1702,7 +1702,7 @@ select option{background:var(--bg3);color:var(--text)}
             <div class="pw-perk-item">Download for offline viewing</div>
             <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
           </div>
-          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $9.99/week</button>
+          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $3.99/week</button>
           <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
           <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
         </div>
@@ -1796,7 +1796,7 @@ select option{background:var(--bg3);color:var(--text)}
           </div>
         </div>
         <div>
-          <div class="psb-price" id="pay-plan-price">$9.99<span>/week</span></div>
+          <div class="psb-price" id="pay-plan-price">$3.99<span>/week</span></div>
         </div>
       </div>
 
@@ -1874,7 +1874,7 @@ select option{background:var(--bg3);color:var(--text)}
           <span>🔒</span> 256-bit SSL encryption · Powered by CCBill · PCI DSS Compliant
         </div>
         <button class="btn-pay" id="btn-pay-ccbill" onclick="processCardPayment()">
-          <span>🔒</span> <span id="btn-pay-ccbill-txt">Subscribe Now — <span id="cc-price-display">$3.99</span>/mo</span>
+          <span>🔒</span> <span id="btn-pay-ccbill-txt">Subscribe Now — <span id="cc-price-display">$3.99</span>/wk</span>
         </button>
         <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
           By subscribing you agree to our <a onclick="void(0)" style="color:var(--pink);cursor:pointer">Terms of Service</a> and confirm you are 18+. Cancel anytime.
@@ -1997,7 +1997,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="os-row"><span class="label">Trial period</span><span class="val" style="color:var(--success)">7 days FREE</span></div>
         <div class="os-row"><span class="label">Tax</span><span class="val">$0.00</span></div>
         <div class="os-row total"><span class="label">Total today</span><span class="val" id="os-total">$0.00</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px">Then <span id="os-then-price" style="color:var(--text2);font-weight:600">$9.99/week</span> after trial</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Then <span id="os-then-price" style="color:var(--text2);font-weight:600">$3.99/week</span> after trial</div>
       </div>
       <div class="os-perks" id="os-perks">
         <div class="os-perk">4K Ultra HD streaming</div>
@@ -2024,7 +2024,7 @@ select option{background:var(--bg3);color:var(--text)}
     <p class="pay-success-sub">Welcome to Juice Bunny! Your subscription has been activated. Check your email for confirmation.</p>
     <div class="pay-receipt" id="pay-receipt">
       <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">Premium</span></div>
-      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$9.99/week</span></div>
+      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$3.99/week</span></div>
       <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">Credit Card</span></div>
       <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">JB-2025-001</span></div>
       <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">Jun 16, 2025</span></div>
@@ -2203,7 +2203,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="offer-card" onclick="unsubAcceptOffer('vip')">
           <span class="offer-icon">✨</span>
           <div class="offer-title">Try VIP for Free</div>
-          <div class="offer-desc">Upgrade to VIP including exclusive model photos — free for 7 days, then $10/mo.</div>
+          <div class="offer-desc">Upgrade to Monthly including exclusive model photos — free for 7 days, then $9.99/mo.</div>
           <span class="offer-badge">7-Day Free Trial</span>
         </div>
       </div>
@@ -2378,8 +2378,6 @@ const allVideosData = [
   {title:'Phantom Signal',rating:'4.7',genre:'Hentai',premium:true,bg:'linear-gradient(135deg,#0a1a0a,#1a2a1a)',emoji:'👾',cat:'anime',dur:'33 min',views:'6.1K',desc:'Animated fantasy beyond your imagination.'},
   {title:'Cherry Blossom',rating:'4.8',genre:'Anime',premium:false,bg:'linear-gradient(135deg,#2a0a1a,#1a0a2a)',emoji:'🌸',cat:'anime',dur:'11 min',views:'9.2K',desc:'Free anime preview — subscribe for the full series.'},
   {title:'Tape Loop No.7',rating:'4.3',genre:'Originals',premium:false,bg:'linear-gradient(135deg,#0d0a0a,#1a0a0a)',emoji:'🎸',cat:'originals',dur:'15 min',views:'7.1K',desc:'Our most unique original — watch free.'},
-  {title:'Dark Temptation',rating:'4.6',genre:'Originals',premium:true,bg:'linear-gradient(135deg,#1a0a10,#2a0a18)',emoji:'🖤',cat:'originals',dur:'25 min',views:'3.4K',desc:'Give in to your darkest desires.'},
-  {title:'Tokyo Fantasy',rating:'4.8',genre:'Hentai',premium:true,bg:'linear-gradient(135deg,#0a0a2a,#1a0a3a)',emoji:'🗼',cat:'anime',dur:'29 min',views:'4.7K',desc:'An animated Tokyo adventure unlike any other.'},
 ];
 
 // Store current preview data by index
@@ -2608,14 +2606,14 @@ function suSelectPlan(plan){
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Upgrade anytime</span></div>`;
     btn.textContent = 'Create Free Account';
   } else if(plan==='weekly'){
-    perks.innerHTML=`<div class="perks-title">Weekly — $9.99/week</div>
+    perks.innerHTML=`<div class="perks-title">Weekly — $3.99/week</div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Full HD & 4K library</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Chat, posts & downloads</span></div>`;
     btn.textContent = '🔥 Create My Account';
   } else {
-    perks.innerHTML=`<div class="perks-title">Monthly — $24.99/month</div>
+    perks.innerHTML=`<div class="perks-title">Monthly — $9.99/month</div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Everything in Weekly</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Save 37% vs weekly</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
@@ -3033,16 +3031,16 @@ const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 // ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
   free:        { name:'Free',    icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View creator profiles','General chat'] },
-  sub_weekly:  { name:'Weekly',  icon:'🔥', price:9.99,  priceStr:'$9.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices'] },
-  sub_monthly: { name:'Monthly', icon:'🔥', price:24.99, priceStr:'$24.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
+  sub_weekly:  { name:'Weekly',  icon:'🔥', price:3.99,  priceStr:'$3.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices'] },
+  sub_monthly: { name:'Monthly', icon:'🔥', price:9.99, priceStr:'$9.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
   live_call:   { name:'Live Call', icon:'📞', price:3,   priceStr:'$3',     period:'per min', perks:['Private 1-on-1 video call','Pay only for time used','HD audio & video','Chat during the call','Fully private — never recorded'] },
 };
 
 // ── BILLING TOGGLE ───────────────────────────────────────────
 let currentBilling = 'weekly';
 const billingPrices = {
-  weekly:  { price: 9.99,  str: '$9.99',  sub: '/week',  label: 'Weekly',  key: 'sub_weekly'  },
-  monthly: { price: 24.99, str: '$24.99', sub: '/month', label: 'Monthly', key: 'sub_monthly' },
+  weekly:  { price: 3.99,  str: '$3.99',  sub: '/week',  label: 'Weekly',  key: 'sub_weekly'  },
+  monthly: { price: 9.99, str: '$9.99', sub: '/month', label: 'Monthly', key: 'sub_monthly' },
 };
 
 function setBilling(period, btn) {
@@ -3082,7 +3080,7 @@ function goToPayment(planKey) {
   document.getElementById('os-name').textContent              = plan.name;
   document.getElementById('os-subtotal').textContent          = plan.priceStr;
   document.getElementById('os-total').textContent             = '$0.00';
-  document.getElementById('os-then-price').textContent        = plan.priceStr + '/mo';
+  document.getElementById('os-then-price').textContent        = plan.priceStr + '/' + plan.period;
   document.getElementById('btc-amount').textContent           = 'Calculating...';
   document.getElementById('os-perks').innerHTML               = plan.perks.map(p=>`<div class="os-perk">${p}</div>`).join('');
 
@@ -3352,7 +3350,7 @@ function showPaymentSuccess(method, email, npData) {
   nextDate.setMonth(nextDate.getMonth() + 1);
 
   document.getElementById('receipt-plan').textContent   = plan.name;
-  document.getElementById('receipt-amount').textContent = plan.priceStr + '/mo';
+  document.getElementById('receipt-amount').textContent = plan.priceStr + '/' + plan.period;
   document.getElementById('receipt-method').textContent = method === 'ccbill' ? 'Credit Card (CCBill)' : 'Bitcoin (NOWPayments)';
   document.getElementById('receipt-txid').textContent   = txId;
   document.getElementById('receipt-next').textContent   = nextDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -3389,11 +3387,35 @@ function copyBtcAddress() {
   }
 }
 
+
+// ── VERIFY PAYMENT ON RETURN (anti-fake-success) ─────────────
+async function verifyPaymentReturn(orderId) {
+  goTo('payment');
+  showToast('Verifying your payment...');
+  try {
+    const res  = await fetch(`${NP_BASE}/payment/${orderId}`, { headers: { 'x-api-key': NP_API_KEY } });
+    const data = await res.json();
+    if(['finished','confirmed'].includes(data.payment_status)) {
+      showPaymentSuccess('btc', '', data);
+    } else if(data.payment_status) {
+      updatePaymentStatus(data.payment_status, data);
+      showToast('Payment is ' + data.payment_status + ' — access unlocks once it confirms.', true);
+    } else {
+      showToast('Could not verify payment — contact support@juicebunnytv.com', true);
+    }
+  } catch(e) {
+    showToast('Could not verify payment — contact support@juicebunnytv.com', true);
+  }
+}
+
 // ── CHECK URL PARAMS ON LOAD (handle redirect back from NOWPayments) ──
 function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   if(params.get('payment') === 'success') {
-    showPaymentSuccess('btc', '', { payment_id: params.get('order') });
+    // NEVER trust the URL alone — verify with NOWPayments before showing success
+    const orderId = params.get('order');
+    if(orderId) { verifyPaymentReturn(orderId); }
+    else { goTo('payment'); showToast('Could not verify payment — contact support@juicebunnytv.com', true); }
   }
   if(params.get('payment') === 'cancelled') {
     goTo('payment');
@@ -3707,13 +3729,13 @@ try {
 // ── SMART CHATBOT ─────────────────────────────────────────────
 const cbotResponses = [
   { match:['price','pricing','cost','how much','plan','plans','subscription','subscribe','weekly','monthly'],
-    reply:'We have three plans 🐰 Free (SD video, no models), Weekly at $9.99/wk (full access + models), and Monthly at $24.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
-    qr:[{label:'📅 Weekly $9.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $24.99',msg:'Tell me about the monthly plan'},{label:'₿ Crypto payments?',msg:'What crypto do you accept?'}]},
-  { match:['weekly','9.99'],
-    reply:'The Weekly plan is $9.99/week 🔥 Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
+    reply:'We have three plans 🐰 Free (SD video, no models), Weekly at $3.99/wk (full access + models), and Monthly at $9.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
+    qr:[{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Crypto payments?',msg:'What crypto do you accept?'}]},
+  { match:['weekly','3.99'],
+    reply:'The Weekly plan is $3.99/week 🔥 Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
     qr:[{label:'📆 Monthly instead?',msg:'Tell me about the monthly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
-  { match:['monthly','24.99'],
-    reply:'The Monthly plan is $24.99/month — 37% saving vs weekly 💰 Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
+  { match:['monthly','9.99'],
+    reply:'The Monthly plan is $9.99/month — 37% saving vs weekly 💰 Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
     qr:[{label:'📅 Weekly instead?',msg:'Tell me about the weekly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
   { match:['live call','call','calls','video call','minute','per min'],
     reply:'Live calls are $3/minute 📞 You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
@@ -3864,7 +3886,7 @@ async function sendCbotMsgText(text){
       // Show contextual quick replies
       const lower = text.toLowerCase();
       if(lower.includes('pric')||lower.includes('plan')||lower.includes('cost')){
-        renderCbotQR([{label:'📅 Weekly $9.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $24.99',msg:'Tell me about the monthly plan'},{label:'₿ Pay with crypto',msg:'What crypto do you accept?'}]);
+        renderCbotQR([{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Pay with crypto',msg:'What crypto do you accept?'}]);
       } else if(lower.includes('call')||lower.includes('model')){
         renderCbotQR([{label:'💰 How much?',msg:'How much do live calls cost?'},{label:'🐰 Become a model',msg:'How do I become a model?'}]);
       } else if(lower.includes('cancel')||lower.includes('refund')){
