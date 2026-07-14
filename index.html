@@ -2023,11 +2023,11 @@ select option{background:var(--bg3);color:var(--text)}
     <h2 class="pay-success-title">Payment Successful! 🐰</h2>
     <p class="pay-success-sub">Welcome to Juice Bunny! Your subscription has been activated. Check your email for confirmation.</p>
     <div class="pay-receipt" id="pay-receipt">
-      <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">Premium</span></div>
-      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">$3.99/week</span></div>
-      <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">Credit Card</span></div>
-      <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">JB-2025-001</span></div>
-      <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">Jun 16, 2025</span></div>
+      <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">—</span></div>
+      <div class="pay-receipt-row"><span class="rl">Amount</span><span class="rv" id="receipt-amount">—</span></div>
+      <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">—</span></div>
+      <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">—</span></div>
+      <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">—</span></div>
       <div class="pay-receipt-row"><span class="rl">Status</span><span class="rv" style="color:var(--success)">✓ Active</span></div>
     </div>
     <button class="btn-start-watching" onclick="goTo('home');updateNavLoggedIn()">
@@ -2300,6 +2300,8 @@ document.addEventListener('click', function(e) {
    ROUTER
    ============================================================ */
 function goTo(page) {
+  // Success page is only reachable after a verified payment — never directly
+  if(page === 'pay-success' && !window._paymentVerified) { page = 'payment'; }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   window.scrollTo(0,0);
@@ -3355,6 +3357,7 @@ function showPaymentSuccess(method, email, npData) {
   document.getElementById('receipt-txid').textContent   = txId;
   document.getElementById('receipt-next').textContent   = nextDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
+  window._paymentVerified = true;
   goTo('pay-success');
   updateNavLoggedIn();
 }
