@@ -472,15 +472,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="dash-card-title">Plan Distribution</div>
           <div style="display:flex;gap:8px;margin-bottom:14px">
             <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)">312</div>
+              <div class="pd-count-bunnyworld" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)">312</div>
               <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">BunnyWorld</div>
             </div>
             <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--success)">580</div>
+              <div class="pd-count-basic" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--success)">580</div>
               <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Basic</div>
             </div>
             <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text3)">355</div>
+              <div class="pd-count-free" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text3)">355</div>
               <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px">Free</div>
             </div>
           </div>
@@ -607,19 +607,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="user-stats">
         <div class="stat-card" style="--stat-color:#FF2D78">
           <div class="stat-icon">👑</div>
-          <div class="stat-val">312</div>
+          <div class="stat-val pd-count-bunnyworld">312</div>
           <div class="stat-lbl">BunnyWorld</div>
           <div class="stat-delta up">↑ 28 this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#00c878">
           <div class="stat-icon">⭐</div>
-          <div class="stat-val">580</div>
+          <div class="stat-val pd-count-basic">580</div>
           <div class="stat-lbl">Basic</div>
           <div class="stat-delta up">↑ 51 this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#606070">
           <div class="stat-icon">🆓</div>
-          <div class="stat-val">355</div>
+          <div class="stat-val pd-count-free">355</div>
           <div class="stat-lbl">Free</div>
           <div class="stat-delta up">↑ 15 this week</div>
         </div>
@@ -744,10 +744,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div class="bc-audience">
               <label>Send to</label>
               <div class="audience-options">
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> 🌍 All Members <small style="color:var(--text3);margin-left:auto">1,247</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/> 👑 BunnyWorld <small style="color:var(--text3);margin-left:auto">312</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> ⭐ Basic <small style="color:var(--text3);margin-left:auto">580</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> 🆓 Free <small style="color:var(--text3);margin-left:auto">355</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> 🌍 All Members <small class="pd-count-all" style="color:var(--text3);margin-left:auto">1,247</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/> 👑 BunnyWorld <small class="pd-count-bunnyworld" style="color:var(--text3);margin-left:auto">312</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> ⭐ Basic <small class="pd-count-basic" style="color:var(--text3);margin-left:auto">580</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> 🆓 Free <small class="pd-count-free" style="color:var(--text3);margin-left:auto">355</small></label>
               </div>
             </div>
             <div id="email-fields">
@@ -983,6 +983,7 @@ function initAdmin() {
   buildRecentTxns();
   buildTxnsTable();
   buildBcHistory();
+  loadRealData();
   document.getElementById('menu-btn').style.display = window.innerWidth<=900 ? 'block' : 'none';
 }
 
@@ -1366,6 +1367,125 @@ function showToast(msg, isError=false) {
 window.addEventListener('resize', ()=>{
   document.getElementById('menu-btn').style.display = window.innerWidth<=900?'block':'none';
 });
+/* ═══════════════════════════════════════════════════════════
+   REAL DATA — overwrites the demo placeholders with live
+   Supabase data. Each section fails gracefully so one empty
+   table never blanks the whole dashboard.
+═══════════════════════════════════════════════════════════ */
+function timeAgo(iso){
+  if(!iso) return '—';
+  const s = Math.floor((Date.now() - new Date(iso).getTime())/1000);
+  if(s < 60) return 'Just now';
+  if(s < 3600) return Math.floor(s/60)+'m ago';
+  if(s < 86400) return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+function fmtDate(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+}
+
+function loadRealData() {
+  loadSupabase(async (client) => {
+    const dashVals   = document.querySelectorAll('#panel-dashboard .dash-stats .stat-val');
+    const dashDeltas = document.querySelectorAll('#panel-dashboard .dash-stats .stat-delta');
+
+    // ── Profiles: users table, signups, plan distribution ──
+    try {
+      const { data: profiles } = await client.from('profiles')
+        .select('id,full_name,email,plan,role,status,created_at')
+        .order('created_at', { ascending:false });
+      if(profiles && profiles.length) {
+        usersData = profiles.map((p,i) => ({
+          id: p.id, name: p.full_name || (p.email||'User').split('@')[0],
+          email: p.email || '—', plan: p.plan || 'free',
+          status: p.status || 'active', joined: fmtDate(p.created_at), lastActive: '—'
+        }));
+        buildUsersTable();
+        document.getElementById('usr-count-lbl').textContent = profiles.length + (profiles.length===1?' subscriber':' subscribers');
+
+        // Recent signups (latest 4)
+        recentSignupsData.length = 0;
+        profiles.slice(0,4).forEach(p => recentSignupsData.push({
+          init: ((p.full_name||p.email||'U')[0]||'U').toUpperCase(),
+          name: p.full_name || (p.email||'User').split('@')[0],
+          plan: p.plan || 'free', time: timeAgo(p.created_at)
+        }));
+        buildRecentSignups();
+
+        // Plan distribution — dashboard card + users panel + broadcast counts
+        const counts = { bunnyworld:0, basic:0, free:0 };
+        profiles.forEach(p => { counts[p.plan] = (counts[p.plan]||0) + 1; });
+        document.querySelectorAll('.pd-count-bunnyworld').forEach(el => el.textContent = counts.bunnyworld);
+        document.querySelectorAll('.pd-count-basic').forEach(el => el.textContent = counts.basic);
+        document.querySelectorAll('.pd-count-free').forEach(el => el.textContent = counts.free);
+        document.querySelectorAll('.pd-count-all').forEach(el => el.textContent = profiles.length);
+        dashVals[1].textContent = counts.bunnyworld + counts.basic;   // paying subscribers
+        dashDeltas[1].textContent = counts.free + ' on free plan';
+      }
+    } catch(e) { console.warn('profiles load failed', e); }
+
+    // ── Payments: revenue stat, chart, transactions ──
+    try {
+      const { data: pays } = await client.from('payments')
+        .select('*').order('created_at', { ascending:false });
+      const finished = (pays||[]).filter(p => p.status === 'finished');
+      const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+      const monthRev = finished.filter(p => new Date(p.created_at) >= monthStart)
+                               .reduce((s,p) => s + Number(p.amount_usd||0), 0);
+      dashVals[0].textContent   = '$' + monthRev.toFixed(2);
+      dashDeltas[0].textContent = finished.length + ' completed payments total';
+
+      // Last-7-days chart
+      const days = [...Array(7)].map((_,i) => { const d = new Date(); d.setDate(d.getDate()-(6-i)); d.setHours(0,0,0,0); return d; });
+      miniRevData.length = 0;
+      days.forEach(d => {
+        const next = new Date(d); next.setDate(next.getDate()+1);
+        const val = finished.filter(p => { const t = new Date(p.created_at); return t >= d && t < next; })
+                            .reduce((s,p) => s + Number(p.amount_usd||0), 0);
+        miniRevData.push({ day: d.toLocaleDateString('en-US',{weekday:'short'}), val: Math.round(val) });
+      });
+      if(miniRevData.every(d => d.val === 0)) miniRevData[6].val = 0.0001; // avoid /0 in chart
+      buildMiniRevChart();
+
+      if(pays && pays.length) {
+        txnsData = pays.map(p => ({
+          id: p.provider_payment_id || ('JB-' + String(p.id).slice(0,8)),
+          user: p.user_email || '—', plan: p.plan || '—',
+          amount: '$' + Number(p.amount_usd||0).toFixed(2),
+          method: p.payment_method === 'ccbill' ? 'Card' : (p.currency || 'Crypto'),
+          status: p.status, date: fmtDate(p.created_at)
+        }));
+        buildTxnsTable(); buildRecentTxns();
+      } else {
+        txnsData = []; buildTxnsTable(); buildRecentTxns();
+      }
+    } catch(e) { console.warn('payments load failed', e); }
+
+    // ── Videos ──
+    try {
+      const { data: vids, count } = await client.from('videos').select('*', { count:'exact' });
+      dashVals[2].textContent   = (vids||[]).length;
+      dashDeltas[2].textContent = (vids||[]).filter(v=>v.is_premium).length + ' premium';
+      videosData = (vids||[]).map(v => ({
+        id: v.id, title: v.title, cat: v.category || '—', thumb: v.thumbnail_emoji || '🎬',
+        dur: v.duration || '—', premium: !!v.is_premium, featured: !!v.is_featured,
+        views: v.view_count || 0, date: fmtDate(v.created_at)
+      }));
+      buildVideosTable();
+    } catch(e) { console.warn('videos load failed', e); }
+
+    // ── Views today ──
+    try {
+      const today = new Date(); today.setHours(0,0,0,0);
+      const { count } = await client.from('video_views')
+        .select('*', { count:'exact', head:true })
+        .gte('watched_at', today.toISOString());
+      dashVals[3].textContent   = count ?? 0;
+      dashDeltas[3].textContent = 'since midnight';
+    } catch(e) { console.warn('views load failed', e); }
+  });
+}
 </script>
 </body>
 </html>
