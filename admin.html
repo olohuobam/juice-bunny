@@ -357,7 +357,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <input type="password" id="adm-pass" placeholder="••••••••" value="admin123"/>
     </div>
     <button class="btn-admin-login" onclick="adminLogin()">Sign In to Admin</button>
-    <p class="login-hint">Demo: admin@juicebunny.com / admin123</p>
   </div>
 </div>
 
@@ -873,21 +872,67 @@ let filteredTxns   = [...txnsData];
 /* ═══════════════════════════════════════════════════════════
    AUTH
 ═══════════════════════════════════════════════════════════ */
+/* ── REAL SUPABASE ADMIN AUTH ── */
+const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+let sb = null;
+
+function loadSupabase(cb) {
+  if(sb) return cb(sb);
+  if(window.supabase) { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); return cb(sb); }
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  script.onload = () => { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); cb(sb); };
+  document.head.appendChild(script);
+}
+
+async function verifyAdminSession(client) {
+  const { data: { session } } = await client.auth.getSession();
+  if(!session) return null;
+  const { data: profile } = await client.from('profiles')
+    .select('role, full_name').eq('id', session.user.id).maybeSingle();
+  return (profile && profile.role === 'admin') ? { session, profile } : false;
+}
+
 function adminLogin() {
   const email = document.getElementById('adm-email').value.trim();
   const pass  = document.getElementById('adm-pass').value;
-  if(email === 'admin@juicebunny.com' && pass === 'admin123') {
+  if(!email || !pass) { showToast('Enter email and password', true); return; }
+
+  loadSupabase(async (client) => {
+    try {
+      const { error } = await client.auth.signInWithPassword({ email, password: pass });
+      if(error) { showToast(error.message || 'Invalid credentials', true); return; }
+
+      const admin = await verifyAdminSession(client);
+      if(!admin) {
+        await client.auth.signOut();
+        showToast('This account does not have admin access', true);
+        return;
+      }
+      document.getElementById('admin-login').style.display = 'none';
+      document.getElementById('admin-shell').style.display = 'block';
+      initAdmin();
+      showToast('✓ Welcome back, ' + ((admin.profile.full_name || 'Admin').split(' ')[0]) + '!');
+    } catch(err) {
+      showToast('Login failed — ' + (err.message || 'try again'), true);
+    }
+  });
+}
+
+// Auto-restore an existing admin session on page load
+loadSupabase(async (client) => {
+  const admin = await verifyAdminSession(client);
+  if(admin) {
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-shell').style.display = 'block';
     initAdmin();
-    showToast('✓ Welcome back, Kimoni!');
-  } else {
-    showToast('Invalid credentials', true);
   }
-}
+});
 document.getElementById('adm-pass').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
 
 function adminLogout() {
+  loadSupabase(async (client) => { await client.auth.signOut(); });
   document.getElementById('admin-shell').style.display = 'none';
   document.getElementById('admin-login').style.display = 'flex';
   showToast('Signed out');
