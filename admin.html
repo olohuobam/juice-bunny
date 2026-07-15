@@ -1141,8 +1141,9 @@ function submitVideo() {
 ═══════════════════════════════════════════════════════════ */
 function buildUsersTable(data) {
   const rows = data || usersData;
-  document.getElementById('usr-count-lbl').textContent = '1,247 subscribers';
-  document.getElementById('usr-count-badge').textContent = '1.2K';
+  const total = usersData.length;
+  document.getElementById('usr-count-lbl').textContent = total + (total === 1 ? ' subscriber' : ' subscribers');
+  document.getElementById('usr-count-badge').textContent = total > 999 ? (total/1000).toFixed(1) + 'K' : total;
   document.getElementById('users-tbody').innerHTML = rows.map(u=>`
     <tr>
       <td>
