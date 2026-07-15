@@ -1060,6 +1060,18 @@ select option{background:var(--bg3);color:var(--text)}
 
 
 /* === UI tweaks: smaller filter tabs, logo chatbot, standalone Cams link === */
+.avatar-menu{
+  position:absolute;top:calc(100% + 10px);right:0;min-width:185px;
+  background:var(--bg2,#12121a);border:1px solid rgba(255,45,120,.35);border-radius:14px;
+  padding:6px;display:none;flex-direction:column;z-index:400;
+  box-shadow:0 12px 36px rgba(0,0,0,.55);
+}
+.avatar-menu.open{display:flex}
+.avatar-menu a{
+  padding:10px 14px;border-radius:9px;color:var(--text,#fff);font-size:13.5px;
+  font-weight:600;cursor:pointer;text-decoration:none;transition:background .15s;
+}
+.avatar-menu a:hover{background:rgba(255,45,120,.14)}
 .ftab{padding:5px 14px;font-size:12px}
 .chatbot-fab .fab-logo{width:40px;height:40px;object-fit:contain;pointer-events:none}
 .cbot-av-logo{width:26px;height:26px;object-fit:contain}
@@ -1111,7 +1123,14 @@ select option{background:var(--bg3);color:var(--text)}
     <button class="btn-nav-login" id="btnNavLogin" onclick="goTo('login')">Login</button>
     <button class="btn-nav-signup" id="btnNavSignup" onclick="goTo('signup')">Sign Up</button>
     <button class="btn-upgrade-nav" id="btnNavUpgrade" onclick="goToPayment('sub_weekly')">Go Premium</button>
-    <div class="nav-avatar" id="navAvatar" onclick="window.location.href='profile.html'">JD</div>
+    <div style="position:relative" id="navAvatarWrap">
+      <div class="nav-avatar" id="navAvatar" onclick="toggleAvatarMenu(event)">JD</div>
+      <div class="avatar-menu" id="avatarMenu">
+        <a onclick="window.location.href='profile.html'">👤 My Profile</a>
+        <a id="avatarMenuAdmin" style="display:none" onclick="window.location.href='admin.html'">🛠 Admin Panel</a>
+        <a onclick="siteLogout()" style="color:#ff6b8a">🚪 Log Out</a>
+      </div>
+    </div>
     <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">☰</button>
   </div>
 </nav>
@@ -1989,7 +2008,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="os-plan-icon" id="os-icon">🔥</div>
         <div>
           <div class="os-plan-name" id="os-name">Premium Plan</div>
-          <div class="os-plan-billing">Monthly · Cancel anytime</div>
+          <div class="os-plan-billing" id="os-billing">Monthly · Cancel anytime</div>
         </div>
       </div>
       <div class="os-rows">
@@ -2328,10 +2347,31 @@ function updateNavLoggedIn(userData) {
     const name = userData.full_name || userData.email || 'JD';
     const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
     av.textContent = initials;
+    if(userData.role) window._userRole = userData.role;
   }
-  // Show broadcast button for admin
-  const bc = document.getElementById('broadcastBtn');
-  bc.style.display = 'flex';
+  // Broadcast + admin menu item: admins only
+  const isAdmin = window._userRole === 'admin';
+  document.getElementById('broadcastBtn').style.display = isAdmin ? 'flex' : 'none';
+  const adminItem = document.getElementById('avatarMenuAdmin');
+  if(adminItem) adminItem.style.display = isAdmin ? 'block' : 'none';
+}
+
+function toggleAvatarMenu(e) {
+  e.stopPropagation();
+  document.getElementById('avatarMenu').classList.toggle('open');
+}
+document.addEventListener('click', () => {
+  const m = document.getElementById('avatarMenu');
+  if(m) m.classList.remove('open');
+});
+
+function siteLogout() {
+  loadSupabase(async (sb) => {
+    await sb.auth.signOut();
+    window._userRole = null;
+    showToast('Logged out 👋');
+    setTimeout(() => window.location.href = 'index.html', 600);
+  });
 }
 
 /* ============================================================
@@ -3086,10 +3126,13 @@ function goToPayment(planKey) {
 
   document.getElementById('pay-plan-icon').textContent        = plan.icon;
   document.getElementById('pay-plan-name').textContent        = plan.name;
-  document.getElementById('pay-plan-price').innerHTML         = plan.priceStr + '<span>/mo</span>';
+  const perAbbr = plan.period === 'week' ? '/wk' : plan.period === 'month' ? '/mo' : '/' + plan.period;
+  document.getElementById('pay-plan-price').innerHTML         = plan.priceStr + '<span>' + perAbbr + '</span>';
+  document.querySelector('.psb-billing').textContent          = 'Billed ' + (plan.period === 'week' ? 'weekly' : plan.period === 'month' ? 'monthly' : plan.period) + ' · Cancel anytime';
   document.getElementById('cc-price-display').textContent     = plan.priceStr;
   document.getElementById('os-icon').textContent              = plan.icon;
   document.getElementById('os-name').textContent              = plan.name;
+  document.getElementById('os-billing').textContent           = (plan.period === 'week' ? 'Weekly' : plan.period === 'month' ? 'Monthly' : plan.period) + ' · Cancel anytime';
   document.getElementById('os-subtotal').textContent          = plan.priceStr;
   document.getElementById('os-total').textContent             = '$0.00';
   document.getElementById('os-then-price').textContent        = plan.priceStr + '/' + plan.period;
@@ -3680,12 +3723,7 @@ function checkSession() {
       // Get profile data for initials
       const { data: profile } = await sb.from('profiles').select('full_name,email,role').eq('id', session.user.id).single();
       updateNavLoggedIn(profile || { email: session.user.email });
-      // Redirect admin if on login page
-      if(profile?.role === 'admin') {
-        const av = document.getElementById('navAvatar');
-        av.title = 'Admin — Click for Admin Panel';
-        av.onclick = () => window.location.href = 'admin.html';
-      }
+      // Admin access is available via the avatar dropdown menu (no click hijack)
     }
   });
 }
