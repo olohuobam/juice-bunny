@@ -475,7 +475,7 @@ select option{background:var(--bg3);color:var(--text)}
             <div class="plan-badge">Most Popular</div>
             <input type="radio" name="plan" value="premium" checked/>
             <div class="plan-name">Premium</div>
-            <div class="plan-cost">$3.99<small>/mo</small></div>
+            <div class="plan-cost">$3.99<small>/wk</small></div>
             <div class="plan-tag">4K · Full Access</div>
           </label>
         </div>
@@ -673,6 +673,31 @@ async function createAccount() {
   const plan     = selectedPlan;
 
   try {
+    // 0. OAuth users (Google) are already authenticated — no password signup.
+    const { data: { session: oauthSession } } = await sb.auth.getSession();
+    if (oauthSession) {
+      const u = oauthSession.user;
+      await sb.from('profiles').upsert({
+        id: u.id,
+        email: u.email,
+        full_name: (fname + ' ' + lname).trim() || u.user_metadata?.full_name || u.user_metadata?.name || '',
+        plan,
+        country: country || null,
+        date_of_birth: dob || null,
+        status: 'active'
+      });
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // 0b. Email signups need a real password
+    if (!password || password.length < 6) {
+      showToast('Please enter a password (at least 6 characters)', true);
+      btn.disabled = false;
+      document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+      return;
+    }
+
     // 1. Sign up with Supabase Auth
     const { data, error } = await sb.auth.signUp({
       email,
@@ -688,6 +713,16 @@ async function createAccount() {
     });
 
     if (error) throw error;
+
+    // Supabase returns a fake success for existing emails (anti-enumeration) —
+    // detectable because identities comes back empty
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+      showToast('An account with this email already exists — please log in instead', true);
+      btn.disabled = false;
+      document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+      setTimeout(() => { window.location.href = 'login.html'; }, 1800);
+      return;
+    }
 
     // 2. Update profile with plan + extra info
     // (profile row auto-created by DB trigger, just update it)
@@ -747,7 +782,7 @@ async function createAccount() {
 async function signInWithGoogle() {
   const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/index.html' }
+    options: { redirectTo: window.location.origin + '/?oauth=signup' }
   });
   if (error) console.error(error);
 }

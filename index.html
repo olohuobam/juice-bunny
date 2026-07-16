@@ -2678,6 +2678,35 @@ async function suCreateAccount(){
 
   loadSupabase(async (sb) => {
     try {
+      // 0. OAuth users (Google) are already authenticated — no password signup.
+      const { data: { session: oauthSession } } = await sb.auth.getSession();
+      if (oauthSession) {
+        const u = oauthSession.user;
+        await sb.from('profiles').upsert({
+          id: u.id,
+          email: u.email,
+          full_name: (fname + ' ' + lname).trim() || u.user_metadata?.full_name || u.user_metadata?.name || '',
+          plan,
+          country: country || null,
+          date_of_birth: dob || null,
+          status: 'active'
+        });
+        document.querySelectorAll('#page-signup .form-panel').forEach(p=>p.classList.remove('active'));
+        document.getElementById('su-steps').style.display='none';
+        document.getElementById('su-header').style.display='none';
+        document.getElementById('su-success').style.display='block';
+        updateNavLoggedIn({ full_name: u.user_metadata?.full_name, email: u.email });
+        return;
+      }
+
+      // 0b. Email signups need a real password
+      if (!password || password.length < 6) {
+        showToast('Please enter a password (at least 6 characters)', true);
+        btn.disabled = false;
+        document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+        return;
+      }
+
       // 1. Sign up with Supabase Auth
       const { data, error } = await sb.auth.signUp({
         email,
