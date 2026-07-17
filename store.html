@@ -124,6 +124,19 @@ button{font-family:inherit;cursor:pointer;border:none}
 .store-footer{border-top:1px solid var(--border);padding:26px 20px;text-align:center;color:var(--text3);font-size:12px}
 .store-footer a{color:var(--text2)}
 
+
+.hamburger{display:none;background:none;color:var(--text);font-size:24px;line-height:1;padding:4px 8px}
+.mobile-menu{position:fixed;top:0;right:-260px;width:240px;height:100vh;z-index:300;background:var(--bg2);
+  border-left:1px solid var(--border);padding:70px 20px 20px;display:flex;flex-direction:column;gap:6px;
+  transition:right .26s ease}
+.mobile-menu.open{right:0}
+.mobile-menu a{padding:12px 14px;border-radius:11px;color:var(--text);font-size:15px;font-weight:600}
+.mobile-menu a:hover{background:var(--bg3)}
+.mobile-menu a.active{color:var(--pink)}
+.mm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:250;opacity:0;pointer-events:none;transition:.25s}
+.mm-overlay.open{opacity:1;pointer-events:auto}
+@media(max-width:640px){ .hamburger{display:block} }
+
 @media(max-width:640px){
   .nav{gap:14px;padding:12px 16px}
   .nav-links{display:none}
@@ -151,7 +164,16 @@ button{font-family:inherit;cursor:pointer;border:none}
   </div>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart(true)">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+    <button class="hamburger" onclick="toggleMenu(true)" aria-label="Menu">☰</button>
   </div>
+</nav>
+
+<div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="store.html" class="active">🛍️ Store</a>
+  <a href="chat.html">💬 Chat</a>
+  <a href="model-apply.html">🐰 Become a Model</a>
 </nav>
 
 <!-- HERO -->
@@ -202,6 +224,7 @@ button{font-family:inherit;cursor:pointer;border:none}
 </footer>
 
 <script>
+function toggleMenu(open){document.getElementById('mobileMenu').classList.toggle('open',open);document.getElementById('mmOverlay').classList.toggle('open',open);}
 /* ═══════════════════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════════════════ */
