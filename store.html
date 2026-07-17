@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Juice Bunny Store — Wellness, Supplements & More</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+:root{
+  --pink:#FF2D78; --pink2:#e0206a; --pink-glow:rgba(255,45,120,.35);
+  --bg:#0d0d12; --bg2:#12121a; --bg3:#1a1a24;
+  --text:#fff; --text2:#a0a0b0; --text3:#606070;
+  --border:rgba(255,255,255,.08); --success:#2ecc71; --error:#ff4444;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none}
+
+/* ── NAV ─────────────────────────────────────────── */
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:26px;
+  padding:14px 28px;background:rgba(13,13,18,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Dancing Script',cursive;font-size:24px;font-weight:700}
+.nav-logo img{height:34px;width:auto}
+.nav-links{display:flex;gap:22px;font-size:14px;color:var(--text2);margin-left:8px}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--pink);font-weight:600}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.cart-btn{position:relative;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:9px 18px;border-radius:20px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:.2s}
+.cart-btn:hover{border-color:var(--pink)}
+.cart-count{background:var(--pink);color:#fff;font-size:11px;font-weight:700;min-width:19px;height:19px;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+
+/* ── HERO ────────────────────────────────────────── */
+.store-hero{padding:56px 28px 30px;text-align:center;
+  background:radial-gradient(ellipse 60% 70% at 50% 0%,rgba(255,45,120,.14),transparent 65%)}
+.store-hero h1{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(44px,6vw,66px);line-height:1.1}
+.store-hero h1 span{color:var(--pink)}
+.store-hero p{color:var(--text2);margin-top:10px;font-size:15px}
+.hero-badges{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.hero-badge{font-size:11px;letter-spacing:1.5px;font-weight:600;color:var(--text2);
+  border:1px solid var(--border);padding:6px 14px;border-radius:14px;background:var(--bg2)}
+
+/* ── SHELF (category tabs) — the signature ───────── */
+.shelf{position:sticky;top:63px;z-index:150;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  padding:16px 20px;background:rgba(13,13,18,.94);backdrop-filter:blur(10px)}
+.shelf-tab{background:transparent;border:1px solid var(--border);color:var(--text2);
+  padding:7px 18px;border-radius:18px;font-size:13px;font-weight:600;transition:.22s}
+.shelf-tab:hover{color:var(--text);border-color:rgba(255,45,120,.5)}
+.shelf-tab.active{color:#fff;background:var(--pink);border-color:var(--pink);
+  box-shadow:0 0 18px var(--pink-glow), 0 0 46px rgba(255,45,120,.18)}
+
+/* ── GRID ────────────────────────────────────────── */
+.store-wrap{max-width:1180px;margin:0 auto;padding:26px 24px 90px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;transition:transform .22s, box-shadow .22s, border-color .22s}
+.pcard:hover{transform:translateY(-4px);border-color:rgba(255,45,120,.45);
+  box-shadow:0 14px 34px rgba(0,0,0,.45), 0 0 24px rgba(255,45,120,.10)}
+.pcard-thumb{height:168px;display:flex;align-items:center;justify-content:center;font-size:58px;
+  background:linear-gradient(135deg,#1a1020,#241428)}
+.pcard-thumb img{width:100%;height:100%;object-fit:cover}
+.pcard-body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pcard-cat{font-size:10.5px;letter-spacing:1.6px;font-weight:700;color:var(--pink);text-transform:uppercase}
+.pcard-name{font-size:15.5px;font-weight:600;line-height:1.35}
+.pcard-desc{font-size:12.5px;color:var(--text2);line-height:1.5;flex:1}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.pcard-price{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px}
+.pcard-price small{font-size:14px;color:var(--text2)}
+.btn-add{background:var(--pink);color:#fff;padding:8px 16px;border-radius:14px;font-size:13px;font-weight:600;transition:.2s}
+.btn-add:hover{background:var(--pink2);box-shadow:0 0 14px var(--pink-glow)}
+.btn-add:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed}
+.oos{font-size:11px;color:var(--error);font-weight:600}
+.grid-empty{grid-column:1/-1;text-align:center;color:var(--text2);padding:60px 20px;font-size:14px}
+
+/* ── CART DRAWER ─────────────────────────────────── */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;opacity:0;pointer-events:none;transition:.25s}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-drawer{position:fixed;top:0;right:-420px;width:min(400px,92vw);height:100vh;z-index:401;
+  background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;transition:right .28s ease}
+.cart-drawer.open{right:0}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--border)}
+.cart-head h3{font-family:'Dancing Script',cursive;font-weight:700;font-size:26px}
+.cart-close{background:none;color:var(--text2);font-size:22px;line-height:1}
+.cart-items{flex:1;overflow-y:auto;padding:14px 22px;display:flex;flex-direction:column;gap:14px}
+.cart-item{display:flex;gap:12px;align-items:center;background:var(--bg3);border:1px solid var(--border);
+  border-radius:14px;padding:10px 12px}
+.ci-thumb{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;background:linear-gradient(135deg,#1a1020,#241428);flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-price{font-size:12px;color:var(--text2);margin-top:2px}
+.ci-qty{display:flex;align-items:center;gap:8px}
+.ci-qty button{width:24px;height:24px;border-radius:8px;background:var(--bg);border:1px solid var(--border);
+  color:var(--text);font-size:14px;line-height:1}
+.ci-qty button:hover{border-color:var(--pink)}
+.ci-qty span{font-size:13px;font-weight:600;min-width:16px;text-align:center}
+.cart-empty{text-align:center;color:var(--text2);font-size:13.5px;padding:40px 12px}
+.cart-foot{border-top:1px solid var(--border);padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.cart-total-row{display:flex;justify-content:space-between;font-size:14px;color:var(--text2)}
+.cart-total-row.big{font-size:16px;color:var(--text);font-weight:700}
+.cart-total-row.big span:last-child{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px}
+.btn-checkout{background:var(--pink);color:#fff;padding:14px;border-radius:16px;font-size:15px;font-weight:700;transition:.2s}
+.btn-checkout:hover{background:var(--pink2);box-shadow:0 0 18px var(--pink-glow)}
+.cart-note{font-size:11px;color:var(--text3);text-align:center;line-height:1.5}
+
+/* ── TOAST ───────────────────────────────────────── */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--bg3);border:1px solid rgba(255,45,120,.45);color:var(--text);
+  padding:12px 22px;border-radius:14px;font-size:13.5px;font-weight:500;z-index:600;
+  opacity:0;transition:.3s;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── FOOTER ──────────────────────────────────────── */
+.store-footer{border-top:1px solid var(--border);padding:26px 20px;text-align:center;color:var(--text3);font-size:12px}
+.store-footer a{color:var(--text2)}
+
+@media(max-width:640px){
+  .nav{gap:14px;padding:12px 16px}
+  .nav-links{display:none}
+  .store-hero{padding:40px 18px 22px}
+  .shelf{top:57px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .pcard-thumb{height:130px;font-size:44px}
+  .pcard-body{padding:12px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html"><img src="white-rabbit-logo.png" alt=""/> Juice Bunny</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="store.html" class="active">Store</a>
+    <a href="chat.html">Chat</a>
+    <a href="model-apply.html">Become a Model</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="toggleCart(true)">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="store-hero">
+  <h1>Juice Bunny <span>Store</span></h1>
+  <p>Supplements, gym essentials, wellness & intimacy — curated for the Juice Bunny lifestyle.</p>
+  <div class="hero-badges">
+    <span class="hero-badge">DISCREET PACKAGING</span>
+    <span class="hero-badge">18+ ONLY</span>
+    <span class="hero-badge">CARD &amp; CRYPTO AT LAUNCH</span>
+  </div>
+</header>
+
+<!-- CATEGORY SHELF -->
+<div class="shelf" id="shelf">
+  <button class="shelf-tab active" data-cat="all" onclick="filterCat(this)">All</button>
+  <button class="shelf-tab" data-cat="supplements" onclick="filterCat(this)">Supplements</button>
+  <button class="shelf-tab" data-cat="gym" onclick="filterCat(this)">Gym</button>
+  <button class="shelf-tab" data-cat="wellness" onclick="filterCat(this)">Wellness</button>
+  <button class="shelf-tab" data-cat="intimacy" onclick="filterCat(this)">Intimacy</button>
+</div>
+
+<!-- GRID -->
+<main class="store-wrap">
+  <div class="grid" id="grid"></div>
+</main>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="cart-head">
+    <h3>Your Cart</h3>
+    <button class="cart-close" onclick="toggleCart(false)" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-total-row"><span>Items</span><span id="cartItemsCount">0</span></div>
+    <div class="cart-total-row big"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Checkout</button>
+    <div class="cart-note">Checkout opens with card &amp; crypto payments at launch.<br/>Discreet billing &amp; packaging on every order.</div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<footer class="store-footer">
+  © 2026 Juice Bunny · 18+ Only · <a href="index.html">juicebunnytv.com</a>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+let sb = null;
+
+/* Catalog fallback — the launch line-up. Replaced automatically
+   by the Supabase `products` table once it has rows. */
+const FALLBACK_PRODUCTS = [
+  {id:'p1', name:'Bunny Boost — Performance Supplement', category:'supplements', price_usd:29.99, emoji:'⚡', description:'Daily energy & stamina blend. 60 capsules.', in_stock:true},
+  {id:'p2', name:'Juice Greens — Superfood Powder', category:'supplements', price_usd:34.99, emoji:'🥬', description:'30 servings of greens, adaptogens & gut support.', in_stock:true},
+  {id:'p3', name:'Midnight Recovery — Sleep & Muscle', category:'supplements', price_usd:24.99, emoji:'🌙', description:'Magnesium + zinc night-time recovery formula.', in_stock:true},
+  {id:'p4', name:'JB Resistance Bands — 5-Level Set', category:'gym', price_usd:19.99, emoji:'💪', description:'Five resistance levels with carry pouch.', in_stock:true},
+  {id:'p5', name:'Bunny Grip — Lifting Straps', category:'gym', price_usd:14.99, emoji:'🏋️', description:'Padded wrist straps for heavy pulls.', in_stock:true},
+  {id:'p6', name:'JB Shaker — Insulated 700ml', category:'gym', price_usd:16.99, emoji:'🥤', description:'Leak-proof, keeps drinks cold for 12h.', in_stock:true},
+  {id:'p7', name:'Glow Ritual — Massage Oil', category:'wellness', price_usd:22.99, emoji:'✨', description:'Warming botanical massage oil, 120ml.', in_stock:true},
+  {id:'p8', name:'Deep Calm — Aromatherapy Candle', category:'wellness', price_usd:18.99, emoji:'🕯️', description:'Sandalwood & vanilla, 40h burn.', in_stock:true},
+  {id:'p9', name:'Bunny Kiss — Couples Set', category:'intimacy', price_usd:49.99, emoji:'💋', description:'Curated couples kit. Ships discreet.', in_stock:true},
+  {id:'p10', name:'Silk Touch — Personal Lubricant', category:'intimacy', price_usd:15.99, emoji:'💧', description:'Water-based, body-safe, 250ml.', in_stock:true},
+  {id:'p11', name:'After Dark — Enhancement Supplement', category:'intimacy', price_usd:39.99, emoji:'🔥', description:'Herbal enhancement blend for him & her.', in_stock:true},
+  {id:'p12', name:'Velvet Blindfold — Satin', category:'intimacy', price_usd:12.99, emoji:'🎀', description:'Soft satin with adjustable strap.', in_stock:true},
+];
+
+let products = [...FALLBACK_PRODUCTS];
+let activeCat = 'all';
+let cart = [];
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+try { cart = JSON.parse(localStorage.getItem('jb_cart') || '[]'); } catch(e) { cart = []; }
+
+renderGrid();
+renderCart();
+
+const s = document.createElement('script');
+s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+s.onload = async () => {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  try {
+    const { data } = await sb.from('products')
+      .select('*').eq('is_active', true).order('created_at', { ascending:true });
+    if (data && data.length) { products = data; renderGrid(); }
+  } catch(e) { /* keep fallback catalog */ }
+};
+document.head.appendChild(s);
+
+/* ═══════════════════════════════════════════════════
+   GRID
+═══════════════════════════════════════════════════ */
+function filterCat(btn) {
+  document.querySelectorAll('.shelf-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const list = products.filter(p => activeCat === 'all' || p.category === activeCat);
+  if (!list.length) {
+    grid.innerHTML = '<div class="grid-empty">Nothing on this shelf yet — check back soon 🐰</div>';
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <article class="pcard">
+      <div class="pcard-thumb">${p.image_url ? `<img src="${p.image_url}" alt="${esc(p.name)}"/>` : (p.emoji || '🛍️')}</div>
+      <div class="pcard-body">
+        <div class="pcard-cat">${esc(p.category)}</div>
+        <div class="pcard-name">${esc(p.name)}</div>
+        <div class="pcard-desc">${esc(p.description || '')}</div>
+        <div class="pcard-foot">
+          <div class="pcard-price"><small>$</small>${Number(p.price_usd).toFixed(2)}</div>
+          ${p.in_stock === false
+            ? '<span class="oos">Out of stock</span>'
+            : `<button class="btn-add" onclick="addToCart('${p.id}')">Add to Cart</button>`}
+        </div>
+      </div>
+    </article>`).join('');
+}
+
+function esc(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ═══════════════════════════════════════════════════
+   CART
+═══════════════════════════════════════════════════ */
+function persistCart() { localStorage.setItem('jb_cart', JSON.stringify(cart)); }
+
+function addToCart(id) {
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) return;
+  const line = cart.find(x => String(x.id) === String(id));
+  if (line) line.qty += 1;
+  else cart.push({ id: p.id, name: p.name, price: Number(p.price_usd), emoji: p.emoji || '🛍️', qty: 1 });
+  persistCart(); renderCart();
+  showToast('✓ Added ' + p.name.split('—')[0].trim() + ' to cart');
+}
+
+function changeQty(id, delta) {
+  const line = cart.find(x => String(x.id) === String(id));
+  if (!line) return;
+  line.qty += delta;
+  if (line.qty <= 0) cart = cart.filter(x => String(x.id) !== String(id));
+  persistCart(); renderCart();
+}
+
+function renderCart() {
+  const count = cart.reduce((s,l) => s + l.qty, 0);
+  const total = cart.reduce((s,l) => s + l.qty * l.price, 0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartItemsCount').textContent = count;
+  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+  const box = document.getElementById('cartItems');
+  if (!cart.length) {
+    box.innerHTML = '<div class="cart-empty">Your cart is empty.<br/>The shelves are full though 🐰</div>';
+    return;
+  }
+  box.innerHTML = cart.map(l => `
+    <div class="cart-item">
+      <div class="ci-thumb">${l.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${esc(l.name)}</div>
+        <div class="ci-price">$${l.price.toFixed(2)} each</div>
+      </div>
+      <div class="ci-qty">
+        <button onclick="changeQty('${l.id}',-1)" aria-label="Decrease">−</button>
+        <span>${l.qty}</span>
+        <button onclick="changeQty('${l.id}',1)" aria-label="Increase">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleCart(open) {
+  document.getElementById('cartDrawer').classList.toggle('open', open);
+  document.getElementById('cartOverlay').classList.toggle('open', open);
+}
+
+function checkout() {
+  if (!cart.length) { showToast('Your cart is empty 🐰', true); return; }
+  showToast('🛒 Checkout opens at launch — card & crypto payments coming soon!', true);
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>
