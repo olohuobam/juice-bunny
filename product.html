@@ -169,6 +169,23 @@ try { cart = JSON.parse(localStorage.getItem('jb_cart') || '[]'); } catch(e){ ca
 
 const id = new URLSearchParams(location.search).get('id');
 
+/* Fallback catalog — mirrors store.html so a product link still
+   resolves before the DB loads or if the table is empty. */
+const FALLBACK_PRODUCTS = {
+  p1:{id:'p1',name:'Bunny Boost — Performance Supplement',category:'supplements',price_usd:29.99,emoji:'⚡',description:'Daily energy & stamina blend. 60 capsules.',stock_units:40},
+  p2:{id:'p2',name:'Juice Greens — Superfood Powder',category:'supplements',price_usd:34.99,sale_price:27.99,emoji:'🥬',description:'30 servings of greens, adaptogens & gut support.',stock_units:12},
+  p3:{id:'p3',name:'Midnight Recovery — Sleep & Muscle',category:'supplements',price_usd:24.99,emoji:'🌙',description:'Magnesium + zinc night-time recovery formula.',stock_units:40},
+  p4:{id:'p4',name:'JB Resistance Bands — 5-Level Set',category:'gym',price_usd:19.99,emoji:'💪',description:'Five resistance levels with carry pouch.',stock_units:40},
+  p5:{id:'p5',name:'Bunny Grip — Lifting Straps',category:'gym',price_usd:14.99,emoji:'🏋️',description:'Padded wrist straps for heavy pulls.',stock_units:40},
+  p6:{id:'p6',name:'JB Shaker — Insulated 700ml',category:'gym',price_usd:16.99,emoji:'🥤',description:'Leak-proof, keeps drinks cold for 12h.',stock_units:40},
+  p7:{id:'p7',name:'Glow Ritual — Massage Oil',category:'wellness',price_usd:22.99,emoji:'✨',description:'Warming botanical massage oil, 120ml.',stock_units:40},
+  p8:{id:'p8',name:'Deep Calm — Aromatherapy Candle',category:'wellness',price_usd:18.99,emoji:'🕯️',description:'Sandalwood & vanilla, 40h burn.',stock_units:40},
+  p9:{id:'p9',name:'Bunny Kiss — Couples Set',category:'intimacy',price_usd:49.99,sale_price:37.49,emoji:'💋',description:'Curated couples kit. Ships discreet.',stock_units:25},
+  p10:{id:'p10',name:'Silk Touch — Personal Lubricant',category:'intimacy',price_usd:15.99,emoji:'💧',description:'Water-based, body-safe, 250ml.',stock_units:40},
+  p11:{id:'p11',name:'After Dark — Enhancement Supplement',category:'intimacy',price_usd:39.99,sale_price:31.99,emoji:'🔥',description:'Herbal enhancement blend for him & her.',stock_units:60},
+  p12:{id:'p12',name:'Velvet Blindfold — Satin',category:'intimacy',price_usd:12.99,emoji:'🎀',description:'Soft satin with adjustable strap.',stock_units:40},
+};
+
 renderCart();
 const s = document.createElement('script');
 s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
@@ -179,12 +196,13 @@ function esc(str){ return String(str==null?'':str).replace(/[&<>"']/g,c=>({'&':'
 
 async function loadProduct() {
   if (!id) { showNotFound(); return; }
+  // Fallback catalog first — instant, and covers p1-style demo IDs
+  if (FALLBACK_PRODUCTS[id]) { product = FALLBACK_PRODUCTS[id]; renderDetail(); }
   try {
     const { data } = await sb.from('products').select('*').eq('id', id).eq('is_active', true).maybeSingle();
-    if (!data) { showNotFound(); return; }
-    product = data;
-    renderDetail();
-  } catch(e) { showNotFound(); }
+    if (data) { product = data; renderDetail(); return; }
+    if (!product) showNotFound();   // no DB row and no fallback match
+  } catch(e) { if (!product) showNotFound(); }
 }
 
 function showNotFound() {
