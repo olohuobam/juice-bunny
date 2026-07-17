@@ -38,17 +38,28 @@ button{font-family:inherit;cursor:pointer;border:none}
 .detail{max-width:1100px;margin:0 auto;padding:20px 24px 90px;
   display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
 
-/* Gallery */
-.gallery-main{aspect-ratio:1;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#1a1020,#241428);
-  display:flex;align-items:center;justify-content:center;font-size:120px;border:1px solid var(--border)}
-.gallery-main img{width:100%;height:100%;object-fit:cover}
-.gallery-thumbs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.gthumb{width:72px;height:72px;border-radius:13px;overflow:hidden;background:linear-gradient(135deg,#1a1020,#241428);
-  display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;
-  border:2px solid transparent;transition:.18s}
-.gthumb img{width:100%;height:100%;object-fit:cover}
-.gthumb.active{border-color:var(--pink)}
-.gthumb:hover{border-color:rgba(255,45,120,.5)}
+/* Carousel */
+.carousel{position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;border:1px solid var(--border);
+  background:var(--bg2);cursor:grab;user-select:none}
+.carousel:active{cursor:grabbing}
+.track{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.slide img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.slide-emoji{font-size:120px}
+.slide-label{position:absolute;bottom:14px;left:14px;font-size:11px;letter-spacing:1.4px;font-weight:700;
+  color:var(--text3);text-transform:uppercase;background:rgba(0,0,0,.35);padding:5px 11px;border-radius:9px}
+.garrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;
+  background:rgba(13,13,18,.7);backdrop-filter:blur(6px);border:1px solid var(--border);color:#fff;
+  font-size:26px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:3}
+.garrow:hover{background:var(--pink);border-color:var(--pink)}
+.garrow.left{left:12px} .garrow.right{right:12px}
+.carousel-sale{position:absolute;top:14px;right:14px;background:var(--success);color:#04210f;z-index:3;
+  font-size:13px;font-weight:800;letter-spacing:.5px;padding:5px 11px;border-radius:11px}
+.gdots{display:flex;gap:9px;justify-content:center;margin-top:14px}
+.gdot{width:9px;height:9px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);
+  padding:0;transition:.2s;cursor:pointer}
+.gdot.active{background:var(--pink);border-color:var(--pink);width:26px;border-radius:5px}
+.gdot:hover{border-color:var(--pink)}
 
 /* Info column */
 .p-cat{font-size:11px;letter-spacing:1.8px;font-weight:700;color:var(--pink);text-transform:uppercase}
@@ -212,31 +223,54 @@ function showNotFound() {
 
 function renderDetail() {
   const p = product;
-  const imgs = (p.images && p.images.length) ? p.images : [];
-  const hasImgs = imgs.length > 0;
+  const realImgs = (p.images && p.images.length) ? p.images : [];
   const emoji = p.emoji || '🛍️';
+  // Build slides: real photos if present, otherwise 3 tinted demo panels
+  // (front / angle / detail) so the carousel is populated before real shots land.
+  const demoTints = [
+    'linear-gradient(135deg,#1a1020,#241428)',
+    'linear-gradient(135deg,#241228,#141020)',
+    'linear-gradient(160deg,#2a1020,#1a0f24)'
+  ];
+  const demoLabels = ['Front', 'Angle', 'Detail'];
+  const slides = realImgs.length
+    ? realImgs.map(u => ({ img:u }))
+    : demoTints.map((t,i) => ({ tint:t, label:demoLabels[i] }));
+
   const stock = Number(p.stock_units || 0);
   const onSale = p.sale_price != null && Number(p.sale_price) < Number(p.price_usd);
   const now = onSale ? Number(p.sale_price) : Number(p.price_usd);
   const pct = onSale ? Math.round((1 - now/Number(p.price_usd)) * 100) : 0;
 
-  let stockCls = 'in-stock', stockTxt = 'In stock';
+  let stockCls = 'in-stock', stockTxt = stock + ' in stock';
   if (stock <= 0) { stockCls = 'out-stock'; stockTxt = 'Out of stock'; }
   else if (stock <= 15) { stockCls = 'low-stock'; stockTxt = 'Only ' + stock + ' left in stock'; }
-  else { stockTxt = stock + ' in stock'; }
 
   document.getElementById('crumbCat').textContent = '/ ' + (p.category || '');
   document.title = p.name + ' — Juice Bunny Store';
 
-  const mainMedia = hasImgs ? `<img id="galleryMain" src="${esc(imgs[0])}" alt="${esc(p.name)}"/>` : `<span id="galleryMain">${emoji}</span>`;
-  const thumbs = hasImgs ? imgs.map((u,i) =>
-    `<div class="gthumb ${i===0?'active':''}" onclick="setMain(${i})"><img src="${esc(u)}" alt=""/></div>`).join('') : '';
+  const slidesHtml = slides.map(s => s.img
+    ? `<div class="slide"><img src="${esc(s.img)}" alt="${esc(p.name)}"/></div>`
+    : `<div class="slide" style="background:${s.tint}"><span class="slide-emoji">${emoji}</span><span class="slide-label">${s.label}</span></div>`
+  ).join('');
+
+  const dotsHtml = slides.length > 1
+    ? slides.map((_,i) => `<button class="gdot ${i===0?'active':''}" onclick="goSlide(${i})" aria-label="View ${i+1}"></button>`).join('')
+    : '';
+
+  const arrowsHtml = slides.length > 1 ? `
+    <button class="garrow left" onclick="stepSlide(-1)" aria-label="Previous image">‹</button>
+    <button class="garrow right" onclick="stepSlide(1)" aria-label="Next image">›</button>` : '';
 
   document.getElementById('detail').innerHTML = `
   <div class="detail">
     <div>
-      <div class="gallery-main">${mainMedia}</div>
-      ${hasImgs && imgs.length > 1 ? `<div class="gallery-thumbs">${thumbs}</div>` : ''}
+      <div class="carousel" id="carousel">
+        <div class="track" id="track">${slidesHtml}</div>
+        ${arrowsHtml}
+        ${onSale ? `<span class="carousel-sale">-${pct}%</span>` : ''}
+      </div>
+      ${dotsHtml ? `<div class="gdots">${dotsHtml}</div>` : ''}
     </div>
     <div>
       <div class="p-cat">${esc(p.category)}</div>
@@ -265,12 +299,39 @@ function renderDetail() {
       </div>
     </div>
   </div>`;
+
+  slideCount = slides.length;
+  slideIndex = 0;
+  setupSwipe();
 }
 
-function setMain(i) {
-  const imgs = product.images || [];
-  document.getElementById('galleryMain').src = imgs[i];
-  document.querySelectorAll('.gthumb').forEach((t,idx) => t.classList.toggle('active', idx===i));
+/* ── CAROUSEL ── */
+let slideIndex = 0, slideCount = 1;
+function updateTrack() {
+  const track = document.getElementById('track');
+  if (track) track.style.transform = `translateX(-${slideIndex * 100}%)`;
+  document.querySelectorAll('.gdot').forEach((d,i) => d.classList.toggle('active', i === slideIndex));
+}
+function goSlide(i) { slideIndex = (i + slideCount) % slideCount; updateTrack(); }
+function stepSlide(d) { goSlide(slideIndex + d); }
+function setupSwipe() {
+  const car = document.getElementById('carousel');
+  if (!car || slideCount < 2) return;
+  let startX = 0, dragging = false;
+  const down = x => { startX = x; dragging = true; };
+  const up = x => {
+    if (!dragging) return; dragging = false;
+    const dx = x - startX;
+    if (Math.abs(dx) > 40) stepSlide(dx < 0 ? 1 : -1);
+  };
+  car.addEventListener('touchstart', e => down(e.touches[0].clientX), {passive:true});
+  car.addEventListener('touchend',   e => up(e.changedTouches[0].clientX));
+  car.addEventListener('mousedown',  e => down(e.clientX));
+  car.addEventListener('mouseup',    e => up(e.clientX));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') stepSlide(-1);
+    if (e.key === 'ArrowRight') stepSlide(1);
+  });
 }
 
 function stepQty(d) {
