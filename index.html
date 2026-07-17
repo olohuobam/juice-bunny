@@ -1085,6 +1085,20 @@ select option{background:var(--bg3);color:var(--text)}
   box-shadow:0 0 8px rgba(255,68,68,.9);animation:camsPulse 1.6s ease-in-out infinite}
 @keyframes camsPulse{0%,100%{opacity:1}50%{opacity:.4}}
 
+/* === Mobile polish (≤560px): tame the big script headings & overflow === */
+@media(max-width:560px){
+  .hero-h1,.hero-h1-pink{font-size:clamp(34px,10vw,46px) !important;line-height:1.08 !important;word-break:break-word}
+  .sec-title{font-size:clamp(30px,8vw,40px) !important}
+  .free-label-big,.prem-title-big{font-size:40px !important}
+  .cta-h2{font-size:clamp(26px,7vw,36px) !important}
+  .hero-sub{font-size:14px;padding:0 6px}
+  .hero-inner,.hero-wrap{overflow-x:hidden}
+  .bunny-wrap,.bunny-img{width:260px !important;height:290px !important}
+  .stat-num{font-size:36px !important}
+  .nav-inner{padding-left:12px;padding-right:12px}
+  body{overflow-x:hidden}
+}
+
 /* === Dancing Script headings (site-wide) === */
 .hero-h1,.hero-h1-pink,.sec-title,.free-label-big,.prem-title-big,.dev-h2,.cta-h2,.unsub-title,.booking-title,.auth-title,.success-title,.pw-title,.modal-title,.pay-success-title{font-family:'Dancing Script',cursive;font-weight:700;letter-spacing:0;text-transform:none}
 .hero-h1,.hero-h1-pink{font-size:clamp(46px,7vw,72px)}
@@ -1143,10 +1157,18 @@ select option{background:var(--bg3);color:var(--text)}
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">⭐ Premium</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">💰 Pricing</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('cams').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">🎥 Cams</a>
+  <a href="store.html">🛍️ Store</a>
   <a href="model-apply.html" class="mobile-model-link">🐰 Become a Model</a>
   <a href="chat.html">💬 Chat</a>
-  <a onclick="goTo('login');closeMobileNav()">🔑 Login</a>
-  <button class="mobile-signup" onclick="goTo('signup');closeMobileNav()">🔥 Sign Up Free</button>
+  <div id="mobileAuthOut">
+    <a onclick="goTo('login');closeMobileNav()">🔑 Login</a>
+    <button class="mobile-signup" onclick="goTo('signup');closeMobileNav()">🔥 Sign Up Free</button>
+  </div>
+  <div id="mobileAuthIn" style="display:none">
+    <a href="profile.html">👤 My Profile</a>
+    <a id="mobileAdminLink" href="admin.html" style="display:none">🛠 Admin Panel</a>
+    <button class="mobile-signup" onclick="siteLogout()">🚪 Log Out</button>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -2355,6 +2377,12 @@ function updateNavLoggedIn(userData) {
   document.getElementById('broadcastBtn').style.display = isAdmin ? 'flex' : 'none';
   const adminItem = document.getElementById('avatarMenuAdmin');
   if(adminItem) adminItem.style.display = isAdmin ? 'block' : 'none';
+  // Mobile menu: swap login/signup for profile/logout
+  const mOut = document.getElementById('mobileAuthOut');
+  const mIn = document.getElementById('mobileAuthIn');
+  if(mOut && mIn){ mOut.style.display = 'none'; mIn.style.display = 'block'; }
+  const mAdmin = document.getElementById('mobileAdminLink');
+  if(mAdmin) mAdmin.style.display = isAdmin ? 'block' : 'none';
 }
 
 function toggleAvatarMenu(e) {
