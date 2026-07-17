@@ -13,7 +13,7 @@
   --pink:#FF2D78; --pink2:#e0206a; --pink-glow:rgba(255,45,120,.35);
   --bg:#0d0d12; --bg2:#12121a; --bg3:#1a1a24;
   --text:#fff; --text2:#a0a0b0; --text3:#606070;
-  --border:rgba(255,255,255,.08); --success:#2ecc71; --error:#ff4444;
+  --border:rgba(255,255,255,.08); --success:#2ecc71; --error:#ff4444; --gold:#ffb020;
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
@@ -59,11 +59,15 @@ button{font-family:inherit;cursor:pointer;border:none}
 .store-wrap{max-width:1180px;margin:0 auto;padding:26px 24px 90px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
 .pcard{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;
-  display:flex;flex-direction:column;transition:transform .22s, box-shadow .22s, border-color .22s}
+  display:flex;flex-direction:column;transition:transform .22s, box-shadow .22s, border-color .22s;cursor:pointer}
 .pcard:hover{transform:translateY(-4px);border-color:rgba(255,45,120,.45);
   box-shadow:0 14px 34px rgba(0,0,0,.45), 0 0 24px rgba(255,45,120,.10)}
 .pcard-thumb{height:168px;display:flex;align-items:center;justify-content:center;font-size:58px;
-  background:linear-gradient(135deg,#1a1020,#241428)}
+  background:linear-gradient(135deg,#1a1020,#241428);position:relative}
+.sale-flag{position:absolute;top:10px;left:10px;background:var(--success);color:#04210f;
+  font-size:12px;font-weight:800;letter-spacing:.5px;padding:4px 9px;border-radius:10px}
+.pcard-low{font-size:11.5px;font-weight:600;color:var(--gold)}
+.pcard-was{font-size:14px;color:var(--text3);text-decoration:line-through;margin-left:7px}
 .pcard-thumb img{width:100%;height:100%;object-fit:cover}
 .pcard-body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .pcard-cat{font-size:10.5px;letter-spacing:1.6px;font-weight:700;color:var(--pink);text-transform:uppercase}
@@ -263,26 +267,43 @@ function renderGrid() {
     grid.innerHTML = '<div class="grid-empty">Nothing on this shelf yet — check back soon 🐰</div>';
     return;
   }
-  grid.innerHTML = list.map(p => `
-    <article class="pcard">
-      <div class="pcard-thumb">${p.image_url ? `<img src="${p.image_url}" alt="${esc(p.name)}"/>` : (p.emoji || '🛍️')}</div>
+  grid.innerHTML = list.map(p => {
+    const onSale = p.sale_price != null && Number(p.sale_price) < Number(p.price_usd);
+    const now = onSale ? Number(p.sale_price) : Number(p.price_usd);
+    const pct = onSale ? Math.round((1 - now/Number(p.price_usd)) * 100) : 0;
+    const stock = p.stock_units != null ? Number(p.stock_units) : (p.in_stock === false ? 0 : null);
+    const soldOut = stock === 0 || p.in_stock === false;
+    const low = stock != null && stock > 0 && stock <= 15;
+    return `
+    <article class="pcard" onclick="openProduct('${p.id}')">
+      <div class="pcard-thumb">
+        ${onSale ? `<span class="sale-flag">-${pct}%</span>` : ''}
+        ${p.image_url ? `<img src="${p.image_url}" alt="${esc(p.name)}"/>` : (p.emoji || '🛍️')}
+      </div>
       <div class="pcard-body">
         <div class="pcard-cat">${esc(p.category)}</div>
         <div class="pcard-name">${esc(p.name)}</div>
         <div class="pcard-desc">${esc(p.description || '')}</div>
+        ${low ? `<div class="pcard-low">Only ${stock} left</div>` : ''}
         <div class="pcard-foot">
-          <div class="pcard-price"><small>$</small>${Number(p.price_usd).toFixed(2)}</div>
-          ${p.in_stock === false
+          <div class="pcard-price">
+            <small>$</small>${now.toFixed(2)}
+            ${onSale ? `<span class="pcard-was">$${Number(p.price_usd).toFixed(2)}</span>` : ''}
+          </div>
+          ${soldOut
             ? '<span class="oos">Out of stock</span>'
-            : `<button class="btn-add" onclick="addToCart('${p.id}')">Add to Cart</button>`}
+            : `<button class="btn-add" onclick="event.stopPropagation();addToCart('${p.id}')">Add</button>`}
         </div>
       </div>
-    </article>`).join('');
+    </article>`;
+  }).join('');
 }
 
 function esc(str) {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+function openProduct(id) { window.location.href = 'product.html?id=' + encodeURIComponent(id); }
 
 /* ═══════════════════════════════════════════════════
    CART
