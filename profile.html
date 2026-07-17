@@ -1004,8 +1004,11 @@ async function saveProfileImage(file, kind) {
     const ext  = (file.name.split('.').pop() || 'jpg').toLowerCase();
     const path = `${kind}s/${currentUser.id}.${ext}`;
 
+    // Read into a buffer first — Safari can send an empty body when
+    // uploading the raw File object ("no content provided")
+    const buf = await file.arrayBuffer();
     const { error: upErr } = await sb.storage.from('asset')
-      .upload(path, file, { upsert: true, contentType: file.type });
+      .upload(path, buf, { upsert: true, contentType: file.type || 'image/jpeg' });
     if(upErr) throw upErr;
 
     const { data: pub } = sb.storage.from('asset').getPublicUrl(path);
