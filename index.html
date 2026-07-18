@@ -1214,7 +1214,7 @@ select option{background:var(--bg3);color:var(--text)}
       <div class="hero-visual">
         <div class="bunny-wrap">
           <div class="bunny-glow"></div>
-          <video id="heroVid" src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture poster="juice-bunny-logo.png" controlslist="nodownload noplaybackrate" style="object-fit:cover;pointer-events:none"></video>
+          <video id="heroVid" src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture poster="juice-bunny-logo.png" style="object-fit:cover"></video>
         </div>
       </div>
     </div>
@@ -4021,6 +4021,25 @@ async function sendCbotMsgText(text){
   document.getElementById('cbotSend').disabled=false;
   document.getElementById('cbotInput').focus();
 }
+
+/* ── HERO VIDEO: retry autoplay when the browser blocks it ──
+   Safari/iOS block muted autoplay under Low Power Mode or when
+   per-site auto-play is set to "Never". Any user gesture unlocks it. */
+(function heroVideoAutoplay(){
+  const tryPlay = () => {
+    const v = document.getElementById('heroVid');
+    if (!v) return;
+    v.muted = true;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  };
+  document.addEventListener('DOMContentLoaded', tryPlay);
+  window.addEventListener('load', tryPlay);
+  ['click','touchstart','scroll','keydown'].forEach(evt =>
+    window.addEventListener(evt, tryPlay, { once:true, passive:true })
+  );
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
+})();
 </script>
 
 </body>
