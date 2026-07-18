@@ -277,7 +277,7 @@ textarea{resize:vertical;min-height:80px;padding-left:14px}
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">🐰 Female creators Only</div>
+  <div class="hero-eyebrow">🐰 Now accepting all creators</div>
   <h1 class="hero-h1">Get Paid to<br/><span>Be Yourself</span></h1>
   <p class="hero-sub">Join Juice Bunny as a creator and earn real money from live calls, content, and fan interactions — on your schedule, on your terms.</p>
   <div class="hero-badges">
@@ -343,8 +343,8 @@ textarea{resize:vertical;min-height:80px;padding-left:14px}
     <div class="req-card must">
       <div class="req-icon">✅</div>
       <div>
-        <div class="req-title">Female, 18 years or older</div>
-        <div class="req-desc">Juice Bunny only accepts female creators. You must be 18+ and provide valid government-issued ID during onboarding.</div>
+        <div class="req-title">18 years or older</div>
+        <div class="req-desc">All genders welcome. You must be 18+ and provide valid government-issued ID during onboarding.</div>
       </div>
     </div>
     <div class="req-card must">
@@ -464,15 +464,17 @@ textarea{resize:vertical;min-height:80px;padding-left:14px}
             <input type="radio" name="gender" value="female" checked/>
             👩 Female
           </label>
+          <label class="radio-opt" id="ro-male" onclick="selectGender('male',this)">
+            <input type="radio" name="gender" value="male"/>
+            👨 Male
+          </label>
           <label class="radio-opt" id="ro-other" onclick="selectGender('other',this)">
             <input type="radio" name="gender" value="other"/>
-            ⚠️ Other (not eligible)
+            ✨ Non-binary / Other
           </label>
         </div>
-        <div class="field-hint">Juice Bunny only accepts female creators at this time.</div>
-        <div id="gender-warning" style="display:none;margin-top:10px;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--error)">
-          ⚠️ Juice Bunny currently only accepts female creator applications. We are unable to process your application at this time.
-        </div>
+        <div class="field-hint">All genders welcome — 18+ with valid government-issued ID.</div>
+        <div id="gender-warning" style="display:none"></div>
       </div>
 
       <div class="btn-actions">
@@ -669,14 +671,10 @@ function goFStep(n) {
 // ── STEP 1 ────────────────────────────────────────────────────
 function selectGender(val, el) {
   selectedGender = val;
-  document.querySelectorAll('.radio-opt').forEach(r => {
-    if(r.id && r.id.startsWith('ro-')) {
-      if(!r.id.includes('exp') && !r.id.includes('other') && r.id !== 'ro-female') return;
-    }
+  ['ro-female','ro-male','ro-other'].forEach(id => {
+    const node = document.getElementById(id);
+    if (node) node.classList.toggle('sel', id === 'ro-' + val);
   });
-  document.getElementById('ro-female').classList.toggle('sel', val === 'female');
-  document.getElementById('ro-other').classList.toggle('sel', val === 'other');
-  document.getElementById('gender-warning').style.display = val === 'other' ? 'block' : 'none';
 }
 
 function step1Next() {
@@ -706,11 +704,6 @@ function step1Next() {
     if(age < 18) { setErr('ff-dob', true); ok = false; }
     else setErr('ff-dob', false);
   } else { setErr('ff-dob', true); ok = false; }
-
-  if(selectedGender !== 'female') {
-    showToast('Only female applicants are eligible', true);
-    return;
-  }
 
   if(ok) goFStep(2);
   else showToast('Please fill in all required fields', true);
