@@ -152,6 +152,9 @@ a{text-decoration:none;color:inherit}
 
 /* ── VIDEOS ─────────────────────────────────────────────────── */
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.row-btn{background:var(--bg3,#1a1a24);border:1px solid var(--border);color:var(--text,#fff);
+  padding:5px 11px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;margin-right:6px;transition:.18s}
+.row-btn:hover{border-color:var(--pink);color:var(--pink)}
 .section-h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px}
 .btn-primary{display:flex;align-items:center;gap:7px;background:var(--pink);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary:hover{background:var(--pink2);transform:translateY(-1px)}
@@ -383,6 +386,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <span class="nav-icon">🎬</span> Videos
         <span class="nav-badge" id="vid-count-badge">24</span>
       </div>
+      <div class="nav-item" onclick="showPanel('products',this)">
+        <span class="nav-icon">🛍️</span> Store Products
+        <span class="nav-badge" id="prod-count-badge">0</span>
+      </div>
 
       <div class="nav-section-label">Members</div>
       <div class="nav-item" onclick="showPanel('users',this)">
@@ -592,6 +599,93 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </tr>
           </thead>
           <tbody id="videos-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── STORE PRODUCTS ─── -->
+    <div class="admin-panel" id="panel-products">
+      <div class="section-head">
+        <span class="section-h2">Store Products</span>
+        <button class="btn-primary" onclick="toggleProductForm()">＋ Add Product</button>
+      </div>
+
+      <div id="prod-form-wrap" style="display:none">
+        <div class="upload-form" style="display:block">
+          <input type="hidden" id="prod-id"/>
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Product Name</label>
+              <input type="text" id="prod-name" placeholder="e.g. Bunny Boost — Performance Supplement"/>
+            </div>
+            <div class="form-field">
+              <label>Category</label>
+              <select id="prod-cat">
+                <option value="supplements">Supplements</option>
+                <option value="gym">Gym</option>
+                <option value="wellness">Wellness</option>
+                <option value="intimacy">Intimacy</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label>Description</label>
+              <textarea id="prod-desc" placeholder="Short product description..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>Price (USD)</label>
+              <input type="number" step="0.01" id="prod-price" placeholder="29.99"/>
+            </div>
+            <div class="form-field">
+              <label>Sale Price (optional — shows crossed-out original)</label>
+              <input type="number" step="0.01" id="prod-sale" placeholder="Leave blank for no sale"/>
+            </div>
+            <div class="form-field">
+              <label>Units in Stock</label>
+              <input type="number" id="prod-stock" placeholder="40"/>
+            </div>
+            <div class="form-field">
+              <label>Emoji / Icon</label>
+              <input type="text" id="prod-emoji" placeholder="⚡"/>
+            </div>
+            <div class="form-field full">
+              <label>Product Photos</label>
+              <div class="upload-zone" id="prod-drop" onclick="document.getElementById('prod-file-input').click()"
+                   ondragover="event.preventDefault();this.classList.add('drag-over')"
+                   ondragleave="this.classList.remove('drag-over')" ondrop="handleProdDrop(event)">
+                <input type="file" id="prod-file-input" accept="image/*" multiple style="display:none" onchange="handleProdFiles(this.files)"/>
+                <div class="upload-icon">📷</div>
+                <div class="upload-title">Drop photos here or <span>browse</span></div>
+                <div class="upload-sub">First photo is the main image · JPG/PNG</div>
+              </div>
+              <div id="prod-img-preview" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="submitProduct()" id="prod-save-btn">✓ Save Product</button>
+            <button class="btn-secondary" onclick="cancelProductForm()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="🔍 Search products..." oninput="filterProducts(this.value)"/>
+          <select class="filter-select" onchange="filterProductsByCat(this.value)">
+            <option value="all">All Categories</option>
+            <option value="supplements">Supplements</option>
+            <option value="gym">Gym</option>
+            <option value="wellness">Wellness</option>
+            <option value="intimacy">Intimacy</option>
+          </select>
+          <span style="font-size:12px;color:var(--text3)" id="prod-count-lbl">0 products</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
         </table>
       </div>
     </div>
@@ -984,6 +1078,7 @@ function initAdmin() {
   buildTxnsTable();
   buildBcHistory();
   loadRealData();
+  loadProducts();
   document.getElementById('menu-btn').style.display = window.innerWidth<=900 ? 'block' : 'none';
 }
 
@@ -1485,6 +1580,168 @@ function loadRealData() {
       dashVals[3].textContent   = count ?? 0;
       dashDeltas[3].textContent = 'since midnight';
     } catch(e) { console.warn('views load failed', e); }
+  });
+}
+/* ═══════════════════════════════════════════════════════════
+   STORE PRODUCTS — full CRUD wired to Supabase
+═══════════════════════════════════════════════════════════ */
+let productsData = [];
+let prodImages = [];   // staged image URLs for the product being edited
+let prodFilter = { text:'', cat:'all' };
+
+function loadProducts() {
+  loadSupabase(async (client) => {
+    try {
+      const { data } = await client.from('products').select('*').order('created_at', { ascending:false });
+      productsData = data || [];
+      renderProductsTable();
+      const n = productsData.length;
+      document.getElementById('prod-count-badge').textContent = n;
+      document.getElementById('prod-count-lbl').textContent = n + (n===1?' product':' products');
+    } catch(e) { console.warn('products load failed', e); }
+  });
+}
+
+function renderProductsTable() {
+  const tbody = document.getElementById('products-tbody');
+  let list = productsData.filter(p => {
+    if (prodFilter.cat !== 'all' && p.category !== prodFilter.cat) return false;
+    if (prodFilter.text && !(p.name||'').toLowerCase().includes(prodFilter.text)) return false;
+    return true;
+  });
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">No products yet — add your first one.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(p => {
+    const onSale = p.sale_price != null && Number(p.sale_price) < Number(p.price_usd);
+    const stock = Number(p.stock_units || 0);
+    const stockColor = stock <= 0 ? 'var(--error)' : stock <= 15 ? 'var(--gold,#ffb020)' : 'var(--success)';
+    const img = (p.images && p.images.length) ? `<img src="${p.images[0]}" style="width:38px;height:38px;border-radius:8px;object-fit:cover"/>` : `<span style="font-size:26px">${p.emoji||'🛍️'}</span>`;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:10px">${img}<span>${escapeHtml(p.name)}</span></div></td>
+      <td style="text-transform:capitalize">${escapeHtml(p.category)}</td>
+      <td>$${Number(onSale?p.sale_price:p.price_usd).toFixed(2)}${onSale?` <s style="color:var(--text3);font-size:11px">$${Number(p.price_usd).toFixed(2)}</s>`:''}</td>
+      <td style="color:${stockColor};font-weight:600">${stock}</td>
+      <td>
+        <button class="row-btn" onclick="editProduct('${p.id}')">✏️ Edit</button>
+        <button class="row-btn" onclick="deleteProduct('${p.id}','${escapeHtml((p.name||'').replace(/'/g,""))}')">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function filterProducts(v){ prodFilter.text = (v||'').toLowerCase(); renderProductsTable(); }
+function filterProductsByCat(v){ prodFilter.cat = v; renderProductsTable(); }
+
+function toggleProductForm() {
+  const w = document.getElementById('prod-form-wrap');
+  const opening = w.style.display === 'none';
+  w.style.display = opening ? 'block' : 'none';
+  if (opening) resetProductForm();
+}
+function cancelProductForm(){ document.getElementById('prod-form-wrap').style.display='none'; }
+
+function resetProductForm() {
+  ['prod-id','prod-name','prod-desc','prod-price','prod-sale','prod-stock','prod-emoji'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('prod-cat').value = 'supplements';
+  prodImages = [];
+  renderProdImgPreview();
+  document.getElementById('prod-save-btn').textContent = '✓ Save Product';
+}
+
+function editProduct(id) {
+  const p = productsData.find(x => String(x.id) === String(id));
+  if (!p) return;
+  document.getElementById('prod-form-wrap').style.display = 'block';
+  document.getElementById('prod-id').value = p.id;
+  document.getElementById('prod-name').value = p.name || '';
+  document.getElementById('prod-cat').value = p.category || 'supplements';
+  document.getElementById('prod-desc').value = p.description || '';
+  document.getElementById('prod-price').value = p.price_usd ?? '';
+  document.getElementById('prod-sale').value = p.sale_price ?? '';
+  document.getElementById('prod-stock').value = p.stock_units ?? '';
+  document.getElementById('prod-emoji').value = p.emoji || '';
+  prodImages = Array.isArray(p.images) ? [...p.images] : [];
+  renderProdImgPreview();
+  document.getElementById('prod-save-btn').textContent = '✓ Update Product';
+  document.getElementById('panel-products').scrollIntoView({ behavior:'smooth' });
+}
+
+function renderProdImgPreview() {
+  const box = document.getElementById('prod-img-preview');
+  box.innerHTML = prodImages.map((u,i) => `
+    <div style="position:relative">
+      <img src="${u}" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:${i===0?'2px solid var(--pink)':'1px solid var(--border)'}"/>
+      <button onclick="removeProdImg(${i})" style="position:absolute;top:-6px;right:-6px;background:var(--error);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer">✕</button>
+    </div>`).join('');
+}
+function removeProdImg(i){ prodImages.splice(i,1); renderProdImgPreview(); }
+
+function handleProdDrop(e){ e.preventDefault(); e.currentTarget.classList.remove('drag-over'); handleProdFiles(e.dataTransfer.files); }
+function handleProdFiles(files) {
+  loadSupabase(async (client) => {
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) continue;
+      try {
+        const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+        const path = `products/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+        const buf = await file.arrayBuffer();
+        const { error } = await client.storage.from('asset').upload(path, buf, { upsert:true, contentType:file.type||'image/jpeg' });
+        if (error) throw error;
+        const { data:pub } = client.storage.from('asset').getPublicUrl(path);
+        prodImages.push(pub.publicUrl);
+        renderProdImgPreview();
+      } catch(err) { alert('Image upload failed: ' + (err.message||err)); }
+    }
+  });
+}
+
+function submitProduct() {
+  const name = document.getElementById('prod-name').value.trim();
+  const price = parseFloat(document.getElementById('prod-price').value);
+  if (!name || isNaN(price)) { alert('Product name and a valid price are required.'); return; }
+  const saleVal = document.getElementById('prod-sale').value;
+  const stockVal = document.getElementById('prod-stock').value;
+  const row = {
+    name,
+    category: document.getElementById('prod-cat').value,
+    description: document.getElementById('prod-desc').value.trim() || null,
+    price_usd: price,
+    sale_price: saleVal === '' ? null : parseFloat(saleVal),
+    stock_units: stockVal === '' ? 0 : parseInt(stockVal, 10),
+    emoji: document.getElementById('prod-emoji').value.trim() || '🛍️',
+    images: prodImages,
+    is_active: true
+  };
+  const id = document.getElementById('prod-id').value;
+  const btn = document.getElementById('prod-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  loadSupabase(async (client) => {
+    try {
+      let res;
+      if (id) res = await client.from('products').update(row).eq('id', id);
+      else    res = await client.from('products').insert(row);
+      if (res.error) throw res.error;
+      btn.disabled = false;
+      document.getElementById('prod-form-wrap').style.display = 'none';
+      loadProducts();
+    } catch(err) {
+      btn.disabled = false; btn.textContent = '✓ Save Product';
+      alert('Could not save product: ' + (err.message||err));
+    }
+  });
+}
+
+function deleteProduct(id, name) {
+  if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+  loadSupabase(async (client) => {
+    try {
+      const { error } = await client.from('products').delete().eq('id', id);
+      if (error) throw error;
+      loadProducts();
+    } catch(err) { alert('Could not delete: ' + (err.message||err)); }
   });
 }
 </script>
