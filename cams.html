@@ -197,8 +197,10 @@ async function loadStreams(){
     .order('started_at',{ascending:false})
     .limit(60);
   if(error){
+    console.error('loadStreams error:',error);
     document.getElementById('grid').innerHTML=
-      '<div class="empty"><span class="big">🐰</span>Cams aren\'t available yet.<br/>Check back soon.</div>';
+      `<div class="empty"><span class="big">🐰</span>Couldn't load cams right now.<br/>
+       <span style="font-size:12px;color:var(--text3)">${esc(error.message||'')}</span></div>`;
     return;
   }
   streams=data||[];
