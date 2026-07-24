@@ -203,6 +203,14 @@ s.onload=async()=>{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);aw
 document.head.appendChild(s);
 
 async function init(){
+  try{ await initInner(); }
+  catch(err){
+    console.error('go-live init:',err);
+    renderGate('Something went wrong', (err&&err.message)||'Could not load this page.',
+      '<a class="btn" href="index.html">Back to Home</a>');
+  }
+}
+async function initInner(){
   const {data:{session}}=await sb.auth.getSession();
   me=session?.user||null;
   if(!me){ return renderGate('Sign in to go live',
@@ -325,11 +333,16 @@ async function createStream(){
 }
 
 async function loadMyStreams(){
-  const {data}=await sb.from('live_streams').select('*')
+  const {data,error}=await sb.from('live_streams').select('*')
     .eq('creator_id',me.id).order('created_at',{ascending:false}).limit(25);
-  myStreams=data||[];
   const box=document.getElementById('streamList');
   if(!box) return;
+  if(error){
+    console.error('loadMyStreams:',error);
+    box.innerHTML='<div class="empty">Could not load streams<br/><span style="font-size:12px;color:var(--text3)">'+esc(error.message||'')+'</span></div>';
+    return;
+  }
+  myStreams=data||[];
   if(!myStreams.length){box.innerHTML='<div class="empty">No streams yet — create one above 🐰</div>';return;}
   const accessLabel={public:'🌍 Public',followers:'💗 Followers',invite:'🔐 Invite only'};
   box.innerHTML=myStreams.map(s=>{
