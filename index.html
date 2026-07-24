@@ -1115,6 +1115,17 @@ select option{background:var(--bg3);color:var(--text)}
 .success-title,.pw-title{font-size:28px}
 .modal-title{font-size:26px}
 .pay-success-title{font-size:34px}
+
+/* === Mobile fixes === */
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:600px){
+  .nav-logo{font-size:18px;white-space:nowrap}
+  .auth-card,.form-panel,.su-wrap,.plan-picker{max-width:100%;box-sizing:border-box}
+  .plan-picker,.su-plans{display:grid;grid-template-columns:1fr;gap:10px}
+  .page,.section,.auth-wrap{padding-left:14px;padding-right:14px}
+  .steps-row{transform:scale(.88);transform-origin:center}
+  input,select,textarea{font-size:16px}  /* stops iOS zoom-on-focus */
+}
 </style>
 </head>
 <body>
