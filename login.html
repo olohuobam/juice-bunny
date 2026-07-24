@@ -347,6 +347,11 @@ input::placeholder{color:var(--text3)}
           <span id="loginBtnText">Sign In →</span>
         </button>
 
+        <button class="btn-submit" style="background:transparent;border:1px solid var(--border);margin-top:10px"
+                onclick="showCodePanel()">
+          ✉️ Email me a sign-in code instead
+        </button>
+
         <div class="auth-footer-text">
           New to Juice Bunny? <a href="signup.html">Create an account</a>
         </div>
@@ -376,6 +381,92 @@ input::placeholder{color:var(--text3)}
         <div class="auth-footer-text" style="margin-top:16px;font-size:12px;color:var(--text3)">
           Check your spam folder if you don't see the email within a few minutes.
         </div>
+      </div>
+
+      <!-- SIGN IN WITH CODE PANEL -->
+      <div class="alt-panel" id="codePanel">
+        <button class="back-btn" onclick="showLogin()">← Back to sign in</button>
+        <div class="auth-header">
+          <div class="auth-title">Sign in with a code</div>
+          <div class="auth-subtitle" id="codeSubtitle">No password needed — we'll email you a 6-digit code.</div>
+        </div>
+
+        <div id="codeStep1">
+          <div class="field" id="f-otpmail">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="otpEmail" placeholder="your@email.com"/>
+            </div>
+            <div class="field-error">Enter a valid email address</div>
+          </div>
+          <button class="btn-submit" id="sendCodeBtn" onclick="sendCode()">
+            <span id="sendCodeText">Send me a code →</span>
+          </button>
+        </div>
+
+        <div id="codeStep2" style="display:none">
+          <div class="field" id="f-otpcode">
+            <label>6-digit code</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔑</span>
+              <input type="text" id="otpCode" inputmode="numeric" maxlength="6"
+                     placeholder="123456" style="letter-spacing:5px;font-size:18px"
+                     onkeydown="if(event.key===\'Enter\')verifyCode()"/>
+            </div>
+            <div class="field-error">That code didn\'t work</div>
+          </div>
+          <button class="btn-submit" id="verifyBtn" onclick="verifyCode()">
+            <span id="verifyText">Verify &amp; sign in →</span>
+          </button>
+          <div class="auth-footer-text" style="margin-top:14px;font-size:12px">
+            Didn\'t get it? <a onclick="sendCode()" style="cursor:pointer">Send another code</a>
+          </div>
+        </div>
+
+        <div class="auth-footer-text" style="margin-top:16px;font-size:12px;color:var(--text3)">
+          New here? A code creates your account automatically.
+        </div>
+
+      <!-- SIGN IN WITH CODE PANEL -->
+      <div class="alt-panel" id="codePanel">
+        <button class="back-btn" onclick="showLogin()">&#8592; Back to sign in</button>
+        <div class="auth-header">
+          <div class="auth-title">Sign in with a code</div>
+          <div class="auth-subtitle" id="codeSubtitle">No password needed &#8212; we&#39;ll email you a 6-digit code.</div>
+        </div>
+        <div id="codeStep1">
+          <div class="field" id="f-otpmail">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">&#9993;</span>
+              <input type="email" id="otpEmail" placeholder="your@email.com"/>
+            </div>
+          </div>
+          <button class="btn-submit" id="sendCodeBtn" onclick="sendCode()">
+            <span id="sendCodeText">Send me a code &#8594;</span>
+          </button>
+        </div>
+        <div id="codeStep2" style="display:none">
+          <div class="field" id="f-otpcode">
+            <label>6-digit code</label>
+            <div class="input-wrap">
+              <span class="input-icon">&#128273;</span>
+              <input type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="123456"
+                     style="letter-spacing:5px;font-size:18px"/>
+            </div>
+          </div>
+          <button class="btn-submit" id="verifyBtn" onclick="verifyCode()">
+            <span id="verifyText">Verify &amp; sign in &#8594;</span>
+          </button>
+          <div class="auth-footer-text" style="margin-top:14px;font-size:12px">
+            Didn&#39;t get it? <a onclick="sendCode()" style="cursor:pointer">Send another code</a>
+          </div>
+        </div>
+        <div class="auth-footer-text" style="margin-top:16px;font-size:12px;color:var(--text3)">
+          New here? A code creates your account automatically.
+        </div>
+      </div>
       </div>
 
     </div>
@@ -474,6 +565,44 @@ function showForgot(e) {
   e.preventDefault();
   document.getElementById('mainPanel').classList.add('hidden');
   document.getElementById('forgotPanel').classList.add('active');
+}
+
+
+/* ── PASSWORDLESS EMAIL CODE ── */
+let otpEmailAddr = '';
+function showCodePanel() {
+  document.querySelectorAll('.alt-panel').forEach(p => p.classList.remove('active'));
+  var lp = document.getElementById('loginPanel');
+  if (lp) lp.classList.remove('active');
+  document.getElementById('codePanel').classList.add('active');
+  document.getElementById('codeStep1').style.display = 'block';
+  document.getElementById('codeStep2').style.display = 'none';
+}
+async function sendCode() {
+  var email = (document.getElementById('otpEmail').value || '').trim();
+  if (!email || email.indexOf('@') < 0) { showToast('Enter a valid email address', true); return; }
+  var btn = document.getElementById('sendCodeBtn');
+  btn.disabled = true; document.getElementById('sendCodeText').textContent = 'Sending...';
+  var res = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } });
+  btn.disabled = false; document.getElementById('sendCodeText').textContent = 'Send me a code';
+  if (res.error) { showToast('Could not send code - ' + res.error.message, true); return; }
+  otpEmailAddr = email;
+  document.getElementById('codeStep1').style.display = 'none';
+  document.getElementById('codeStep2').style.display = 'block';
+  document.getElementById('codeSubtitle').textContent = 'We sent a code to ' + email;
+  document.getElementById('otpCode').focus();
+  showToast('Code sent - check your inbox');
+}
+async function verifyCode() {
+  var token = (document.getElementById('otpCode').value || '').trim();
+  if (token.length < 6) { showToast('Enter the 6-digit code', true); return; }
+  var btn = document.getElementById('verifyBtn');
+  btn.disabled = true; document.getElementById('verifyText').textContent = 'Verifying...';
+  var res = await sb.auth.verifyOtp({ email: otpEmailAddr, token: token, type: 'email' });
+  btn.disabled = false; document.getElementById('verifyText').textContent = 'Verify and sign in';
+  if (res.error) { showToast('That code did not work - try again', true); return; }
+  showToast('Signed in!');
+  setTimeout(function(){ window.location.href = 'index.html'; }, 700);
 }
 
 function showLogin() {
