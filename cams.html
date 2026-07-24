@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Live Cams — Juice Bunny</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,.35);
+--bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;--text:#fff;--text2:#a0a0b0;--text3:#606070;
+--border:rgba(255,255,255,.08);--success:#2ecc71;--error:#ff4444;--gold:#ffb020}
+html,body{overflow-x:hidden;max-width:100%}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none}
+
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:22px;padding:14px 26px;
+background:rgba(13,13,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:'Dancing Script',cursive;font-size:23px;
+font-weight:700;white-space:nowrap;flex-shrink:0}
+.nav-logo img{height:30px}
+.nav-links{display:flex;gap:20px;font-size:14px;color:var(--text2);margin-left:6px}
+.nav-links a:hover{color:#fff}
+.nav-links a.active{color:var(--pink);font-weight:600}
+.nav-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.btn{background:var(--pink);color:#fff;padding:9px 18px;border-radius:20px;font-size:13.5px;
+font-weight:700;transition:.2s;display:inline-block}
+.btn:hover{background:var(--pink2);box-shadow:0 0 16px var(--pink-glow)}
+.btn-ghost{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--pink);background:var(--bg3);box-shadow:none}
+.hamburger{display:none;background:none;color:var(--text);font-size:23px;padding:4px 6px}
+.mobile-menu{position:fixed;top:0;right:-260px;width:240px;height:100vh;z-index:300;background:var(--bg2);
+border-left:1px solid var(--border);padding:70px 20px 20px;display:flex;flex-direction:column;gap:6px;transition:right .26s}
+.mobile-menu.open{right:0}
+.mobile-menu a{padding:12px 14px;border-radius:11px;font-size:15px;font-weight:600}
+.mobile-menu a:hover{background:var(--bg3)}
+.mm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:250;opacity:0;pointer-events:none;transition:.25s}
+.mm-overlay.open{opacity:1;pointer-events:auto}
+
+.hero{padding:44px 22px 22px;text-align:center;
+background:radial-gradient(ellipse 60% 70% at 50% 0%,rgba(255,45,120,.13),transparent 62%)}
+.hero h1{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(40px,6vw,60px);line-height:1.1}
+.hero h1 span{color:var(--pink)}
+.hero p{color:var(--text2);font-size:15px;margin-top:8px}
+.live-count{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:var(--bg2);
+border:1px solid var(--border);border-radius:18px;padding:7px 16px;font-size:13px;font-weight:600}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--error);
+box-shadow:0 0 8px rgba(255,68,68,.9);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.tabs{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;padding:16px 20px}
+.tab{background:transparent;border:1px solid var(--border);color:var(--text2);padding:7px 17px;
+border-radius:18px;font-size:13px;font-weight:600;transition:.2s}
+.tab:hover{color:#fff;border-color:rgba(255,45,120,.5)}
+.tab.active{background:var(--pink);border-color:var(--pink);color:#fff;box-shadow:0 0 16px var(--pink-glow)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:14px 22px 90px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:18px}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s,border-color .22s;cursor:pointer}
+.scard:hover{transform:translateY(-4px);border-color:rgba(255,45,120,.45);
+box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 22px rgba(255,45,120,.1)}
+.sthumb{height:158px;position:relative;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(135deg,#1a1020,#241428);font-size:48px}
+.sthumb img{width:100%;height:100%;object-fit:cover}
+.live-pill{position:absolute;top:11px;left:11px;display:flex;align-items:center;gap:6px;
+background:rgba(255,68,68,.92);color:#fff;font-size:11px;font-weight:800;letter-spacing:.6px;
+padding:4px 10px;border-radius:9px}
+.live-pill .live-dot{background:#fff;box-shadow:none;width:6px;height:6px}
+.viewers{position:absolute;top:11px;right:11px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:9px}
+.lock{position:absolute;bottom:11px;right:11px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+font-size:11px;font-weight:600;padding:4px 9px;border-radius:9px}
+.sbody{padding:15px;display:flex;flex-direction:column;gap:7px;flex:1}
+.stitle{font-size:15px;font-weight:600;line-height:1.35}
+.screator{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text2)}
+.cav{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);
+display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex-shrink:0}
+.sfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:9px}
+.price{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.7px}
+.price.free{color:var(--success);font-size:13px;font-family:'Inter',sans-serif;font-weight:700}
+.join-btn{background:var(--pink);color:#fff;padding:7px 15px;border-radius:13px;font-size:12.5px;font-weight:700}
+.join-btn:hover{background:var(--pink2)}
+.empty{grid-column:1/-1;text-align:center;color:var(--text2);padding:56px 20px;font-size:14.5px;line-height:1.8}
+.empty .big{font-size:42px;display:block;margin-bottom:12px}
+
+.notice{max-width:1180px;margin:0 auto 20px;background:rgba(255,176,32,.08);
+border:1px solid rgba(255,176,32,.25);border-left:3px solid var(--gold);border-radius:12px;
+padding:13px 18px;font-size:13px;color:var(--text2);line-height:1.6}
+.notice b{color:var(--gold)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+background:var(--bg3);border:1px solid rgba(255,45,120,.45);padding:12px 22px;border-radius:14px;
+font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:700px){
+  .nav-links{display:none}.hamburger{display:block}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .sthumb{height:118px;font-size:36px}
+  .sbody{padding:11px}.stitle{font-size:13.5px}
+  .wrap{padding:10px 14px 70px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html"><img src="white-rabbit-logo.png" alt=""/> Juice Bunny</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="cams.html" class="active">Cams</a>
+    <a href="store.html">Store</a>
+    <a href="chat.html">Chat</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn btn-ghost" href="go-live.html" id="goLiveBtn" style="display:none">🎥 Go Live</a>
+    <button class="hamburger" onclick="toggleMenu(true)" aria-label="Menu">☰</button>
+  </div>
+</nav>
+<div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="cams.html">🎥 Cams</a>
+  <a href="store.html">🛍️ Store</a>
+  <a href="chat.html">💬 Chat</a>
+  <a href="go-live.html" id="mmGoLive" style="display:none">📹 Go Live</a>
+</nav>
+
+<header class="hero">
+  <h1>Live <span>Cams</span></h1>
+  <p>Real creators, streaming right now.</p>
+  <div class="live-count"><span class="live-dot"></span> <span id="liveCount">—</span> live now</div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-f="all" onclick="setFilter('all',this)">All</button>
+  <button class="tab" data-f="free" onclick="setFilter('free',this)">Free for subs</button>
+  <button class="tab" data-f="paid" onclick="setFilter('paid',this)">Per minute</button>
+  <button class="tab" data-f="following" onclick="setFilter('following',this)">Following</button>
+</div>
+
+<main class="wrap">
+  <div class="notice" id="setupNotice">
+    <b>Coming online soon:</b> live video is being finalised with our streaming provider.
+    Creators can already set up streams — cams appear here the moment the video layer is switched on.
+  </div>
+  <div class="grid" id="grid"><div class="empty">Loading…</div></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL='https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+let sb=null,me=null,myProfile=null,streams=[],following=new Set(),filter='all';
+
+function toggleMenu(o){document.getElementById('mobileMenu').classList.toggle('open',o);
+  document.getElementById('mmOverlay').classList.toggle('open',o);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+let tt=null;
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2800);}
+
+const s=document.createElement('script');
+s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+s.onload=async()=>{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);await init();};
+document.head.appendChild(s);
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  me=session?.user||null;
+  if(me){
+    const {data:p}=await sb.from('profiles').select('*').eq('id',me.id).maybeSingle();
+    myProfile=p;
+    if(p&&(p.role==='model'||p.role==='creator'||p.role==='admin')){
+      document.getElementById('goLiveBtn').style.display='inline-block';
+      document.getElementById('mmGoLive').style.display='block';
+    }
+    const {data:f}=await sb.from('follows').select('creator_id').eq('follower_id',me.id);
+    (f||[]).forEach(r=>following.add(r.creator_id));
+  }
+  loadStreams();
+  // refresh every 20s so the list stays current
+  setInterval(loadStreams,20000);
+}
+
+async function loadStreams(){
+  const {data,error}=await sb.from('live_streams')
+    .select('*, profiles:creator_id(id,full_name,email,avatar_url,role)')
+    .in('status',['live','scheduled'])
+    .order('status',{ascending:true})
+    .order('started_at',{ascending:false})
+    .limit(60);
+  if(error){
+    document.getElementById('grid').innerHTML=
+      '<div class="empty"><span class="big">🐰</span>Cams aren\'t available yet.<br/>Check back soon.</div>';
+    return;
+  }
+  streams=data||[];
+  const liveN=streams.filter(s=>s.status==='live').length;
+  document.getElementById('liveCount').textContent=liveN;
+  render();
+}
+
+function setFilter(f,el){
+  filter=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===el));
+  render();
+}
+
+function render(){
+  const grid=document.getElementById('grid');
+  let list=streams.filter(s=>{
+    if(filter==='free') return s.billing_mode==='subscription';
+    if(filter==='paid') return s.billing_mode==='per_minute';
+    if(filter==='following') return following.has(s.creator_id);
+    return true;
+  });
+  if(!list.length){
+    grid.innerHTML=`<div class="empty"><span class="big">🐰</span>
+      ${filter==='following'?'No streams from creators you follow right now.':'No cams live at the moment.'}<br/>
+      New streams appear here as soon as creators go live.</div>`;
+    return;
+  }
+  const accessIcon={public:'',followers:'💗 Followers',invite:'🔐 Invite only'};
+  grid.innerHTML=list.map(s=>{
+    const p=s.profiles||{};
+    const name=p.full_name||(p.email||'Creator').split('@')[0];
+    const live=s.status==='live';
+    const price = s.billing_mode==='per_minute'
+      ? `<span class="price">$${Number(s.rate_per_min||0).toFixed(2)}<span style="font-size:12px">/min</span></span>`
+      : `<span class="price free">Free for subs</span>`;
+    return `<article class="scard" onclick="joinStream('${s.id}')">
+      <div class="sthumb">
+        ${s.thumbnail_url?`<img src="${esc(s.thumbnail_url)}" alt=""/>`:'🎥'}
+        ${live?'<span class="live-pill"><span class="live-dot"></span>LIVE</span>':''}
+        ${live?`<span class="viewers">👤 ${s.peak_viewers||0}</span>`:'<span class="viewers">Starting soon</span>'}
+        ${accessIcon[s.access_type]?`<span class="lock">${accessIcon[s.access_type]}</span>`:''}
+      </div>
+      <div class="sbody">
+        <div class="stitle">${esc(s.title)}</div>
+        <div class="screator">
+          <span class="cav">${esc((name[0]||'C').toUpperCase())}</span>${esc(name)}
+        </div>
+        <div class="sfoot">
+          ${price}
+          <button class="join-btn" onclick="event.stopPropagation();joinStream('${s.id}')">
+            ${live?'Join':'Notify me'}
+          </button>
+        </div>
+      </div>
+    </article>`;}).join('');
+}
+
+async function joinStream(id){
+  const s=streams.find(x=>x.id===id);
+  if(!s)return;
+
+  if(!me){showToast('Sign in to join a live stream');
+    setTimeout(()=>window.location.href='login.html',900);return;}
+
+  if(s.status!=='live'){showToast('This stream hasn\'t started yet — you\'ll be notified');return;}
+
+  // Server-side access check (invite / followers / subscription)
+  const {data:allowed,error}=await sb.rpc('can_join_stream',{p_stream_id:id});
+  if(error){showToast('Could not verify access');return;}
+
+  if(!allowed){
+    if(s.access_type==='invite'){showToast('🔐 This stream is invite only');return;}
+    if(s.access_type==='followers'){showToast('💗 Follow this creator to join');return;}
+    showToast('🎟️ A subscription is needed to join — upgrade to watch');
+    setTimeout(()=>window.location.href='index.html#pricing',1400);
+    return;
+  }
+
+  // Record the join, then hand off to the media layer
+  await sb.from('stream_participants').insert({
+    stream_id:id,user_id:me.id,role:'viewer'});
+
+  showToast('✓ Access granted — video connection activates once the provider is live');
+  // When the media layer lands, this becomes:
+  // window.location.href = 'stream.html?id=' + id;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Go Live — Juice Bunny</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,.35);
+--bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;--text:#fff;--text2:#a0a0b0;--text3:#606070;
+--border:rgba(255,255,255,.08);--success:#2ecc71;--error:#ff4444;--gold:#ffb020}
+html,body{overflow-x:hidden;max-width:100%}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none}
+
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:22px;padding:14px 26px;
+background:rgba(13,13,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:'Dancing Script',cursive;font-size:23px;
+font-weight:700;white-space:nowrap;flex-shrink:0}
+.nav-logo img{height:30px}
+.nav-links{display:flex;gap:20px;font-size:14px;color:var(--text2);margin-left:6px}
+.nav-links a:hover{color:#fff}
+.nav-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.hamburger{display:none;background:none;color:var(--text);font-size:23px;padding:4px 6px}
+.mobile-menu{position:fixed;top:0;right:-260px;width:240px;height:100vh;z-index:300;background:var(--bg2);
+border-left:1px solid var(--border);padding:70px 20px 20px;display:flex;flex-direction:column;gap:6px;transition:right .26s}
+.mobile-menu.open{right:0}
+.mobile-menu a{padding:12px 14px;border-radius:11px;font-size:15px;font-weight:600}
+.mobile-menu a:hover{background:var(--bg3)}
+.mm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:250;opacity:0;pointer-events:none;transition:.25s}
+.mm-overlay.open{opacity:1;pointer-events:auto}
+
+.wrap{max-width:1000px;margin:0 auto;padding:38px 22px 90px}
+h1{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(38px,5.5vw,52px);line-height:1.1}
+.sub{color:var(--text2);font-size:15px;margin:6px 0 30px}
+
+.gate{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:40px 28px;text-align:center}
+.gate h2{font-family:'Dancing Script',cursive;font-size:30px;margin-bottom:10px}
+.gate p{color:var(--text2);font-size:14.5px;margin-bottom:18px;line-height:1.7}
+.btn{background:var(--pink);color:#fff;padding:12px 24px;border-radius:14px;font-size:14.5px;
+font-weight:700;transition:.2s;display:inline-block}
+.btn:hover{background:var(--pink2);box-shadow:0 0 18px var(--pink-glow)}
+.btn-ghost{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--pink);background:var(--bg3);box-shadow:none}
+.btn:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed;box-shadow:none}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:22px}
+.card-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.card-sub{color:var(--text3);font-size:12.5px;margin-bottom:18px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+.field.full{grid-column:1/-1}
+label{display:block;font-size:12px;letter-spacing:.8px;text-transform:uppercase;
+color:var(--text3);font-weight:700;margin-bottom:7px}
+input[type=text],input[type=number],textarea,select{width:100%;background:var(--bg3);
+border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);
+font-family:inherit;font-size:15px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--pink)}
+textarea{min-height:80px;resize:vertical}
+
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{background:var(--bg3);border:1.5px solid var(--border);border-radius:13px;padding:13px 12px;
+cursor:pointer;transition:.18s;text-align:center}
+.opt:hover{border-color:rgba(255,45,120,.5)}
+.opt.sel{border-color:var(--pink);background:rgba(255,45,120,.09)}
+.opt-icon{font-size:22px;display:block;margin-bottom:5px}
+.opt-name{font-size:13px;font-weight:700}
+.opt-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
+
+.stream-row{display:flex;align-items:center;gap:14px;background:var(--bg3);border:1px solid var(--border);
+border-radius:14px;padding:14px 16px;margin-bottom:10px;flex-wrap:wrap}
+.live-dot{width:9px;height:9px;border-radius:50%;background:var(--error);
+box-shadow:0 0 8px rgba(255,68,68,.9);animation:pulse 1.6s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sr-info{flex:1;min-width:150px}
+.sr-title{font-size:14.5px;font-weight:600}
+.sr-meta{font-size:12px;color:var(--text3);margin-top:3px}
+.badge{font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:4px 9px;border-radius:8px;text-transform:uppercase}
+.b-live{background:rgba(255,68,68,.15);color:var(--error)}
+.b-sched{background:rgba(255,176,32,.15);color:var(--gold)}
+.b-ended{background:var(--bg);color:var(--text3)}
+.row-btn{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 12px;
+border-radius:9px;font-size:12px;font-weight:600;transition:.18s}
+.row-btn:hover{border-color:var(--pink);color:var(--pink)}
+.empty{text-align:center;color:var(--text3);padding:30px 14px;font-size:13.5px}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;
+align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:26px;
+width:100%;max-width:460px;max-height:86vh;overflow-y:auto}
+.modal h3{font-family:'Dancing Script',cursive;font-size:26px;margin-bottom:4px}
+.modal p.mh{color:var(--text3);font-size:12.5px;margin-bottom:18px}
+.inv-row{display:flex;align-items:center;gap:11px;background:var(--bg3);border:1px solid var(--border);
+border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.inv-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#8b00ff);
+display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.inv-name{flex:1;font-size:13.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inv-role{font-size:11px;color:var(--text3)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+background:var(--bg3);border:1px solid rgba(255,45,120,.45);padding:12px 22px;border-radius:14px;
+font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.notice{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.25);border-left:3px solid var(--gold);
+border-radius:12px;padding:14px 18px;margin-bottom:22px;font-size:13px;color:var(--text2);line-height:1.6}
+.notice b{color:var(--gold)}
+
+@media(max-width:700px){
+  .nav-links{display:none}.hamburger{display:block}
+  .grid2,.opts{grid-template-columns:1fr}
+  .wrap{padding:26px 16px 70px}
+  input,select,textarea{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html"><img src="white-rabbit-logo.png" alt=""/> Juice Bunny</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="cams.html">Cams</a>
+    <a href="store.html">Store</a>
+    <a href="profile.html">Profile</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn btn-ghost" href="cams.html" style="padding:8px 16px;font-size:13px">Browse Cams</a>
+    <button class="hamburger" onclick="toggleMenu(true)" aria-label="Menu">☰</button>
+  </div>
+</nav>
+<div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="cams.html">🎥 Cams</a>
+  <a href="store.html">🛍️ Store</a>
+  <a href="profile.html">👤 Profile</a>
+</nav>
+
+<main class="wrap">
+  <h1>Go Live</h1>
+  <p class="sub">Start a stream, choose who can watch, and invite guests.</p>
+
+  <div id="content"><div class="empty">Loading…</div></div>
+</main>
+
+<!-- INVITE MODAL -->
+<div class="modal-bg" id="inviteModal" onclick="if(event.target===this)closeInvite()">
+  <div class="modal">
+    <h3>Invite to stream</h3>
+    <p class="mh" id="inviteStreamName"></p>
+    <div class="field">
+      <label>Search members</label>
+      <input type="text" id="inviteSearch" placeholder="Name or email…" oninput="searchUsers(this.value)"/>
+    </div>
+    <div class="field">
+      <label>Invite as</label>
+      <div class="opts" style="grid-template-columns:1fr 1fr">
+        <div class="opt sel" id="ir-viewer" onclick="setInviteRole('viewer',this)">
+          <span class="opt-icon">👀</span><div class="opt-name">Viewer</div>
+          <div class="opt-desc">Can watch</div>
+        </div>
+        <div class="opt" id="ir-cohost" onclick="setInviteRole('cohost',this)">
+          <span class="opt-icon">🎬</span><div class="opt-name">Co-host</div>
+          <div class="opt-desc">Appears on cam</div>
+        </div>
+      </div>
+    </div>
+    <div id="searchResults"></div>
+    <div style="margin-top:16px">
+      <div class="card-title" style="font-size:14px;margin-bottom:8px">Already invited</div>
+      <div id="currentInvites"><div class="empty" style="padding:14px">No invites yet</div></div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;margin-top:18px" onclick="closeInvite()">Done</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
+let sb=null, me=null, myProfile=null, myStreams=[];
+let accessType='public', billingMode='subscription', inviteRole='viewer', inviteStreamId=null;
+
+function toggleMenu(o){document.getElementById('mobileMenu').classList.toggle('open',o);
+  document.getElementById('mmOverlay').classList.toggle('open',o);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+let tt=null;
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2800);}
+
+const s=document.createElement('script');
+s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+s.onload=async()=>{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);await init();};
+document.head.appendChild(s);
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  me=session?.user||null;
+  if(!me){ return renderGate('Sign in to go live',
+    'You need to be signed in as an approved creator to start a stream.',
+    '<a class="btn" href="login.html">Log In</a>'); }
+
+  const {data:p}=await sb.from('profiles').select('*').eq('id',me.id).maybeSingle();
+  myProfile=p;
+  const isCreator = p && (p.role==='model'||p.role==='creator'||p.role==='admin');
+  if(!isCreator){ return renderGate('Creator access required',
+    'Live streaming is available to approved Juice Bunny creators. Apply to become a creator and once you\'re verified you can start streaming.',
+    '<a class="btn" href="model-apply.html">Apply as a Creator</a>'); }
+
+  renderCreator();
+  loadMyStreams();
+}
+
+function renderGate(title,body,cta){
+  document.getElementById('content').innerHTML =
+    `<div class="gate"><h2>${esc(title)}</h2><p>${esc(body)}</p>${cta}</div>`;
+}
+
+function renderCreator(){
+  document.getElementById('content').innerHTML = `
+  <div class="notice">
+    <b>Setup pending:</b> the live video connection is being finalised with our streaming provider.
+    You can create and schedule streams now — they'll go live as soon as the video layer is switched on.
+  </div>
+
+  <div class="card">
+    <div class="card-title">New stream</div>
+    <div class="card-sub">Set it up, then start it whenever you're ready.</div>
+
+    <div class="grid2">
+      <div class="field full">
+        <label>Stream title</label>
+        <input type="text" id="st-title" placeholder="Friday night with Scarlett…"/>
+      </div>
+      <div class="field full">
+        <label>Description <span style="text-transform:none;color:var(--text3)">(optional)</span></label>
+        <textarea id="st-desc" placeholder="Tell your fans what to expect…"></textarea>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Who can join</label>
+      <div class="opts">
+        <div class="opt sel" id="at-public" onclick="setAccess('public',this)">
+          <span class="opt-icon">🌍</span><div class="opt-name">Public</div>
+          <div class="opt-desc">Any subscriber</div>
+        </div>
+        <div class="opt" id="at-followers" onclick="setAccess('followers',this)">
+          <span class="opt-icon">💗</span><div class="opt-name">Followers</div>
+          <div class="opt-desc">People who follow you</div>
+        </div>
+        <div class="opt" id="at-invite" onclick="setAccess('invite',this)">
+          <span class="opt-icon">🔐</span><div class="opt-name">Invite only</div>
+          <div class="opt-desc">You pick who joins</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Billing</label>
+      <div class="opts" style="grid-template-columns:1fr 1fr">
+        <div class="opt sel" id="bm-subscription" onclick="setBilling('subscription',this)">
+          <span class="opt-icon">🎟️</span><div class="opt-name">Free for subscribers</div>
+          <div class="opt-desc">Included in their plan</div>
+        </div>
+        <div class="opt" id="bm-per_minute" onclick="setBilling('per_minute',this)">
+          <span class="opt-icon">⏱️</span><div class="opt-name">Per minute</div>
+          <div class="opt-desc">Charged by the minute</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id="rate-field" style="display:none;max-width:220px">
+      <label>Rate per minute (USD)</label>
+      <input type="number" step="0.50" min="0.50" id="st-rate" value="3.00"/>
+    </div>
+
+    <button class="btn" id="createBtn" onclick="createStream()">Create stream</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Your streams</div>
+    <div class="card-sub">Start, invite guests, or end a session.</div>
+    <div id="streamList"><div class="empty">Loading…</div></div>
+  </div>`;
+}
+
+function setAccess(v,el){accessType=v;
+  ['public','followers','invite'].forEach(k=>document.getElementById('at-'+k).classList.toggle('sel',k===v));}
+function setBilling(v,el){billingMode=v;
+  ['subscription','per_minute'].forEach(k=>document.getElementById('bm-'+k).classList.toggle('sel',k===v));
+  document.getElementById('rate-field').style.display = v==='per_minute'?'block':'none';}
+function setInviteRole(v,el){inviteRole=v;
+  ['viewer','cohost'].forEach(k=>document.getElementById('ir-'+k).classList.toggle('sel',k===v));}
+
+async function createStream(){
+  const title=document.getElementById('st-title').value.trim();
+  if(!title){showToast('Give your stream a title first');return;}
+  const btn=document.getElementById('createBtn');
+  btn.disabled=true;btn.textContent='Creating…';
+  const row={
+    creator_id:me.id, title,
+    description:document.getElementById('st-desc').value.trim()||null,
+    access_type:accessType, billing_mode:billingMode,
+    rate_per_min: billingMode==='per_minute' ? parseFloat(document.getElementById('st-rate').value||'3') : null,
+    status:'scheduled',
+    room_name:'jb-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)
+  };
+  const {error}=await sb.from('live_streams').insert(row);
+  btn.disabled=false;btn.textContent='Create stream';
+  if(error){showToast('Could not create: '+error.message);return;}
+  document.getElementById('st-title').value='';
+  document.getElementById('st-desc').value='';
+  showToast('✓ Stream created');
+  loadMyStreams();
+}
+
+async function loadMyStreams(){
+  const {data}=await sb.from('live_streams').select('*')
+    .eq('creator_id',me.id).order('created_at',{ascending:false}).limit(25);
+  myStreams=data||[];
+  const box=document.getElementById('streamList');
+  if(!box) return;
+  if(!myStreams.length){box.innerHTML='<div class="empty">No streams yet — create one above 🐰</div>';return;}
+  const accessLabel={public:'🌍 Public',followers:'💗 Followers',invite:'🔐 Invite only'};
+  box.innerHTML=myStreams.map(s=>{
+    const bill = s.billing_mode==='per_minute' ? `$${Number(s.rate_per_min||0).toFixed(2)}/min` : 'Free for subscribers';
+    const badge = s.status==='live' ? '<span class="badge b-live">● Live</span>'
+                : s.status==='ended' ? '<span class="badge b-ended">Ended</span>'
+                : '<span class="badge b-sched">Ready</span>';
+    return `<div class="stream-row">
+      ${s.status==='live'?'<span class="live-dot"></span>':''}
+      <div class="sr-info">
+        <div class="sr-title">${esc(s.title)}</div>
+        <div class="sr-meta">${accessLabel[s.access_type]} · ${bill}${s.status==='live'?' · '+(s.peak_viewers||0)+' peak viewers':''}</div>
+      </div>
+      ${badge}
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        ${s.access_type==='invite'||s.status!=='ended'
+          ? `<button class="row-btn" onclick="openInvite('${s.id}')">👥 Invite</button>`:''}
+        ${s.status==='scheduled'?`<button class="row-btn" onclick="startStream('${s.id}')">▶ Start</button>`:''}
+        ${s.status==='live'?`<button class="row-btn" onclick="endStream('${s.id}')">■ End</button>`:''}
+        ${s.status!=='live'?`<button class="row-btn" onclick="deleteStream('${s.id}')">🗑</button>`:''}
+      </div>
+    </div>`;}).join('');
+}
+
+async function startStream(id){
+  const {error}=await sb.from('live_streams')
+    .update({status:'live',started_at:new Date().toISOString()}).eq('id',id);
+  if(error)return showToast('Could not start: '+error.message);
+  showToast('🔴 You are live — video connection activates once the provider is configured');
+  loadMyStreams();
+}
+async function endStream(id){
+  const {error}=await sb.from('live_streams')
+    .update({status:'ended',ended_at:new Date().toISOString()}).eq('id',id);
+  if(error)return showToast('Could not end: '+error.message);
+  showToast('Stream ended');
+  loadMyStreams();
+}
+async function deleteStream(id){
+  if(!confirm('Delete this stream?'))return;
+  const {error}=await sb.from('live_streams').delete().eq('id',id);
+  if(error)return showToast('Could not delete: '+error.message);
+  loadMyStreams();
+}
+
+/* ── INVITES ── */
+function openInvite(id){
+  inviteStreamId=id;
+  const s=myStreams.find(x=>x.id===id);
+  document.getElementById('inviteStreamName').textContent=s?s.title:'';
+  document.getElementById('inviteSearch').value='';
+  document.getElementById('searchResults').innerHTML='';
+  document.getElementById('inviteModal').classList.add('open');
+  loadInvites();
+}
+function closeInvite(){document.getElementById('inviteModal').classList.remove('open');}
+
+let searchTimer=null;
+function searchUsers(q){
+  clearTimeout(searchTimer);
+  if(!q||q.length<2){document.getElementById('searchResults').innerHTML='';return;}
+  searchTimer=setTimeout(async()=>{
+    const {data}=await sb.from('profiles')
+      .select('id,full_name,email,role')
+      .or(`full_name.ilike.%${q}%,email.ilike.%${q}%`)
+      .neq('id',me.id).limit(8);
+    const box=document.getElementById('searchResults');
+    if(!data||!data.length){box.innerHTML='<div class="empty" style="padding:14px">No members found</div>';return;}
+    box.innerHTML=data.map(u=>{
+      const name=u.full_name||u.email.split('@')[0];
+      return `<div class="inv-row">
+        <div class="inv-av">${esc((name[0]||'U').toUpperCase())}</div>
+        <div class="inv-name">${esc(name)}${u.role==='model'?' <span class="inv-role">· creator</span>':''}</div>
+        <button class="row-btn" onclick="sendInvite('${u.id}','${esc(name).replace(/'/g,'')}')">Invite</button>
+      </div>`;}).join('');
+  },260);
+}
+
+async function sendInvite(userId,name){
+  const {error}=await sb.from('stream_invites').insert({
+    stream_id:inviteStreamId,user_id:userId,invite_role:inviteRole,invited_by:me.id});
+  if(error){
+    showToast(error.code==='23505'?'Already invited':'Could not invite: '+error.message);
+    return;
+  }
+  showToast(`✓ Invited ${name} as ${inviteRole==='cohost'?'co-host':'viewer'}`);
+  loadInvites();
+}
+
+async function loadInvites(){
+  const {data}=await sb.from('stream_invites')
+    .select('id,invite_role,status,user_id,profiles:user_id(full_name,email)')
+    .eq('stream_id',inviteStreamId);
+  const box=document.getElementById('currentInvites');
+  if(!data||!data.length){box.innerHTML='<div class="empty" style="padding:14px">No invites yet</div>';return;}
+  box.innerHTML=data.map(i=>{
+    const p=i.profiles||{};
+    const name=p.full_name||(p.email||'Member').split('@')[0];
+    return `<div class="inv-row">
+      <div class="inv-av">${esc((name[0]||'U').toUpperCase())}</div>
+      <div class="inv-name">${esc(name)}<span class="inv-role"> · ${i.invite_role==='cohost'?'co-host':'viewer'}</span></div>
+      <button class="row-btn" onclick="removeInvite('${i.id}')">Remove</button>
+    </div>`;}).join('');
+}
+async function removeInvite(id){
+  const {error}=await sb.from('stream_invites').delete().eq('id',id);
+  if(error)return showToast('Could not remove');
+  loadInvites();
+}
+</script>
+</body>
+</html>
