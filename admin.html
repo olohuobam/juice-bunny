@@ -391,6 +391,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <span class="nav-badge" id="prod-count-badge">0</span>
       </div>
 
+      <div class="nav-item" onclick="showPanel('orders',this)">
+        <span class="nav-icon">📦</span> Store Orders
+        <span class="nav-badge" id="ord-count-badge">0</span>
+      </div>
+
       <div class="nav-section-label">Members</div>
       <div class="nav-item" onclick="showPanel('users',this)">
         <span class="nav-icon">👥</span> Subscribers
@@ -687,6 +692,47 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </thead>
           <tbody id="products-tbody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ─── STORE ORDERS ─── -->
+    <div class="admin-panel" id="panel-orders">
+      <div class="section-head">
+        <span class="section-h2">Store Orders</span>
+        <span style="font-size:12px;color:var(--text3)" id="ord-count-lbl">0 orders</span>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" placeholder="🔍 Search order # / name / email..." oninput="filterOrders(this.value)"/>
+          <select class="filter-select" onchange="filterOrdersByStatus(this.value)">
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── ORDER DETAIL MODAL ─── -->
+    <div class="modal-bg" id="orderModal" onclick="if(event.target===this)closeOrderModal()"
+         style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;padding:20px">
+      <div class="modal" style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:26px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:4px">
+          <div class="section-h2" style="font-size:22px" id="om-number">Order</div>
+          <button onclick="closeOrderModal()" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer">✕</button>
+        </div>
+        <div id="om-body"></div>
       </div>
     </div>
 
@@ -1079,6 +1125,7 @@ function initAdmin() {
   buildBcHistory();
   loadRealData();
   loadProducts();
+  loadOrders();
   document.getElementById('menu-btn').style.display = window.innerWidth<=900 ? 'block' : 'none';
 }
 
@@ -1742,6 +1789,124 @@ function deleteProduct(id, name) {
       if (error) throw error;
       loadProducts();
     } catch(err) { alert('Could not delete: ' + (err.message||err)); }
+  });
+}
+/* ═══════════════════════════════════════════════════════════
+   STORE ORDERS — admin view + fulfilment
+═══════════════════════════════════════════════════════════ */
+let ordersData = [];
+let ordFilter = { text:'', status:'all' };
+const ORDER_STATUSES = ['pending','paid','processing','shipped','delivered','cancelled','refunded'];
+
+function loadOrders() {
+  loadSupabase(async (client) => {
+    try {
+      const { data } = await client.from('orders').select('*').order('created_at',{ascending:false}).limit(200);
+      ordersData = data || [];
+      renderOrdersTable();
+      const n = ordersData.length;
+      const pending = ordersData.filter(o=>o.status==='pending').length;
+      document.getElementById('ord-count-badge').textContent = pending || n;
+      document.getElementById('ord-count-lbl').textContent = n + (n===1?' order':' orders') + (pending?` · ${pending} pending`:'');
+    } catch(e) { console.warn('orders load failed', e); }
+  });
+}
+
+function ordFmtDate(iso){ if(!iso) return '—'; return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}); }
+
+function statusBadge(s){
+  const colors={pending:'var(--gold,#ffb020)',paid:'#4aa3ff',processing:'#a855f7',
+    shipped:'#22c55e',delivered:'var(--success)',cancelled:'var(--error)',refunded:'var(--text3)'};
+  const c=colors[s]||'var(--text3)';
+  return `<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${c};background:${c}22;padding:4px 9px;border-radius:8px">${s}</span>`;
+}
+
+function renderOrdersTable(){
+  const tbody=document.getElementById('orders-tbody');
+  let list=ordersData.filter(o=>{
+    if(ordFilter.status!=='all' && o.status!==ordFilter.status) return false;
+    if(ordFilter.text){
+      const t=ordFilter.text;
+      return (o.order_number||'').toLowerCase().includes(t)
+        || (o.full_name||'').toLowerCase().includes(t)
+        || (o.email||'').toLowerCase().includes(t);
+    }
+    return true;
+  });
+  if(!list.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:30px">No orders yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=list.map(o=>`
+    <tr style="cursor:pointer" onclick="openOrder('${o.id}')">
+      <td style="font-family:monospace;font-size:12px">${escapeHtml(o.order_number)}</td>
+      <td>${escapeHtml(o.full_name)}<br/><span style="font-size:11px;color:var(--text3)">${escapeHtml(o.email)}</span></td>
+      <td style="font-size:12px;color:var(--text3)">${o.city?escapeHtml(o.city)+', ':''}${escapeHtml(o.country||'')}</td>
+      <td style="font-weight:700">$${Number(o.total_usd||0).toFixed(2)}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td style="font-size:12px;color:var(--text3)">${ordFmtDate(o.created_at)}</td>
+    </tr>`).join('');
+}
+
+function filterOrders(v){ ordFilter.text=(v||'').toLowerCase(); renderOrdersTable(); }
+function filterOrdersByStatus(v){ ordFilter.status=v; renderOrdersTable(); }
+
+function openOrder(id){
+  loadSupabase(async (client)=>{
+    const o=ordersData.find(x=>String(x.id)===String(id));
+    if(!o) return;
+    document.getElementById('om-number').textContent=o.order_number;
+    document.getElementById('orderModal').style.display='flex';
+
+    const { data:items }=await client.from('order_items').select('*').eq('order_id',id);
+    const itemRows=(items||[]).map(it=>`
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px">
+        <span>${it.emoji||'🛍️'} ${escapeHtml(it.product_name)} <span style="color:var(--text3)">× ${it.quantity}</span></span>
+        <span style="font-weight:600">$${Number(it.line_total||0).toFixed(2)}</span>
+      </div>`).join('') || '<div style="color:var(--text3);font-size:13px;padding:8px 0">No items recorded</div>';
+
+    const statusOpts=ORDER_STATUSES.map(s=>`<option value="${s}"${s===o.status?' selected':''}>${s}</option>`).join('');
+
+    document.getElementById('om-body').innerHTML=`
+      <div style="color:var(--text3);font-size:12px;margin-bottom:16px">${ordFmtDate(o.created_at)}</div>
+
+      <div style="font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);font-weight:700;margin-bottom:8px">Customer</div>
+      <div style="font-size:14px;line-height:1.7;margin-bottom:16px">
+        ${escapeHtml(o.full_name)}<br/>
+        ${escapeHtml(o.email)}${o.phone?'<br/>'+escapeHtml(o.phone):''}<br/>
+        ${escapeHtml(o.address_line1)}${o.address_line2?', '+escapeHtml(o.address_line2):''}<br/>
+        ${escapeHtml(o.city||'')}${o.state_region?', '+escapeHtml(o.state_region):''} ${escapeHtml(o.postal_code||'')}<br/>
+        ${escapeHtml(o.country||'')}
+      </div>
+
+      <div style="font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);font-weight:700;margin-bottom:8px">Items</div>
+      ${itemRows}
+      <div style="display:flex;justify-content:space-between;padding:12px 0 4px;font-weight:700;font-size:15px">
+        <span>Total</span><span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">$${Number(o.total_usd||0).toFixed(2)}</span>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);font-weight:700;margin-bottom:8px">Update status</div>
+        <select id="om-status" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-size:14px;margin-bottom:12px">${statusOpts}</select>
+
+        <div style="font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);font-weight:700;margin-bottom:8px">Tracking number</div>
+        <input id="om-tracking" value="${escapeHtml(o.tracking_number||'')}" placeholder="Add tracking #"
+               style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-size:14px;margin-bottom:16px"/>
+
+        <button class="btn-primary" style="width:100%" onclick="saveOrder('${o.id}')">✓ Save changes</button>
+      </div>`;
+  });
+}
+function closeOrderModal(){ document.getElementById('orderModal').style.display='none'; }
+
+function saveOrder(id){
+  const status=document.getElementById('om-status').value;
+  const tracking=document.getElementById('om-tracking').value.trim()||null;
+  loadSupabase(async (client)=>{
+    const { error }=await client.from('orders').update({status,tracking_number:tracking}).eq('id',id);
+    if(error){ alert('Could not update: '+error.message); return; }
+    closeOrderModal();
+    loadOrders();
   });
 }
 </script>
