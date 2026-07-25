@@ -384,7 +384,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="nav-section-label">Content</div>
       <div class="nav-item" onclick="showPanel('videos',this)">
         <span class="nav-icon">🎬</span> Videos
-        <span class="nav-badge" id="vid-count-badge">24</span>
+        <span class="nav-badge" id="vid-count-badge">0</span>
       </div>
       <div class="nav-item" onclick="showPanel('products',this)">
         <span class="nav-icon">🛍️</span> Store Products
@@ -957,38 +957,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
 /* ═══════════════════════════════════════════════════════════
    DATA
 ═══════════════════════════════════════════════════════════ */
-let videosData = [
-  {id:1,title:'Midnight Desires',cat:'Romance',thumb:'🌙',dur:'22:14',premium:true,featured:true,views:4820,date:'Jun 08 2026'},
-  {id:2,title:'Neon Nights',cat:'Action',thumb:'⚡',dur:'18:40',premium:true,featured:false,views:3210,date:'Jun 06 2026'},
-  {id:3,title:'Cherry Blossom Dreams',cat:'Anime',thumb:'🌸',dur:'31:05',premium:false,featured:true,views:8940,date:'Jun 04 2026'},
-  {id:4,title:'Dark Temptation',cat:'Originals',thumb:'🖤',dur:'25:22',premium:true,featured:false,views:2660,date:'Jun 01 2026'},
-  {id:5,title:'Velvet Underground',cat:'Steamy',thumb:'🍷',dur:'19:58',premium:true,featured:true,views:5430,date:'May 28 2026'},
-  {id:6,title:'Free Preview Pack',cat:'Action',thumb:'🎁',dur:'05:00',premium:false,featured:false,views:12400,date:'May 25 2026'},
-  {id:7,title:'Starlight Sessions',cat:'Romance',thumb:'✨',dur:'28:17',premium:true,featured:false,views:1870,date:'May 20 2026'},
-  {id:8,title:'Tokyo Fantasy',cat:'Anime',thumb:'🗼',dur:'33:44',premium:true,featured:true,views:6120,date:'May 15 2026'},
-];
+let videosData = [];
 
-let usersData = [
-  {id:1,name:'Jessica M.',email:'jessica@email.com',plan:'bunnyworld',status:'active',joined:'Jun 01 2026',lastActive:'2 hours ago'},
-  {id:2,name:'Ryan K.',email:'ryank@email.com',plan:'basic',status:'active',joined:'May 28 2026',lastActive:'1 day ago'},
-  {id:3,name:'Samantha L.',email:'sam@email.com',plan:'bunnyworld',status:'active',joined:'May 25 2026',lastActive:'5 hours ago'},
-  {id:4,name:'Marcus T.',email:'marcus@email.com',plan:'free',status:'active',joined:'May 20 2026',lastActive:'3 days ago'},
-  {id:5,name:'Priya N.',email:'priya@email.com',plan:'basic',status:'active',joined:'May 15 2026',lastActive:'12 hours ago'},
-  {id:6,name:'Tyler B.',email:'tyler@email.com',plan:'bunnyworld',status:'active',joined:'May 10 2026',lastActive:'Just now'},
-  {id:7,name:'Camille R.',email:'camille@email.com',plan:'basic',status:'inactive',joined:'Apr 28 2026',lastActive:'2 weeks ago'},
-  {id:8,name:'Devon W.',email:'devon@email.com',plan:'free',status:'active',joined:'Apr 20 2026',lastActive:'4 days ago'},
-];
+let usersData = [];
 
-let txnsData = [
-  {id:'JB-8821049',user:'Jessica M.',plan:'BunnyWorld',amount:'$15.99',method:'BTC',status:'finished',date:'Jun 08 2026'},
-  {id:'JB-8820884',user:'Tyler B.',plan:'BunnyWorld',amount:'$15.99',method:'ETH',status:'finished',date:'Jun 08 2026'},
-  {id:'JB-8820541',user:'Samantha L.',plan:'Basic',amount:'$9.99',method:'USDT',status:'finished',date:'Jun 07 2026'},
-  {id:'JB-8820122',user:'Priya N.',plan:'Basic',amount:'$9.99',method:'LTC',status:'finished',date:'Jun 07 2026'},
-  {id:'JB-8819871',user:'Ryan K.',plan:'Basic',amount:'$9.99',method:'XRP',status:'pending',date:'Jun 06 2026'},
-  {id:'JB-8819344',user:'Marcus T.',plan:'Basic',amount:'$9.99',method:'BTC',status:'failed',date:'Jun 05 2026'},
-  {id:'JB-8818990',user:'Camille R.',plan:'BunnyWorld',amount:'$15.99',method:'ETH',status:'finished',date:'Jun 04 2026'},
-  {id:'JB-8818433',user:'Devon W.',plan:'Basic',amount:'$9.99',method:'USDT',status:'finished',date:'Jun 03 2026'},
-];
+let txnsData = [];
 
 const recentSignupsData = [
   {init:'J',name:'Jessica M.',plan:'bunnyworld',time:'2h ago'},
