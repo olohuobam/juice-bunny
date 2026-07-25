@@ -399,7 +399,7 @@ function renderCart() {
     </div>`).join('');
 }
 function toggleCart(open){ document.getElementById('cartDrawer').classList.toggle('open',open); document.getElementById('cartOverlay').classList.toggle('open',open); }
-function checkout(){ if(!cart.length){showToast('Your cart is empty 🐰');return;} showToast('🛒 Checkout opens at launch — card & crypto coming soon!'); }
+function checkout(){ if(!cart.length){showToast('Your cart is empty 🐰');return;} window.location.href='checkout.html'; }
 
 let toastTimer=null;
 function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600); }

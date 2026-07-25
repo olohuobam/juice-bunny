@@ -383,8 +383,8 @@ function toggleCart(open) {
 }
 
 function checkout() {
-  if (!cart.length) { showToast('Your cart is empty 🐰', true); return; }
-  showToast('🛒 Checkout opens at launch — card & crypto payments coming soon!', true);
+  if (!cart.length) { showToast('Your cart is empty 🐰'); return; }
+  window.location.href = 'checkout.html';
 }
 
 /* ═══════════════════════════════════════════════════
