@@ -186,13 +186,20 @@ function renderSummary(){
 }
 
 async function placeOrder(){
-  const g=id=>document.getElementById(id).value.trim();
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
   const name=g('ck-name'), email=g('ck-email'), addr1=g('ck-addr1'),
         city=g('ck-city'), zip=g('ck-zip'), country=g('ck-country');
-  if(!name||!email||!addr1||!city||!zip||!country){
-    showToast('Please fill in name, email, address, city, postal code and country',true);return;
+  const missing=[];
+  if(!name) missing.push('name');
+  if(!email) missing.push('email');
+  if(!addr1) missing.push('address');
+  if(!city) missing.push('city');
+  if(!zip) missing.push('postal code');
+  if(!country) missing.push('country');
+  if(missing.length){
+    showToast('Please fill in: '+missing.join(', '));return;
   }
-  if(email.indexOf('@')<0){showToast('Enter a valid email',true);return;}
+  if(email.indexOf('@')<0){showToast('Enter a valid email');return;}
   if(!cart.length){showToast('Your cart is empty',true);return;}
 
   const btn=document.getElementById('placeBtn');
