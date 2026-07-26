@@ -227,7 +227,36 @@ async function placeOrder(){
       if(e2) console.warn('item error',e2);
     }
 
-    // 3. Clear cart, show confirmation
+    // 3. Send confirmation email (never blocks the order if it fails)
+    try{
+      const itemsHtml = cart.map(l =>
+        `<tr><td style="padding:8px 0;border-bottom:1px solid #2a2a34;color:#fff">${l.emoji||'🛍️'} ${esc(l.name)} × ${l.qty}</td>`
+        + `<td style="padding:8px 0;border-bottom:1px solid #2a2a34;text-align:right;color:#fff">$${(l.qty*l.price).toFixed(2)}</td></tr>`).join('');
+      const emailHtml = `
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#0d0d12;padding:30px;border-radius:14px">
+          <h1 style="color:#FF2D78;font-size:26px;margin:0 0 4px">Order Confirmed 🐰</h1>
+          <p style="color:#a0a0b0;font-size:14px;margin:0 0 20px">Thank you, ${esc(name.split(' ')[0])}! We've received your order.</p>
+          <div style="background:#1a1a24;border-radius:10px;padding:16px;margin-bottom:18px">
+            <div style="color:#FF2D78;font-size:20px;font-weight:bold;letter-spacing:1px">${esc(order.order_number)}</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px">${itemsHtml}
+            <tr><td style="padding:12px 0 0;font-weight:bold;color:#fff">Total</td>
+            <td style="padding:12px 0 0;text-align:right;font-weight:bold;color:#FF2D78">$${subtotal.toFixed(2)}</td></tr>
+          </table>
+          <div style="background:#1a1020;border-radius:10px;padding:14px;margin:18px 0;font-size:13px;color:#a0a0b0">
+            📦 Shipping to: ${esc(addr1)}, ${esc(city)}, ${esc(country)}<br/>
+            Card &amp; crypto payment activates at launch — we'll contact you to complete payment.
+          </div>
+          <p style="color:#606070;font-size:12px;text-align:center;margin-top:20px">Discreet packaging on every order · Juice Bunny · 18+</p>
+        </div>`;
+      await fetch('https://ewhhufhnfrhherjmbvqq.supabase.co/functions/v1/resend-email', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+SUPABASE_KEY },
+        body: JSON.stringify({ to: email, subject: `Order Confirmed — ${order.order_number} 🐰`, html: emailHtml })
+      });
+    }catch(mailErr){ console.warn('confirmation email failed', mailErr); }
+
+    // 4. Clear cart, show confirmation
     localStorage.removeItem('jb_cart');
     document.getElementById('main').innerHTML=`
       <div class="success">
