@@ -413,7 +413,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="field" id="f-dob">
           <label>Date of Birth</label>
           <div class="input-wrap">
-            <span class="input-icon">📅</span>
+            <span class="input-icon"></span>
             <input type="date" id="dob" onchange="validateAge()"/>
           </div>
           <div class="field-hint">You must be 18+ to access this platform</div>
@@ -423,7 +423,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="field" id="f-country">
           <label>Country</label>
           <div class="input-wrap">
-            <span class="input-icon">🌍</span>
+            <span class="input-icon"></span>
             <select id="country">
               <option value="">Select your country</option>
               <option>United States</option>
@@ -491,7 +491,7 @@ select option{background:var(--bg3);color:var(--text)}
 
         <div style="margin-top:20px">
           <button class="btn-submit" id="createBtn" onclick="createAccount()">
-            <span id="createBtnText">🔥 Create My Account</span>
+            <span id="createBtnText"> Create My Account</span>
           </button>
           <button class="btn-back" onclick="goPanel(2)">← Back</button>
         </div>
@@ -585,8 +585,8 @@ function validateConfirm() {
 
 function togglePass(id, btn) {
   const inp = document.getElementById(id);
-  if(inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
-  else { inp.type = 'password'; btn.textContent = '👁'; }
+  if(inp.type === 'password') { inp.type = 'text'; btn.textContent = ''; }
+  else { inp.type = 'password'; btn.textContent = ''; }
 }
 
 function goStep2() {

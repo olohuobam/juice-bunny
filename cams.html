@@ -229,7 +229,7 @@ function render(){
       New streams appear here as soon as creators go live.</div>`;
     return;
   }
-  const accessIcon={public:'',followers:'💗 Followers',invite:'🔐 Invite only'};
+  const accessIcon={public:'',followers:' Followers',invite:'🔐 Invite only'};
   grid.innerHTML=list.map(s=>{
     const p=s.profiles||{};
     const name=p.full_name||(p.email||'Creator').split('@')[0];
@@ -274,7 +274,7 @@ async function joinStream(id){
 
   if(!allowed){
     if(s.access_type==='invite'){showToast('🔐 This stream is invite only');return;}
-    if(s.access_type==='followers'){showToast('💗 Follow this creator to join');return;}
+    if(s.access_type==='followers'){showToast(' Follow this creator to join');return;}
     showToast('🎟️ A subscription is needed to join — upgrade to watch');
     setTimeout(()=>window.location.href='index.html#pricing',1400);
     return;
