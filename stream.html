@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/agora-rtc-sdk-ng@4.20.0/AgoraRTC_N.js"></script>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.20.0.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,.35);
@@ -163,7 +163,7 @@ function renderRoom(){
         </div>
         <div class="video-placeholder" id="vidPlaceholder">
           <span class="big">${isHost?'📹':'🎥'}</span>
-          ${isHost?'Starting your camera…':'Waiting for creator\\'s video…'}
+          ${isHost?'Starting your camera…':'Waiting for creator&#39;s video…'}
         </div>
         <div id="remotePlayer"></div>
         <div id="localPlayer"></div>
@@ -201,7 +201,7 @@ async function getToken(role){
 async function connectAgora(){
   if(typeof AgoraRTC==='undefined'){
     const ph=document.getElementById('vidPlaceholder');
-    if(ph) ph.innerHTML='<span class="big">⚠️</span>Video SDK didn't load.<br/><span style="font-size:12px;color:var(--text3)">Check connection or disable ad-blockers, then reload.</span>';
+    if(ph) ph.innerHTML='<span class="big">⚠️</span>Video SDK did not load.<br/><span style="font-size:12px;color:var(--text3)">Check connection or disable ad-blockers, then reload.</span>';
     return;
   }
   try{
