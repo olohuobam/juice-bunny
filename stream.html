@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.20.0.js"></script>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,.35);
@@ -189,13 +189,18 @@ function renderRoom(){
 }
 
 async function getToken(role){
-  const res=await fetch(TOKEN_FN,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_KEY},
-    body:JSON.stringify({channel:stream.room_name||('jb_'+id.slice(0,8)), uid:0, role})
-  });
-  if(!res.ok) throw new Error('token request failed');
-  return await res.json();
+  let res;
+  try{
+    res=await fetch(TOKEN_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_KEY},
+      body:JSON.stringify({channel:stream.room_name||('jb_'+id.slice(0,8)), uid:0, role})
+    });
+  }catch(e){ throw new Error('Cannot reach token server: '+(e.message||e)); }
+  const text=await res.text();
+  if(!res.ok) throw new Error('Token server '+res.status+': '+text);
+  try{ return JSON.parse(text); }
+  catch(e){ throw new Error('Token server returned invalid response: '+text.slice(0,120)); }
 }
 
 async function connectAgora(){
