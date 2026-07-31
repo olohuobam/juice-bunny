@@ -87,11 +87,6 @@ display:flex;align-items:center;justify-content:center;font-size:10.5px;font-wei
 .empty{grid-column:1/-1;text-align:center;color:var(--text2);padding:56px 20px;font-size:14.5px;line-height:1.8}
 .empty .big{font-size:42px;display:block;margin-bottom:12px}
 
-.notice{max-width:1180px;margin:0 auto 20px;background:rgba(255,176,32,.08);
-border:1px solid rgba(255,176,32,.25);border-left:3px solid var(--gold);border-radius:12px;
-padding:13px 18px;font-size:13px;color:var(--text2);line-height:1.6}
-.notice b{color:var(--gold)}
-
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
 background:var(--bg3);border:1px solid rgba(255,45,120,.45);padding:12px 22px;border-radius:14px;
 font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:92vw;text-align:center}
@@ -145,10 +140,6 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
 </div>
 
 <main class="wrap">
-  <div class="notice" id="setupNotice">
-    <b>Coming online soon:</b> live video is being finalised with our streaming provider.
-    Creators can already set up streams — cams appear here the moment the video layer is switched on.
-  </div>
   <div class="grid" id="grid"><div class="empty">Loading…</div></div>
 </main>
 
@@ -185,7 +176,6 @@ async function init(){
     (f||[]).forEach(r=>following.add(r.creator_id));
   }
   loadStreams();
-  // refresh every 20s so the list stays current
   setInterval(loadStreams,20000);
 }
 
@@ -229,7 +219,7 @@ function render(){
       New streams appear here as soon as creators go live.</div>`;
     return;
   }
-  const accessIcon={public:'',followers:' Followers',invite:'🔐 Invite only'};
+  const accessIcon={public:'',followers:'💗 Followers',invite:'🔐 Invite only'};
   grid.innerHTML=list.map(s=>{
     const p=s.profiles||{};
     const name=p.full_name||(p.email||'Creator').split('@')[0];
@@ -266,7 +256,7 @@ async function joinStream(id){
   if(!me){showToast('Sign in to join a live stream');
     setTimeout(()=>window.location.href='login.html',900);return;}
 
-  if(s.status!=='live'){showToast('This stream hasn\'t started yet — you\'ll be notified');return;}
+  if(s.status!=='live'){showToast('This stream hasn\'t started yet — check back soon');return;}
 
   // Server-side access check (invite / followers / subscription)
   const {data:allowed,error}=await sb.rpc('can_join_stream',{p_stream_id:id});
@@ -274,19 +264,14 @@ async function joinStream(id){
 
   if(!allowed){
     if(s.access_type==='invite'){showToast('🔐 This stream is invite only');return;}
-    if(s.access_type==='followers'){showToast(' Follow this creator to join');return;}
+    if(s.access_type==='followers'){showToast('💗 Follow this creator to join');return;}
     showToast('🎟️ A subscription is needed to join — upgrade to watch');
     setTimeout(()=>window.location.href='index.html#pricing',1400);
     return;
   }
 
-  // Record the join, then hand off to the media layer
-  await sb.from('stream_participants').insert({
-    stream_id:id,user_id:me.id,role:'viewer'});
-
-  showToast('✓ Access granted — video connection activates once the provider is live');
-  // When the media layer lands, this becomes:
-  // window.location.href = 'stream.html?id=' + id;
+  // Access granted → open the live room
+  window.location.href='stream.html?id='+id;
 }
 </script>
 </body>
