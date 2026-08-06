@@ -33,8 +33,12 @@ font-size:11px;font-weight:800;letter-spacing:.6px;padding:4px 10px;border-radiu
 
 .stage{flex:1;display:grid;grid-template-columns:1fr 320px;gap:0;min-height:0}
 .video-area{position:relative;background:#000;display:flex;align-items:center;justify-content:center;min-height:0}
-#localPlayer,#remotePlayer{width:100%;height:100%;position:absolute;inset:0}
-#localPlayer video,#remotePlayer video{object-fit:contain !important}
+#remotePlayer{width:100%;height:100%;position:absolute;inset:0;display:flex;flex-wrap:wrap;gap:2px;background:#000}
+#remotePlayer > div{flex:1 1 45%;min-width:280px;position:relative;background:#000}
+#remotePlayer video{object-fit:contain !important}
+#localPlayer{position:absolute;bottom:16px;right:16px;width:150px;height:200px;border-radius:12px;
+overflow:hidden;border:2px solid var(--pink);z-index:5;background:#000;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+#localPlayer video{object-fit:cover !important}
 .video-placeholder{text-align:center;color:var(--text3);z-index:1}
 .video-placeholder .big{font-size:60px;display:block;margin-bottom:12px}
 .stream-title-overlay{position:absolute;top:16px;left:16px;z-index:3;background:rgba(0,0,0,.55);
@@ -224,15 +228,28 @@ async function connectAgora(){
     client = AgoraRTC.createClient({ mode:'live', codec:'vp8' });
     await client.setClientRole(isBroadcaster ? 'host' : 'audience');
 
-    // Remote (viewers see host; host sees co-hosts)
+    // Remote (viewers see broadcasters; broadcasters see each other)
     client.on('user-published', async (user, mediaType)=>{
       await client.subscribe(user, mediaType);
       const ph=document.getElementById('vidPlaceholder'); if(ph) ph.style.display='none';
-      if(mediaType==='video'){ user.videoTrack.play('remotePlayer'); }
+      if(mediaType==='video'){
+        let box=document.getElementById('remote-'+user.uid);
+        if(!box){ box=document.createElement('div'); box.id='remote-'+user.uid;
+          document.getElementById('remotePlayer').appendChild(box); }
+        user.videoTrack.play('remote-'+user.uid);
+      }
       if(mediaType==='audio'){ user.audioTrack.play(); }
     });
     client.on('user-unpublished',(user,mediaType)=>{
-      if(mediaType==='video'){ const ph=document.getElementById('vidPlaceholder'); if(ph) ph.style.display='block'; }
+      if(mediaType==='video'){
+        const box=document.getElementById('remote-'+user.uid); if(box) box.remove();
+        if(!document.getElementById('remotePlayer').children.length){
+          const ph=document.getElementById('vidPlaceholder'); if(ph) ph.style.display='block';
+        }
+      }
+    });
+    client.on('user-left',(user)=>{
+      const box=document.getElementById('remote-'+user.uid); if(box) box.remove();
     });
     client.on('user-joined',()=>updateViewerCount());
     client.on('user-left',()=>updateViewerCount());
