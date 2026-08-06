@@ -99,7 +99,7 @@ padding:10px 13px;color:var(--text);font-family:inherit;font-size:14px}
 <script>
 const SUPABASE_URL='https://ewhhufhnfrhherjmbvqq.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
-const TOKEN_FN = SUPABASE_URL + '/functions/v1/agora-token';
+const TOKEN_FN = SUPABASE_URL + '/functions/v1/dynamic-processor';
 
 let sb=null, me=null, myName='Guest', stream=null, isHost=false;
 let client=null, localTracks={audio:null,video:null}, joined=false, chatChannel=null;
