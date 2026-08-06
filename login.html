@@ -255,7 +255,7 @@ input::placeholder{color:var(--text3)}
         <div class="left-sub">Your exclusive premium entertainment hub. Thousands of titles, new drops weekly, zero ads — ever.</div>
         <div class="left-perks">
           <div class="left-perk">
-            <div class="perk-icon">🎬</div>
+            <div class="perk-icon"></div>
             <div class="perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div>
           </div>
           <div class="left-perk">
@@ -273,7 +273,7 @@ input::placeholder{color:var(--text3)}
         </div>
       </div>
       <div class="left-bottom">
-        <div class="bunny-watermark">🐰</div>
+        <div class="bunny-watermark"></div>
         <div class="left-testimonial">
           <div class="test-stars">★★★★★</div>
           <div class="test-quote">"Best streaming platform I've ever used. The content quality and privacy features are unmatched."</div>
@@ -295,7 +295,7 @@ input::placeholder{color:var(--text3)}
       <div class="main-panel" id="mainPanel">
         <div class="auth-header">
           <div class="auth-title">Sign in to your account</div>
-          <div class="auth-subtitle">Good to see you again 👋</div>
+          <div class="auth-subtitle">Good to see you again </div>
         </div>
 
         <div class="error-banner" id="errorBanner">
@@ -522,7 +522,7 @@ async function doLogin() {
       .eq('id', data.user.id)
       .single();
 
-    showToast('✓ Signed in! Redirecting...');
+    showToast(' Signed in! Redirecting...');
 
     setTimeout(() => {
       if (profile?.role === 'admin') {
@@ -624,7 +624,7 @@ async function doReset() {
   if (error) {
     showToast('⚠ ' + error.message);
   } else {
-    showToast('✓ Reset link sent! Check your inbox.');
+    showToast(' Reset link sent! Check your inbox.');
     setTimeout(showLogin, 2000);
   }
   document.getElementById('resetBtnText').textContent = 'Send Reset Link →';

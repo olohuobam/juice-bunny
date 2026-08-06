@@ -80,7 +80,7 @@ create table if not exists public.videos (
   description         text,
   category            text check (category in ('Action','Romance','Anime','Originals','Steamy','Live Call')),
   thumbnail_url       text,
-  thumbnail_emoji     text default '🎬',
+  thumbnail_emoji     text default '',
   duration            text,
   cloudflare_video_id text,         -- populated when Cloudflare Stream is wired in
   is_premium          boolean default true,

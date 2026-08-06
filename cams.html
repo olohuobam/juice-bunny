@@ -113,16 +113,16 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
     <a href="chat.html">Chat</a>
   </div>
   <div class="nav-right">
-    <a class="btn btn-ghost" href="go-live.html" id="goLiveBtn" style="display:none">🎥 Go Live</a>
+    <a class="btn btn-ghost" href="go-live.html" id="goLiveBtn" style="display:none"> Go Live</a>
     <button class="hamburger" onclick="toggleMenu(true)" aria-label="Menu">☰</button>
   </div>
 </nav>
 <div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="index.html">🏠 Home</a>
-  <a href="cams.html">🎥 Cams</a>
-  <a href="store.html">🛍️ Store</a>
-  <a href="chat.html">💬 Chat</a>
+  <a href="index.html"> Home</a>
+  <a href="cams.html"> Cams</a>
+  <a href="store.html"> Store</a>
+  <a href="chat.html"> Chat</a>
   <a href="go-live.html" id="mmGoLive" style="display:none">📹 Go Live</a>
 </nav>
 
@@ -189,7 +189,7 @@ async function loadStreams(){
   if(error){
     console.error('loadStreams error:',error);
     document.getElementById('grid').innerHTML=
-      `<div class="empty"><span class="big">🐰</span>Couldn't load cams right now.<br/>
+      `<div class="empty"><span class="big"></span>Couldn't load cams right now.<br/>
        <span style="font-size:12px;color:var(--text3)">${esc(error.message||'')}</span></div>`;
     return;
   }
@@ -214,7 +214,7 @@ function render(){
     return true;
   });
   if(!list.length){
-    grid.innerHTML=`<div class="empty"><span class="big">🐰</span>
+    grid.innerHTML=`<div class="empty"><span class="big"></span>
       ${filter==='following'?'No streams from creators you follow right now.':'No cams live at the moment.'}<br/>
       New streams appear here as soon as creators go live.</div>`;
     return;
@@ -229,7 +229,7 @@ function render(){
       : `<span class="price free">Free for subs</span>`;
     return `<article class="scard" onclick="joinStream('${s.id}')">
       <div class="sthumb">
-        ${s.thumbnail_url?`<img src="${esc(s.thumbnail_url)}" alt=""/>`:'🎥'}
+        ${s.thumbnail_url?`<img src="${esc(s.thumbnail_url)}" alt=""/>`:''}
         ${live?'<span class="live-pill"><span class="live-dot"></span>LIVE</span>':''}
         ${live?`<span class="viewers">👤 ${s.peak_viewers||0}</span>`:'<span class="viewers">Starting soon</span>'}
         ${accessIcon[s.access_type]?`<span class="lock">${accessIcon[s.access_type]}</span>`:''}
@@ -265,7 +265,7 @@ async function joinStream(id){
   if(!allowed){
     if(s.access_type==='invite'){showToast('🔐 This stream is invite only');return;}
     if(s.access_type==='followers'){showToast('💗 Follow this creator to join');return;}
-    showToast('🎟️ A subscription is needed to join — upgrade to watch');
+    showToast(' A subscription is needed to join — upgrade to watch');
     setTimeout(()=>window.location.href='index.html#pricing',1400);
     return;
   }

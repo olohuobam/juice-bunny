@@ -10,7 +10,7 @@ create table if not exists public.products (
   category    text not null check (category in ('supplements','gym','wellness','intimacy')),
   price_usd   numeric(10,2) not null,
   image_url   text,
-  emoji       text default '🛍️',
+  emoji       text default '',
   in_stock    boolean default true,
   is_active   boolean default true,
   created_at  timestamptz default now(),

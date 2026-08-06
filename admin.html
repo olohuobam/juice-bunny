@@ -383,16 +383,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="nav-section-label">Content</div>
       <div class="nav-item" onclick="showPanel('videos',this)">
-        <span class="nav-icon">🎬</span> Videos
+        <span class="nav-icon"></span> Videos
         <span class="nav-badge" id="vid-count-badge">0</span>
       </div>
       <div class="nav-item" onclick="showPanel('products',this)">
-        <span class="nav-icon">🛍️</span> Store Products
+        <span class="nav-icon"></span> Store Products
         <span class="nav-badge" id="prod-count-badge">0</span>
       </div>
 
       <div class="nav-item" onclick="showPanel('orders',this)">
-        <span class="nav-icon">📦</span> Store Orders
+        <span class="nav-icon"></span> Store Orders
         <span class="nav-badge" id="ord-count-badge">0</span>
       </div>
 
@@ -404,7 +404,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="nav-section-label">Finance</div>
       <div class="nav-item" onclick="showPanel('revenue',this)">
-        <span class="nav-icon">💰</span> Revenue
+        <span class="nav-icon"></span> Revenue
       </div>
 
       <div class="nav-section-label">Marketing</div>
@@ -442,7 +442,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="admin-panel active" id="panel-dashboard">
       <div class="dash-stats">
         <div class="stat-card" style="--stat-color:#FF2D78">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">$4,280</div>
           <div class="stat-lbl">Revenue This Month</div>
           <div class="stat-delta up">↑ 18% vs last month</div>
@@ -454,7 +454,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-delta up">↑ 94 new this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#8b00ff">
-          <div class="stat-icon">🎬</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">24</div>
           <div class="stat-lbl">Total Videos</div>
           <div class="stat-delta up">↑ 3 added this week</div>
@@ -508,7 +508,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <button class="btn-primary" style="justify-content:center" onclick="showPanel('videos',null);setTimeout(()=>document.getElementById('upload-form-wrap').style.display='block',100)">＋ Upload New Video</button>
             <button class="btn-secondary" onclick="showPanel('broadcast',null)">📣 Send Broadcast</button>
             <button class="btn-secondary" onclick="showPanel('users',null)">👥 Manage Subscribers</button>
-            <button class="btn-secondary" onclick="showPanel('revenue',null)">💰 View Revenue Report</button>
+            <button class="btn-secondary" onclick="showPanel('revenue',null)"> View Revenue Report</button>
           </div>
         </div>
       </div>
@@ -524,7 +524,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div id="upload-form-wrap">
         <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
           <input type="file" id="file-input" accept="video/*" onchange="handleFileSelect(this)"/>
-          <div class="upload-icon">🎬</div>
+          <div class="upload-icon"></div>
           <div class="upload-title">Drop video here or <span>browse files</span></div>
           <div class="upload-sub">MP4, MOV, AVI — up to 4GB per file</div>
         </div>
@@ -576,7 +576,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div class="progress-lbl" id="progress-lbl">Uploading...</div>
           </div>
           <div class="form-actions">
-            <button class="btn-primary" onclick="submitVideo()">✓ Save Video</button>
+            <button class="btn-primary" onclick="submitVideo()"> Save Video</button>
             <button class="btn-secondary" onclick="cancelUpload()">Cancel</button>
           </div>
         </div>
@@ -666,7 +666,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn-primary" onclick="submitProduct()" id="prod-save-btn">✓ Save Product</button>
+            <button class="btn-primary" onclick="submitProduct()" id="prod-save-btn"> Save Product</button>
             <button class="btn-secondary" onclick="cancelProductForm()">Cancel</button>
           </div>
         </div>
@@ -746,7 +746,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="user-stats">
         <div class="stat-card" style="--stat-color:#FF2D78">
-          <div class="stat-icon">👑</div>
+          <div class="stat-icon"></div>
           <div class="stat-val pd-count-bunnyworld">312</div>
           <div class="stat-lbl">BunnyWorld</div>
           <div class="stat-delta up">↑ 28 this week</div>
@@ -799,7 +799,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="rev-summary">
         <div class="stat-card" style="--stat-color:#FF2D78">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">$4,280</div>
           <div class="stat-lbl">This Month</div>
           <div class="stat-delta up">↑ 18% vs last month</div>
@@ -879,13 +879,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div class="bc-title">✉️ Compose Message</div>
             <div class="bc-type-tabs">
               <button class="bc-tab active" id="tab-email" onclick="setBcType('email')">📧 Email</button>
-              <button class="bc-tab" id="tab-sms" onclick="setBcType('sms')">💬 SMS</button>
+              <button class="bc-tab" id="tab-sms" onclick="setBcType('sms')"> SMS</button>
             </div>
             <div class="bc-audience">
               <label>Send to</label>
               <div class="audience-options">
                 <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> 🌍 All Members <small class="pd-count-all" style="color:var(--text3);margin-left:auto">1,247</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/> 👑 BunnyWorld <small class="pd-count-bunnyworld" style="color:var(--text3);margin-left:auto">312</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/>  BunnyWorld <small class="pd-count-bunnyworld" style="color:var(--text3);margin-left:auto">312</small></label>
                 <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> ⭐ Basic <small class="pd-count-basic" style="color:var(--text3);margin-left:auto">580</small></label>
                 <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> 🆓 Free <small class="pd-count-free" style="color:var(--text3);margin-left:auto">355</small></label>
               </div>
@@ -972,7 +972,7 @@ const recentSignupsData = [
 
 const bcHistory = [
   {type:'email',audience:'All Members',subject:'🔥 New Drop: Neon Nights is LIVE',sent:'1,247',date:'Jun 06 2026',openRate:'42%'},
-  {type:'sms',audience:'BunnyWorld',subject:'Exclusive content just for you 👑',sent:'312',date:'Jun 01 2026',openRate:'91%'},
+  {type:'sms',audience:'BunnyWorld',subject:'Exclusive content just for you ',sent:'312',date:'Jun 01 2026',openRate:'91%'},
   {type:'email',audience:'Basic',subject:'Upgrade to BunnyWorld — 50% off today',sent:'580',date:'May 28 2026',openRate:'38%'},
 ];
 
@@ -1026,7 +1026,7 @@ function adminLogin() {
       document.getElementById('admin-login').style.display = 'none';
       document.getElementById('admin-shell').style.display = 'block';
       initAdmin();
-      showToast('✓ Welcome back, ' + ((admin.profile.full_name || 'Admin').split(' ')[0]) + '!');
+      showToast(' Welcome back, ' + ((admin.profile.full_name || 'Admin').split(' ')[0]) + '!');
     } catch(err) {
       showToast('Login failed — ' + (err.message || 'try again'), true);
     }
@@ -1220,12 +1220,12 @@ function submitVideo() {
     if(pct>=100){
       pct=100; clearInterval(iv);
       fill.style.width='100%';
-      lbl.textContent='✓ Upload complete!';
+      lbl.textContent=' Upload complete!';
       const newVid = {
         id: videosData.length+1,
         title,
         cat:   document.getElementById('vid-cat').value,
-        thumb: document.getElementById('vid-thumb').value || '🎬',
+        thumb: document.getElementById('vid-thumb').value || '',
         dur:   document.getElementById('vid-dur').value || '00:00',
         premium: document.getElementById('vid-premium').checked,
         featured:document.getElementById('vid-featured').checked,
@@ -1242,7 +1242,7 @@ function submitVideo() {
         document.getElementById('vid-desc').value='';
         document.getElementById('vid-dur').value='';
         document.getElementById('vid-thumb').value='';
-        showToast('✓ Video added successfully!');
+        showToast(' Video added successfully!');
       },600);
     } else {
       fill.style.width=pct+'%';
@@ -1434,7 +1434,7 @@ function buildBcHistory() {
         <span style="font-size:10px;color:var(--text3)">${b.date}</span>
       </div>
       <div style="display:flex;gap:10px;font-size:11px;color:var(--text3)">
-        <span>${b.type==='email'?'📧':'💬'} ${b.type}</span>
+        <span>${b.type==='email'?'📧':''} ${b.type}</span>
         <span>· ${b.audience}</span>
         <span>· ${b.sent} sent</span>
         ${b.openRate!=='—'?`<span style="color:var(--success)">· ${b.openRate} open rate</span>`:''}
@@ -1584,7 +1584,7 @@ function loadRealData() {
       dashVals[2].textContent   = (vids||[]).length;
       dashDeltas[2].textContent = (vids||[]).filter(v=>v.is_premium).length + ' premium';
       videosData = (vids||[]).map(v => ({
-        id: v.id, title: v.title, cat: v.category || '—', thumb: v.thumbnail_emoji || '🎬',
+        id: v.id, title: v.title, cat: v.category || '—', thumb: v.thumbnail_emoji || '',
         dur: v.duration || '—', premium: !!v.is_premium, featured: !!v.is_featured,
         views: v.view_count || 0, date: fmtDate(v.created_at)
       }));
@@ -1637,7 +1637,7 @@ function renderProductsTable() {
     const onSale = p.sale_price != null && Number(p.sale_price) < Number(p.price_usd);
     const stock = Number(p.stock_units || 0);
     const stockColor = stock <= 0 ? 'var(--error)' : stock <= 15 ? 'var(--gold,#ffb020)' : 'var(--success)';
-    const img = (p.images && p.images.length) ? `<img src="${p.images[0]}" style="width:38px;height:38px;border-radius:8px;object-fit:cover"/>` : `<span style="font-size:26px">${p.emoji||'🛍️'}</span>`;
+    const img = (p.images && p.images.length) ? `<img src="${p.images[0]}" style="width:38px;height:38px;border-radius:8px;object-fit:cover"/>` : `<span style="font-size:26px">${p.emoji||''}</span>`;
     return `<tr>
       <td><div style="display:flex;align-items:center;gap:10px">${img}<span>${escapeHtml(p.name)}</span></div></td>
       <td style="text-transform:capitalize">${escapeHtml(p.category)}</td>
@@ -1645,7 +1645,7 @@ function renderProductsTable() {
       <td style="color:${stockColor};font-weight:600">${stock}</td>
       <td>
         <button class="row-btn" onclick="editProduct('${p.id}')">✏️ Edit</button>
-        <button class="row-btn" onclick="deleteProduct('${p.id}','${escapeHtml((p.name||'').replace(/'/g,""))}')">🗑️</button>
+        <button class="row-btn" onclick="deleteProduct('${p.id}','${escapeHtml((p.name||'').replace(/'/g,""))}')">️</button>
       </td>
     </tr>`;
   }).join('');
@@ -1668,7 +1668,7 @@ function resetProductForm() {
   document.getElementById('prod-cat').value = 'supplements';
   prodImages = [];
   renderProdImgPreview();
-  document.getElementById('prod-save-btn').textContent = '✓ Save Product';
+  document.getElementById('prod-save-btn').textContent = ' Save Product';
 }
 
 function editProduct(id) {
@@ -1685,7 +1685,7 @@ function editProduct(id) {
   document.getElementById('prod-emoji').value = p.emoji || '';
   prodImages = Array.isArray(p.images) ? [...p.images] : [];
   renderProdImgPreview();
-  document.getElementById('prod-save-btn').textContent = '✓ Update Product';
+  document.getElementById('prod-save-btn').textContent = ' Update Product';
   document.getElementById('panel-products').scrollIntoView({ behavior:'smooth' });
 }
 
@@ -1731,7 +1731,7 @@ function submitProduct() {
     price_usd: price,
     sale_price: saleVal === '' ? null : parseFloat(saleVal),
     stock_units: stockVal === '' ? 0 : parseInt(stockVal, 10),
-    emoji: document.getElementById('prod-emoji').value.trim() || '🛍️',
+    emoji: document.getElementById('prod-emoji').value.trim() || '',
     images: prodImages,
     is_active: true
   };
@@ -1748,7 +1748,7 @@ function submitProduct() {
       document.getElementById('prod-form-wrap').style.display = 'none';
       loadProducts();
     } catch(err) {
-      btn.disabled = false; btn.textContent = '✓ Save Product';
+      btn.disabled = false; btn.textContent = ' Save Product';
       alert('Could not save product: ' + (err.message||err));
     }
   });
@@ -1834,7 +1834,7 @@ function openOrder(id){
     const { data:items }=await client.from('order_items').select('*').eq('order_id',id);
     const itemRows=(items||[]).map(it=>`
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px">
-        <span>${it.emoji||'🛍️'} ${escapeHtml(it.product_name)} <span style="color:var(--text3)">× ${it.quantity}</span></span>
+        <span>${it.emoji||''} ${escapeHtml(it.product_name)} <span style="color:var(--text3)">× ${it.quantity}</span></span>
         <span style="font-weight:600">$${Number(it.line_total||0).toFixed(2)}</span>
       </div>`).join('') || '<div style="color:var(--text3);font-size:13px;padding:8px 0">No items recorded</div>';
 
@@ -1866,7 +1866,7 @@ function openOrder(id){
         <input id="om-tracking" value="${escapeHtml(o.tracking_number||'')}" placeholder="Add tracking #"
                style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-size:14px;margin-bottom:16px"/>
 
-        <button class="btn-primary" style="width:100%" onclick="saveOrder('${o.id}')">✓ Save changes</button>
+        <button class="btn-primary" style="width:100%" onclick="saveOrder('${o.id}')"> Save changes</button>
       </div>`;
   });
 }

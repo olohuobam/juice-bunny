@@ -170,10 +170,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 
 <div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="index.html">🏠 Home</a>
-  <a href="store.html" class="active">🛍️ Store</a>
-  <a href="chat.html">💬 Chat</a>
-  <a href="model-apply.html">🐰 Become a Model</a>
+  <a href="index.html"> Home</a>
+  <a href="store.html" class="active"> Store</a>
+  <a href="chat.html"> Chat</a>
+  <a href="model-apply.html"> Become a Model</a>
 </nav>
 
 <!-- HERO -->
@@ -287,7 +287,7 @@ function renderGrid() {
   const grid = document.getElementById('grid');
   const list = products.filter(p => activeCat === 'all' || p.category === activeCat);
   if (!list.length) {
-    grid.innerHTML = '<div class="grid-empty">Nothing on this shelf yet — check back soon 🐰</div>';
+    grid.innerHTML = '<div class="grid-empty">Nothing on this shelf yet — check back soon </div>';
     return;
   }
   grid.innerHTML = list.map(p => {
@@ -301,7 +301,7 @@ function renderGrid() {
     <article class="pcard" onclick="openProduct('${p.id}')">
       <div class="pcard-thumb">
         ${onSale ? `<span class="sale-flag">-${pct}%</span>` : ''}
-        ${p.image_url ? `<img src="${p.image_url}" alt="${esc(p.name)}"/>` : (p.emoji || '🛍️')}
+        ${p.image_url ? `<img src="${p.image_url}" alt="${esc(p.name)}"/>` : (p.emoji || '')}
       </div>
       <div class="pcard-body">
         <div class="pcard-cat">${esc(p.category)}</div>
@@ -338,9 +338,9 @@ function addToCart(id) {
   if (!p) return;
   const line = cart.find(x => String(x.id) === String(id));
   if (line) line.qty += 1;
-  else cart.push({ id: p.id, name: p.name, price: Number(p.price_usd), emoji: p.emoji || '🛍️', qty: 1 });
+  else cart.push({ id: p.id, name: p.name, price: Number(p.price_usd), emoji: p.emoji || '', qty: 1 });
   persistCart(); renderCart();
-  showToast('✓ Added ' + p.name.split('—')[0].trim() + ' to cart');
+  showToast(' Added ' + p.name.split('—')[0].trim() + ' to cart');
 }
 
 function changeQty(id, delta) {
@@ -359,7 +359,7 @@ function renderCart() {
   document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
   const box = document.getElementById('cartItems');
   if (!cart.length) {
-    box.innerHTML = '<div class="cart-empty">Your cart is empty.<br/>The shelves are full though 🐰</div>';
+    box.innerHTML = '<div class="cart-empty">Your cart is empty.<br/>The shelves are full though </div>';
     return;
   }
   box.innerHTML = cart.map(l => `
@@ -383,7 +383,7 @@ function toggleCart(open) {
 }
 
 function checkout() {
-  if (!cart.length) { showToast('Your cart is empty 🐰'); return; }
+  if (!cart.length) { showToast('Your cart is empty '); return; }
   window.location.href = 'checkout.html';
 }
 

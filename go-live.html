@@ -134,9 +134,9 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
 </nav>
 <div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="index.html">🏠 Home</a>
-  <a href="cams.html">🎥 Cams</a>
-  <a href="store.html">🛍️ Store</a>
+  <a href="index.html"> Home</a>
+  <a href="cams.html"> Cams</a>
+  <a href="store.html"> Store</a>
   <a href="profile.html">👤 Profile</a>
 </nav>
 
@@ -160,11 +160,11 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
       <label>Invite as</label>
       <div class="opts" style="grid-template-columns:1fr 1fr">
         <div class="opt sel" id="ir-viewer" onclick="setInviteRole('viewer',this)">
-          <span class="opt-icon">👀</span><div class="opt-name">Viewer</div>
+          <span class="opt-icon"></span><div class="opt-name">Viewer</div>
           <div class="opt-desc">Can watch</div>
         </div>
         <div class="opt" id="ir-cohost" onclick="setInviteRole('cohost',this)">
-          <span class="opt-icon">🎬</span><div class="opt-name">Co-host</div>
+          <span class="opt-icon"></span><div class="opt-name">Co-host</div>
           <div class="opt-desc">Appears on cam</div>
         </div>
       </div>
@@ -268,7 +268,7 @@ function renderCreator(){
       <label>Billing</label>
       <div class="opts" style="grid-template-columns:1fr 1fr">
         <div class="opt sel" id="bm-subscription" onclick="setBilling('subscription',this)">
-          <span class="opt-icon">🎟️</span><div class="opt-name">Free for subscribers</div>
+          <span class="opt-icon"></span><div class="opt-name">Free for subscribers</div>
           <div class="opt-desc">Included in their plan</div>
         </div>
         <div class="opt" id="bm-per_minute" onclick="setBilling('per_minute',this)">
@@ -319,7 +319,7 @@ async function createStream(){
   if(error){showToast('Could not create: '+error.message);return;}
   document.getElementById('st-title').value='';
   document.getElementById('st-desc').value='';
-  showToast('✓ Stream created');
+  showToast(' Stream created');
   loadMyStreams();
 }
 
@@ -334,7 +334,7 @@ async function loadMyStreams(){
     return;
   }
   myStreams=data||[];
-  if(!myStreams.length){box.innerHTML='<div class="empty">No streams yet — create one above 🐰</div>';return;}
+  if(!myStreams.length){box.innerHTML='<div class="empty">No streams yet — create one above </div>';return;}
   const accessLabel={public:'🌍 Public',followers:'💗 Followers',invite:'🔐 Invite only'};
   box.innerHTML=myStreams.map(s=>{
     const bill = s.billing_mode==='per_minute' ? `$${Number(s.rate_per_min||0).toFixed(2)}/min` : 'Free for subscribers';
@@ -353,7 +353,7 @@ async function loadMyStreams(){
           ? `<button class="row-btn" onclick="openInvite('${s.id}')">👥 Invite</button>`:''}
         ${s.status==='scheduled'?`<button class="row-btn" onclick="startStream('${s.id}')">▶ Start</button>`:''}
         ${s.status==='live'?`<button class="row-btn" onclick="reenterStream('${s.id}')">📹 Enter</button> <button class="row-btn" onclick="endStream('${s.id}')">■ End</button>`:''}
-        ${s.status!=='live'?`<button class="row-btn" onclick="deleteStream('${s.id}')">🗑</button>`:''}
+        ${s.status!=='live'?`<button class="row-btn" onclick="deleteStream('${s.id}')"></button>`:''}
       </div>
     </div>`;}).join('');
 }
@@ -419,7 +419,7 @@ async function sendInvite(userId,name){
     showToast(error.code==='23505'?'Already invited':'Could not invite: '+error.message);
     return;
   }
-  showToast(`✓ Invited ${name} as ${inviteRole==='cohost'?'co-host':'viewer'}`);
+  showToast(` Invited ${name} as ${inviteRole==='cohost'?'co-host':'viewer'}`);
   loadInvites();
 }
 

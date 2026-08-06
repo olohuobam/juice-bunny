@@ -1,4 +1,4 @@
-# 🐰 Juice Bunny — Premium Adult Entertainment Platform
+#  Juice Bunny — Premium Adult Entertainment Platform
 
 A full-stack frontend for a premium adult video streaming platform with subscription tiers, crypto & credit card payments, admin broadcasting, and a retention system.
 
@@ -76,7 +76,7 @@ JUICE_BUNNY/
 
 ---
 
-## ⏳ Pending — Phase 5
+##  Pending — Phase 5
 
 - [ ] Admin panel (upload/delete videos, set free/paid, manage users)
 - [ ] Real CCBill FlexForms integration (awaiting client CCBill account)
@@ -152,8 +152,8 @@ This platform contains **adult content (18+)**. The following are required befor
 
 | Method | Provider | Status |
 |--------|----------|--------|
-| Credit Card | CCBill | ⏳ Awaiting account setup |
-| Bitcoin | NOWPayments | ⏳ Awaiting account approval |
+| Credit Card | CCBill |  Awaiting account setup |
+| Bitcoin | NOWPayments |  Awaiting account approval |
 | Currency | USD | ✅ Confirmed |
 
 ---

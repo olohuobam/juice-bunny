@@ -377,7 +377,7 @@ footer{background:var(--bg2);padding:52px 40px 28px;border-top:1px solid var(--b
 .tier-desc{font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .tier-perks{list-style:none;margin-bottom:24px}
 .tier-perks li{font-size:13px;color:var(--text2);padding:7px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04)}
-.tier-perks li::before{content:'✓';color:var(--pink);font-weight:700;font-size:12px;flex-shrink:0}
+.tier-perks li::before{content:'';color:var(--pink);font-weight:700;font-size:12px;flex-shrink:0}
 .tier-perks li.no{color:var(--text3)}
 .tier-perks li.no::before{content:'✕';color:var(--text3)}
 .tier-card.vip .tier-perks li::before{color:#ffc832}
@@ -685,7 +685,7 @@ select option{background:var(--bg3);color:var(--text)}
 .pw-price-big span{font-size:16px;color:var(--text2);font-weight:400}
 .pw-perk-list{display:flex;flex-direction:column;gap:8px;margin:16px 0 24px;text-align:left}
 .pw-perk-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
-.pw-perk-item::before{content:'✓';color:var(--pink);font-weight:700;font-size:13px;width:16px;flex-shrink:0}
+.pw-perk-item::before{content:'';color:var(--pink);font-weight:700;font-size:13px;width:16px;flex-shrink:0}
 .btn-pw-main{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--pink),#c41060);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-bottom:10px}
 .btn-pw-main:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--pink-glow)}
 .btn-pw-ghost{width:100%;padding:12px;border-radius:12px;background:none;border:1px solid var(--border2);color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
@@ -798,7 +798,7 @@ select option{background:var(--bg3);color:var(--text)}
 }
 .method-card:hover{border-color:rgba(255,45,120,.4);background:rgba(255,45,120,.04)}
 .method-card.selected{border-color:var(--pink);background:rgba(255,45,120,.07)}
-.method-card.selected::before{content:'✓';position:absolute;top:10px;right:12px;font-size:12px;color:var(--pink);font-weight:700}
+.method-card.selected::before{content:'';position:absolute;top:10px;right:12px;font-size:12px;color:var(--pink);font-weight:700}
 .method-icon{font-size:32px;margin-bottom:10px;display:block}
 .method-name{font-size:14px;font-weight:700;margin-bottom:3px}
 .method-desc{font-size:11px;color:var(--text3);line-height:1.4}
@@ -877,7 +877,7 @@ select option{background:var(--bg3);color:var(--text)}
 .os-row.total .val{color:var(--pink);font-size:18px}
 .os-perks{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 .os-perk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);margin-bottom:8px}
-.os-perk::before{content:'✓';color:var(--pink);font-weight:700;font-size:11px}
+.os-perk::before{content:'';color:var(--pink);font-weight:700;font-size:11px}
 .os-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 
 /* CRYPTO SELECTOR */
@@ -1163,8 +1163,8 @@ html,body{overflow-x:hidden;max-width:100%}
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100)">Premium</a>
     <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100)">Pricing</a>
     <a href="model-apply.html" style="color:var(--pink);font-weight:600">Become a Model</a>
-    <a href="store.html">🛍️ Store</a>
-    <a href="chat.html">💬 Chat</a>
+    <a href="store.html"> Store</a>
+    <a href="chat.html"> Chat</a>
     <a class="nav-cams" href="cams.html"><span class="cams-dot"></span>Cams</a>
   </div>
   <div class="nav-right">
@@ -1175,7 +1175,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="nav-avatar" id="navAvatar" onclick="toggleAvatarMenu(event)">JD</div>
       <div class="avatar-menu" id="avatarMenu">
         <a onclick="window.location.href='profile.html'">👤 My Profile</a>
-        <a id="avatarMenuGoLive" style="display:none" href="go-live.html">🎥 Go Live</a>
+        <a id="avatarMenuGoLive" style="display:none" href="go-live.html"> Go Live</a>
         <a id="avatarMenuAdmin" style="display:none" onclick="window.location.href='admin.html'">🛠 Admin Panel</a>
         <a onclick="siteLogout()" style="color:#ff6b8a">🚪 Log Out</a>
       </div>
@@ -1186,21 +1186,21 @@ html,body{overflow-x:hidden;max-width:100%}
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobileNav">
-  <a onclick="goTo('home');closeMobileNav()">🏠 Home</a>
-  <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">🎬 Movies</a>
+  <a onclick="goTo('home');closeMobileNav()"> Home</a>
+  <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()"> Movies</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">⭐ Premium</a>
-  <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">💰 Pricing</a>
-  <a href="cams.html">🎥 Cams</a>
-  <a href="store.html">🛍️ Store</a>
-  <a href="model-apply.html" class="mobile-model-link">🐰 Become a Model</a>
-  <a href="chat.html">💬 Chat</a>
+  <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()"> Pricing</a>
+  <a href="cams.html"> Cams</a>
+  <a href="store.html"> Store</a>
+  <a href="model-apply.html" class="mobile-model-link"> Become a Model</a>
+  <a href="chat.html"> Chat</a>
   <div id="mobileAuthOut">
     <a onclick="goTo('login');closeMobileNav()">🔑 Login</a>
     <button class="mobile-signup" onclick="goTo('signup');closeMobileNav()">🔥 Sign Up Free</button>
   </div>
   <div id="mobileAuthIn" style="display:none">
     <a href="profile.html">👤 My Profile</a>
-    <a id="mobileGoLive" href="go-live.html" style="display:none">🎥 Go Live</a>
+    <a id="mobileGoLive" href="go-live.html" style="display:none"> Go Live</a>
     <a id="mobileAdminLink" href="admin.html" style="display:none">🛠 Admin Panel</a>
     <button class="mobile-signup" onclick="siteLogout()">🚪 Log Out</button>
   </div>
@@ -1292,7 +1292,7 @@ html,body{overflow-x:hidden;max-width:100%}
         pointer-events:none;transition:opacity .15s;
       ">
         <div id="pvp-thumb" style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;background:linear-gradient(135deg,#1a0a18,#2d0a22)">
-          <span id="pvp-emoji">🎬</span>
+          <span id="pvp-emoji"></span>
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
             <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,45,120,.9);display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>
           </div>
@@ -1368,7 +1368,7 @@ html,body{overflow-x:hidden;max-width:100%}
       </div>
       <div class="reveal reveal-d2">
         <div class="dev-visual">
-          <div class="dev-screen">🎬</div>
+          <div class="dev-screen"></div>
           <div class="dev-phone">📱</div>
         </div>
       </div>
@@ -1418,7 +1418,7 @@ html,body{overflow-x:hidden;max-width:100%}
             <li>🔥 Full HD &amp; 4K explicit library</li>
             <li>💦 Daily fresh drops</li>
             <li>📥 Unlimited downloads</li>
-            <li>💬 Chat with creators &amp; fans</li>
+            <li> Chat with creators &amp; fans</li>
             <li>📸 Model posts &amp; photo feeds</li>
             <li>📞 Access to live creator calls</li>
             <li>🔒 100% private · All devices</li>
@@ -1436,7 +1436,7 @@ html,body{overflow-x:hidden;max-width:100%}
             <li>📹 Private 1-on-1 video call</li>
             <li>⚡ Connect instantly or schedule</li>
             <li>🎙️ Audio &amp; video, HD quality</li>
-            <li>💬 Chat during the call</li>
+            <li> Chat during the call</li>
             <li>⏱️ Billed per minute — $3/min</li>
             <li>🔒 Fully private, never recorded</li>
           </ul>
@@ -1504,7 +1504,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <p class="cta-p">Join Juice Bunny today and dive into the most explicit, steamy content online. Your fantasies are waiting.</p>
         <div class="cta-btns">
           <button class="btn-cta1" onclick="goToPayment('sub_monthly')">🔥 Get Access Now</button>
-          <button class="btn-cta2" onclick="goToPayment('sub_monthly')">🐰 Enter BunnyWorld</button>
+          <button class="btn-cta2" onclick="goToPayment('sub_monthly')"> Enter BunnyWorld</button>
         </div>
       </div>
     </div>
@@ -1658,8 +1658,8 @@ html,body{overflow-x:hidden;max-width:100%}
 
         <!-- SUCCESS -->
         <div class="success-panel" id="su-success">
-          <div class="success-anim">✓</div>
-          <div class="success-title">Welcome to Juice Bunny! 🐰</div>
+          <div class="success-anim"></div>
+          <div class="success-title">Welcome to Juice Bunny! </div>
           <div class="success-txt">Your account has been created. Time to explore exclusive content made just for you.</div>
           <button class="btn-goto" onclick="goTo('home');updateNavLoggedIn()">Start Watching →</button>
         </div>
@@ -1685,14 +1685,14 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="ll-headline">Welcome back<br/>to <span>Juice Bunny</span></div>
           <div class="ll-sub">Your exclusive premium entertainment hub. Thousands of titles, new drops weekly, zero ads — ever.</div>
           <div class="ll-perks">
-            <div class="ll-perk"><div class="ll-perk-icon">🎬</div><div class="ll-perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon"></div><div class="ll-perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div></div>
             <div class="ll-perk"><div class="ll-perk-icon">🔒</div><div class="ll-perk-info"><strong>100% Private</strong>No tracking, no ads, ever</div></div>
             <div class="ll-perk"><div class="ll-perk-icon">⚡</div><div class="ll-perk-info"><strong>New Drops Weekly</strong>Fresh exclusive content every week</div></div>
             <div class="ll-perk"><div class="ll-perk-icon">₿</div><div class="ll-perk-info"><strong>Pay Your Way</strong>Credit card or Bitcoin accepted</div></div>
           </div>
         </div>
         <div class="ll-bottom">
-          <div class="ll-bunny-bg">🐰</div>
+          <div class="ll-bunny-bg"></div>
           <div class="ll-test">
             <div class="ll-test-stars">★★★★★</div>
             <div class="ll-test-q">"Best streaming platform I've ever used. The content quality and privacy features are unmatched."</div>
@@ -1706,7 +1706,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <div class="login-main" id="li-main">
           <div class="auth-header" style="margin-bottom:22px;text-align:left">
             <div class="auth-title">Sign in to your account</div>
-            <div class="auth-subtitle">Good to see you again 👋</div>
+            <div class="auth-subtitle">Good to see you again </div>
           </div>
           <div class="err-banner" id="li-err"><span>⚠️</span><span id="li-err-msg">Invalid email or password.</span></div>
           <div class="social-btns">
@@ -1759,7 +1759,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <button class="q-badge free-q" id="vp-q-btn" onclick="vpToggleQMenu()">480p SD</button>
           <div class="q-menu" id="vp-q-menu">
             <div class="qm-hdr">Video Quality</div>
-            <div class="qm-row cur" onclick="vpSetQuality('480p','free')"><span>480p SD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill free">FREE</span><span class="qm-chk" id="qc-480">✓</span></div></div>
+            <div class="qm-row cur" onclick="vpSetQuality('480p','free')"><span>480p SD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill free">FREE</span><span class="qm-chk" id="qc-480"></span></div></div>
             <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>720p HD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
             <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>1080p FHD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
             <div class="qm-row locked" onclick="vpUpgradePrompt()"><span>4K Ultra HD</span><div style="display:flex;align-items:center;gap:8px"><span class="qm-pill prem">PREMIUM</span><span class="qm-lk">🔒</span></div></div>
@@ -2097,8 +2097,8 @@ html,body{overflow-x:hidden;max-width:100%}
      ============================================================ -->
 <div id="page-pay-success" class="page">
   <div class="pay-success-wrap">
-    <div class="pay-success-icon">✓</div>
-    <h2 class="pay-success-title">Payment Successful! 🐰</h2>
+    <div class="pay-success-icon"></div>
+    <h2 class="pay-success-title">Payment Successful! </h2>
     <p class="pay-success-sub">Welcome to Juice Bunny! Your subscription has been activated. Check your email for confirmation.</p>
     <div class="pay-receipt" id="pay-receipt">
       <div class="pay-receipt-row"><span class="rl">Plan</span><span class="rv" id="receipt-plan">—</span></div>
@@ -2106,7 +2106,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="pay-receipt-row"><span class="rl">Payment Method</span><span class="rv" id="receipt-method">—</span></div>
       <div class="pay-receipt-row"><span class="rl">Transaction ID</span><span class="rv" id="receipt-txid" style="font-family:monospace;font-size:11px">—</span></div>
       <div class="pay-receipt-row"><span class="rl">Next Billing</span><span class="rv" id="receipt-next">—</span></div>
-      <div class="pay-receipt-row"><span class="rl">Status</span><span class="rv" style="color:var(--success)">✓ Active</span></div>
+      <div class="pay-receipt-row"><span class="rl">Status</span><span class="rv" style="color:var(--success)"> Active</span></div>
     </div>
     <button class="btn-start-watching" onclick="goTo('home');updateNavLoggedIn()">
       ▶ Start Watching Now
@@ -2182,7 +2182,7 @@ html,body{overflow-x:hidden;max-width:100%}
         </div>
         <div class="bc-field">
           <span class="bc-label">Text Message</span>
-          <textarea class="bc-input" id="bc-sms-body" rows="4" placeholder="Keep it short! e.g. &#10;Juice Bunny 🐰: New VIP content just dropped! Watch now 👉 juicebunny.com" maxlength="160" oninput="bcCountChars(this)"></textarea>
+          <textarea class="bc-input" id="bc-sms-body" rows="4" placeholder="Keep it short! e.g. &#10;Juice Bunny : New VIP content just dropped! Watch now 👉 juicebunny.com" maxlength="160" oninput="bcCountChars(this)"></textarea>
           <div class="bc-hint" id="bc-sms-chars">0 / 160 characters</div>
         </div>
         <div class="bc-field" style="background:rgba(255,200,50,.05);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:12px">
@@ -2222,7 +2222,7 @@ html,body{overflow-x:hidden;max-width:100%}
     </div>
     <div id="booking-summary" style="display:none;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;margin-bottom:24px">
       <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:14px">Booking Summary</div>
-      <div style="font-size:14px;margin-bottom:8px">🐰 Model: <strong id="sum-model" style="color:var(--pink)">—</strong></div>
+      <div style="font-size:14px;margin-bottom:8px"> Model: <strong id="sum-model" style="color:var(--pink)">—</strong></div>
       <div style="font-size:14px;margin-bottom:8px">🕐 Time: <strong id="sum-time" style="color:#fff">—</strong></div>
       <div style="font-size:14px;margin-bottom:8px">⏱ Duration: <strong style="color:#fff">30 minutes</strong></div>
       <div style="font-size:14px">✅ Included in: <strong style="color:#ffc832">BunnyWorld Plan</strong></div>
@@ -2302,7 +2302,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="offer-title">Too Expensive</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Not enough content')">
-          <span class="offer-icon">🎬</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Not Enough Content</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Technical issues')">
@@ -2318,7 +2318,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="offer-title">Found Something Else</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Other')">
-          <span class="offer-icon">💬</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Other Reason</div>
         </div>
       </div>
@@ -2326,7 +2326,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <textarea class="bc-input" id="unsub-feedback" rows="3" placeholder="Anything else you'd like to tell us? (optional)"></textarea>
       </div>
       <div class="unsub-btns">
-        <button class="btn-stay" onclick="unsubGoHome()">🐰 Actually, I'll Stay!</button>
+        <button class="btn-stay" onclick="unsubGoHome()"> Actually, I'll Stay!</button>
         <button class="btn-still-unsub" onclick="unsubGoStep(3)">Continue with cancellation</button>
       </div>
     </div>
@@ -2439,7 +2439,7 @@ function siteLogout() {
   loadSupabase(async (sb) => {
     await sb.auth.signOut();
     window._userRole = null;
-    showToast('Logged out 👋');
+    showToast('Logged out ');
     setTimeout(() => window.location.href = 'index.html', 600);
   });
 }
@@ -2599,7 +2599,7 @@ function filterMovies(btn,cat) {
 function subscribeNewsletter() {
   const inp=document.getElementById('nlEmail');
   if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim())){
-    showToast('✓ Subscribed! Check your inbox.');
+    showToast(' Subscribed! Check your inbox.');
     inp.value='';
   } else {
     inp.style.borderColor='var(--error)';
@@ -2870,7 +2870,7 @@ async function liDoLogin(){
       // Get profile
       const { data: profile } = await sb.from('profiles').select('*').eq('id', data.user.id).single();
 
-      showToast('✓ Welcome back' + (profile?.full_name ? ', ' + profile.full_name.split(' ')[0] : '') + '! 🐰');
+      showToast(' Welcome back' + (profile?.full_name ? ', ' + profile.full_name.split(' ')[0] : '') + '! ');
       updateNavLoggedIn(profile || { email });
 
       // Redirect admin to admin panel
@@ -2917,7 +2917,7 @@ async function liDoReset(){
         redirectTo: 'https://juicebunnytv.com'
       });
       if(error) throw error;
-      showToast('✓ Reset link sent! Check your inbox.');
+      showToast(' Reset link sent! Check your inbox.');
       setTimeout(liShowMain, 1800);
     } catch(err) {
       showToast(err.message || 'Error sending reset email', true);
@@ -2957,7 +2957,7 @@ function vpLoadVideo(i){
   document.getElementById('vid-blur').style.display='none';
   const pill=document.getElementById('vp-access-pill');
   if(v.prem){pill.innerHTML='🔒 Premium';pill.className='vpill pink';}
-  else{pill.innerHTML='✓ Free';pill.className='vpill green';}
+  else{pill.innerHTML=' Free';pill.className='vpill green';}
   showToast('Loading: '+v.title);
 }
 function vpTogglePlay(){
@@ -3116,10 +3116,10 @@ function bcSendEmail(){
   const body=document.getElementById('bc-email-body').value.trim();
   if(!subj||!body){showToast('Please fill in subject and message',true);return}
   const btn=document.getElementById('bc-email-send');
-  btn.disabled=true;btn.innerHTML='<span>⏳</span> Sending...';
+  btn.disabled=true;btn.innerHTML='<span></span> Sending...';
   setTimeout(()=>{
     closeBroadcast();
-    showToast('✓ Email broadcast sent successfully!');
+    showToast(' Email broadcast sent successfully!');
     btn.disabled=false;btn.innerHTML='<span>✉️</span> Send Email Now';
     document.getElementById('bc-email-subject').value='';
     document.getElementById('bc-email-body').value='';
@@ -3129,10 +3129,10 @@ function bcSendSMS(){
   const body=document.getElementById('bc-sms-body').value.trim();
   if(!body){showToast('Please write a message',true);return}
   const btn=document.getElementById('bc-sms-send');
-  btn.disabled=true;btn.innerHTML='<span>⏳</span> Sending...';
+  btn.disabled=true;btn.innerHTML='<span></span> Sending...';
   setTimeout(()=>{
     closeBroadcast();
-    showToast('✓ SMS broadcast sent! (Requires Twilio setup)');
+    showToast(' SMS broadcast sent! (Requires Twilio setup)');
     btn.disabled=false;btn.innerHTML='<span>📱</span> Send Text Now';
     document.getElementById('bc-sms-body').value='';
   },2000);
@@ -3148,10 +3148,10 @@ function unsubGoStep(n){
 }
 function unsubAcceptOffer(type){
   const msgs={
-    pause:'✓ Subscription paused for 3 months. See you soon! 🐰',
-    discount:'✓ 50% discount applied! Only $1.99 next month.',
-    downgrade:'✓ Switched to Free plan. Your account stays active.',
-    vip:'✓ VIP trial activated! 7 days free. Enjoy the model photos! ✨'
+    pause:' Subscription paused for 3 months. See you soon! ',
+    discount:' 50% discount applied! Only $1.99 next month.',
+    downgrade:' Switched to Free plan. Your account stays active.',
+    vip:' VIP trial activated! 7 days free. Enjoy the model photos! ✨'
   };
   closeBroadcast();
   showToast(msgs[type]);
@@ -3163,7 +3163,7 @@ function unsubSelectReason(card,reason){
   showToast('Feedback noted: "'+reason+'" — thank you!');
 }
 function unsubGoHome(){
-  showToast('Welcome back! 🐰 So glad you stayed!');
+  showToast('Welcome back!  So glad you stayed!');
   setTimeout(()=>goTo('home'),1200);
 }
 
@@ -3181,7 +3181,7 @@ const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 
 // ── PLANS ────────────────────────────────────────────────────
 const PLANS = {
-  free:        { name:'Free',    icon:'🐰', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View creator profiles','General chat'] },
+  free:        { name:'Free',    icon:'', price:0,     priceStr:'$0',     period:'forever', perks:['SD video streaming','Browse all categories','View creator profiles','General chat'] },
   sub_weekly:  { name:'Weekly',  icon:'🔥', price:3.99,  priceStr:'$3.99',  period:'week',    perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices'] },
   sub_monthly: { name:'Monthly', icon:'🔥', price:9.99, priceStr:'$9.99', period:'month',   perks:['Full HD & 4K library','Daily fresh drops','Unlimited downloads','Chat with creators & fans','Model posts & photo feeds','Access to live creator calls ($3/min)','100% private · All devices','Save 37% vs weekly'] },
   live_call:   { name:'Live Call', icon:'📞', price:3,   priceStr:'$3',     period:'per min', perks:['Private 1-on-1 video call','Pay only for time used','HD audio & video','Chat during the call','Fully private — never recorded'] },
@@ -3368,7 +3368,7 @@ async function initBtcPayment() {
   const minAmt = cryptoMins[selectedCrypto];
 
   if(plan.price === 0) {
-    document.getElementById('btc-status').innerHTML = '✓ Free plan — no payment required';
+    document.getElementById('btc-status').innerHTML = ' Free plan — no payment required';
     return;
   }
 
@@ -3472,7 +3472,7 @@ function stopPaymentPoll() {
 function updatePaymentStatus(status, data) {
   const statusMap = {
     waiting:    '<span class="btc-pending-dot"></span> Waiting for payment...',
-    confirming: '⏳ Payment received! Confirming on blockchain...',
+    confirming: ' Payment received! Confirming on blockchain...',
     confirmed:  '✅ Confirmed! Activating your account...',
     finished:   '✅ Payment complete! Activating your account...',
     failed:     '❌ Payment failed. Please try again.',
@@ -3538,7 +3538,7 @@ function copyBtcAddress() {
   const addr = document.getElementById('btc-address').textContent;
   if(addr && addr !== 'Generating address...') {
     navigator.clipboard && navigator.clipboard.writeText(addr);
-    showToast('✓ Bitcoin address copied!');
+    showToast(' Bitcoin address copied!');
   }
 }
 
@@ -3596,12 +3596,12 @@ function checkPaymentReturn() {
           _socialAuthSession = session;
           goTo('signup');
           suGoPanel(2);
-          showToast('✓ Google sign-in successful — complete your profile');
+          showToast(' Google sign-in successful — complete your profile');
         } else {
           // Returning user — go straight to home
           updateNavLoggedIn();
           goTo('home');
-          showToast('✓ Welcome back! 🐰');
+          showToast(' Welcome back! ');
         }
       }
     });
@@ -3752,7 +3752,7 @@ async function signInWithGoogle(mode) {
 }
 
 function signInWithTwitter(mode) {
-  showToast('X (Twitter) login coming soon! Use Google or email for now 🐰', true);
+  showToast('X (Twitter) login coming soon! Use Google or email for now ', true);
 }
 
 // ── HANDLE SOCIAL AUTH SUCCESS ────────────────────────────────
@@ -3780,11 +3780,11 @@ function handleSocialAuthSuccess(user, mode) {
       if(el) { el.classList.remove('err'); el.classList.add('ok'); }
     });
 
-    showToast(`✓ Signed in with ${user.provider === 'google' ? 'Google' : 'Facebook'} — complete your profile`);
+    showToast(` Signed in with ${user.provider === 'google' ? 'Google' : 'Facebook'} — complete your profile`);
     suGoPanel(2);
   } else {
     // Login — go straight to home
-    showToast(`✓ Welcome back, ${firstName}! 🐰`);
+    showToast(` Welcome back, ${firstName}! `);
     updateNavLoggedIn();
     setTimeout(() => goTo('home'), 1000);
   }
@@ -3879,43 +3879,43 @@ try {
 // ── SMART CHATBOT ─────────────────────────────────────────────
 const cbotResponses = [
   { match:['price','pricing','cost','how much','plan','plans','subscription','subscribe','weekly','monthly'],
-    reply:'We have three plans 🐰 Free (SD video, no models), Weekly at $3.99/wk (full access + models), and Monthly at $9.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
+    reply:'We have three plans  Free (SD video, no models), Weekly at $3.99/wk (full access + models), and Monthly at $9.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
     qr:[{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Crypto payments?',msg:'What crypto do you accept?'}]},
   { match:['weekly','3.99'],
     reply:'The Weekly plan is $3.99/week 🔥 Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
     qr:[{label:'📆 Monthly instead?',msg:'Tell me about the monthly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
   { match:['monthly','9.99'],
-    reply:'The Monthly plan is $9.99/month — 37% saving vs weekly 💰 Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
+    reply:'The Monthly plan is $9.99/month — 37% saving vs weekly  Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
     qr:[{label:'📅 Weekly instead?',msg:'Tell me about the weekly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
   { match:['live call','call','calls','video call','minute','per min'],
     reply:'Live calls are $3/minute 📞 You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
-    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the creators?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
+    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the creators?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
   { match:['model','creators','girls','who are'],
     reply:'Our creators are real verified females handpicked by Juice Bunny 🌟 They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
-    qr:[{label:'📞 Book a call',msg:'How do live calls work?'},{label:'🐰 Become a model',msg:'How do I become a model?'},{label:'💰 Pricing',msg:'What are the subscription plans?'}]},
+    qr:[{label:'📞 Book a call',msg:'How do live calls work?'},{label:' Become a model',msg:'How do I become a model?'},{label:' Pricing',msg:'What are the subscription plans?'}]},
   { match:['become a model','apply','model application','join as model'],
-    reply:'We\'d love to have you! 🐰 Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
-    qr:[{label:'💰 Earn how much?',msg:'How much do models earn?'},{label:'📝 Apply now',msg:'Where is the model application?'}]},
+    reply:'We\'d love to have you!  Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
+    qr:[{label:' Earn how much?',msg:'How much do models earn?'},{label:'📝 Apply now',msg:'Where is the model application?'}]},
   { match:['earn','earning','payout','money','income'],
-    reply:'Models earn $0.60 per live call minute 💰 That\'s $36 per hour! Payouts weekly via BTC, ETH or bank transfer. No hidden fees.',
-    qr:[{label:'🐰 Apply to model',msg:'How do I become a model?'},{label:'📞 How calls work',msg:'How do live calls work?'}]},
+    reply:'Models earn $0.60 per live call minute  That\'s $36 per hour! Payouts weekly via BTC, ETH or bank transfer. No hidden fees.',
+    qr:[{label:' Apply to model',msg:'How do I become a model?'},{label:'📞 How calls work',msg:'How do live calls work?'}]},
   { match:['crypto','bitcoin','btc','eth','usdt','ltc','xrp'],
     reply:'We accept BTC, ETH, USDT TRC20, Litecoin and XRP via NOWPayments ₿ Fast, private payments. Credit/debit cards via CCBill also accepted!',
-    qr:[{label:'💳 Card payments',msg:'Do you accept credit cards?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+    qr:[{label:'💳 Card payments',msg:'Do you accept credit cards?'},{label:' View plans',msg:'What are the subscription plans?'}]},
   { match:['card','credit','debit','visa','mastercard','ccbill'],
     reply:'Yes! Visa, Mastercard and Amex accepted via CCBill — the industry standard for adult platforms 🔒 Your card details are never stored by us.',
-    qr:[{label:'₿ Pay with crypto',msg:'What crypto do you accept?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+    qr:[{label:'₿ Pay with crypto',msg:'What crypto do you accept?'},{label:' View plans',msg:'What are the subscription plans?'}]},
   { match:['private','privacy','secure','track','anonymous','discreet'],
     reply:'Juice Bunny is 100% private 🔒 Zero tracking, zero ads, zero data selling. 256-bit SSL on all transactions. What you watch stays between you and us.',
-    qr:[{label:'💰 View plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    qr:[{label:' View plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
   { match:['sign up','signup','register','create account','join','get started'],
-    reply:'Signing up takes 2 minutes! 🐰 Click "Sign Up" at the top, verify your age (18+ only), pick a plan and you\'re in. First 7 days free on paid plans!',
-    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'❓ Age requirement',msg:'What is the age requirement?'}]},
+    reply:'Signing up takes 2 minutes!  Click "Sign Up" at the top, verify your age (18+ only), pick a plan and you\'re in. First 7 days free on paid plans!',
+    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'❓ Age requirement',msg:'What is the age requirement?'}]},
   { match:['age','18','how old'],
     reply:'Juice Bunny is strictly 18+ 🔞 Age is verified during signup as required by law for all adult content platforms.',
-    qr:[{label:'🔥 Sign up (18+)',msg:'How do I sign up?'},{label:'💰 View plans',msg:'What are the subscription plans?'}]},
+    qr:[{label:'🔥 Sign up (18+)',msg:'How do I sign up?'},{label:' View plans',msg:'What are the subscription plans?'}]},
   { match:['cancel','cancellation','unsubscribe','stop subscription'],
-    reply:'Cancel anytime from Account Settings — no questions asked 🐰 Access continues until your billing period ends. Want to pause instead? That\'s an option too!',
+    reply:'Cancel anytime from Account Settings — no questions asked  Access continues until your billing period ends. Want to pause instead? That\'s an option too!',
     qr:[{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Need help?',msg:'How do I contact support?'}]},
   { match:['pause','hold','freeze'],
     reply:'Yes! Pause your subscription for up to 3 months at no charge ⏸ Go to Account Settings → Subscription → Pause. Your library stays exactly as you left it!',
@@ -3925,22 +3925,22 @@ const cbotResponses = [
     qr:[{label:'📧 Email support',msg:'What is the support email?'}]},
   { match:['contact','support','help','email','reach','talk to human'],
     reply:'Reach us at support@juicebunnytv.com 📧 We respond within 24 hours. For urgent issues add "URGENT" to the subject line!',
-    qr:[{label:'💰 View plans',msg:'What are the subscription plans?'},{label:'❌ Cancel',msg:'How do I cancel?'}]},
+    qr:[{label:' View plans',msg:'What are the subscription plans?'},{label:'❌ Cancel',msg:'How do I cancel?'}]},
   { match:['free plan','free tier','without paying','no cost'],
-    reply:'Our Free plan gives you SD video streaming, creator profiles and general chat — no card needed 🐰 For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
-    qr:[{label:'💰 Paid plans',msg:'What are the paid plans?'},{label:'🔥 Upgrade',msg:'How do I upgrade?'}]},
+    reply:'Our Free plan gives you SD video streaming, creator profiles and general chat — no card needed  For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
+    qr:[{label:' Paid plans',msg:'What are the paid plans?'},{label:'🔥 Upgrade',msg:'How do I upgrade?'}]},
   { match:['download','offline'],
     reply:'Paid subscribers can download any video for offline viewing 📥 Works on all devices. Downloads stay available while your subscription is active.',
-    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'}]},
+    qr:[{label:' See plans',msg:'What are the subscription plans?'}]},
   { match:['device','phone','tv','tablet','laptop','mobile','iphone','android'],
     reply:'Juice Bunny works on all devices 📱 Smartphones, tablets, laptops, desktops and Smart TVs. No app needed — everything runs in your browser!',
-    qr:[{label:'💰 See plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
 ];
 
 const cbotFallbacks = [
-  'Great question! 🐰 For specific help with that, email support@juicebunnytv.com and we\'ll get back to you within 24 hours.',
+  'Great question!  For specific help with that, email support@juicebunnytv.com and we\'ll get back to you within 24 hours.',
   'I\'m not sure about that one, but email support@juicebunnytv.com 📧 — our team replies within 24 hours!',
-  'Let me point you to our support team for that — support@juicebunnytv.com 🐰 Anything else I can help with?',
+  'Let me point you to our support team for that — support@juicebunnytv.com  Anything else I can help with?',
 ];
 
 function getBotResponse(text) {
@@ -3951,16 +3951,16 @@ function getBotResponse(text) {
     if(score > bestScore) { bestScore = score; bestMatch = r; }
   }
   if(bestMatch && bestScore > 0) return bestMatch;
-  return { reply: cbotFallbacks[Math.floor(Math.random()*cbotFallbacks.length)], qr:[{label:'💰 Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}] };
+  return { reply: cbotFallbacks[Math.floor(Math.random()*cbotFallbacks.length)], qr:[{label:' Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}] };
 }
 
 let cbotOpen=false, cbotTyping=false;
 
 const cbotQuickReplies=[
-  {label:'💰 Pricing',msg:'What are the subscription plans?'},
+  {label:' Pricing',msg:'What are the subscription plans?'},
   {label:'📞 Live Calls',msg:'How do live calls work?'},
   {label:'₿ Pay with Crypto',msg:'What crypto payments do you accept?'},
-  {label:'🐰 Become a Model',msg:'How do I become a model?'},
+  {label:' Become a Model',msg:'How do I become a model?'},
   {label:'❌ Cancel',msg:'How do I cancel my subscription?'},
   {label:'🔒 Privacy',msg:'Is Juice Bunny private and secure?'},
 ];
@@ -3970,7 +3970,7 @@ function toggleChatbot(){
   const win=document.getElementById('chatbotWindow');
   win.classList.toggle('open',cbotOpen);
   if(cbotOpen&&!document.getElementById('cbotMsgs').children.length){
-    cbotAddMsg('bot','Hey there! 🐰 I\'m Bunny, your Juice Bunny support assistant. What can I help you with today?');
+    cbotAddMsg('bot','Hey there!  I\'m Bunny, your Juice Bunny support assistant. What can I help you with today?');
     renderCbotQR(cbotQuickReplies);
   }
   if(cbotOpen) setTimeout(()=>document.getElementById('cbotInput').focus(),200);
@@ -3980,7 +3980,7 @@ function cbotAddMsg(role,text){
   const msgs=document.getElementById('cbotMsgs');
   const div=document.createElement('div');
   div.className='cbot-msg '+role;
-  div.innerHTML=`<div class="cbot-msg-av">${role==='bot'?'🐰':'You'}</div><div class="cbot-bubble">${text}</div>`;
+  div.innerHTML=`<div class="cbot-msg-av">${role==='bot'?'':'You'}</div><div class="cbot-bubble">${text}</div>`;
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
 }
@@ -3989,7 +3989,7 @@ function cbotShowTyping(){
   const msgs=document.getElementById('cbotMsgs');
   const div=document.createElement('div');
   div.className='cbot-msg bot'; div.id='cbot-typing';
-  div.innerHTML=`<div class="cbot-msg-av">🐰</div><div class="cbot-typing"><div class="cbot-dot"></div><div class="cbot-dot"></div><div class="cbot-dot"></div></div>`;
+  div.innerHTML=`<div class="cbot-msg-av"></div><div class="cbot-typing"><div class="cbot-dot"></div><div class="cbot-dot"></div><div class="cbot-dot"></div></div>`;
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
 }
@@ -4038,11 +4038,11 @@ async function sendCbotMsgText(text){
       if(lower.includes('pric')||lower.includes('plan')||lower.includes('cost')){
         renderCbotQR([{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Pay with crypto',msg:'What crypto do you accept?'}]);
       } else if(lower.includes('call')||lower.includes('model')){
-        renderCbotQR([{label:'💰 How much?',msg:'How much do live calls cost?'},{label:'🐰 Become a model',msg:'How do I become a model?'}]);
+        renderCbotQR([{label:' How much?',msg:'How much do live calls cost?'},{label:' Become a model',msg:'How do I become a model?'}]);
       } else if(lower.includes('cancel')||lower.includes('refund')){
         renderCbotQR([{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Contact support',msg:'How do I contact support?'}]);
       } else {
-        renderCbotQR([{label:'💰 Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}]);
+        renderCbotQR([{label:' Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}]);
       }
     } else {
       // Fallback to smart responses if API fails

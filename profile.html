@@ -350,7 +350,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
     <div class="profile-left">
       <div class="profile-name" id="profile-name">
         Loading...
-        <span class="verified-badge" id="verified-badge" style="display:none">✓ Verified</span>
+        <span class="verified-badge" id="verified-badge" style="display:none"> Verified</span>
         <span class="creator-tag" id="creator-tag" style="display:none">🌟 creator</span>
       </div>
       <div class="profile-handle" id="profile-handle">@username</div>
@@ -601,7 +601,7 @@ function getDemoProfile() {
     email: 'demo@juicebunny.com',
     role: 'creator',
     plan: 'creator',
-    bio: 'Your favorite Juice Bunny creator 🐰 Live calls available daily. DM me anytime 💋',
+    bio: 'Your favorite Juice Bunny creator  Live calls available daily. DM me anytime 💋',
     avatar_url: null,
     cover_url: null,
     username: 'scarlett',
@@ -704,9 +704,9 @@ function renderActions(p) {
   } else if(currentUser) {
     actionsEl.innerHTML = `
       <button class="btn-follow ${following?'following':''}" id="follow-btn" onclick="toggleFollow()">
-        ${following ? '✓ Following' : '+ Follow'}
+        ${following ? ' Following' : '+ Follow'}
       </button>
-      <button class="btn-msg" onclick="openMessage()">💬 Message</button>
+      <button class="btn-msg" onclick="openMessage()"> Message</button>
       ${iscreator ? `<button class="btn-call" onclick="openCallModal()"><span class="online-dot"></span> Live Call</button>` : ''}
     `;
   } else {
@@ -727,7 +727,7 @@ function loadPosts(p) {
     { id:3, text:'Exclusive photo set 📸', media:'💋', locked:true, likes:430, comments:67, time:'1d ago' },
     { id:4, text:'Good morning beautiful people ☀️', media:'🌸', locked:false, likes:98, comments:11, time:'2d ago' },
   ] : [
-    { id:1, text:'Just joined Juice Bunny! 🐰 This place is amazing', media:null, locked:false, likes:12, comments:3, time:'1d ago' },
+    { id:1, text:'Just joined Juice Bunny!  This place is amazing', media:null, locked:false, likes:12, comments:3, time:'1d ago' },
   ];
 
   posts = demoPosts;
@@ -769,9 +769,9 @@ function renderPosts() {
         <button class="fp-act ${post.liked?'liked':''}" onclick="likePost(${post.id},this)">
           ${post.liked?'♥':'♡'} <span id="likes-${post.id}">${post.likes}</span>
         </button>
-        <button class="fp-act" onclick="commentPost(${post.id})">💬 ${post.comments}</button>
+        <button class="fp-act" onclick="commentPost(${post.id})"> ${post.comments}</button>
         <button class="fp-act" onclick="sharePost(${post.id})">↗ Share</button>
-        ${isOwnProfile ? `<button class="fp-act" onclick="deletePost(${post.id})" style="color:var(--error)">🗑</button>` : ''}
+        ${isOwnProfile ? `<button class="fp-act" onclick="deletePost(${post.id})" style="color:var(--error)"></button>` : ''}
       </div>
     </div>
   `).join('');
@@ -787,7 +787,7 @@ function likePost(id, btn) {
   if(post.liked) showToast('❤️ Liked!');
 }
 
-function commentPost(id) { showToast('💬 Comments coming soon!') }
+function commentPost(id) { showToast(' Comments coming soon!') }
 function sharePost(id) { navigator.clipboard?.writeText(window.location.href); showToast('🔗 Link copied!') }
 function deletePost(id) {
   posts = posts.filter(p => p.id !== id);
@@ -838,7 +838,7 @@ function publishPost() {
   document.getElementById('post-input').value = '';
   document.getElementById('composer-previews').innerHTML = '';
   composerMediaFiles = [];
-  showToast('✓ Post published!');
+  showToast(' Post published!');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -869,13 +869,13 @@ function buildAboutTab(p) {
 //  MEDIA GRID
 // ═══════════════════════════════════════════════════════
 function buildMediaGrid() {
-  const emojis = ['🌹','💋','✨','🌸','🔥','💄','👠','🌙','💎','🐰','⚡','🌺'];
+  const emojis = ['🌹','💋','✨','🌸','🔥','💄','👠','🌙','💎','','⚡','🌺'];
   document.getElementById('media-grid').innerHTML = emojis.map((e,i) => `
     <div class="post-thumb ${i>5&&!isOwnProfile?'locked':''}" style="background:linear-gradient(135deg,#1a0a18,#2d0a22)">
       <span>${e}</span>
       <div class="post-meta-ov">
         <span class="post-stat">♥ ${Math.floor(Math.random()*500+50)}</span>
-        <span class="post-stat">💬 ${Math.floor(Math.random()*50+5)}</span>
+        <span class="post-stat"> ${Math.floor(Math.random()*50+5)}</span>
       </div>
     </div>
   `).join('');
@@ -890,15 +890,15 @@ function toggleFollow() {
   const btn = document.getElementById('follow-btn');
   if(btn) {
     btn.classList.toggle('following', following);
-    btn.textContent = following ? '✓ Following' : '+ Follow';
+    btn.textContent = following ? ' Following' : '+ Follow';
   }
   const count = parseInt(document.getElementById('stat-followers').textContent.replace('K','000').replace('.','')) || 0;
   document.getElementById('stat-followers').textContent = formatNum(following ? count+1 : count-1);
-  showToast(following ? '✓ Following!' : 'Unfollowed');
+  showToast(following ? ' Following!' : 'Unfollowed');
 }
 
 function openMessage() {
-  showToast('💬 Chat coming soon!');
+  showToast(' Chat coming soon!');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -962,7 +962,7 @@ async function saveProfile() {
   }
 
   toggleEditPanel();
-  showToast('✓ Profile updated!');
+  showToast(' Profile updated!');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1031,7 +1031,7 @@ async function saveProfileImage(file, kind) {
     if(dbErr) throw dbErr;
 
     if(viewedProfile) viewedProfile[col] = url;
-    showToast(kind === 'avatar' ? '✓ Profile photo saved!' : '✓ Cover saved!');
+    showToast(kind === 'avatar' ? ' Profile photo saved!' : ' Cover saved!');
   } catch(err) {
     console.error('saveProfileImage:', err);
     showToast('Could not save ' + kind + ' — ' + (err.message || 'try again'), true);

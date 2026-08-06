@@ -168,10 +168,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 
 <div class="mm-overlay" id="mmOverlay" onclick="toggleMenu(false)"></div>
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="index.html">🏠 Home</a>
-  <a href="store.html" class="active">🛍️ Store</a>
-  <a href="chat.html">💬 Chat</a>
-  <a href="model-apply.html">🐰 Become a Model</a>
+  <a href="index.html"> Home</a>
+  <a href="store.html" class="active"> Store</a>
+  <a href="chat.html"> Chat</a>
+  <a href="model-apply.html"> Become a Model</a>
 </nav>
 
 <div class="crumb"><a href="store.html">← Store</a> <span id="crumbCat"></span></div>
@@ -247,7 +247,7 @@ function showNotFound() {
 function renderDetail() {
   const p = product;
   const realImgs = (p.images && p.images.length) ? p.images : [];
-  const emoji = p.emoji || '🛍️';
+  const emoji = p.emoji || '';
   // Build slides: real photos if present, otherwise 3 tinted demo panels
   // (front / angle / detail) so the carousel is populated before real shots land.
   const demoTints = [
@@ -371,9 +371,9 @@ function addToCart() {
     ? Number(product.sale_price) : Number(product.price_usd);
   const line = cart.find(x => String(x.id) === String(product.id));
   if (line) line.qty += qty;
-  else cart.push({ id: product.id, name: product.name, price, emoji: product.emoji || '🛍️', qty });
+  else cart.push({ id: product.id, name: product.name, price, emoji: product.emoji || '', qty });
   persistCart(); renderCart(); toggleCart(true);
-  showToast('✓ Added ' + qty + ' × ' + product.name.split('—')[0].trim());
+  showToast(' Added ' + qty + ' × ' + product.name.split('—')[0].trim());
 }
 function changeQty(id, d) {
   const line = cart.find(x => String(x.id) === String(id));
@@ -388,7 +388,7 @@ function renderCart() {
   document.getElementById('cartItemsCount').textContent = count;
   document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
   const box = document.getElementById('cartItems');
-  if (!cart.length) { box.innerHTML = '<div class="cart-empty">Your cart is empty 🐰</div>'; return; }
+  if (!cart.length) { box.innerHTML = '<div class="cart-empty">Your cart is empty </div>'; return; }
   box.innerHTML = cart.map(l => `
     <div class="cart-item">
       <div class="ci-thumb">${l.emoji}</div>
@@ -399,7 +399,7 @@ function renderCart() {
     </div>`).join('');
 }
 function toggleCart(open){ document.getElementById('cartDrawer').classList.toggle('open',open); document.getElementById('cartOverlay').classList.toggle('open',open); }
-function checkout(){ if(!cart.length){showToast('Your cart is empty 🐰');return;} window.location.href='checkout.html'; }
+function checkout(){ if(!cart.length){showToast('Your cart is empty ');return;} window.location.href='checkout.html'; }
 
 let toastTimer=null;
 function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600); }

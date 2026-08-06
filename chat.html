@@ -384,7 +384,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   <!-- MAIN -->
   <div class="chat-main" id="chatMain">
     <div class="chat-empty" id="chat-empty">
-      <div class="chat-empty-icon">💬</div>
+      <div class="chat-empty-icon"></div>
       <div class="chat-empty-title">Your Messages</div>
       <div class="chat-empty-sub">Select a conversation or start a new one to begin chatting with fans and creators.</div>
     </div>
@@ -679,7 +679,7 @@ function renderMessages(msgs) {
         <div class="msg-bubble">
           ${msg.text ? msg.text : ''}
           ${msg.image ? `<img src="${msg.image}" class="msg-img" onclick="window.open('${msg.image}')"/>` : ''}
-          <span class="msg-time">${msg.time}${isOwn?' ✓':''}</span>
+          <span class="msg-time">${msg.time}${isOwn?' ':''}</span>
         </div>
         ${isOwn ? `<div class="msg-av" style="background:linear-gradient(135deg,var(--pink),#8b00ff)">${myInitials}</div>` : ''}
       </div>
