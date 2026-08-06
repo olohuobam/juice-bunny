@@ -101,7 +101,7 @@ const SUPABASE_URL='https://ewhhufhnfrhherjmbvqq.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
 const TOKEN_FN = SUPABASE_URL + '/functions/v1/dynamic-processor';
 
-let sb=null, me=null, myName='Guest', stream=null, isHost=false;
+let sb=null, me=null, myName='Guest', stream=null, isHost=false, isCohost=false, isBroadcaster=false;
 let client=null, localTracks={audio:null,video:null}, joined=false, chatChannel=null;
 
 const id = new URLSearchParams(location.search).get('id');
@@ -130,6 +130,14 @@ async function init(){
   if(error||!data){ return screen('<span class="big">🐰</span><h2>Stream not found</h2><p>It may have ended.</p><a class="btn" href="cams.html">Browse Cams</a>'); }
   stream=data;
   isHost = me && me.id===stream.creator_id;
+
+  // Check if this viewer was invited as a co-host (also broadcasts)
+  if(me && !isHost){
+    const {data:inv}=await sb.from('stream_invites')
+      .select('invite_role').eq('stream_id',id).eq('user_id',me.id).maybeSingle();
+    if(inv && inv.invite_role==='cohost') isCohost=true;
+  }
+  isBroadcaster = isHost || isCohost;
 
   if(stream.status!=='live' && !isHost){
     return screen(`<span class="big">⏳</span><h2>${esc(stream.title)}</h2><p>This stream hasn't started yet. Check back when the creator goes live.</p><a class="btn" href="cams.html">Browse Cams</a>`);
@@ -162,12 +170,12 @@ function renderRoom(){
           <div class="c">${esc(cname)}${stream.billing_mode==='per_minute'?` · $${Number(stream.rate_per_min||0).toFixed(2)}/min`:''}</div>
         </div>
         <div class="video-placeholder" id="vidPlaceholder">
-          <span class="big">${isHost?'📹':'🎥'}</span>
-          ${isHost?'Starting your camera…':'Waiting for creator&#39;s video…'}
+          <span class="big">${isBroadcaster?'📹':'🎥'}</span>
+          ${isBroadcaster?'Starting your camera…':'Waiting for creator&#39;s video…'}
         </div>
         <div id="remotePlayer"></div>
         <div id="localPlayer"></div>
-        ${isHost?`
+        ${isBroadcaster?`
         <div class="host-controls">
           <button class="ctrl-btn" id="micBtn" onclick="toggleMic()" title="Mute">🎤</button>
           <button class="ctrl-btn" id="camBtn" onclick="toggleCam()" title="Camera">📷</button>
@@ -210,11 +218,11 @@ async function connectAgora(){
     return;
   }
   try{
-    const role = isHost ? 'host' : 'audience';
+    const role = isBroadcaster ? 'host' : 'audience';
     const { token, appId, channel, uid } = await getToken(role);
 
     client = AgoraRTC.createClient({ mode:'live', codec:'vp8' });
-    await client.setClientRole(isHost ? 'host' : 'audience');
+    await client.setClientRole(isBroadcaster ? 'host' : 'audience');
 
     // Remote (viewers see host; host sees co-hosts)
     client.on('user-published', async (user, mediaType)=>{
@@ -231,7 +239,7 @@ async function connectAgora(){
 
     await client.join(appId, channel, token, uid);
 
-    if(isHost){
+    if(isBroadcaster){
       localTracks.audio = await AgoraRTC.createMicrophoneAudioTrack();
       localTracks.video = await AgoraRTC.createCameraVideoTrack();
       const ph=document.getElementById('vidPlaceholder'); if(ph) ph.style.display='none';
@@ -242,7 +250,7 @@ async function connectAgora(){
     updateViewerCount();
 
     // Record the join (viewers) for participant/billing tracking
-    if(me && !isHost){
+    if(me && !isBroadcaster){
       await sb.from('stream_participants').insert({ stream_id:id, user_id:me.id, role:'viewer' });
     }
   }catch(err){
