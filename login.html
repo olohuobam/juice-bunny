@@ -259,11 +259,11 @@ input::placeholder{color:var(--text3)}
             <div class="perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div>
           </div>
           <div class="left-perk">
-            <div class="perk-icon">🔒</div>
+            <div class="perk-icon"></div>
             <div class="perk-info"><strong>100% Private</strong>No tracking, no ads, ever</div>
           </div>
           <div class="left-perk">
-            <div class="perk-icon">⚡</div>
+            <div class="perk-icon"></div>
             <div class="perk-info"><strong>New Drops Weekly</strong>Fresh exclusive content every week</div>
           </div>
           <div class="left-perk">
@@ -299,7 +299,7 @@ input::placeholder{color:var(--text3)}
         </div>
 
         <div class="error-banner" id="errorBanner">
-          <span>⚠️</span> <span id="errorMsg">Invalid email or password. Please try again.</span>
+          <span id="errorMsg">Invalid email or password. Please try again.</span>
         </div>
 
         <div class="social-btns">
@@ -318,7 +318,7 @@ input::placeholder{color:var(--text3)}
         <div class="field" id="f-email">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon">✉️</span>
+            <span class="input-icon"></span>
             <input type="email" id="loginEmail" placeholder="your@email.com" oninput="clearError()"/>
           </div>
           <div class="field-error">Enter a valid email address</div>
@@ -327,7 +327,7 @@ input::placeholder{color:var(--text3)}
         <div class="field" id="f-pass">
           <label>Password</label>
           <div class="input-wrap">
-            <span class="input-icon">🔒</span>
+            <span class="input-icon"></span>
             <input type="password" id="loginPass" placeholder="Your password" oninput="clearError()" onkeydown="if(event.key==='Enter')doLogin()"/>
             <button class="eye-toggle" onclick="togglePass()" type="button">👁</button>
           </div>
@@ -349,14 +349,14 @@ input::placeholder{color:var(--text3)}
 
         <button class="btn-submit" style="background:transparent;border:1px solid var(--border);margin-top:10px"
                 onclick="showCodePanel()">
-          ✉️ Email me a sign-in code instead
+          Email me a sign-in code instead
         </button>
 
         <div class="auth-footer-text">
           New to Juice Bunny? <a href="signup.html">Create an account</a>
         </div>
         <div class="auth-footer-text" style="margin-top:8px;font-size:11px">
-          🔒 Secured with 256-bit SSL encryption
+          Secured with 256-bit SSL encryption
         </div>
       </div>
 
@@ -370,7 +370,7 @@ input::placeholder{color:var(--text3)}
         <div class="field" id="f-reset">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon">✉️</span>
+            <span class="input-icon"></span>
             <input type="email" id="resetEmail" placeholder="your@email.com"/>
           </div>
           <div class="field-error">Enter a valid email address</div>
@@ -395,7 +395,7 @@ input::placeholder{color:var(--text3)}
           <div class="field" id="f-otpmail">
             <label>Email Address</label>
             <div class="input-wrap">
-              <span class="input-icon">✉️</span>
+              <span class="input-icon"></span>
               <input type="email" id="otpEmail" placeholder="your@email.com"/>
             </div>
             <div class="field-error">Enter a valid email address</div>
@@ -409,7 +409,7 @@ input::placeholder{color:var(--text3)}
           <div class="field" id="f-otpcode">
             <label>6-digit code</label>
             <div class="input-wrap">
-              <span class="input-icon">🔑</span>
+              <span class="input-icon"></span>
               <input type="text" id="otpCode" inputmode="numeric" maxlength="6"
                      placeholder="123456" style="letter-spacing:5px;font-size:18px"
                      onkeydown="if(event.key===\'Enter\')verifyCode()"/>
@@ -622,7 +622,7 @@ async function doReset() {
   });
 
   if (error) {
-    showToast('⚠ ' + error.message);
+    showToast(error.message);
   } else {
     showToast(' Reset link sent! Check your inbox.');
     setTimeout(showLogin, 2000);

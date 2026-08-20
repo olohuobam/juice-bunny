@@ -147,10 +147,9 @@ a{text-decoration:none;color:inherit}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
 .bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
-.bunny-img{width:480px;height:520px;object-fit:cover;position:relative;z-index:1;
-  mix-blend-mode:screen;background:transparent;
-  filter:contrast(1.35) brightness(1.08) saturate(1.1)}
-.bunny-wrap{background:transparent !important}
+.bunny-img{width:480px;height:520px;object-fit:cover;position:relative;z-index:1;background:transparent}
+.bunny-wrap{background:transparent !important;perspective:900px}
+.bunny-img-fallback{animation:heroSpinY 4s linear infinite;backface-visibility:visible}
 @keyframes heroSpinY{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
 @media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:340px;height:380px}.bunny-img{width:340px;height:380px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
 
@@ -1174,10 +1173,10 @@ html,body{overflow-x:hidden;max-width:100%}
     <div style="position:relative" id="navAvatarWrap">
       <div class="nav-avatar" id="navAvatar" onclick="toggleAvatarMenu(event)">JD</div>
       <div class="avatar-menu" id="avatarMenu">
-        <a onclick="window.location.href='profile.html'">👤 My Profile</a>
+        <a onclick="window.location.href='profile.html'">My Profile</a>
         <a id="avatarMenuGoLive" style="display:none" href="go-live.html"> Go Live</a>
-        <a id="avatarMenuAdmin" style="display:none" onclick="window.location.href='admin.html'">🛠 Admin Panel</a>
-        <a onclick="siteLogout()" style="color:#ff6b8a">🚪 Log Out</a>
+        <a id="avatarMenuAdmin" style="display:none" onclick="window.location.href='admin.html'">Admin Panel</a>
+        <a onclick="siteLogout()" style="color:#ff6b8a">Log Out</a>
       </div>
     </div>
     <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">☰</button>
@@ -1188,21 +1187,21 @@ html,body{overflow-x:hidden;max-width:100%}
 <div class="mobile-nav" id="mobileNav">
   <a onclick="goTo('home');closeMobileNav()"> Home</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('trending').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()"> Movies</a>
-  <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">⭐ Premium</a>
+  <a onclick="goTo('home');setTimeout(()=>document.getElementById('features').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()">Premium</a>
   <a onclick="goTo('home');setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),100);closeMobileNav()"> Pricing</a>
   <a href="cams.html"> Cams</a>
   <a href="store.html"> Store</a>
   <a href="model-apply.html" class="mobile-model-link"> Become a Model</a>
   <a href="chat.html"> Chat</a>
   <div id="mobileAuthOut">
-    <a onclick="goTo('login');closeMobileNav()">🔑 Login</a>
-    <button class="mobile-signup" onclick="goTo('signup');closeMobileNav()">🔥 Sign Up Free</button>
+    <a onclick="goTo('login');closeMobileNav()">Login</a>
+    <button class="mobile-signup" onclick="goTo('signup');closeMobileNav()">Sign Up Free</button>
   </div>
   <div id="mobileAuthIn" style="display:none">
-    <a href="profile.html">👤 My Profile</a>
+    <a href="profile.html">My Profile</a>
     <a id="mobileGoLive" href="go-live.html" style="display:none"> Go Live</a>
-    <a id="mobileAdminLink" href="admin.html" style="display:none">🛠 Admin Panel</a>
-    <button class="mobile-signup" onclick="siteLogout()">🚪 Log Out</button>
+    <a id="mobileAdminLink" href="admin.html" style="display:none">Admin Panel</a>
+    <button class="mobile-signup" onclick="siteLogout()">Log Out</button>
   </div>
 </div>
 
@@ -1242,14 +1241,15 @@ html,body{overflow-x:hidden;max-width:100%}
         <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
         <p class="hero-sub">Hop into your wildest fantasy. Stream exclusive 4K adult videos, live creator calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
-          <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">🔥 Get Naughty Now</button>
+          <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
         </div>
       </div>
       <div class="hero-visual">
         <div class="bunny-wrap">
           <div class="bunny-glow"></div>
-          <video id="heroVid" src="https://ewhhufhnfrhherjmbvqq.supabase.co/storage/v1/object/public/asset/WhatsApp%20Video%202026-07-05%20at%2011.14.59%20AM.mp4" class="bunny-img" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture poster="juice-bunny-logo.png" style="object-fit:cover"></video>
+          <video id="heroVid" src="bunny-hero.webm" class="bunny-img" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture poster="juice-bunny-logo.png"></video>
+          <img id="heroImgFallback" src="juice-bunny-logo.png" class="bunny-img bunny-img-fallback" alt="Juice Bunny" style="display:none;object-fit:contain"/>
         </div>
       </div>
     </div>
@@ -1344,12 +1344,12 @@ html,body{overflow-x:hidden;max-width:100%}
         <p class="sec-sub">Built for pleasure-seekers who demand the best. Explicit, private, and dripping in quality.</p>
       </div>
       <div class="feats-grid">
-        <div class="feat-card reveal"><span class="feat-icon">📺</span><div class="feat-title">Crystal Clear 4K Filth</div><div class="feat-desc">Every dirty detail in razor-sharp 4K Ultra HD. See every curve, every expression, every moment in stunning clarity.</div></div>
-        <div class="feat-card reveal reveal-d1"><span class="feat-icon">🔒</span><div class="feat-title">Your Secrets Stay Secret</div><div class="feat-desc">Zero tracking, zero ads, zero data selling. What you watch is nobody's business but yours. Complete privacy guaranteed.</div></div>
-        <div class="feat-card reveal reveal-d2"><span class="feat-icon">💦</span><div class="feat-title">Fresh Content Daily</div><div class="feat-desc">New explicit drops every single day. Sexy originals, steamy exclusives, and nasty surprises you won't find anywhere else.</div></div>
-        <div class="feat-card reveal"><span class="feat-icon">📱</span><div class="feat-title">Pleasure On Any Device</div><div class="feat-desc">In bed, on the couch, in the bathroom — stream seamlessly on your phone, tablet, laptop or smart TV. Anywhere the mood strikes.</div></div>
-        <div class="feat-card reveal reveal-d1"><span class="feat-icon">📞</span><div class="feat-title">Live Calls With Models</div><div class="feat-desc" style="cursor:pointer" onclick="goTo('booking')">BunnyWorld members get exclusive live video calls with the creators in our videos. Face-to-face fantasies, no filters.</div></div>
-        <div class="feat-card reveal reveal-d2"><span class="feat-icon">⬇️</span><div class="feat-title">Download & Get Off Later</div><div class="feat-desc">Save your favorites for offline viewing. No Wi-Fi? No problem. Your filthy downloads go wherever you go.</div></div>
+        <div class="feat-card reveal"><span class="feat-icon"></span><div class="feat-title">Crystal Clear 4K Filth</div><div class="feat-desc">Every dirty detail in razor-sharp 4K Ultra HD. See every curve, every expression, every moment in stunning clarity.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon"></span><div class="feat-title">Your Secrets Stay Secret</div><div class="feat-desc">Zero tracking, zero ads, zero data selling. What you watch is nobody's business but yours. Complete privacy guaranteed.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon"></span><div class="feat-title">Fresh Content Daily</div><div class="feat-desc">New explicit drops every single day. Sexy originals, steamy exclusives, and nasty surprises you won't find anywhere else.</div></div>
+        <div class="feat-card reveal"><span class="feat-icon"></span><div class="feat-title">Pleasure On Any Device</div><div class="feat-desc">In bed, on the couch, in the bathroom — stream seamlessly on your phone, tablet, laptop or smart TV. Anywhere the mood strikes.</div></div>
+        <div class="feat-card reveal reveal-d1"><span class="feat-icon"></span><div class="feat-title">Live Calls With Models</div><div class="feat-desc" style="cursor:pointer" onclick="goTo('booking')">BunnyWorld members get exclusive live video calls with the creators in our videos. Face-to-face fantasies, no filters.</div></div>
+        <div class="feat-card reveal reveal-d2"><span class="feat-icon"></span><div class="feat-title">Download & Get Off Later</div><div class="feat-desc">Save your favorites for offline viewing. No Wi-Fi? No problem. Your filthy downloads go wherever you go.</div></div>
       </div>
     </div>
   </section>
@@ -1369,7 +1369,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="reveal reveal-d2">
         <div class="dev-visual">
           <div class="dev-screen"></div>
-          <div class="dev-phone">📱</div>
+          <div class="dev-phone"></div>
         </div>
       </div>
     </div>
@@ -1415,33 +1415,33 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="tier-price" id="sub-price"><sup>$</sup>3.99<sub>/week</sub></div>
           <div class="tier-desc" id="sub-desc">Full access to everything — premium content, models, chat, posts and live calls.</div>
           <ul class="tier-perks">
-            <li>🔥 Full HD &amp; 4K explicit library</li>
-            <li>💦 Daily fresh drops</li>
-            <li>📥 Unlimited downloads</li>
+            <li>Full HD &amp; 4K explicit library</li>
+            <li>Daily fresh drops</li>
+            <li>Unlimited downloads</li>
             <li> Chat with creators &amp; fans</li>
-            <li>📸 Model posts &amp; photo feeds</li>
-            <li>📞 Access to live creator calls</li>
-            <li>🔒 100% private · All devices</li>
+            <li>Model posts &amp; photo feeds</li>
+            <li>Access to live creator calls</li>
+            <li>100% private · All devices</li>
           </ul>
           <button class="btn-tier primary" id="sub-btn" onclick="goToPayment('sub_weekly')">Get Full Access</button>
         </div>
 
         <!-- LIVE CALL ADD-ON -->
         <div class="tier-card vip">
-          <div class="tier-hot vip-hot">⚡ Add-On</div>
+          <div class="tier-hot vip-hot">Add-On</div>
           <div class="tier-name">Live Calls</div>
           <div class="tier-price"><sup>$</sup>3<sub>/min</sub></div>
           <div class="tier-desc">Go live with any model, one-on-one. Pay only for the time you use — no booking fees, no minimums.</div>
           <ul class="tier-perks">
-            <li>📹 Private 1-on-1 video call</li>
-            <li>⚡ Connect instantly or schedule</li>
-            <li>🎙️ Audio &amp; video, HD quality</li>
+            <li>Private 1-on-1 video call</li>
+            <li>Connect instantly or schedule</li>
+            <li>Audio &amp; video, HD quality</li>
             <li> Chat during the call</li>
-            <li>⏱️ Billed per minute — $3/min</li>
-            <li>🔒 Fully private, never recorded</li>
+            <li>Billed per minute — $3/min</li>
+            <li>Fully private, never recorded</li>
           </ul>
           <div style="background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6">
-            ⚠️ <strong style="color:#ffc832">Subscribers only.</strong> You need an active Weekly or Monthly plan to access live calls.
+            <strong style="color:#ffc832">Subscribers only.</strong> You need an active Weekly or Monthly plan to access live calls.
           </div>
           <button class="btn-tier vip-btn" onclick="goTo('signup')">Start a Call</button>
         </div>
@@ -1450,7 +1450,7 @@ html,body{overflow-x:hidden;max-width:100%}
 
       <!-- LIVE CALL EXPLAINER STRIP -->
       <div class="reveal" style="margin-top:28px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:14px;padding:24px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-        <div style="font-size:36px">📞</div>
+        <div style="font-size:36px"></div>
         <div style="flex:1;min-width:200px">
           <div style="font-size:15px;font-weight:700;margin-bottom:4px">How Live Calls Work</div>
           <div style="font-size:13px;color:var(--text2);line-height:1.7">Subscribe to any paid plan → browse available models → start a live call → pay <strong style="color:#fff">$3/min</strong> only for time used. Your subscription unlocks access, calls are billed separately per session.</div>
@@ -1459,12 +1459,12 @@ html,body{overflow-x:hidden;max-width:100%}
       </div>
 
       <div class="pay-badges reveal" style="margin-top:24px;justify-content:center;display:flex;gap:10px;flex-wrap:wrap">
-        <span class="pay-badge">💳 CCBill</span>
+        <span class="pay-badge">CCBill</span>
         <span class="pay-badge">₿ BTC</span>
         <span class="pay-badge">⟠ ETH</span>
         <span class="pay-badge">₮ USDT</span>
-        <span class="pay-badge">🔒 SSL Secured</span>
-        <span class="pay-badge">↩ Cancel Anytime</span>
+        <span class="pay-badge">SSL Secured</span>
+        <span class="pay-badge">Cancel Anytime</span>
       </div>
     </div>
   </section>
@@ -1503,7 +1503,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <h2 class="cta-h2">Ready to Get <span>Naughty?</span></h2>
         <p class="cta-p">Join Juice Bunny today and dive into the most explicit, steamy content online. Your fantasies are waiting.</p>
         <div class="cta-btns">
-          <button class="btn-cta1" onclick="goToPayment('sub_monthly')">🔥 Get Access Now</button>
+          <button class="btn-cta1" onclick="goToPayment('sub_monthly')">Get Access Now</button>
           <button class="btn-cta2" onclick="goToPayment('sub_monthly')"> Enter BunnyWorld</button>
         </div>
       </div>
@@ -1596,21 +1596,21 @@ html,body{overflow-x:hidden;max-width:100%}
           </div>
           <div class="or-divider">or sign up with email</div>
           <div class="field-row-2">
-            <div class="field-wrap" id="fw-fname"><label>First Name</label><div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="su-fname" placeholder="John" oninput="suValidateName('su-fname','fw-fname')"/></div><div class="field-err">Required</div></div>
-            <div class="field-wrap" id="fw-lname"><label>Last Name</label><div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="su-lname" placeholder="Doe" oninput="suValidateName('su-lname','fw-lname')"/></div><div class="field-err">Required</div></div>
+            <div class="field-wrap" id="fw-fname"><label>First Name</label><div class="inp-wrap"><span class="inp-icon"></span><input type="text" id="su-fname" placeholder="John" oninput="suValidateName('su-fname','fw-fname')"/></div><div class="field-err">Required</div></div>
+            <div class="field-wrap" id="fw-lname"><label>Last Name</label><div class="inp-wrap"><span class="inp-icon"></span><input type="text" id="su-lname" placeholder="Doe" oninput="suValidateName('su-lname','fw-lname')"/></div><div class="field-err">Required</div></div>
           </div>
-          <div class="field-wrap" id="fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="su-email" placeholder="john@example.com" oninput="suValidateEmail()"/></div><div class="field-err">Enter a valid email</div></div>
-          <div class="field-wrap" id="fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="su-pass" placeholder="Min. 8 characters" oninput="suCheckStrength()"/><button class="eye-btn" onclick="suTogglePass('su-pass',this)" type="button">👁</button></div><div class="strength-bar"><div class="s-seg" id="ss1"></div><div class="s-seg" id="ss2"></div><div class="s-seg" id="ss3"></div><div class="s-seg" id="ss4"></div></div><div class="s-lbl" id="su-slbl">Enter a password</div><div class="field-err">Min. 8 characters</div></div>
-          <div class="field-wrap" id="fw-conf"><label>Confirm Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="su-conf" placeholder="Repeat password" oninput="suValidateConf()"/><button class="eye-btn" onclick="suTogglePass('su-conf',this)" type="button">👁</button></div><div class="field-err">Passwords don't match</div></div>
+          <div class="field-wrap" id="fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon"></span><input type="email" id="su-email" placeholder="john@example.com" oninput="suValidateEmail()"/></div><div class="field-err">Enter a valid email</div></div>
+          <div class="field-wrap" id="fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon"></span><input type="password" id="su-pass" placeholder="Min. 8 characters" oninput="suCheckStrength()"/><button class="eye-btn" onclick="suTogglePass('su-pass',this)" type="button">👁</button></div><div class="strength-bar"><div class="s-seg" id="ss1"></div><div class="s-seg" id="ss2"></div><div class="s-seg" id="ss3"></div><div class="s-seg" id="ss4"></div></div><div class="s-lbl" id="su-slbl">Enter a password</div><div class="field-err">Min. 8 characters</div></div>
+          <div class="field-wrap" id="fw-conf"><label>Confirm Password</label><div class="inp-wrap"><span class="inp-icon"></span><input type="password" id="su-conf" placeholder="Repeat password" oninput="suValidateConf()"/><button class="eye-btn" onclick="suTogglePass('su-conf',this)" type="button">👁</button></div><div class="field-err">Passwords don't match</div></div>
           <button class="btn-submit" onclick="suGoStep2()">Continue →</button>
           <div class="auth-foot-txt">Already have an account? <a onclick="goTo('login')">Log in</a></div>
         </div>
 
         <!-- PANEL 2 -->
         <div class="form-panel" id="su-p2">
-          <div class="age-gate-box"><div class="age-gate-icon">🔞</div><div class="age-gate-title">Age Verification Required</div><div class="age-gate-text">Juice Bunny contains adult content for mature audiences only. You must be 18+ to continue.</div></div>
-          <div class="field-wrap" id="fw-dob"><label>Date of Birth</label><div class="inp-wrap"><span class="inp-icon">📅</span><input type="date" id="su-dob" onchange="suValidateAge()"/></div><div class="field-hint">You must be 18+ to access this platform</div><div class="field-err">You must be 18 or older</div></div>
-          <div class="field-wrap" id="fw-country"><label>Country</label><div class="inp-wrap"><span class="inp-icon">🌍</span><select id="su-country" onchange="suCheckVerifyBtn()"><option value="">Select your country</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Other</option></select></div></div>
+          <div class="age-gate-box"><div class="age-gate-icon"></div><div class="age-gate-title">Age Verification Required</div><div class="age-gate-text">Juice Bunny contains adult content for mature audiences only. You must be 18+ to continue.</div></div>
+          <div class="field-wrap" id="fw-dob"><label>Date of Birth</label><div class="inp-wrap"><span class="inp-icon"></span><input type="date" id="su-dob" onchange="suValidateAge()"/></div><div class="field-hint">You must be 18+ to access this platform</div><div class="field-err">You must be 18 or older</div></div>
+          <div class="field-wrap" id="fw-country"><label>Country</label><div class="inp-wrap"><span class="inp-icon"></span><select id="su-country" onchange="suCheckVerifyBtn()"><option value="">Select your country</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Germany</option><option>France</option><option>Netherlands</option><option>Other</option></select></div></div>
           <div style="margin-bottom:18px">
             <div class="check-row age-row"><input type="checkbox" id="su-agecheck" onchange="suCheckVerifyBtn()"/><div class="check-label">I confirm that I am 18 years of age or older and legally permitted to view adult content in my jurisdiction.</div></div>
             <div class="check-row"><input type="checkbox" id="su-terms" onchange="suCheckVerifyBtn()"/><div class="check-label">I agree to the <a href="terms.html" target="_blank">Terms of Service</a>, <a href="privacy.html" target="_blank">Privacy Policy</a>, and <a href="2257.html" target="_blank">2257 Compliance Statement</a>.</div></div>
@@ -1652,7 +1652,7 @@ html,body{overflow-x:hidden;max-width:100%}
             <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Offline downloads included</span></div>
             <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Cancel anytime, no hidden fees</span></div>
           </div>
-          <button class="btn-submit" id="su-createbtn" onclick="suCreateAccount()"><span id="su-createtxt">🔥 Create My Account</span></button>
+          <button class="btn-submit" id="su-createbtn" onclick="suCreateAccount()"><span id="su-createtxt">Create My Account</span></button>
           <button class="btn-back-step" onclick="suGoPanel(2)">← Back</button>
         </div>
 
@@ -1664,7 +1664,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <button class="btn-goto" onclick="goTo('home');updateNavLoggedIn()">Start Watching →</button>
         </div>
       </div>
-      <div class="auth-foot-txt" style="margin-top:16px;font-size:11px;color:var(--text3)">🔒 256-bit SSL encrypted · Your data is safe with us</div>
+      <div class="auth-foot-txt" style="margin-top:16px;font-size:11px;color:var(--text3)">256-bit SSL encrypted · Your data is safe with us</div>
     </div>
   </div>
 </div>
@@ -1686,8 +1686,8 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="ll-sub">Your exclusive premium entertainment hub. Thousands of titles, new drops weekly, zero ads — ever.</div>
           <div class="ll-perks">
             <div class="ll-perk"><div class="ll-perk-icon"></div><div class="ll-perk-info"><strong>Unlimited 4K Streaming</strong>Cinema-quality on every device</div></div>
-            <div class="ll-perk"><div class="ll-perk-icon">🔒</div><div class="ll-perk-info"><strong>100% Private</strong>No tracking, no ads, ever</div></div>
-            <div class="ll-perk"><div class="ll-perk-icon">⚡</div><div class="ll-perk-info"><strong>New Drops Weekly</strong>Fresh exclusive content every week</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon"></div><div class="ll-perk-info"><strong>100% Private</strong>No tracking, no ads, ever</div></div>
+            <div class="ll-perk"><div class="ll-perk-icon"></div><div class="ll-perk-info"><strong>New Drops Weekly</strong>Fresh exclusive content every week</div></div>
             <div class="ll-perk"><div class="ll-perk-icon">₿</div><div class="ll-perk-info"><strong>Pay Your Way</strong>Credit card or Bitcoin accepted</div></div>
           </div>
         </div>
@@ -1708,14 +1708,14 @@ html,body{overflow-x:hidden;max-width:100%}
             <div class="auth-title">Sign in to your account</div>
             <div class="auth-subtitle">Good to see you again </div>
           </div>
-          <div class="err-banner" id="li-err"><span>⚠️</span><span id="li-err-msg">Invalid email or password.</span></div>
+          <div class="err-banner" id="li-err"><span id="li-err-msg">Invalid email or password.</span></div>
           <div class="social-btns">
             <button class="btn-social" onclick="signInWithGoogle('login')"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</button>
             <button class="btn-social" onclick="signInWithTwitter('login')"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X (Twitter)</button>
           </div>
           <div class="or-divider">or sign in with email</div>
-          <div class="field-wrap" id="li-fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="li-email" placeholder="your@email.com" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/></div><div class="field-err">Enter a valid email</div></div>
-          <div class="field-wrap" id="li-fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="li-pass" placeholder="Your password" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/><button class="eye-btn" onclick="liTogglePass()" type="button">👁</button></div><div class="field-err">Password is required</div></div>
+          <div class="field-wrap" id="li-fw-email"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon"></span><input type="email" id="li-email" placeholder="your@email.com" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/></div><div class="field-err">Enter a valid email</div></div>
+          <div class="field-wrap" id="li-fw-pass"><label>Password</label><div class="inp-wrap"><span class="inp-icon"></span><input type="password" id="li-pass" placeholder="Your password" oninput="liClearErr()" onkeydown="if(event.key==='Enter')liDoLogin()"/><button class="eye-btn" onclick="liTogglePass()" type="button">👁</button></div><div class="field-err">Password is required</div></div>
           <div class="forgot-row"><span class="forgot-lnk" onclick="liShowForgot()">Forgot password?</span></div>
           <div class="remember-row"><input type="checkbox" id="li-remember"/><label for="li-remember">Keep me signed in</label></div>
           <button class="btn-submit" id="li-btn" onclick="liDoLogin()"><span id="li-btn-txt">Sign In →</span></button>
@@ -1726,7 +1726,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <div class="login-forgot" id="li-forgot">
           <button class="back-lnk" onclick="liShowMain()">← Back to sign in</button>
           <div class="auth-header" style="margin-bottom:22px;text-align:left"><div class="auth-title">Reset your password</div><div class="auth-subtitle">We'll send you a reset link.</div></div>
-          <div class="field-wrap" id="li-fw-reset"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" id="li-reset-email" placeholder="your@email.com"/></div><div class="field-err">Enter a valid email</div></div>
+          <div class="field-wrap" id="li-fw-reset"><label>Email Address</label><div class="inp-wrap"><span class="inp-icon"></span><input type="email" id="li-reset-email" placeholder="your@email.com"/></div><div class="field-err">Enter a valid email</div></div>
           <button class="btn-submit" onclick="liDoReset()"><span id="li-reset-txt">Send Reset Link →</span></button>
           <div class="auth-foot-txt" style="margin-top:14px;font-size:12px;color:var(--text3)">Check your spam folder if you don't see it within a few minutes.</div>
         </div>
@@ -1780,9 +1780,9 @@ html,body{overflow-x:hidden;max-width:100%}
             <div class="pw-perk-item">Download for offline viewing</div>
             <div class="pw-perk-item">Cancel anytime, zero hidden fees</div>
           </div>
-          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">🔥 Unlock Full Access — $3.99/week</button>
+          <button class="btn-pw-main" onclick="goToPayment('sub_weekly')">Unlock Full Access — $3.99/week</button>
           <button class="btn-pw-ghost" onclick="vpClosePaywall()">Continue Watching Preview</button>
-          <div class="pw-pay-methods"><span>💳 CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>🔒 SSL</span></div>
+          <div class="pw-pay-methods"><span>CCBill</span><span class="pw-sep"></span><span>₿ Bitcoin</span><span class="pw-sep"></span><span>SSL</span></div>
         </div>
       </div>
     </div>
@@ -1801,7 +1801,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="vid-actions-row">
         <button class="vact-btn" id="vp-like-btn" onclick="vpToggleLike()">♡ Like</button>
         <button class="vact-btn" onclick="vpWatchlist()">+ Watchlist</button>
-        <button class="vact-btn" onclick="vpShare()">↗ Share</button>
+        <button class="vact-btn" onclick="vpShare()">Share</button>
         <button class="vact-btn" onclick="goTo('home')">← Back</button>
       </div>
       <p class="vid-desc">A hypnotic journey through neon-drenched dreamscapes where reality dissolves into art. Follow the untold story of an underground dancer who discovers her performances are unlocking dormant memories of a parallel life. Shot in stunning 4K with a score that pulses like a heartbeat.</p>
@@ -1817,7 +1817,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Genre</div><div style="font-size:14px;font-weight:500">Sci-Fi · Drama</div></div>
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Runtime</div><div style="font-size:14px;font-weight:500">28 minutes</div></div>
         </div>
-        <div style="padding:16px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:10px;font-size:13px;color:var(--text2)">🔞 <strong style="color:#fff">18+ Content.</strong> This video contains explicit adult content for mature audiences only.</div>
+        <div style="padding:16px;background:rgba(255,45,120,.05);border:1px solid rgba(255,45,120,.15);border-radius:10px;font-size:13px;color:var(--text2)"><strong style="color:#fff">18+ Content.</strong> This video contains explicit adult content for mature audiences only.</div>
       </div>
       <div class="tab-pane" id="vp-tab-cast">
         <div class="cast-row">
@@ -1882,23 +1882,22 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="method-label">Choose Payment Method</div>
       <div class="method-cards">
         <div class="method-card selected" id="method-ccbill" onclick="selectMethod('ccbill')">
-          <span class="method-icon">💳</span>
+          <span class="method-icon"></span>
           <div class="method-name">Credit Card</div>
           <div class="method-desc">Visa, Mastercard, Amex accepted</div>
-          <span class="method-badge secure">🔒 CCBill Secure</span>
+          <span class="method-badge secure">CCBill Secure</span>
         </div>
         <div class="method-card" id="method-btc" onclick="selectMethod('btc')">
           <span class="method-icon">₿</span>
           <div class="method-name">Bitcoin</div>
           <div class="method-desc">Pay with BTC via NOWPayments</div>
-          <span class="method-badge crypto">⚡ Instant</span>
+          <span class="method-badge crypto">Instant</span>
         </div>
       </div>
 
       <!-- CCBILL FORM -->
       <div class="pay-form active" id="form-ccbill">
         <div class="ccbill-notice">
-          <span class="notice-icon">🔒</span>
           <div>Your payment is processed securely by <strong>CCBill</strong> — the industry standard for adult content platforms. We never store your card details.</div>
         </div>
         <div class="form-row">
@@ -1919,7 +1918,7 @@ html,body{overflow-x:hidden;max-width:100%}
           <label>Card Number</label>
           <div class="card-input-wrap">
             <input type="text" class="form-input" placeholder="1234 5678 9012 3456" id="cc-number" maxlength="19" oninput="formatCard(this)"/>
-            <div class="card-icons">💳</div>
+            <div class="card-icons"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1949,10 +1948,10 @@ html,body{overflow-x:hidden;max-width:100%}
           </select>
         </div>
         <div class="secure-note">
-          <span>🔒</span> 256-bit SSL encryption · Powered by CCBill · PCI DSS Compliant
+          256-bit SSL encryption · Powered by CCBill · PCI DSS Compliant
         </div>
         <button class="btn-pay" id="btn-pay-ccbill" onclick="processCardPayment()">
-          <span>🔒</span> <span id="btn-pay-ccbill-txt">Subscribe Now — <span id="cc-price-display">$3.99</span>/wk</span>
+          <span id="btn-pay-ccbill-txt">Subscribe Now — <span id="cc-price-display">$3.99</span>/wk</span>
         </button>
         <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
           By subscribing you agree to our <a onclick="void(0)" style="color:var(--pink);cursor:pointer">Terms of Service</a> and confirm you are 18+. Cancel anytime.
@@ -1999,7 +1998,7 @@ html,body{overflow-x:hidden;max-width:100%}
           </div>
           <!-- Min amount warning -->
           <div id="crypto-min-warn" style="display:none;margin-top:10px;background:rgba(255,165,0,.08);border:1px solid rgba(255,165,0,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#ffa500">
-            ⚠️ <span id="crypto-min-warn-txt"></span>
+            <span id="crypto-min-warn-txt"></span>
           </div>
         </div>
 
@@ -2037,7 +2036,7 @@ html,body{overflow-x:hidden;max-width:100%}
 
         <!-- STATUS -->
         <div class="btc-timer">
-          <span>⏱ Invoice expires in:</span>
+          <span>Invoice expires in:</span>
           <span class="btc-timer-count" id="btc-countdown">--:--</span>
         </div>
         <div class="btc-pending" id="btc-status">
@@ -2052,7 +2051,7 @@ html,body{overflow-x:hidden;max-width:100%}
         </div>
 
         <button class="btn-pay btn-pay-btc" id="btn-pay-btc" onclick="processBtcPayment()">
-          ⚡ Pay with Crypto
+          Pay with Crypto
         </button>
         <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
           Powered by NOWPayments · Non-custodial · Funds go directly to merchant
@@ -2085,7 +2084,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <div class="os-perk">Cancel anytime</div>
       </div>
       <div class="os-secure">
-        <span>🔒</span> Secured by CCBill & NOWPayments
+        Secured by CCBill & NOWPayments
       </div>
     </div>
 
@@ -2109,7 +2108,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <div class="pay-receipt-row"><span class="rl">Status</span><span class="rv" style="color:var(--success)"> Active</span></div>
     </div>
     <button class="btn-start-watching" onclick="goTo('home');updateNavLoggedIn()">
-      ▶ Start Watching Now
+      Start Watching Now
     </button>
     <div style="font-size:12px;color:var(--text3);margin-top:16px">
       Manage your subscription anytime in <span style="color:var(--pink);cursor:pointer">Account Settings</span>
@@ -2119,7 +2118,7 @@ html,body{overflow-x:hidden;max-width:100%}
 <button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- ADMIN BROADCAST BTN (visible after login as admin) -->
-<button class="admin-broadcast-btn" id="broadcastBtn" onclick="openBroadcast()">📢 Broadcast</button>
+<button class="admin-broadcast-btn" id="broadcastBtn" onclick="openBroadcast()">Broadcast</button>
 
 <!-- TOAST -->
 <div class="toast" id="globalToast"></div>
@@ -2131,15 +2130,15 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="modal-box">
     <div class="modal-head">
       <div>
-        <div class="modal-title">📢 Send Announcement</div>
+        <div class="modal-title">Send Announcement</div>
         <div class="modal-sub">Email or text all your subscribers at once</div>
       </div>
       <button class="modal-close" onclick="closeBroadcast()">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-tabs">
-        <button class="mtab active" onclick="switchBcTab('email',this)">✉️ Email</button>
-        <button class="mtab" onclick="switchBcTab('sms',this)">📱 SMS / Text</button>
+        <button class="mtab active" onclick="switchBcTab('email',this)">Email</button>
+        <button class="mtab" onclick="switchBcTab('sms',this)">SMS / Text</button>
       </div>
 
       <!-- EMAIL TAB -->
@@ -2155,7 +2154,7 @@ html,body{overflow-x:hidden;max-width:100%}
         </div>
         <div class="bc-field">
           <span class="bc-label">Subject Line</span>
-          <input type="text" class="bc-input" id="bc-email-subject" placeholder="e.g. 🔥 New drop just landed — don't miss it!"/>
+          <input type="text" class="bc-input" id="bc-email-subject" placeholder="e.g. New drop just landed — don't miss it!"/>
         </div>
         <div class="bc-field">
           <span class="bc-label">Message</span>
@@ -2166,7 +2165,7 @@ html,body{overflow-x:hidden;max-width:100%}
           Sending to: <span class="bc-count" id="bc-email-count">All subscribers</span>
         </div>
         <button class="btn-send" id="bc-email-send" onclick="bcSendEmail()">
-          <span>✉️</span> Send Email Now
+          Send Email Now
         </button>
       </div>
 
@@ -2182,18 +2181,18 @@ html,body{overflow-x:hidden;max-width:100%}
         </div>
         <div class="bc-field">
           <span class="bc-label">Text Message</span>
-          <textarea class="bc-input" id="bc-sms-body" rows="4" placeholder="Keep it short! e.g. &#10;Juice Bunny : New VIP content just dropped! Watch now 👉 juicebunny.com" maxlength="160" oninput="bcCountChars(this)"></textarea>
+          <textarea class="bc-input" id="bc-sms-body" rows="4" placeholder="Keep it short! e.g. &#10;Juice Bunny : New VIP content just dropped! Watch now: juicebunny.com" maxlength="160" oninput="bcCountChars(this)"></textarea>
           <div class="bc-hint" id="bc-sms-chars">0 / 160 characters</div>
         </div>
         <div class="bc-field" style="background:rgba(255,200,50,.05);border:1px solid rgba(255,200,50,.2);border-radius:10px;padding:12px">
-          <div style="font-size:12px;color:#ffc832;font-weight:600;margin-bottom:4px">⚠️ SMS requires Twilio integration</div>
+          <div style="font-size:12px;color:#ffc832;font-weight:600;margin-bottom:4px">SMS requires Twilio integration</div>
           <div style="font-size:12px;color:var(--text2)">Add your Twilio Account SID and Auth Token in Settings to activate SMS sending.</div>
         </div>
         <div class="bc-recipients">
           Sending to: <span class="bc-count" id="bc-sms-count">All subscribers</span>
         </div>
         <button class="btn-send" id="bc-sms-send" onclick="bcSendSMS()">
-          <span>📱</span> Send Text Now
+          Send Text Now
         </button>
       </div>
     </div>
@@ -2209,8 +2208,8 @@ html,body{overflow-x:hidden;max-width:100%}
 <div id="page-booking" class="page">
   <div class="booking-wrap">
     <button class="payment-back" onclick="goTo('home')">← Back</button>
-    <div class="booking-title">📞 Book a Live Call</div>
-    <div class="booking-sub">Pick your model, choose a time slot, and get ready for a private one-on-one session. BunnyWorld members only. 🔥</div>
+    <div class="booking-title">Book a Live Call</div>
+    <div class="booking-sub">Pick your model, choose a time slot, and get ready for a private one-on-one session. BunnyWorld members only.</div>
     <div style="margin-bottom:24px">
       <div class="method-label">Choose Your Model</div>
       <div class="model-grid" id="modelGrid"></div>
@@ -2223,9 +2222,9 @@ html,body{overflow-x:hidden;max-width:100%}
     <div id="booking-summary" style="display:none;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:20px;margin-bottom:24px">
       <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:14px">Booking Summary</div>
       <div style="font-size:14px;margin-bottom:8px"> Model: <strong id="sum-model" style="color:var(--pink)">—</strong></div>
-      <div style="font-size:14px;margin-bottom:8px">🕐 Time: <strong id="sum-time" style="color:#fff">—</strong></div>
-      <div style="font-size:14px;margin-bottom:8px">⏱ Duration: <strong style="color:#fff">30 minutes</strong></div>
-      <div style="font-size:14px">✅ Included in: <strong style="color:#ffc832">BunnyWorld Plan</strong></div>
+      <div style="font-size:14px;margin-bottom:8px">Time: <strong id="sum-time" style="color:#fff">—</strong></div>
+      <div style="font-size:14px;margin-bottom:8px">Duration: <strong style="color:#fff">30 minutes</strong></div>
+      <div style="font-size:14px">Included in: <strong style="color:#ffc832">BunnyWorld Plan</strong></div>
     </div>
     <div id="booking-form" style="display:none">
       <div class="form-field">
@@ -2240,12 +2239,12 @@ html,body{overflow-x:hidden;max-width:100%}
         <label>Special Requests (Optional)</label>
         <textarea class="form-input" id="book-note" rows="3" placeholder="Anything you'd like her to know beforehand..." style="resize:vertical"></textarea>
       </div>
-      <button class="btn-book" onclick="confirmBooking()">🔥 Confirm My Booking</button>
+      <button class="btn-book" onclick="confirmBooking()">Confirm My Booking</button>
     </div>
     <div id="booking-success" style="display:none;text-align:center;padding:40px 20px">
-      <div style="font-size:60px;margin-bottom:16px">🎉</div>
+      <div style="font-size:60px;margin-bottom:16px"></div>
       <div style="font-size:24px;font-weight:700;margin-bottom:10px">You're Booked, Baby!</div>
-      <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Your live call is confirmed. Check your email for the calendar invite and private video call link. She can't wait. 🔥</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Your live call is confirmed. Check your email for the calendar invite and private video call link. She can't wait.</div>
       <button class="btn-book" onclick="goTo('home')">Back to Juice Bunny</button>
     </div>
   </div>
@@ -2261,25 +2260,25 @@ html,body{overflow-x:hidden;max-width:100%}
       <p class="unsub-sub">We'd hate to see you leave. Before you cancel, here are some exclusive offers we've put together just for you.</p>
       <div class="unsub-offers">
         <div class="offer-card" onclick="unsubAcceptOffer('pause')">
-          <span class="offer-icon">⏸️</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Pause Your Subscription</div>
           <div class="offer-desc">Not ready to commit right now? Pause for up to 3 months and come back whenever you want.</div>
           <span class="offer-badge">No Charge While Paused</span>
         </div>
         <div class="offer-card" onclick="unsubAcceptOffer('discount')">
-          <span class="offer-icon">🎁</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Get 50% Off Next Month</div>
           <div class="offer-desc">Stay for just $1.99 next month. Full premium access, half the price. One-time offer.</div>
           <span class="offer-badge">Limited Time Offer</span>
         </div>
         <div class="offer-card" onclick="unsubAcceptOffer('downgrade')">
-          <span class="offer-icon">⬇️</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Switch to Free Plan</div>
           <div class="offer-desc">Keep your account and access our free library. No charge, no commitment.</div>
           <span class="offer-badge">Always Free</span>
         </div>
         <div class="offer-card" onclick="unsubAcceptOffer('vip')">
-          <span class="offer-icon">✨</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Try VIP for Free</div>
           <div class="offer-desc">Upgrade to Monthly including exclusive model photos — free for 7 days, then $9.99/mo.</div>
           <span class="offer-badge">7-Day Free Trial</span>
@@ -2298,7 +2297,7 @@ html,body{overflow-x:hidden;max-width:100%}
       <p class="unsub-sub">Tell us why you're leaving and we'll do our best to fix it. Your feedback shapes what we build next.</p>
       <div class="unsub-offers offers-3">
         <div class="offer-card" onclick="unsubSelectReason(this,'Too expensive')">
-          <span class="offer-icon">💸</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Too Expensive</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Not enough content')">
@@ -2306,15 +2305,15 @@ html,body{overflow-x:hidden;max-width:100%}
           <div class="offer-title">Not Enough Content</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Technical issues')">
-          <span class="offer-icon">⚙️</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Technical Issues</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Just a break')">
-          <span class="offer-icon">😴</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Just Taking a Break</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Found something else')">
-          <span class="offer-icon">🔍</span>
+          <span class="offer-icon"></span>
           <div class="offer-title">Found Something Else</div>
         </div>
         <div class="offer-card" onclick="unsubSelectReason(this,'Other')">
@@ -2333,13 +2332,13 @@ html,body{overflow-x:hidden;max-width:100%}
 
     <!-- STEP 3: Confirmed cancelled -->
     <div class="unsub-step" id="unsub-s3">
-      <span class="unsub-sad">😞</span>
+      <span class="unsub-sad"></span>
       <h2 class="unsub-title">You've been <span>unsubscribed</span></h2>
       <p class="unsub-sub">We're sorry to see you go. Your subscription has been cancelled and you won't be charged again. Your access continues until the end of your billing period.</p>
       <div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:24px;max-width:400px;margin:0 auto 32px;text-align:left">
-        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">📅 Access ends: <strong style="color:#fff">June 16, 2025</strong></div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">💳 No further charges</div>
-        <div style="font-size:13px;color:var(--text2)">📧 Confirmation sent to your email</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Access ends: <strong style="color:#fff">June 16, 2025</strong></div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:10px">No further charges</div>
+        <div style="font-size:13px;color:var(--text2)">Confirmation sent to your email</div>
       </div>
       <div class="unsub-btns">
         <button class="btn-stay" onclick="unsubGoHome()">Rejoin Juice Bunny</button>
@@ -2723,14 +2722,14 @@ function suSelectPlan(plan){
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Chat, posts & downloads</span></div>`;
-    btn.textContent = '🔥 Create My Account';
+    btn.textContent = 'Create My Account';
   } else {
     perks.innerHTML=`<div class="perks-title">Monthly — $9.99/month</div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Everything in Weekly</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Save 37% vs weekly</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Access to all creators</span></div>
       <div class="perk-item"><span class="perk-dot-s"></span><span class="perk-text">Live calls at $3/min</span></div>`;
-    btn.textContent = '🔥 Create My Account';
+    btn.textContent = 'Create My Account';
   }
 }
 async function suCreateAccount(){
@@ -2773,7 +2772,7 @@ async function suCreateAccount(){
       if (!password || password.length < 6) {
         showToast('Please enter a password (at least 6 characters)', true);
         btn.disabled = false;
-        document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+        document.getElementById('su-createtxt').textContent = 'Create My Account';
         return;
       }
 
@@ -2799,7 +2798,7 @@ async function suCreateAccount(){
       if(data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
         showToast('An account with this email already exists — please log in instead', true);
         btn.disabled = false;
-        document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+        document.getElementById('su-createtxt').textContent = 'Create My Account';
         setTimeout(() => goTo('login'), 1500);
         return;
       }
@@ -2826,7 +2825,7 @@ async function suCreateAccount(){
 
       // Update success message if email confirmation is required
       if(data.user && !data.session) {
-        successPanel.querySelector('.success-title').textContent = 'Check your email! 📧';
+        successPanel.querySelector('.success-title').textContent = 'Check your email!';
         successPanel.querySelector('.success-txt').textContent = 'We sent a confirmation link to ' + email + '. Click it to activate your account and start watching.';
         successPanel.querySelector('.btn-goto').style.display = 'none';
       }
@@ -2834,7 +2833,7 @@ async function suCreateAccount(){
     } catch(err) {
       showToast(err.message || 'Signup failed. Please try again.', true);
       btn.disabled = false;
-      document.getElementById('su-createtxt').textContent = '🔥 Create My Account';
+      document.getElementById('su-createtxt').textContent = 'Create My Account';
     }
   });
 }
@@ -3120,7 +3119,7 @@ function bcSendEmail(){
   setTimeout(()=>{
     closeBroadcast();
     showToast(' Email broadcast sent successfully!');
-    btn.disabled=false;btn.innerHTML='<span>✉️</span> Send Email Now';
+    btn.disabled=false;btn.innerHTML='Send Email Now';
     document.getElementById('bc-email-subject').value='';
     document.getElementById('bc-email-body').value='';
   },2000);
@@ -3133,7 +3132,7 @@ function bcSendSMS(){
   setTimeout(()=>{
     closeBroadcast();
     showToast(' SMS broadcast sent! (Requires Twilio setup)');
-    btn.disabled=false;btn.innerHTML='<span>📱</span> Send Text Now';
+    btn.disabled=false;btn.innerHTML='Send Text Now';
     document.getElementById('bc-sms-body').value='';
   },2000);
 }
@@ -3151,7 +3150,7 @@ function unsubAcceptOffer(type){
     pause:' Subscription paused for 3 months. See you soon! ',
     discount:' 50% discount applied! Only $1.99 next month.',
     downgrade:' Switched to Free plan. Your account stays active.',
-    vip:' VIP trial activated! 7 days free. Enjoy the model photos! ✨'
+    vip:' VIP trial activated! 7 days free. Enjoy the model photos!'
   };
   closeBroadcast();
   showToast(msgs[type]);
@@ -3358,7 +3357,7 @@ function processCardPayment() {
   setTimeout(() => {
     btn.disabled = false;
     document.getElementById('btn-pay-ccbill-txt').textContent = `Subscribe Now — ${PLANS[currentPlan]?.priceStr || ''}`;
-    showToast('💳 Card payments activating soon — use crypto in the meantime!', true);
+    showToast('Card payments activating soon — use crypto in the meantime!', true);
   }, 1500);
 }
 
@@ -3374,7 +3373,7 @@ async function initBtcPayment() {
 
   // Warn if below minimum but don't block — NOWPayments will handle it
   if(plan.price < minAmt) {
-    document.getElementById('btc-status').innerHTML = `⚠️ Please select USDT, LTC or XRP for $${plan.price} plan — BTC/ETH minimum is higher.`;
+    document.getElementById('btc-status').innerHTML = `Please select USDT, LTC or XRP for $${plan.price} plan — BTC/ETH minimum is higher.`;
     return;
   }
 
@@ -3409,14 +3408,14 @@ async function initBtcPayment() {
       startBtcTimer();
 
       document.getElementById('btc-status').innerHTML = `
-        ✅ ${ticker} invoice ready!
+        ${ticker} invoice ready!
         <br/><br/>
         <a href="${data.invoice_url}" target="_blank"
            style="display:inline-flex;align-items:center;gap:8px;
            background:rgba(255,165,0,.12);border:1px solid rgba(255,165,0,.4);
            color:#ffa500;padding:12px 22px;border-radius:10px;
            font-weight:700;font-size:14px;text-decoration:none;margin-top:4px">
-          ⚡ Open ${ticker} Payment Page →
+          Open ${ticker} Payment Page →
         </a>
         <br/><br/>
         <span style="font-size:12px;color:var(--text3)">Secure payment page powered by NOWPayments. Opens in a new tab.</span>
@@ -3424,7 +3423,7 @@ async function initBtcPayment() {
 
       // Update pay button
       const btn = document.getElementById('btn-pay-btc');
-      btn.textContent = `⚡ Pay with ${ticker} →`;
+      btn.textContent = `Pay with ${ticker} →`;
       btn.onclick = () => window.open(data.invoice_url, '_blank');
 
     } else {
@@ -3432,7 +3431,7 @@ async function initBtcPayment() {
     }
 
   } catch(err) {
-    document.getElementById('btc-status').innerHTML = `⚠️ ${err.message || 'Error creating invoice. Please try again.'}`;
+    document.getElementById('btc-status').innerHTML = `${err.message || 'Error creating invoice. Please try again.'}`;
     showToast('Payment error: ' + (err.message || 'Unknown'), true);
   }
 }
@@ -3458,7 +3457,7 @@ function startPaymentPoll(paymentId) {
       if(['failed','expired'].includes(data.payment_status)) {
         stopPaymentPoll();
         stopBtcTimer();
-        document.getElementById('btc-status').innerHTML = '❌ Payment ' + data.payment_status + '. Please try again.';
+        document.getElementById('btc-status').innerHTML = 'Payment ' + data.payment_status + '. Please try again.';
       }
 
     } catch(e) { console.error('Poll error:', e); }
@@ -3473,10 +3472,10 @@ function updatePaymentStatus(status, data) {
   const statusMap = {
     waiting:    '<span class="btc-pending-dot"></span> Waiting for payment...',
     confirming: ' Payment received! Confirming on blockchain...',
-    confirmed:  '✅ Confirmed! Activating your account...',
-    finished:   '✅ Payment complete! Activating your account...',
-    failed:     '❌ Payment failed. Please try again.',
-    expired:    '⚠️ Payment window expired. Please refresh.',
+    confirmed:  'Confirmed! Activating your account...',
+    finished:   'Payment complete! Activating your account...',
+    failed:     'Payment failed. Please try again.',
+    expired:    'Payment window expired. Please refresh.',
   };
   const el = document.getElementById('btc-status');
   if(el && statusMap[status]) el.innerHTML = statusMap[status];
@@ -3528,7 +3527,7 @@ function startBtcTimer() {
       stopBtcTimer();
       if(el) el.textContent = 'EXPIRED';
       const status = document.getElementById('btc-status');
-      if(status) status.innerHTML = '⚠️ Address expired. Click Bitcoin tab again to regenerate.';
+      if(status) status.innerHTML = 'Address expired. Click Bitcoin tab again to regenerate.';
     }
   }, 1000);
 }
@@ -3643,7 +3642,7 @@ function buildLandingModelGrid() {
         <div style="font-size:15px;font-weight:700;margin-bottom:2px">${m.name}</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${m.tag}</div>
         <button id="call-btn-${i}" style="width:100%;padding:9px;border-radius:20px;border:none;background:${isOnline ? 'var(--pink)' : 'rgba(255,255,255,.06)'};color:${isOnline ? '#fff' : 'var(--text3)'};font-family:Inter,sans-serif;font-size:13px;font-weight:700;cursor:${isOnline ? 'pointer' : 'not-allowed'};transition:all .2s">
-          ${isOnline ? '📞 Call Now' : 'Currently Offline'}
+          ${isOnline ? 'Call Now' : 'Currently Offline'}
         </button>
       </div>
     </div>
@@ -3669,7 +3668,7 @@ function buildModelGrid() {
       <div class="model-avatar">${m.emoji}</div>
       <div class="model-name">${m.name}</div>
       <div class="model-tag">${m.tag}</div>
-      <span class="model-status-badge ${m.status}">${m.status === 'online' ? '🟢 Available Now' : '🟡 Busy — Check Back'}</span>
+      <span class="model-status-badge ${m.status}">${m.status === 'online' ? 'Available Now' : 'Busy — Check Back'}</span>
     </div>`).join('');
 }
 
@@ -3720,7 +3719,7 @@ const faqData = [
   {q:'Can I cancel anytime?',a:'Yes — cancel instantly from your account settings. No questions, no guilt, no hidden fees. Your access continues until the end of your current billing period.'},
   {q:'What payment methods do you accept?',a:'We accept credit/debit cards via CCBill (the industry standard for adult platforms) and cryptocurrency including Bitcoin (BTC), Ethereum (ETH), Tether (USDT TRC20), Litecoin (LTC), and XRP.'},
   {q:'Is there a free trial?',a:'Yes — your first 7 days are on us with any paid plan. Cancel before the trial ends and you won\'t be charged a thing.'},
-  {q:'What video quality can I expect?',a:'Basic and BunnyWorld members get full 4K Ultra HD streaming. Free members get 480p SD preview content. The difference is... significant. 😏'},
+  {q:'What video quality can I expect?',a:'Basic and BunnyWorld members get full 4K Ultra HD streaming. Free members get 480p SD preview content. The difference is... significant.'},
   {q:'How old do I need to be?',a:'You must be 18 years of age or older to access Juice Bunny. We verify age on signup and strictly enforce this. 18 U.S.C. § 2257 records are maintained for all content.'},
 ];
 
@@ -3880,67 +3879,67 @@ try {
 const cbotResponses = [
   { match:['price','pricing','cost','how much','plan','plans','subscription','subscribe','weekly','monthly'],
     reply:'We have three plans  Free (SD video, no models), Weekly at $3.99/wk (full access + models), and Monthly at $9.99/mo (same but save 37%). Live calls are $3/min on top of any paid plan!',
-    qr:[{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Crypto payments?',msg:'What crypto do you accept?'}]},
+    qr:[{label:'Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'Crypto payments?',msg:'What crypto do you accept?'}]},
   { match:['weekly','3.99'],
-    reply:'The Weekly plan is $3.99/week 🔥 Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
-    qr:[{label:'📆 Monthly instead?',msg:'Tell me about the monthly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    reply:'The Weekly plan is $3.99/week. Full HD & 4K content, all models, chat, posts and live calls at $3/min. Cancel anytime!',
+    qr:[{label:'Monthly instead?',msg:'Tell me about the monthly plan'},{label:'Live calls',msg:'How do live calls work?'},{label:'Sign up',msg:'How do I sign up?'}]},
   { match:['monthly','9.99'],
-    reply:'The Monthly plan is $9.99/month — 37% saving vs weekly  Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
-    qr:[{label:'📅 Weekly instead?',msg:'Tell me about the weekly plan'},{label:'📞 Live calls',msg:'How do live calls work?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    reply:'The Monthly plan is $9.99/month — 37% saving vs weekly. Everything included: 4K content, all models, chat, posts and live calls at $3/min. Best value!',
+    qr:[{label:'Weekly instead?',msg:'Tell me about the weekly plan'},{label:'Live calls',msg:'How do live calls work?'},{label:'Sign up',msg:'How do I sign up?'}]},
   { match:['live call','call','calls','video call','minute','per min'],
-    reply:'Live calls are $3/minute 📞 You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
-    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'👩 Who are models?',msg:'Who are the creators?'},{label:'🔥 Get started',msg:'How do I sign up?'}]},
+    reply:'Live calls are $3/minute. You need an active subscription first, then connect with any online model for a private 1-on-1 HD video call. Pay only for minutes you use!',
+    qr:[{label:'See plans',msg:'What are the subscription plans?'},{label:'Who are models?',msg:'Who are the creators?'},{label:'Get started',msg:'How do I sign up?'}]},
   { match:['model','creators','girls','who are'],
-    reply:'Our creators are real verified females handpicked by Juice Bunny 🌟 They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
-    qr:[{label:'📞 Book a call',msg:'How do live calls work?'},{label:' Become a model',msg:'How do I become a model?'},{label:' Pricing',msg:'What are the subscription plans?'}]},
+    reply:'Our creators are real verified females handpicked by Juice Bunny. They create content, post photos and take live calls. Browse their profiles and call any that\'s online!',
+    qr:[{label:'Book a call',msg:'How do live calls work?'},{label:'Become a model',msg:'How do I become a model?'},{label:'Pricing',msg:'What are the subscription plans?'}]},
   { match:['become a model','apply','model application','join as model'],
-    reply:'We\'d love to have you!  Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
-    qr:[{label:' Earn how much?',msg:'How much do models earn?'},{label:'📝 Apply now',msg:'Where is the model application?'}]},
+    reply:'We\'d love to have you! Juice Bunny only accepts female models. You earn 20% of every call minute ($0.60/min). Click "Become a Model" in the nav to apply — takes 5 minutes!',
+    qr:[{label:'Earn how much?',msg:'How much do models earn?'},{label:'Apply now',msg:'Where is the model application?'}]},
   { match:['earn','earning','payout','money','income'],
-    reply:'Models earn $0.60 per live call minute  That\'s $36 per hour! Payouts weekly via BTC, ETH or bank transfer. No hidden fees.',
-    qr:[{label:' Apply to model',msg:'How do I become a model?'},{label:'📞 How calls work',msg:'How do live calls work?'}]},
+    reply:'Models earn $0.60 per live call minute. That\'s $36 per hour! Payouts weekly via BTC, ETH or bank transfer. No hidden fees.',
+    qr:[{label:'Apply to model',msg:'How do I become a model?'},{label:'How calls work',msg:'How do live calls work?'}]},
   { match:['crypto','bitcoin','btc','eth','usdt','ltc','xrp'],
-    reply:'We accept BTC, ETH, USDT TRC20, Litecoin and XRP via NOWPayments ₿ Fast, private payments. Credit/debit cards via CCBill also accepted!',
-    qr:[{label:'💳 Card payments',msg:'Do you accept credit cards?'},{label:' View plans',msg:'What are the subscription plans?'}]},
+    reply:'We accept BTC, ETH, USDT TRC20, Litecoin and XRP via NOWPayments. Fast, private payments. Credit/debit cards via CCBill also accepted!',
+    qr:[{label:'Card payments',msg:'Do you accept credit cards?'},{label:'View plans',msg:'What are the subscription plans?'}]},
   { match:['card','credit','debit','visa','mastercard','ccbill'],
-    reply:'Yes! Visa, Mastercard and Amex accepted via CCBill — the industry standard for adult platforms 🔒 Your card details are never stored by us.',
-    qr:[{label:'₿ Pay with crypto',msg:'What crypto do you accept?'},{label:' View plans',msg:'What are the subscription plans?'}]},
+    reply:'Yes! Visa, Mastercard and Amex accepted via CCBill — the industry standard for adult platforms. Your card details are never stored by us.',
+    qr:[{label:'Pay with crypto',msg:'What crypto do you accept?'},{label:'View plans',msg:'What are the subscription plans?'}]},
   { match:['private','privacy','secure','track','anonymous','discreet'],
-    reply:'Juice Bunny is 100% private 🔒 Zero tracking, zero ads, zero data selling. 256-bit SSL on all transactions. What you watch stays between you and us.',
-    qr:[{label:' View plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    reply:'Juice Bunny is 100% private. Zero tracking, zero ads, zero data selling. 256-bit SSL on all transactions. What you watch stays between you and us.',
+    qr:[{label:'View plans',msg:'What are the subscription plans?'},{label:'Sign up',msg:'How do I sign up?'}]},
   { match:['sign up','signup','register','create account','join','get started'],
-    reply:'Signing up takes 2 minutes!  Click "Sign Up" at the top, verify your age (18+ only), pick a plan and you\'re in. First 7 days free on paid plans!',
-    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'❓ Age requirement',msg:'What is the age requirement?'}]},
+    reply:'Signing up takes 2 minutes! Click "Sign Up" at the top, verify your age (18+ only), pick a plan and you\'re in. First 7 days free on paid plans!',
+    qr:[{label:'See plans',msg:'What are the subscription plans?'},{label:'Age requirement',msg:'What is the age requirement?'}]},
   { match:['age','18','how old'],
-    reply:'Juice Bunny is strictly 18+ 🔞 Age is verified during signup as required by law for all adult content platforms.',
-    qr:[{label:'🔥 Sign up (18+)',msg:'How do I sign up?'},{label:' View plans',msg:'What are the subscription plans?'}]},
+    reply:'Juice Bunny is strictly 18+. Age is verified during signup as required by law for all adult content platforms.',
+    qr:[{label:'Sign up (18+)',msg:'How do I sign up?'},{label:'View plans',msg:'What are the subscription plans?'}]},
   { match:['cancel','cancellation','unsubscribe','stop subscription'],
-    reply:'Cancel anytime from Account Settings — no questions asked  Access continues until your billing period ends. Want to pause instead? That\'s an option too!',
-    qr:[{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Need help?',msg:'How do I contact support?'}]},
+    reply:'Cancel anytime from Account Settings — no questions asked. Access continues until your billing period ends. Want to pause instead? That\'s an option too!',
+    qr:[{label:'Pause instead',msg:'Can I pause my subscription?'},{label:'Need help?',msg:'How do I contact support?'}]},
   { match:['pause','hold','freeze'],
-    reply:'Yes! Pause your subscription for up to 3 months at no charge ⏸ Go to Account Settings → Subscription → Pause. Your library stays exactly as you left it!',
-    qr:[{label:'❌ Cancel instead',msg:'How do I cancel?'},{label:'📧 Need help?',msg:'How do I contact support?'}]},
+    reply:'Yes! Pause your subscription for up to 3 months at no charge. Go to Account Settings → Subscription → Pause. Your library stays exactly as you left it!',
+    qr:[{label:'Cancel instead',msg:'How do I cancel?'},{label:'Need help?',msg:'How do I contact support?'}]},
   { match:['refund','money back','billing issue','charge','payment issue'],
-    reply:'For billing issues or refunds, email support@juicebunnytv.com 📧 Include your account email and transaction ID. We respond within 24 hours.',
-    qr:[{label:'📧 Email support',msg:'What is the support email?'}]},
+    reply:'For billing issues or refunds, email support@juicebunnytv.com. Include your account email and transaction ID. We respond within 24 hours.',
+    qr:[{label:'Email support',msg:'What is the support email?'}]},
   { match:['contact','support','help','email','reach','talk to human'],
-    reply:'Reach us at support@juicebunnytv.com 📧 We respond within 24 hours. For urgent issues add "URGENT" to the subject line!',
-    qr:[{label:' View plans',msg:'What are the subscription plans?'},{label:'❌ Cancel',msg:'How do I cancel?'}]},
+    reply:'Reach us at support@juicebunnytv.com. We respond within 24 hours. For urgent issues add "URGENT" to the subject line!',
+    qr:[{label:'View plans',msg:'What are the subscription plans?'},{label:'Cancel',msg:'How do I cancel?'}]},
   { match:['free plan','free tier','without paying','no cost'],
-    reply:'Our Free plan gives you SD video streaming, creator profiles and general chat — no card needed  For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
-    qr:[{label:' Paid plans',msg:'What are the paid plans?'},{label:'🔥 Upgrade',msg:'How do I upgrade?'}]},
+    reply:'Our Free plan gives you SD video streaming, creator profiles and general chat — no card needed. For HD/4K, models and live calls you\'ll need Weekly or Monthly.',
+    qr:[{label:'Paid plans',msg:'What are the paid plans?'},{label:'Upgrade',msg:'How do I upgrade?'}]},
   { match:['download','offline'],
-    reply:'Paid subscribers can download any video for offline viewing 📥 Works on all devices. Downloads stay available while your subscription is active.',
-    qr:[{label:' See plans',msg:'What are the subscription plans?'}]},
+    reply:'Paid subscribers can download any video for offline viewing. Works on all devices. Downloads stay available while your subscription is active.',
+    qr:[{label:'See plans',msg:'What are the subscription plans?'}]},
   { match:['device','phone','tv','tablet','laptop','mobile','iphone','android'],
-    reply:'Juice Bunny works on all devices 📱 Smartphones, tablets, laptops, desktops and Smart TVs. No app needed — everything runs in your browser!',
-    qr:[{label:' See plans',msg:'What are the subscription plans?'},{label:'🔥 Sign up',msg:'How do I sign up?'}]},
+    reply:'Juice Bunny works on all devices. Smartphones, tablets, laptops, desktops and Smart TVs. No app needed — everything runs in your browser!',
+    qr:[{label:'See plans',msg:'What are the subscription plans?'},{label:'Sign up',msg:'How do I sign up?'}]},
 ];
 
 const cbotFallbacks = [
-  'Great question!  For specific help with that, email support@juicebunnytv.com and we\'ll get back to you within 24 hours.',
-  'I\'m not sure about that one, but email support@juicebunnytv.com 📧 — our team replies within 24 hours!',
-  'Let me point you to our support team for that — support@juicebunnytv.com  Anything else I can help with?',
+  'Great question! For specific help with that, email support@juicebunnytv.com and we\'ll get back to you within 24 hours.',
+  'I\'m not sure about that one, but email support@juicebunnytv.com — our team replies within 24 hours!',
+  'Let me point you to our support team for that — support@juicebunnytv.com. Anything else I can help with?',
 ];
 
 function getBotResponse(text) {
@@ -3951,18 +3950,18 @@ function getBotResponse(text) {
     if(score > bestScore) { bestScore = score; bestMatch = r; }
   }
   if(bestMatch && bestScore > 0) return bestMatch;
-  return { reply: cbotFallbacks[Math.floor(Math.random()*cbotFallbacks.length)], qr:[{label:' Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}] };
+  return { reply: cbotFallbacks[Math.floor(Math.random()*cbotFallbacks.length)], qr:[{label:'Pricing',msg:'What are the subscription plans?'},{label:'Live Calls',msg:'How do live calls work?'},{label:'Contact',msg:'How do I contact support?'}] };
 }
 
 let cbotOpen=false, cbotTyping=false;
 
 const cbotQuickReplies=[
-  {label:' Pricing',msg:'What are the subscription plans?'},
-  {label:'📞 Live Calls',msg:'How do live calls work?'},
-  {label:'₿ Pay with Crypto',msg:'What crypto payments do you accept?'},
-  {label:' Become a Model',msg:'How do I become a model?'},
-  {label:'❌ Cancel',msg:'How do I cancel my subscription?'},
-  {label:'🔒 Privacy',msg:'Is Juice Bunny private and secure?'},
+  {label:'Pricing',msg:'What are the subscription plans?'},
+  {label:'Live Calls',msg:'How do live calls work?'},
+  {label:'Pay with Crypto',msg:'What crypto payments do you accept?'},
+  {label:'Become a Model',msg:'How do I become a model?'},
+  {label:'Cancel',msg:'How do I cancel my subscription?'},
+  {label:'Privacy',msg:'Is Juice Bunny private and secure?'},
 ];
 
 function toggleChatbot(){
@@ -4036,13 +4035,13 @@ async function sendCbotMsgText(text){
       // Show contextual quick replies
       const lower = text.toLowerCase();
       if(lower.includes('pric')||lower.includes('plan')||lower.includes('cost')){
-        renderCbotQR([{label:'📅 Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'📆 Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'₿ Pay with crypto',msg:'What crypto do you accept?'}]);
+        renderCbotQR([{label:'Weekly $3.99',msg:'Tell me about the weekly plan'},{label:'Monthly $9.99',msg:'Tell me about the monthly plan'},{label:'Pay with crypto',msg:'What crypto do you accept?'}]);
       } else if(lower.includes('call')||lower.includes('model')){
-        renderCbotQR([{label:' How much?',msg:'How much do live calls cost?'},{label:' Become a model',msg:'How do I become a model?'}]);
+        renderCbotQR([{label:'How much?',msg:'How much do live calls cost?'},{label:'Become a model',msg:'How do I become a model?'}]);
       } else if(lower.includes('cancel')||lower.includes('refund')){
-        renderCbotQR([{label:'⏸ Pause instead',msg:'Can I pause my subscription?'},{label:'📧 Contact support',msg:'How do I contact support?'}]);
+        renderCbotQR([{label:'Pause instead',msg:'Can I pause my subscription?'},{label:'Contact support',msg:'How do I contact support?'}]);
       } else {
-        renderCbotQR([{label:' Pricing',msg:'What are the subscription plans?'},{label:'📞 Live Calls',msg:'How do live calls work?'},{label:'📧 Contact',msg:'How do I contact support?'}]);
+        renderCbotQR([{label:'Pricing',msg:'What are the subscription plans?'},{label:'Live Calls',msg:'How do live calls work?'},{label:'Contact',msg:'How do I contact support?'}]);
       }
     } else {
       // Fallback to smart responses if API fails
@@ -4063,13 +4062,55 @@ async function sendCbotMsgText(text){
   document.getElementById('cbotInput').focus();
 }
 
+/* ── HERO VIDEO: alpha-channel WebM transparency fallback ──
+   Chrome/Edge/Firefox/Android render VP9-alpha WebM transparently in
+   <video>. Safari (macOS + iOS) decodes the same file but ignores its
+   alpha channel and paints it opaque — canPlayType() can't tell us
+   this, so we feature-test with a tiny inline transparent WebM and a
+   canvas pixel read. If the pixel comes back opaque, we swap to the
+   static transparent PNG (spun via CSS) instead. */
+(function heroBunnyAlphaFallback(){
+  const heroVid = document.getElementById('heroVid');
+  const heroImg = document.getElementById('heroImgFallback');
+  if (!heroVid || !heroImg) return;
+
+  const ALPHA_TEST_WEBM = 'data:video/webm;base64,GkXfo59ChoEBQveBAULygQRC84EIQoKEd2VibUKHgQJChYECGFOAZwEAAAAAAAJ1EU2bdLpNu4tTq4QVSalmU6yBoU27i1OrhBZUrmtTrIHYTbuMU6uEElTDZ1OsggEiTbuMU6uEHFO7a1OsggJf7AEAAAAAAABZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVSalmsirXsYMPQkBNgI1MYXZmNjAuMTYuMTAwV0GNTGF2ZjYwLjE2LjEwMESJiEBeAAAAAAAAFlSua8WuAQAAAAAAADzXgQFzxYjwMF8a8wpvPJyBACK1nIN1bmSIgQCGhVZfVlA5g4EBI+ODhAJiWgDgjbCBCLqBCJqBAlPAgQESVMNnQIBzc6BjwIBnyJpFo4dFTkNPREVSRIeNTGF2ZjYwLjE2LjEwMHNz2mPAi2PFiPAwXxrzCm88Z8ilRaOHRU5DT0RFUkSHmExhdmM2MC4zMS4xMDIgbGlidnB4LXZwOWfIoUWjiERVUkFUSU9ORIeTMDA6MDA6MDAuMTIwMDAwMDAwAB9DtnVAseeBAKDGoZ+BAAAAgkmDQgAAcAB2ADgkHBiMAAAgIABRO//8iIAAdaGipqDugQGlm4JJg0IAAHAAdgA4JBwYjAAAIAAAEb//92wAAKCxoZOBACgAhgBAkpwAVAAAAyAAAEtAdaGWppTugQGlj4YAQJKcAFQAAAMgAABLQPuB2KCxoZOBAFAAhgBAkpwAUuAAAyAAAEtAdaGWppTugQGlj4YAQJKcAFLgAAMgAABLQPuB2BxTu2uRu4+zgQC3iveBAfGCAajwgQM=';
+
+  function showFallbackImage(){
+    heroVid.pause();
+    heroVid.style.display = 'none';
+    heroImg.style.display = '';
+  }
+
+  function detectAlphaSupport(cb){
+    try{
+      const t = document.createElement('video');
+      t.muted = true; t.playsInline = true; t.src = ALPHA_TEST_WEBM;
+      const finish = (ok) => { cb(ok); };
+      t.addEventListener('loadeddata', () => {
+        try{
+          const c = document.createElement('canvas');
+          c.width = 8; c.height = 8;
+          const ctx = c.getContext('2d');
+          ctx.drawImage(t, 0, 0, 8, 8);
+          const alpha = ctx.getImageData(0, 0, 1, 1).data[3];
+          finish(alpha < 250);
+        }catch(e){ finish(false); }
+      }, { once:true });
+      t.addEventListener('error', () => finish(false), { once:true });
+    }catch(e){ cb(false); }
+  }
+
+  detectAlphaSupport((supported) => { if (!supported) showFallbackImage(); });
+})();
+
 /* ── HERO VIDEO: retry autoplay when the browser blocks it ──
    Safari/iOS block muted autoplay under Low Power Mode or when
    per-site auto-play is set to "Never". Any user gesture unlocks it. */
 (function heroVideoAutoplay(){
   const tryPlay = () => {
     const v = document.getElementById('heroVid');
-    if (!v) return;
+    if (!v || v.style.display === 'none') return;
     v.muted = true;
     const p = v.play();
     if (p && p.catch) p.catch(() => {});

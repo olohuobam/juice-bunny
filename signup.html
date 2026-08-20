@@ -344,7 +344,7 @@ select option{background:var(--bg3);color:var(--text)}
           <div class="field" id="f-fname">
             <label>First Name</label>
             <div class="input-wrap">
-              <span class="input-icon">👤</span>
+              <span class="input-icon"></span>
               <input type="text" id="fname" placeholder="John" oninput="validateName('fname','f-fname')"/>
             </div>
             <div class="field-error">Required</div>
@@ -352,7 +352,7 @@ select option{background:var(--bg3);color:var(--text)}
           <div class="field" id="f-lname">
             <label>Last Name</label>
             <div class="input-wrap">
-              <span class="input-icon">👤</span>
+              <span class="input-icon"></span>
               <input type="text" id="lname" placeholder="Doe" oninput="validateName('lname','f-lname')"/>
             </div>
             <div class="field-error">Required</div>
@@ -362,7 +362,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="field" id="f-email">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon">✉️</span>
+            <span class="input-icon"></span>
             <input type="email" id="email" placeholder="john@example.com" oninput="validateEmail()"/>
           </div>
           <div class="field-error">Enter a valid email</div>
@@ -371,7 +371,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="field" id="f-pass">
           <label>Password</label>
           <div class="input-wrap">
-            <span class="input-icon">🔒</span>
+            <span class="input-icon"></span>
             <input type="password" id="pass" placeholder="Min. 8 characters" oninput="checkStrength()"/>
             <button class="eye-toggle" onclick="togglePass('pass',this)" type="button">👁</button>
           </div>
@@ -388,7 +388,7 @@ select option{background:var(--bg3);color:var(--text)}
         <div class="field" id="f-confirm">
           <label>Confirm Password</label>
           <div class="input-wrap">
-            <span class="input-icon">🔒</span>
+            <span class="input-icon"></span>
             <input type="password" id="confirm" placeholder="Repeat password" oninput="validateConfirm()"/>
             <button class="eye-toggle" onclick="togglePass('confirm',this)" type="button">👁</button>
           </div>
@@ -405,7 +405,7 @@ select option{background:var(--bg3);color:var(--text)}
       <!-- PANEL 2: AGE VERIFY -->
       <div class="form-panel" id="panel2">
         <div class="age-gate-box">
-          <div class="age-gate-icon">🔞</div>
+          <div class="age-gate-icon"></div>
           <div class="age-gate-title">Age Verification Required</div>
           <div class="age-gate-text">Juice Bunny contains adult content intended for mature audiences only. You must confirm you are 18 years of age or older to continue.</div>
         </div>
@@ -508,7 +508,7 @@ select option{background:var(--bg3);color:var(--text)}
     </div>
 
     <div class="auth-footer-text" style="margin-top:20px">
-      🔒 256-bit SSL encrypted · Your data is safe with us
+      256-bit SSL encrypted · Your data is safe with us
     </div>
 
   </div>
@@ -520,7 +520,7 @@ select option{background:var(--bg3);color:var(--text)}
 const SUPABASE_URL  = 'https://ewhhufhnfrhherjmbvqq.supabase.co';
 const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGh1ZmhuZnJoaGVyam1idnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MjA3NjYsImV4cCI6MjA5NzI5Njc2Nn0.F2Jso5b9G2M67kW1Ty5oGGgH9wYqH0rcI1c3iToByhM';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-console.log('✅ Supabase client ready:', sb ? 'connected' : 'FAILED');
+console.log('Supabase client ready:', sb ? 'connected' : 'FAILED');
 
 let selectedPlan = 'basic';
 
@@ -655,7 +655,7 @@ function selectPlan(plan) {
       <div class="perk"><span class="perk-dot"></span><span class="perk-text">New drops every week</span></div>
       <div class="perk"><span class="perk-dot"></span><span class="perk-text">Download for offline viewing</span></div>
       <div class="perk"><span class="perk-dot"></span><span class="perk-text">Cancel anytime, no hidden fees</span></div>`;
-    document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+    document.getElementById('createBtnText').textContent = 'Create My Account';
   }
 }
 
@@ -694,7 +694,7 @@ async function createAccount() {
     if (!password || password.length < 6) {
       showToast('Please enter a password (at least 6 characters)', true);
       btn.disabled = false;
-      document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+      document.getElementById('createBtnText').textContent = 'Create My Account';
       return;
     }
 
@@ -719,7 +719,7 @@ async function createAccount() {
     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
       showToast('An account with this email already exists — please log in instead', true);
       btn.disabled = false;
-      document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+      document.getElementById('createBtnText').textContent = 'Create My Account';
       setTimeout(() => { window.location.href = 'login.html'; }, 1800);
       return;
     }
@@ -772,9 +772,9 @@ async function createAccount() {
       errEl.style.cssText = 'color:#ff4757;font-size:13px;text-align:center;margin-top:12px;padding:10px;background:rgba(255,71,87,.1);border-radius:8px;border:1px solid rgba(255,71,87,.25)';
       btn.parentNode.insertBefore(errEl, btn.nextSibling);
     }
-    errEl.textContent = '⚠ ' + msg;
+    errEl.textContent = msg;
     btn.disabled = false;
-    document.getElementById('createBtnText').textContent = '🔥 Create My Account';
+    document.getElementById('createBtnText').textContent = 'Create My Account';
   }
 }
 

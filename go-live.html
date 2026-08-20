@@ -137,7 +137,7 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
   <a href="index.html"> Home</a>
   <a href="cams.html"> Cams</a>
   <a href="store.html"> Store</a>
-  <a href="profile.html">👤 Profile</a>
+  <a href="profile.html">Profile</a>
 </nav>
 
 <main class="wrap">
@@ -250,15 +250,15 @@ function renderCreator(){
       <label>Who can join</label>
       <div class="opts">
         <div class="opt sel" id="at-public" onclick="setAccess('public',this)">
-          <span class="opt-icon">🌍</span><div class="opt-name">Public</div>
+          <span class="opt-icon"></span><div class="opt-name">Public</div>
           <div class="opt-desc">Any subscriber</div>
         </div>
         <div class="opt" id="at-followers" onclick="setAccess('followers',this)">
-          <span class="opt-icon">💗</span><div class="opt-name">Followers</div>
+          <span class="opt-icon"></span><div class="opt-name">Followers</div>
           <div class="opt-desc">People who follow you</div>
         </div>
         <div class="opt" id="at-invite" onclick="setAccess('invite',this)">
-          <span class="opt-icon">🔐</span><div class="opt-name">Invite only</div>
+          <span class="opt-icon"></span><div class="opt-name">Invite only</div>
           <div class="opt-desc">You pick who joins</div>
         </div>
       </div>
@@ -272,7 +272,7 @@ function renderCreator(){
           <div class="opt-desc">Included in their plan</div>
         </div>
         <div class="opt" id="bm-per_minute" onclick="setBilling('per_minute',this)">
-          <span class="opt-icon">⏱️</span><div class="opt-name">Per minute</div>
+          <span class="opt-icon"></span><div class="opt-name">Per minute</div>
           <div class="opt-desc">Charged by the minute</div>
         </div>
       </div>
@@ -335,7 +335,7 @@ async function loadMyStreams(){
   }
   myStreams=data||[];
   if(!myStreams.length){box.innerHTML='<div class="empty">No streams yet — create one above </div>';return;}
-  const accessLabel={public:'🌍 Public',followers:'💗 Followers',invite:'🔐 Invite only'};
+  const accessLabel={public:'Public',followers:'Followers',invite:'Invite only'};
   box.innerHTML=myStreams.map(s=>{
     const bill = s.billing_mode==='per_minute' ? `$${Number(s.rate_per_min||0).toFixed(2)}/min` : 'Free for subscribers';
     const badge = s.status==='live' ? '<span class="badge b-live">● Live</span>'
@@ -350,9 +350,9 @@ async function loadMyStreams(){
       ${badge}
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         ${s.access_type==='invite'||s.status!=='ended'
-          ? `<button class="row-btn" onclick="openInvite('${s.id}')">👥 Invite</button>`:''}
-        ${s.status==='scheduled'?`<button class="row-btn" onclick="startStream('${s.id}')">▶ Start</button>`:''}
-        ${s.status==='live'?`<button class="row-btn" onclick="reenterStream('${s.id}')">📹 Enter</button> <button class="row-btn" onclick="endStream('${s.id}')">■ End</button>`:''}
+          ? `<button class="row-btn" onclick="openInvite('${s.id}')">Invite</button>`:''}
+        ${s.status==='scheduled'?`<button class="row-btn" onclick="startStream('${s.id}')">Start</button>`:''}
+        ${s.status==='live'?`<button class="row-btn" onclick="reenterStream('${s.id}')">Enter</button> <button class="row-btn" onclick="endStream('${s.id}')">■ End</button>`:''}
         ${s.status!=='live'?`<button class="row-btn" onclick="deleteStream('${s.id}')"></button>`:''}
       </div>
     </div>`;}).join('');

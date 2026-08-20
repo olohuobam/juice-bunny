@@ -378,7 +378,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <nav class="sidebar-nav">
       <div class="nav-section-label">Overview</div>
       <div class="nav-item active" onclick="showPanel('dashboard',this)">
-        <span class="nav-icon">📊</span> Dashboard
+        Dashboard
       </div>
 
       <div class="nav-section-label">Content</div>
@@ -398,7 +398,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="nav-section-label">Members</div>
       <div class="nav-item" onclick="showPanel('users',this)">
-        <span class="nav-icon">👥</span> Subscribers
+        Subscribers
         <span class="nav-badge" id="usr-count-badge">1.2K</span>
       </div>
 
@@ -409,7 +409,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="nav-section-label">Marketing</div>
       <div class="nav-item" onclick="showPanel('broadcast',this)">
-        <span class="nav-icon">📣</span> Broadcast
+        Broadcast
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -434,7 +434,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="topbar-right">
         <span class="status-dot"></span>
         <span class="topbar-time" id="topbar-clock"></span>
-        <a href="index.html" target="_blank" style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text3)'">↗ View Site</a>
+        <a href="index.html" target="_blank" style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text3)'">View Site</a>
       </div>
     </div>
 
@@ -448,7 +448,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-delta up">↑ 18% vs last month</div>
         </div>
         <div class="stat-card" style="--stat-color:#00c878">
-          <div class="stat-icon">👥</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">1,247</div>
           <div class="stat-lbl">Active Subscribers</div>
           <div class="stat-delta up">↑ 94 new this week</div>
@@ -460,7 +460,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-delta up">↑ 3 added this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#ffb300">
-          <div class="stat-icon">🔥</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">8,340</div>
           <div class="stat-lbl">Views Today</div>
           <div class="stat-delta up">↑ 12% vs yesterday</div>
@@ -506,8 +506,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="dash-card-title">Quick Actions</div>
           <div style="display:flex;flex-direction:column;gap:9px">
             <button class="btn-primary" style="justify-content:center" onclick="showPanel('videos',null);setTimeout(()=>document.getElementById('upload-form-wrap').style.display='block',100)">＋ Upload New Video</button>
-            <button class="btn-secondary" onclick="showPanel('broadcast',null)">📣 Send Broadcast</button>
-            <button class="btn-secondary" onclick="showPanel('users',null)">👥 Manage Subscribers</button>
+            <button class="btn-secondary" onclick="showPanel('broadcast',null)">Send Broadcast</button>
+            <button class="btn-secondary" onclick="showPanel('users',null)">Manage Subscribers</button>
             <button class="btn-secondary" onclick="showPanel('revenue',null)"> View Revenue Report</button>
           </div>
         </div>
@@ -561,11 +561,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div class="form-field full">
               <div style="display:flex;gap:12px">
                 <div class="toggle-row" style="flex:1">
-                  <span class="toggle-lbl">🔒 Premium Content</span>
+                  <span class="toggle-lbl">Premium Content</span>
                   <label class="toggle"><input type="checkbox" id="vid-premium" checked/><span class="toggle-slider"></span></label>
                 </div>
                 <div class="toggle-row" style="flex:1">
-                  <span class="toggle-lbl">🌟 Feature on Homepage</span>
+                  <span class="toggle-lbl">Feature on Homepage</span>
                   <label class="toggle"><input type="checkbox" id="vid-featured"/><span class="toggle-slider"></span></label>
                 </div>
               </div>
@@ -584,7 +584,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="table-wrap">
         <div class="table-toolbar">
-          <input class="search-input" placeholder="🔍 Search videos..." oninput="filterVideos(this.value)"/>
+          <input class="search-input" placeholder="Search videos..." oninput="filterVideos(this.value)"/>
           <select class="filter-select" onchange="filterVideosByType(this.value)">
             <option value="all">All Videos</option>
             <option value="premium">Premium</option>
@@ -658,7 +658,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
                    ondragover="event.preventDefault();this.classList.add('drag-over')"
                    ondragleave="this.classList.remove('drag-over')" ondrop="handleProdDrop(event)">
                 <input type="file" id="prod-file-input" accept="image/*" multiple style="display:none" onchange="handleProdFiles(this.files)"/>
-                <div class="upload-icon">📷</div>
+                <div class="upload-icon"></div>
                 <div class="upload-title">Drop photos here or <span>browse</span></div>
                 <div class="upload-sub">First photo is the main image · JPG/PNG</div>
               </div>
@@ -674,7 +674,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="table-wrap">
         <div class="table-toolbar">
-          <input class="search-input" placeholder="🔍 Search products..." oninput="filterProducts(this.value)"/>
+          <input class="search-input" placeholder="Search products..." oninput="filterProducts(this.value)"/>
           <select class="filter-select" onchange="filterProductsByCat(this.value)">
             <option value="all">All Categories</option>
             <option value="supplements">Supplements</option>
@@ -704,7 +704,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="table-wrap">
         <div class="table-toolbar">
-          <input class="search-input" placeholder="🔍 Search order # / name / email..." oninput="filterOrders(this.value)"/>
+          <input class="search-input" placeholder="Search order # / name / email..." oninput="filterOrders(this.value)"/>
           <select class="filter-select" onchange="filterOrdersByStatus(this.value)">
             <option value="all">All statuses</option>
             <option value="pending">Pending</option>
@@ -752,13 +752,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-delta up">↑ 28 this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#00c878">
-          <div class="stat-icon">⭐</div>
+          <div class="stat-icon"></div>
           <div class="stat-val pd-count-basic">580</div>
           <div class="stat-lbl">Basic</div>
           <div class="stat-delta up">↑ 51 this week</div>
         </div>
         <div class="stat-card" style="--stat-color:#606070">
-          <div class="stat-icon">🆓</div>
+          <div class="stat-icon"></div>
           <div class="stat-val pd-count-free">355</div>
           <div class="stat-lbl">Free</div>
           <div class="stat-delta up">↑ 15 this week</div>
@@ -766,7 +766,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="table-wrap">
         <div class="table-toolbar">
-          <input class="search-input" placeholder="🔍 Search by name or email..." oninput="filterUsers(this.value)"/>
+          <input class="search-input" placeholder="Search by name or email..." oninput="filterUsers(this.value)"/>
           <select class="filter-select" onchange="filterUsersByPlan(this.value)">
             <option value="all">All Plans</option>
             <option value="bunnyworld">BunnyWorld</option>
@@ -805,19 +805,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-delta up">↑ 18% vs last month</div>
         </div>
         <div class="stat-card" style="--stat-color:#00c878">
-          <div class="stat-icon">📆</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">$142</div>
           <div class="stat-lbl">Today</div>
           <div class="stat-delta up">↑ 3 transactions</div>
         </div>
         <div class="stat-card" style="--stat-color:#8b00ff">
-          <div class="stat-icon">📈</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">$18.4K</div>
           <div class="stat-lbl">All Time</div>
           <div class="stat-delta up">Since launch</div>
         </div>
         <div class="stat-card" style="--stat-color:#ffb300">
-          <div class="stat-icon">🔄</div>
+          <div class="stat-icon"></div>
           <div class="stat-val">94%</div>
           <div class="stat-lbl">Renewal Rate</div>
           <div class="stat-delta up">↑ 2% vs last month</div>
@@ -843,7 +843,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="table-wrap">
         <div class="table-toolbar">
-          <input class="search-input" placeholder="🔍 Search transactions..." oninput="filterTxns(this.value)"/>
+          <input class="search-input" placeholder="Search transactions..." oninput="filterTxns(this.value)"/>
           <select class="filter-select" onchange="filterTxnsByStatus(this.value)">
             <option value="all">All Status</option>
             <option value="finished">Completed</option>
@@ -876,31 +876,31 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="broadcast-wrap">
         <div>
           <div class="bc-composer">
-            <div class="bc-title">✉️ Compose Message</div>
+            <div class="bc-title">Compose Message</div>
             <div class="bc-type-tabs">
-              <button class="bc-tab active" id="tab-email" onclick="setBcType('email')">📧 Email</button>
+              <button class="bc-tab active" id="tab-email" onclick="setBcType('email')">Email</button>
               <button class="bc-tab" id="tab-sms" onclick="setBcType('sms')"> SMS</button>
             </div>
             <div class="bc-audience">
               <label>Send to</label>
               <div class="audience-options">
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> 🌍 All Members <small class="pd-count-all" style="color:var(--text3);margin-left:auto">1,247</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="all" checked onchange="updateBcStats()"/> All Members <small class="pd-count-all" style="color:var(--text3);margin-left:auto">1,247</small></label>
                 <label class="aud-opt"><input type="radio" name="bc-audience" value="bunnyworld" onchange="updateBcStats()"/>  BunnyWorld <small class="pd-count-bunnyworld" style="color:var(--text3);margin-left:auto">312</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> ⭐ Basic <small class="pd-count-basic" style="color:var(--text3);margin-left:auto">580</small></label>
-                <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> 🆓 Free <small class="pd-count-free" style="color:var(--text3);margin-left:auto">355</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="basic" onchange="updateBcStats()"/> Basic <small class="pd-count-basic" style="color:var(--text3);margin-left:auto">580</small></label>
+                <label class="aud-opt"><input type="radio" name="bc-audience" value="free" onchange="updateBcStats()"/> Free <small class="pd-count-free" style="color:var(--text3);margin-left:auto">355</small></label>
               </div>
             </div>
             <div id="email-fields">
               <div class="form-field" style="margin-bottom:12px">
                 <label>Subject Line</label>
-                <input type="text" id="bc-subject" placeholder="🔥 New content just dropped..." oninput="updatePreview()"/>
+                <input type="text" id="bc-subject" placeholder="New content just dropped..." oninput="updatePreview()"/>
               </div>
             </div>
             <div class="form-field">
               <label id="bc-body-label">Message</label>
               <textarea id="bc-body" rows="5" placeholder="Hey [name], we just uploaded something you'll love..." oninput="updatePreview()"></textarea>
             </div>
-            <button class="btn-broadcast" onclick="sendBroadcast()">🚀 Send Broadcast</button>
+            <button class="btn-broadcast" onclick="sendBroadcast()">Send Broadcast</button>
           </div>
 
           <div class="broadcast-history">
@@ -971,7 +971,7 @@ const recentSignupsData = [
 ];
 
 const bcHistory = [
-  {type:'email',audience:'All Members',subject:'🔥 New Drop: Neon Nights is LIVE',sent:'1,247',date:'Jun 06 2026',openRate:'42%'},
+  {type:'email',audience:'All Members',subject:'New Drop: Neon Nights is LIVE',sent:'1,247',date:'Jun 06 2026',openRate:'42%'},
   {type:'sms',audience:'BunnyWorld',subject:'Exclusive content just for you ',sent:'312',date:'Jun 01 2026',openRate:'91%'},
   {type:'email',audience:'Basic',subject:'Upgrade to BunnyWorld — 50% off today',sent:'580',date:'May 28 2026',openRate:'38%'},
 ];
@@ -1143,7 +1143,7 @@ function buildVideosTable(data) {
           <div class="vid-thumb">${v.thumb}</div>
           <div>
             <div class="vid-title">${v.title}</div>
-            <div class="vid-dur">${v.dur} ${v.featured?'· 🌟 Featured':''}</div>
+            <div class="vid-dur">${v.dur} ${v.featured?'· Featured':''}</div>
           </div>
         </div>
       </td>
@@ -1409,7 +1409,7 @@ function updateBcStats() {
 function sendBroadcast() {
   const body = document.getElementById('bc-body').value.trim();
   if(!body){ showToast('Please write a message first', true); return; }
-  showToast('🚀 Broadcast sent! — wire to SendGrid/Twilio for live sends');
+  showToast('Broadcast sent! — wire to SendGrid/Twilio for live sends');
   const audience = document.querySelector('input[name="bc-audience"]:checked').value;
   const counts = {all:1247,bunnyworld:312,basic:580,free:355};
   bcHistory.unshift({
@@ -1434,7 +1434,7 @@ function buildBcHistory() {
         <span style="font-size:10px;color:var(--text3)">${b.date}</span>
       </div>
       <div style="display:flex;gap:10px;font-size:11px;color:var(--text3)">
-        <span>${b.type==='email'?'📧':''} ${b.type}</span>
+        <span>${b.type}</span>
         <span>· ${b.audience}</span>
         <span>· ${b.sent} sent</span>
         ${b.openRate!=='—'?`<span style="color:var(--success)">· ${b.openRate} open rate</span>`:''}
@@ -1644,7 +1644,7 @@ function renderProductsTable() {
       <td>$${Number(onSale?p.sale_price:p.price_usd).toFixed(2)}${onSale?` <s style="color:var(--text3);font-size:11px">$${Number(p.price_usd).toFixed(2)}</s>`:''}</td>
       <td style="color:${stockColor};font-weight:600">${stock}</td>
       <td>
-        <button class="row-btn" onclick="editProduct('${p.id}')">✏️ Edit</button>
+        <button class="row-btn" onclick="editProduct('${p.id}')">Edit</button>
         <button class="row-btn" onclick="deleteProduct('${p.id}','${escapeHtml((p.name||'').replace(/'/g,""))}')">️</button>
       </td>
     </tr>`;

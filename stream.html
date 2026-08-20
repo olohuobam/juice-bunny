@@ -152,10 +152,10 @@ async function init(){
     const {data:allowed,error:accErr}=await sb.rpc('can_join_stream',{p_stream_id:id});
     if(accErr){ return screen('<span class="big"></span><h2>Access check failed</h2><p>Please try again.</p><a class="btn" href="cams.html">Back</a>'); }
     if(!allowed){
-      const msg = stream.access_type==='invite' ? '🔐 This stream is invite only.'
-        : stream.access_type==='followers' ? '💗 Follow this creator to join.'
-        : ' A subscription is needed to watch.';
-      return screen(`<span class="big">🔒</span><h2>Can't join</h2><p>${msg}</p><a class="btn" href="cams.html">Browse Cams</a>`);
+      const msg = stream.access_type==='invite' ? 'This stream is invite only.'
+        : stream.access_type==='followers' ? 'Follow this creator to join.'
+        : 'A subscription is needed to watch.';
+      return screen(`<span class="big"></span><h2>Can't join</h2><p>${msg}</p><a class="btn" href="cams.html">Browse Cams</a>`);
     }
   }
 
@@ -174,7 +174,7 @@ function renderRoom(){
           <div class="c">${esc(cname)}${stream.billing_mode==='per_minute'?` · $${Number(stream.rate_per_min||0).toFixed(2)}/min`:''}</div>
         </div>
         <div class="video-placeholder" id="vidPlaceholder">
-          <span class="big">${isBroadcaster?'📹':''}</span>
+          <span class="big"></span>
           ${isBroadcaster?'Starting your camera…':'Waiting for creator&#39;s video…'}
         </div>
         <div id="remotePlayer"></div>
@@ -218,7 +218,7 @@ async function getToken(role){
 async function connectAgora(){
   if(typeof AgoraRTC==='undefined'){
     const ph=document.getElementById('vidPlaceholder');
-    if(ph) ph.innerHTML='<span class="big">⚠️</span>Video SDK did not load.<br/><span style="font-size:12px;color:var(--text3)">Check connection or disable ad-blockers, then reload.</span>';
+    if(ph) ph.innerHTML='<span class="big"></span>Video SDK did not load.<br/><span style="font-size:12px;color:var(--text3)">Check connection or disable ad-blockers, then reload.</span>';
     return;
   }
   try{
@@ -273,9 +273,9 @@ async function connectAgora(){
   }catch(err){
     console.error('Agora connect failed', err);
     const ph=document.getElementById('vidPlaceholder');
-    if(ph) ph.innerHTML = '<span class="big">⚠️</span>Could not start video.<br/><span style="font-size:12px;color:var(--text3)">'+esc(err.message||'')+'</span>';
+    if(ph) ph.innerHTML = '<span class="big"></span>Could not start video.<br/><span style="font-size:12px;color:var(--text3)">'+esc(err.message||'')+'</span>';
     if(err.message && /Permission|NotAllowed|device/i.test(err.message)){
-      if(ph) ph.innerHTML = '<span class="big">📷</span>Camera/mic blocked.<br/><span style="font-size:12px;color:var(--text3)">Allow camera & microphone access, then reload.</span>';
+      if(ph) ph.innerHTML = '<span class="big"></span>Camera/mic blocked.<br/><span style="font-size:12px;color:var(--text3)">Allow camera & microphone access, then reload.</span>';
     }
   }
 }

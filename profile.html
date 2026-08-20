@@ -319,7 +319,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
   </div>
   <div class="nav-actions">
     <button class="btn-nav btn-nav-ghost" onclick="window.location.href='index.html'">← Home</button>
-    <button class="btn-nav btn-nav-pink" id="nav-edit-btn" onclick="toggleEditPanel()" style="display:none">✏️ Edit Profile</button>
+    <button class="btn-nav btn-nav-pink" id="nav-edit-btn" onclick="toggleEditPanel()" style="display:none">Edit Profile</button>
   </div>
 </nav>
 
@@ -328,7 +328,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
   <div class="cover-pattern"></div>
   <div class="cover-overlay"></div>
   <button class="cover-edit-btn" id="cover-edit-btn" style="display:none" onclick="document.getElementById('cover-input').click()">
-    📷 Change Cover
+    Change Cover
   </button>
   <input type="file" id="cover-input" accept="image/*" style="display:none" onchange="handleCoverUpload(this)"/>
 </div>
@@ -339,7 +339,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
     <div class="avatar-wrap" id="avatar-wrap" onclick="handleAvatarClick()">
       <span id="avatar-initials">JD</span>
       <div class="avatar-edit-hint" id="avatar-edit-hint" style="display:none">
-        <span>📷</span><span>Change</span>
+        <span>Change</span>
       </div>
       <div class="avatar-badge online" id="avatar-badge">🟢</div>
     </div>
@@ -351,7 +351,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
       <div class="profile-name" id="profile-name">
         Loading...
         <span class="verified-badge" id="verified-badge" style="display:none"> Verified</span>
-        <span class="creator-tag" id="creator-tag" style="display:none">🌟 creator</span>
+        <span class="creator-tag" id="creator-tag" style="display:none">creator</span>
       </div>
       <div class="profile-handle" id="profile-handle">@username</div>
       <div class="profile-bio" id="profile-bio">Loading profile...</div>
@@ -370,7 +370,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
 <!-- EDIT PANEL -->
 <div class="edit-panel" id="edit-panel">
   <div class="edit-card">
-    <div class="edit-title">✏️ Edit Your Profile</div>
+    <div class="edit-title">Edit Your Profile</div>
     <div class="edit-grid">
       <div class="edit-field">
         <label>Display Name</label>
@@ -462,7 +462,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
 
     <!-- Empty state -->
     <div id="posts-empty" style="display:none;text-align:center;padding:60px 20px">
-      <div style="font-size:48px;margin-bottom:16px">📭</div>
+      <div style="font-size:48px;margin-bottom:16px"></div>
       <div style="font-size:16px;font-weight:600;margin-bottom:8px">No posts yet</div>
       <div style="font-size:14px;color:var(--text3)">Posts will appear here</div>
     </div>
@@ -500,7 +500,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
     <div style="font-size:13px;color:var(--text2);margin-bottom:16px;text-align:center">
       Selected: <strong style="color:#fff" id="selected-mins-display">5 minutes</strong> — <strong style="color:var(--gold)" id="selected-price-display">$15.00</strong>
     </div>
-    <button class="btn-start-call" onclick="startCall()">⚡ Start Call Now</button>
+    <button class="btn-start-call" onclick="startCall()">Start Call Now</button>
     <div class="call-note">Requires active subscription. You'll be taken to a secure payment page.<br/>Unused minutes are not refunded.</div>
   </div>
 </div>
@@ -711,7 +711,7 @@ function renderActions(p) {
     `;
   } else {
     actionsEl.innerHTML = `
-      <button class="btn-follow" onclick="window.location.href='index.html'">🔥 Join to Follow</button>
+      <button class="btn-follow" onclick="window.location.href='index.html'">Join to Follow</button>
     `;
   }
 }
@@ -770,7 +770,7 @@ function renderPosts() {
           ${post.liked?'♥':'♡'} <span id="likes-${post.id}">${post.likes}</span>
         </button>
         <button class="fp-act" onclick="commentPost(${post.id})"> ${post.comments}</button>
-        <button class="fp-act" onclick="sharePost(${post.id})">↗ Share</button>
+        <button class="fp-act" onclick="sharePost(${post.id})">Share</button>
         ${isOwnProfile ? `<button class="fp-act" onclick="deletePost(${post.id})" style="color:var(--error)"></button>` : ''}
       </div>
     </div>
@@ -784,11 +784,11 @@ function likePost(id, btn) {
   post.likes += post.liked ? 1 : -1;
   btn.classList.toggle('liked', post.liked);
   btn.innerHTML = `${post.liked?'♥':'♡'} <span id="likes-${id}">${post.likes}</span>`;
-  if(post.liked) showToast('❤️ Liked!');
+  if(post.liked) showToast('Liked!');
 }
 
 function commentPost(id) { showToast(' Comments coming soon!') }
-function sharePost(id) { navigator.clipboard?.writeText(window.location.href); showToast('🔗 Link copied!') }
+function sharePost(id) { navigator.clipboard?.writeText(window.location.href); showToast('Link copied!') }
 function deletePost(id) {
   posts = posts.filter(p => p.id !== id);
   document.getElementById('post-'+id)?.remove();
@@ -847,7 +847,7 @@ function publishPost() {
 function buildAboutTab(p) {
   const items = [
     { label:'Member Since', val: new Date(p.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'}), class:'' },
-    { label:'Account Type', val: iscreator ? '🌟 creator' : '👤 Subscriber', class: iscreator ? 'pink' : '' },
+    { label:'Account Type', val: iscreator ? 'creator' : 'Subscriber', class: iscreator ? 'pink' : '' },
     { label:'Subscription', val: p.plan ? p.plan.charAt(0).toUpperCase()+p.plan.slice(1) : 'Free', class: p.plan && p.plan!=='free' ? 'green' : '' },
     { label:'Location', val: p.location || '—', class:'' },
     { label:'Posts', val: formatNum(p.posts_count || 0), class:'' },
@@ -855,7 +855,7 @@ function buildAboutTab(p) {
   ];
   if(iscreator) {
     items.push({ label:'Live Call Rate', val:'$3.00 / minute', class:'pink' });
-    items.push({ label:'Availability', val: p.is_online ? '🟢 Online Now' : '⚫ Offline', class: p.is_online ? 'green' : '' });
+    items.push({ label:'Availability', val: p.is_online ? 'Online Now' : 'Offline', class: p.is_online ? 'green' : '' });
   }
   document.getElementById('about-grid').innerHTML = items.map(i => `
     <div class="about-card">
@@ -922,7 +922,7 @@ function selectMins(el, mins) {
 function startCall() {
   const total = (selectedCallMins * CALL_RATE).toFixed(2);
   closeCallModal();
-  showToast(`⚡ Starting ${selectedCallMins}-minute call — $${total} — Live calls coming with Daily.co integration!`);
+  showToast(`Starting ${selectedCallMins}-minute call — $${total} — Live calls coming with Daily.co integration!`);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -958,7 +958,7 @@ async function saveProfile() {
   // Save to Supabase if logged in
   if(sb && currentUser) {
     const { error } = await sb.from('profiles').update({ full_name:name, username, bio, location, website }).eq('id', currentUser.id);
-    if(error) { showToast('⚠ Could not save: ' + error.message, true); return; }
+    if(error) { showToast('Could not save: ' + error.message, true); return; }
   }
 
   toggleEditPanel();

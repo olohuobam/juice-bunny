@@ -123,7 +123,7 @@ font-size:13.5px;font-weight:500;z-index:600;opacity:0;transition:.3s;max-width:
   <a href="cams.html"> Cams</a>
   <a href="store.html"> Store</a>
   <a href="chat.html"> Chat</a>
-  <a href="go-live.html" id="mmGoLive" style="display:none">📹 Go Live</a>
+  <a href="go-live.html" id="mmGoLive" style="display:none">Go Live</a>
 </nav>
 
 <header class="hero">
@@ -219,7 +219,7 @@ function render(){
       New streams appear here as soon as creators go live.</div>`;
     return;
   }
-  const accessIcon={public:'',followers:'💗 Followers',invite:'🔐 Invite only'};
+  const accessIcon={public:'',followers:'Followers',invite:'Invite only'};
   grid.innerHTML=list.map(s=>{
     const p=s.profiles||{};
     const name=p.full_name||(p.email||'Creator').split('@')[0];
@@ -263,8 +263,8 @@ async function joinStream(id){
   if(error){showToast('Could not verify access');return;}
 
   if(!allowed){
-    if(s.access_type==='invite'){showToast('🔐 This stream is invite only');return;}
-    if(s.access_type==='followers'){showToast('💗 Follow this creator to join');return;}
+    if(s.access_type==='invite'){showToast('This stream is invite only');return;}
+    if(s.access_type==='followers'){showToast('Follow this creator to join');return;}
     showToast(' A subscription is needed to join — upgrade to watch');
     setTimeout(()=>window.location.href='index.html#pricing',1400);
     return;

@@ -365,7 +365,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
     <div class="sidebar-head">
       <div class="sidebar-title">Messages</div>
       <div class="search-box">
-        <span class="search-icon">🔍</span>
+        <span class="search-icon"></span>
         <input class="search-input" id="conv-search" placeholder="Search conversations..." oninput="filterConvs(this.value)"/>
       </div>
     </div>
@@ -408,12 +408,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
       <!-- Call rate bar (creator chats only) -->
       <div class="call-rate-bar" id="call-rate-bar" style="display:none">
         <div class="crb-left">
-          <span>📞</span>
           <span id="crb-name">creator</span> is available for a live call
         </div>
         <div style="display:flex;align-items:center;gap:12px">
           <span class="crb-rate">$3/min</span>
-          <button class="btn-start-call-bar" onclick="startCallFromChat()">⚡ Start Call</button>
+          <button class="btn-start-call-bar" onclick="startCallFromChat()">Start Call</button>
         </div>
       </div>
 
@@ -630,8 +629,8 @@ function openConv(id) {
   // Actions
   const actionsEl = document.getElementById('ch-actions');
   actionsEl.innerHTML = `
-    <button class="chat-act-btn" onclick="viewProfile()">👤 Profile</button>
-    ${currentConvData.type==='creator' ? `<button class="chat-act-btn call" onclick="startCallFromChat()">⚡ $3/min Call</button>` : ''}
+    <button class="chat-act-btn" onclick="viewProfile()">Profile</button>
+    ${currentConvData.type==='creator' ? `<button class="chat-act-btn call" onclick="startCallFromChat()">$3/min Call</button>` : ''}
   `;
 
   // Call rate bar for creator chats
@@ -645,7 +644,7 @@ function openConv(id) {
 
   // Input hint
   document.getElementById('input-hint').textContent =
-    currentConvData.type === 'creator' ? '💡 Subscribers can chat with creators' : '';
+    currentConvData.type === 'creator' ? 'Subscribers can chat with creators' : '';
 
   // Render messages
   renderMessages(currentConvData.messages);
@@ -869,7 +868,7 @@ function startNewConv(userId) {
 //  CALL
 // ═══════════════════════════════════════════════════════
 function startCallFromChat() {
-  showToast('⚡ Live calls launching with Daily.co integration — coming soon!');
+  showToast('Live calls launching with Daily.co integration — coming soon!');
 }
 
 // ═══════════════════════════════════════════════════════
