@@ -142,12 +142,13 @@ a{text-decoration:none;color:inherit}
 .hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s .3s both}
 .bunny-wrap{width:480px;height:520px;display:flex;align-items:center;justify-content:center;position:relative}
 .bunny-wrap::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, rgba(13,13,18,0.6) 55%, rgba(13,13,18,0.92) 72%, #0d0d12 88%)}
-.bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.2),transparent 65%)}
+.bunny-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,45,120,.09),transparent 60%)}
 .bunny-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,45,120,.2);animation:ringPulse 3s ease-in-out infinite}
 .bunny-ring:nth-child(2){inset:20px;border-color:rgba(255,45,120,.12);animation-delay:.5s}
 .bunny-ring:nth-child(3){inset:50px;border-color:rgba(255,45,120,.08);animation-delay:1s}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:1}}
-.bunny-img{width:480px;height:520px;object-fit:cover;position:relative;z-index:1;background:transparent}
+.bunny-img{width:480px;height:520px;object-fit:cover;position:relative;z-index:1;background:transparent;
+  filter:contrast(1.35) brightness(1.08) saturate(1.1)}
 .bunny-wrap{background:transparent !important;perspective:900px}
 .bunny-img-fallback{animation:heroSpinY 4s linear infinite;backface-visibility:visible}
 @keyframes heroSpinY{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
