@@ -427,9 +427,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
               oninput="autoResize(this);updateSendBtn()"
               onkeydown="handleMsgKey(event)"></textarea>
             <div style="display:flex;gap:6px;flex-shrink:0">
-              <button class="tool-btn" title="Attach image" onclick="document.getElementById('msg-img-input').click()">🖼️</button>
+              <button class="tool-btn" title="Attach image" onclick="document.getElementById('msg-img-input').click()">️</button>
               <input type="file" id="msg-img-input" accept="image/*" style="display:none" onchange="handleMsgImage(this)"/>
-              <button class="tool-btn" title="Emoji" onclick="showToast('Emoji picker coming soon!')">😊</button>
+              <button class="tool-btn" title="Emoji" onclick="showToast('Emoji picker coming soon!')"></button>
             </div>
           </div>
           <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>➤</button>
@@ -473,21 +473,21 @@ const demoConversations = [
   {
     id:'conv-1', type:'creator', isOnline:true, unread:3,
     user:{ name:'Scarlett Rose', handle:'scarlett', initials:'SR', color:'linear-gradient(135deg,#6a0a3a,#2a0a18)' },
-    lastMsg:'Hey babe 😘 just posted something special for you...', lastTime:'2m ago',
+    lastMsg:'Hey babe just posted something special for you...', lastTime:'2m ago',
     messages:[
-      { id:1, from:'them', text:'Hey! Just wanted to say I loved your last message 😘', time:'10:02 AM', read:true },
-      { id:2, from:'them', text:'I just posted something special for subscribers only... check it out 💋', time:'10:03 AM', read:true },
-      { id:3, from:'them', text:'Also I\'m free for a live call tonight if you\'re interested 🔥', time:'10:05 AM', read:false },
+      { id:1, from:'them', text:'Hey! Just wanted to say I loved your last message', time:'10:02 AM', read:true },
+      { id:2, from:'them', text:'I just posted something special for subscribers only... check it out', time:'10:03 AM', read:true },
+      { id:3, from:'them', text:'Also I\'m free for a live call tonight if you\'re interested', time:'10:05 AM', read:false },
     ]
   },
   {
     id:'conv-2', type:'creator', isOnline:true, unread:0,
     user:{ name:'Luna Starr', handle:'luna', initials:'LS', color:'linear-gradient(135deg,#0a0a3a,#1a0a4a)' },
-    lastMsg:'I\'ll be live at 9PM EST tonight! 🌙', lastTime:'1h ago',
+    lastMsg:'I\'ll be live at 9PM EST tonight!', lastTime:'1h ago',
     messages:[
-      { id:1, from:'them', text:'Hi there! I noticed you\'ve been watching my content 💫', time:'Yesterday', read:true },
-      { id:2, from:'me', text:'Yes! Your last post was incredible 🔥', time:'Yesterday', read:true },
-      { id:3, from:'them', text:'Thank you so much 🥺 I\'ll be live at 9PM EST tonight!', time:'1h ago', read:true },
+      { id:1, from:'them', text:'Hi there! I noticed you\'ve been watching my content', time:'Yesterday', read:true },
+      { id:2, from:'me', text:'Yes! Your last post was incredible', time:'Yesterday', read:true },
+      { id:3, from:'them', text:'Thank you so much I\'ll be live at 9PM EST tonight!', time:'1h ago', read:true },
     ]
   },
   {
@@ -495,9 +495,9 @@ const demoConversations = [
     user:{ name:'Jake R.', handle:'jaker', initials:'JR', color:'linear-gradient(135deg,#0a1a2a,#0a0a1a)' },
     lastMsg:'Have you seen Scarlett\'s new post?', lastTime:'3h ago',
     messages:[
-      { id:1, from:'them', text:'Yo what\'s up! New member here 🙌', time:'Yesterday', read:true },
-      { id:2, from:'me', text:'Hey welcome! This platform is 🔥', time:'Yesterday', read:true },
-      { id:3, from:'them', text:'Have you seen Scarlett\'s new post? Absolutely wild 😅', time:'3h ago', read:false },
+      { id:1, from:'them', text:'Yo what\'s up! New member here', time:'Yesterday', read:true },
+      { id:2, from:'me', text:'Hey welcome! This platform is', time:'Yesterday', read:true },
+      { id:3, from:'them', text:'Have you seen Scarlett\'s new post? Absolutely wild', time:'3h ago', read:false },
     ]
   },
   {
@@ -512,11 +512,11 @@ const demoConversations = [
   {
     id:'conv-5', type:'creator', isOnline:false, unread:0,
     user:{ name:'Jade Storm', handle:'jade', initials:'JS', color:'linear-gradient(135deg,#0a2a1a,#0a1a0a)' },
-    lastMsg:'Thanks for the call last night! 💚', lastTime:'1d ago',
+    lastMsg:'Thanks for the call last night!', lastTime:'1d ago',
     messages:[
-      { id:1, from:'them', text:'That was such a fun call last night 💚', time:'1d ago', read:true },
-      { id:2, from:'me', text:'It really was! Can\'t wait for the next one 🔥', time:'1d ago', read:true },
-      { id:3, from:'them', text:'Thanks for the call last night! Come back soon 😊', time:'1d ago', read:true },
+      { id:1, from:'them', text:'That was such a fun call last night', time:'1d ago', read:true },
+      { id:2, from:'me', text:'It really was! Can\'t wait for the next one', time:'1d ago', read:true },
+      { id:3, from:'them', text:'Thanks for the call last night! Come back soon', time:'1d ago', read:true },
     ]
   },
 ];
@@ -746,11 +746,11 @@ function simulateTyping() {
   scrollToBottom();
 
   const replies = [
-    'That\'s so sweet 😘',
-    'I love hearing that! 💋',
-    'You should book a call sometime 🔥',
-    'Check out my latest post! ✨',
-    'You\'re my favorite fan 🥺',
+    'That\'s so sweet',
+    'I love hearing that!',
+    'You should book a call sometime',
+    'Check out my latest post!',
+    'You\'re my favorite fan',
   ];
 
   setTimeout(() => {
@@ -792,11 +792,11 @@ function handleMsgImage(input) {
     const time = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
     const msg = { id: Date.now(), from:'me', image: e.target.result, text:'', time, read:false };
     currentConvData.messages.push(msg);
-    currentConvData.lastMsg = '📷 Image';
+    currentConvData.lastMsg = 'Image';
     currentConvData.lastTime = 'Just now';
     renderMessages(currentConvData.messages);
     renderConvList(allConversations);
-    showToast('📷 Image sent!');
+    showToast('Image sent!');
   };
   reader.readAsDataURL(input.files[0]);
 }

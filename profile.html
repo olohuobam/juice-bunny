@@ -341,7 +341,7 @@ textarea.edit-input{resize:vertical;min-height:80px}
       <div class="avatar-edit-hint" id="avatar-edit-hint" style="display:none">
         <span>Change</span>
       </div>
-      <div class="avatar-badge online" id="avatar-badge">🟢</div>
+      <div class="avatar-badge online" id="avatar-badge"></div>
     </div>
     <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)"/>
   </div>
@@ -428,10 +428,10 @@ textarea.edit-input{resize:vertical;min-height:80px}
           <div class="composer-media-preview" id="composer-previews"></div>
           <div class="composer-actions">
             <div class="composer-tools">
-              <button class="composer-tool" title="Add photo" onclick="document.getElementById('post-media-input').click()">🖼️</button>
+              <button class="composer-tool" title="Add photo" onclick="document.getElementById('post-media-input').click()">️</button>
               <input type="file" id="post-media-input" accept="image/*,video/*" multiple style="display:none" onchange="handlePostMedia(this)"/>
               <button class="composer-tool" title="Lock for subscribers">🔒</button>
-              <button class="composer-tool" title="Add location">📍</button>
+              <button class="composer-tool" title="Add location"></button>
             </div>
             <button class="btn-post" onclick="publishPost()">Post</button>
           </div>
@@ -601,7 +601,7 @@ function getDemoProfile() {
     email: 'demo@juicebunny.com',
     role: 'creator',
     plan: 'creator',
-    bio: 'Your favorite Juice Bunny creator  Live calls available daily. DM me anytime 💋',
+    bio: 'Your favorite Juice Bunny creator  Live calls available daily. DM me anytime',
     avatar_url: null,
     cover_url: null,
     username: 'scarlett',
@@ -722,10 +722,10 @@ function renderActions(p) {
 function loadPosts(p) {
   // Demo posts
   const demoPosts = iscreator ? [
-    { id:1, text:'New content just dropped 🔥 Check it out!', media:'🌹', locked:false, likes:284, comments:32, time:'2h ago' },
-    { id:2, text:'Tonight at 9PM EST I\'m going live 💋 Book your slot now before they fill up!', media:null, locked:false, likes:156, comments:18, time:'5h ago' },
-    { id:3, text:'Exclusive photo set 📸', media:'💋', locked:true, likes:430, comments:67, time:'1d ago' },
-    { id:4, text:'Good morning beautiful people ☀️', media:'🌸', locked:false, likes:98, comments:11, time:'2d ago' },
+    { id:1, text:'New content just dropped Check it out!', media:'', locked:false, likes:284, comments:32, time:'2h ago' },
+    { id:2, text:'Tonight at 9PM EST I\'m going live Book your slot now before they fill up!', media:null, locked:false, likes:156, comments:18, time:'5h ago' },
+    { id:3, text:'Exclusive photo set', media:'', locked:true, likes:430, comments:67, time:'1d ago' },
+    { id:4, text:'Good morning beautiful people️', media:'', locked:false, likes:98, comments:11, time:'2d ago' },
   ] : [
     { id:1, text:'Just joined Juice Bunny!  This place is amazing', media:null, locked:false, likes:12, comments:3, time:'1d ago' },
   ];
@@ -826,7 +826,7 @@ function publishPost() {
   const newPost = {
     id: Date.now(),
     text,
-    media: composerMediaFiles.length ? '🖼️' : null,
+    media: composerMediaFiles.length ? '️' : null,
     locked: false,
     likes: 0,
     comments: 0,
@@ -869,7 +869,7 @@ function buildAboutTab(p) {
 //  MEDIA GRID
 // ═══════════════════════════════════════════════════════
 function buildMediaGrid() {
-  const emojis = ['🌹','💋','✨','🌸','🔥','💄','👠','🌙','💎','','⚡','🌺'];
+  const emojis = ['','','','','','','','','','','',''];
   document.getElementById('media-grid').innerHTML = emojis.map((e,i) => `
     <div class="post-thumb ${i>5&&!isOwnProfile?'locked':''}" style="background:linear-gradient(135deg,#1a0a18,#2d0a22)">
       <span>${e}</span>

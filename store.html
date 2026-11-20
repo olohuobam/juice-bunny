@@ -237,18 +237,18 @@ let sb = null;
 /* Catalog fallback — the launch line-up. Replaced automatically
    by the Supabase `products` table once it has rows. */
 const FALLBACK_PRODUCTS = [
-  {id:'p1', name:'Bunny Boost — Performance Supplement', category:'supplements', price_usd:29.99, emoji:'⚡', description:'Daily energy & stamina blend. 60 capsules.', in_stock:true},
-  {id:'p2', name:'Juice Greens — Superfood Powder', category:'supplements', price_usd:34.99, emoji:'🥬', description:'30 servings of greens, adaptogens & gut support.', in_stock:true},
-  {id:'p3', name:'Midnight Recovery — Sleep & Muscle', category:'supplements', price_usd:24.99, emoji:'🌙', description:'Magnesium + zinc night-time recovery formula.', in_stock:true},
-  {id:'p4', name:'JB Resistance Bands — 5-Level Set', category:'gym', price_usd:19.99, emoji:'💪', description:'Five resistance levels with carry pouch.', in_stock:true},
-  {id:'p5', name:'Bunny Grip — Lifting Straps', category:'gym', price_usd:14.99, emoji:'🏋️', description:'Padded wrist straps for heavy pulls.', in_stock:true},
-  {id:'p6', name:'JB Shaker — Insulated 700ml', category:'gym', price_usd:16.99, emoji:'🥤', description:'Leak-proof, keeps drinks cold for 12h.', in_stock:true},
-  {id:'p7', name:'Glow Ritual — Massage Oil', category:'wellness', price_usd:22.99, emoji:'✨', description:'Warming botanical massage oil, 120ml.', in_stock:true},
-  {id:'p8', name:'Deep Calm — Aromatherapy Candle', category:'wellness', price_usd:18.99, emoji:'🕯️', description:'Sandalwood & vanilla, 40h burn.', in_stock:true},
-  {id:'p9', name:'Bunny Kiss — Couples Set', category:'intimacy', price_usd:49.99, emoji:'💋', description:'Curated couples kit. Ships discreet.', in_stock:true},
-  {id:'p10', name:'Silk Touch — Personal Lubricant', category:'intimacy', price_usd:15.99, emoji:'💧', description:'Water-based, body-safe, 250ml.', in_stock:true},
-  {id:'p11', name:'After Dark — Enhancement Supplement', category:'intimacy', price_usd:39.99, emoji:'🔥', description:'Herbal enhancement blend for him & her.', in_stock:true},
-  {id:'p12', name:'Velvet Blindfold — Satin', category:'intimacy', price_usd:12.99, emoji:'🎀', description:'Soft satin with adjustable strap.', in_stock:true},
+  {id:'p1', name:'Bunny Boost — Performance Supplement', category:'supplements', price_usd:29.99, emoji:'', description:'Daily energy & stamina blend. 60 capsules.', in_stock:true},
+  {id:'p2', name:'Juice Greens — Superfood Powder', category:'supplements', price_usd:34.99, emoji:'', description:'30 servings of greens, adaptogens & gut support.', in_stock:true},
+  {id:'p3', name:'Midnight Recovery — Sleep & Muscle', category:'supplements', price_usd:24.99, emoji:'', description:'Magnesium + zinc night-time recovery formula.', in_stock:true},
+  {id:'p4', name:'JB Resistance Bands — 5-Level Set', category:'gym', price_usd:19.99, emoji:'', description:'Five resistance levels with carry pouch.', in_stock:true},
+  {id:'p5', name:'Bunny Grip — Lifting Straps', category:'gym', price_usd:14.99, emoji:'️', description:'Padded wrist straps for heavy pulls.', in_stock:true},
+  {id:'p6', name:'JB Shaker — Insulated 700ml', category:'gym', price_usd:16.99, emoji:'', description:'Leak-proof, keeps drinks cold for 12h.', in_stock:true},
+  {id:'p7', name:'Glow Ritual — Massage Oil', category:'wellness', price_usd:22.99, emoji:'', description:'Warming botanical massage oil, 120ml.', in_stock:true},
+  {id:'p8', name:'Deep Calm — Aromatherapy Candle', category:'wellness', price_usd:18.99, emoji:'️', description:'Sandalwood & vanilla, 40h burn.', in_stock:true},
+  {id:'p9', name:'Bunny Kiss — Couples Set', category:'intimacy', price_usd:49.99, emoji:'', description:'Curated couples kit. Ships discreet.', in_stock:true},
+  {id:'p10', name:'Silk Touch — Personal Lubricant', category:'intimacy', price_usd:15.99, emoji:'', description:'Water-based, body-safe, 250ml.', in_stock:true},
+  {id:'p11', name:'After Dark — Enhancement Supplement', category:'intimacy', price_usd:39.99, emoji:'', description:'Herbal enhancement blend for him & her.', in_stock:true},
+  {id:'p12', name:'Velvet Blindfold — Satin', category:'intimacy', price_usd:12.99, emoji:'', description:'Soft satin with adjustable strap.', in_stock:true},
 ];
 
 let products = [...FALLBACK_PRODUCTS];
