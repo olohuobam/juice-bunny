@@ -3169,10 +3169,35 @@ function unsubGoHome(){
    ============================================================ */
 
 // ── CONFIG ──────────────────────────────────────────────────
-const NP_API_KEY  = 'RQ4GT49-JR048PS-JBHHXF4-CZ4TDC9';
-const NP_IPN_KEY  = 'i+cuF4QZstNRJMiLoWnHz/F0xvaeL+px';
+// NOWPayments keys live server-side only (Vercel env vars) — never in the browser.
 const SITE_URL    = 'https://juice-bunny.vercel.app';
 const NP_BASE     = 'https://api.nowpayments.io/v1';
+
+// ── Secure subscription helpers (activation is server-verified) ──
+function getSessionUser() {
+  return new Promise((resolve) => {
+    try {
+      loadSupabase(async (sb) => {
+        const { data: { session } } = await sb.auth.getSession();
+        resolve(session ? session.user : null);
+      });
+    } catch (e) { resolve(null); }
+  });
+}
+// Poll the user's Supabase profile — the NOWPayments webhook writes the real subscription.
+function startSubscriptionPoll(userId) {
+  stopPaymentPoll();
+  paymentPollInterval = setInterval(() => {
+    loadSupabase(async (sb) => {
+      const { data: pr } = await sb.from('profiles').select('plan,status,plan_expires_at').eq('id', userId).single();
+      if (pr && pr.status === 'active' && pr.plan && pr.plan !== 'free' &&
+          (!pr.plan_expires_at || new Date(pr.plan_expires_at) > new Date())) {
+        stopPaymentPoll(); stopBtcTimer();
+        showPaymentSuccess('btc', '', {});
+      }
+    });
+  }, 8000);
+}
 const ETH_WALLET  = '0x10262524f5b146c328883DdB9152Ea85B72a1c24';
 const BTC_WALLET  = 'bc1q7k52702gvvjvmezn0hh24pvwnrwkcs4cnwq4a3';
 
@@ -3274,16 +3299,10 @@ async function fetchBtcEstimate(usdAmount) {
 
 async function fetchCryptoEstimate(usdAmount, currency) {
   try {
-    document.getElementById('btc-amount').textContent = 'Calculating...';
-    const res  = await fetch(`${NP_BASE}/estimate?amount=${usdAmount}&currency_from=usd&currency_to=${currency}`, {
-      headers: { 'x-api-key': NP_API_KEY }
-    });
-    const data = await res.json();
-    if(data.estimated_amount) {
-      const ticker = currency === 'usdttrc20' ? 'USDT' : currency.toUpperCase();
-      document.getElementById('btc-amount').textContent = parseFloat(data.estimated_amount).toFixed(6) + ' ' + ticker;
-      document.getElementById('crypto-amount-label').textContent = `Estimated ${ticker} Amount`;
-    }
+    const ticker = currency === 'usdttrc20' ? 'USDT' : currency.toUpperCase();
+    document.getElementById('btc-amount').textContent = '\u2248 $' + usdAmount + ' in ' + ticker;
+    const _lbl = document.getElementById('crypto-amount-label');
+    if (_lbl) _lbl.textContent = 'Exact amount shown on payment page';
   } catch(e) {
     document.getElementById('btc-amount').textContent = '— (fetch error)';
   }
@@ -3382,28 +3401,24 @@ async function initBtcPayment() {
   document.getElementById('btc-status').innerHTML = `<span class="btc-pending-dot"></span> Creating ${ticker} invoice...`;
 
   try {
-    const orderId = 'JB-' + Date.now();
+    const _sbUser = await getSessionUser();
+    if (!_sbUser) {
+      document.getElementById('btc-status').innerHTML = 'Please sign in to subscribe.';
+      showToast('Please sign in to subscribe', true);
+      return;
+    }
 
-    const res = await fetch(`${NP_BASE}/invoice`, {
+    const res = await fetch('/api/create-invoice', {
       method: 'POST',
-      headers: { 'x-api-key': NP_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        price_amount:      plan.price,
-        price_currency:    'usd',
-        pay_currency:      selectedCrypto,
-        order_id:          orderId,
-        order_description: `Juice Bunny ${plan.name} - Monthly Subscription`,
-        success_url:       `${SITE_URL}?payment=success&order=${orderId}`,
-        cancel_url:        `${SITE_URL}?payment=cancelled`,
-        ipn_callback_url:  `${SITE_URL}/api/nowpayments-webhook`
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: currentPlan, userId: _sbUser.id, email: _sbUser.email, payCurrency: selectedCrypto })
     });
 
     const data = await res.json();
 
     if(data.invoice_url) {
-      currentPaymentId = data.id;
       startBtcTimer();
+      startSubscriptionPoll(_sbUser.id);
 
       document.getElementById('btc-status').innerHTML = `
         ${ticker} invoice ready!
@@ -3425,7 +3440,7 @@ async function initBtcPayment() {
       btn.onclick = () => window.open(data.invoice_url, '_blank');
 
     } else {
-      throw new Error(data.message || 'Could not create invoice');
+      throw new Error(data.error || data.message || 'Could not create invoice');
     }
 
   } catch(err) {
@@ -3435,32 +3450,8 @@ async function initBtcPayment() {
 }
 
 // ── PAYMENT STATUS POLLING ───────────────────────────────────
-function startPaymentPoll(paymentId) {
-  stopPaymentPoll();
-  paymentPollInterval = setInterval(async () => {
-    try {
-      const res  = await fetch(`${NP_BASE}/payment/${paymentId}`, {
-        headers: { 'x-api-key': NP_API_KEY }
-      });
-      const data = await res.json();
-
-      updatePaymentStatus(data.payment_status, data);
-
-      if(['finished','confirmed'].includes(data.payment_status)) {
-        stopPaymentPoll();
-        stopBtcTimer();
-        const email = document.getElementById('btc-email').value || '';
-        setTimeout(() => showPaymentSuccess('btc', email, data), 1500);
-      }
-      if(['failed','expired'].includes(data.payment_status)) {
-        stopPaymentPoll();
-        stopBtcTimer();
-        document.getElementById('btc-status').innerHTML = 'Payment ' + data.payment_status + '. Please try again.';
-      }
-
-    } catch(e) { console.error('Poll error:', e); }
-  }, 10000); // check every 10 seconds
-}
+// Legacy direct-NOWPayments poll removed — activation is now server-verified (see startSubscriptionPoll).
+function startPaymentPoll(paymentId) { /* deprecated */ }
 
 function stopPaymentPoll() {
   clearInterval(paymentPollInterval);
@@ -3541,23 +3532,13 @@ function copyBtcAddress() {
 
 
 // ── VERIFY PAYMENT ON RETURN (anti-fake-success) ─────────────
-async function verifyPaymentReturn(orderId) {
+async function verifyPaymentReturn() {
   goTo('payment');
   showToast('Verifying your payment...');
-  try {
-    const res  = await fetch(`${NP_BASE}/payment/${orderId}`, { headers: { 'x-api-key': NP_API_KEY } });
-    const data = await res.json();
-    if(['finished','confirmed'].includes(data.payment_status)) {
-      showPaymentSuccess('btc', '', data);
-    } else if(data.payment_status) {
-      updatePaymentStatus(data.payment_status, data);
-      showToast('Payment is ' + data.payment_status + ' — access unlocks once it confirms.', true);
-    } else {
-      showToast('Could not verify payment — contact support@juicebunnytv.com', true);
-    }
-  } catch(e) {
-    showToast('Could not verify payment — contact support@juicebunnytv.com', true);
-  }
+  const user = await getSessionUser();
+  if (!user) { showToast('Please sign in to confirm your subscription', true); return; }
+  // Access unlocks only once the server-verified webhook marks the subscription active.
+  startSubscriptionPoll(user.id);
 }
 
 // ── CHECK URL PARAMS ON LOAD (handle redirect back from NOWPayments) ──
@@ -3565,9 +3546,7 @@ function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   if(params.get('payment') === 'success') {
     // NEVER trust the URL alone — verify with NOWPayments before showing success
-    const orderId = params.get('order');
-    if(orderId) { verifyPaymentReturn(orderId); }
-    else { goTo('payment'); showToast('Could not verify payment — contact support@juicebunnytv.com', true); }
+    verifyPaymentReturn();
   }
   if(params.get('payment') === 'cancelled') {
     goTo('payment');
