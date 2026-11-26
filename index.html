@@ -16,6 +16,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --pink:#FF2D78;--pink2:#e0206a;--pink-glow:rgba(255,45,120,0.35);
+  --gold:#ffc23d;--gold2:#f29d2e;--coin-glow:rgba(255,180,40,0.5);
   --bg:#0d0d12;--bg2:#12121a;--bg3:#1a1a24;
   --text:#fff;--text2:#a0a0b0;--text3:#606070;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
@@ -153,6 +154,100 @@ a{text-decoration:none;color:inherit}
   animation:bunnySpriteSpin 20s steps(1) infinite}
 @keyframes bunnySpriteSpin{0%{background-position:calc(var(--fw) * -0) calc(var(--fh) * -0)}2.9412%{background-position:calc(var(--fw) * -1) calc(var(--fh) * -0)}5.8824%{background-position:calc(var(--fw) * -2) calc(var(--fh) * -0)}8.8235%{background-position:calc(var(--fw) * -3) calc(var(--fh) * -0)}11.7647%{background-position:calc(var(--fw) * -4) calc(var(--fh) * -0)}14.7059%{background-position:calc(var(--fw) * -5) calc(var(--fh) * -0)}17.6471%{background-position:calc(var(--fw) * -6) calc(var(--fh) * -0)}20.5882%{background-position:calc(var(--fw) * -0) calc(var(--fh) * -1)}23.5294%{background-position:calc(var(--fw) * -1) calc(var(--fh) * -1)}26.4706%{background-position:calc(var(--fw) * -2) calc(var(--fh) * -1)}29.4118%{background-position:calc(var(--fw) * -3) calc(var(--fh) * -1)}32.3529%{background-position:calc(var(--fw) * -4) calc(var(--fh) * -1)}35.2941%{background-position:calc(var(--fw) * -5) calc(var(--fh) * -1)}38.2353%{background-position:calc(var(--fw) * -6) calc(var(--fh) * -1)}41.1765%{background-position:calc(var(--fw) * -0) calc(var(--fh) * -2)}44.1176%{background-position:calc(var(--fw) * -1) calc(var(--fh) * -2)}47.0588%{background-position:calc(var(--fw) * -2) calc(var(--fh) * -2)}50%{background-position:calc(var(--fw) * -3) calc(var(--fh) * -2)}52.9412%{background-position:calc(var(--fw) * -4) calc(var(--fh) * -2)}55.8824%{background-position:calc(var(--fw) * -5) calc(var(--fh) * -2)}58.8235%{background-position:calc(var(--fw) * -6) calc(var(--fh) * -2)}61.7647%{background-position:calc(var(--fw) * -0) calc(var(--fh) * -3)}64.7059%{background-position:calc(var(--fw) * -1) calc(var(--fh) * -3)}67.6471%{background-position:calc(var(--fw) * -2) calc(var(--fh) * -3)}70.5882%{background-position:calc(var(--fw) * -3) calc(var(--fh) * -3)}73.5294%{background-position:calc(var(--fw) * -4) calc(var(--fh) * -3)}76.4706%{background-position:calc(var(--fw) * -5) calc(var(--fh) * -3)}79.4118%{background-position:calc(var(--fw) * -6) calc(var(--fh) * -3)}82.3529%{background-position:calc(var(--fw) * -0) calc(var(--fh) * -4)}85.2941%{background-position:calc(var(--fw) * -1) calc(var(--fh) * -4)}88.2353%{background-position:calc(var(--fw) * -2) calc(var(--fh) * -4)}91.1765%{background-position:calc(var(--fw) * -3) calc(var(--fh) * -4)}94.1176%{background-position:calc(var(--fw) * -4) calc(var(--fh) * -4)}97.0588%{background-position:calc(var(--fw) * -5) calc(var(--fh) * -4)}}
 @media(max-width:768px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.bunny-wrap{width:340px;height:380px}.bunny-sprite{--fw:340px}.hero-sub{margin:14px auto 24px}.hero-btns{justify-content:center}}
+
+/* ===== JUICY REWARDS — HERO 2.0 ===== */
+/* film grain overlay — kills the flat "AI gradient" look */
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* animated aurora behind hero */
+.hero{isolation:isolate}
+.hero-aurora{position:absolute;inset:-25% -12%;z-index:0;pointer-events:none;filter:blur(64px);opacity:.72}
+.hero-aurora i{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:auroraDrift 20s ease-in-out infinite}
+.hero-aurora i:nth-child(1){width:46vw;height:46vw;left:46%;top:-10%;background:radial-gradient(circle,rgba(255,45,120,.5),transparent 70%)}
+.hero-aurora i:nth-child(2){width:40vw;height:40vw;left:0;top:38%;background:radial-gradient(circle,rgba(150,0,255,.3),transparent 70%);animation-delay:-7s}
+.hero-aurora i:nth-child(3){width:30vw;height:30vw;left:62%;top:52%;background:radial-gradient(circle,rgba(255,180,60,.2),transparent 70%);animation-delay:-13s}
+@keyframes auroraDrift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4%,3%) scale(1.14)}66%{transform:translate(-3%,-2%) scale(.92)}}
+/* drifting background coins */
+.hero-floaties{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hero-floaties .fc{position:absolute;bottom:-50px;opacity:0;animation:floatUp linear infinite;filter:drop-shadow(0 2px 6px rgba(255,180,40,.3))}
+@keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.45}90%{opacity:.45}100%{transform:translateY(-118vh) rotate(280deg);opacity:0}}
+/* eyebrow live badge */
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.28);color:#ffd7e6;padding:6px 14px;border-radius:30px;font-size:12px;font-weight:600;letter-spacing:.2px;margin-bottom:18px;animation:fadeUp .7s both}
+.hero-eyebrow b{color:#fff}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#1fd65f;box-shadow:0 0 0 0 rgba(31,214,95,.6);animation:livePulse 1.7s infinite}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(31,214,95,.55)}70%{box-shadow:0 0 0 8px rgba(31,214,95,0)}100%{box-shadow:0 0 0 0 rgba(31,214,95,0)}}
+/* headline highlighter */
+.hl-mark{position:relative;color:#fff}
+.hl-mark::after{content:'';position:absolute;left:-3%;right:-3%;bottom:.1em;height:.4em;background:linear-gradient(90deg,var(--pink),#ff7fb0);z-index:-1;border-radius:5px;transform:skewX(-6deg) scaleX(0);transform-origin:left;animation:markIn .55s .75s forwards cubic-bezier(.2,.8,.2,1);opacity:.92}
+@keyframes markIn{to{transform:skewX(-6deg) scaleX(1)}}
+/* coin chip under buttons */
+.coin-chip{display:inline-flex;align-items:center;gap:11px;margin-top:22px;background:rgba(255,194,61,.08);border:1px solid rgba(255,194,61,.32);padding:10px 16px;border-radius:14px;animation:fadeUp .7s .5s both}
+.coin-chip .cc-coin{width:28px;height:28px;flex:0 0 auto;filter:drop-shadow(0 2px 6px var(--coin-glow))}
+.coin-chip .cc-val{font-family:'Bebas Neue',sans-serif;font-size:27px;line-height:1;color:var(--gold);letter-spacing:.5px;vertical-align:-2px}
+.coin-chip .cc-txt{font-size:12.5px;color:var(--text2)}
+.coin-chip .cc-txt b{color:#fff}
+/* ---- bunny arena / tap game ---- */
+.bunny-arena{position:relative;width:480px;max-width:92vw;display:flex;align-items:center;justify-content:center}
+.arena-glow{position:absolute;inset:6%;border-radius:50%;z-index:0;background:radial-gradient(circle at 50% 58%,rgba(255,45,120,.14),transparent 62%);transition:opacity .3s;pointer-events:none}
+.bunny-tap{position:relative;z-index:2;background:none;border:none;cursor:pointer;padding:0;display:block;outline:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .08s}
+.bunny-tap:active{transform:scale(.96)}
+.bunny-tap.bounce{animation:bunnyBounce .42s cubic-bezier(.3,1.4,.5,1)}
+@keyframes bunnyBounce{0%{transform:scale(1)}28%{transform:scale(1.07,.93) translateY(-9px)}60%{transform:scale(.97,1.03)}100%{transform:scale(1)}}
+.tap-bubble{position:absolute;top:6%;left:50%;transform:translateX(-50%);background:#fff;color:#15151d;font-size:13px;font-weight:700;padding:7px 15px;border-radius:20px;white-space:nowrap;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.35);animation:bob 1.9s ease-in-out infinite}
+.tap-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#fff;border-bottom:0}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+.tap-bubble.hide{display:none}
+/* HUD */
+.coin-hud{position:absolute;top:-4px;right:-6px;z-index:6;width:152px;background:rgba(18,18,26,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border2);border-radius:16px;padding:12px 14px;box-shadow:0 14px 42px rgba(0,0,0,.45)}
+.hud-top{display:flex;align-items:center;gap:8px}
+.hud-top .hud-coin{width:30px;height:30px;flex:0 0 auto;filter:drop-shadow(0 2px 6px var(--coin-glow))}
+.hud-coins{font-family:'Bebas Neue',sans-serif;font-size:31px;line-height:.9;color:var(--gold);letter-spacing:.5px}
+.hud-coins.pop{animation:cpop .25s}
+@keyframes cpop{0%{transform:scale(1)}40%{transform:scale(1.3);color:#fff}100%{transform:scale(1)}}
+.hud-lbl{font-size:9px;letter-spacing:1.3px;color:var(--text3);text-transform:uppercase;margin:2px 0 0}
+.reward-bar{margin-top:10px;height:7px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden}
+.reward-bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--pink));transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.reward-next{margin-top:7px;font-size:10px;color:var(--text2);line-height:1.35}
+.reward-next b{color:#fff}
+/* combo badge */
+.combo-badge{position:absolute;top:33%;left:-4px;z-index:6;transform:scale(0);transform-origin:left center;background:linear-gradient(135deg,#ff2d78,#ff8a3d);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;padding:5px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(255,80,120,.5);transition:transform .18s cubic-bezier(.3,1.5,.5,1);white-space:nowrap}
+.combo-badge.on{transform:scale(1) rotate(-5deg)}
+/* flying particles */
+.jbcoin{position:absolute;width:30px;height:30px;z-index:9998;pointer-events:none;will-change:transform,opacity;filter:drop-shadow(0 2px 5px var(--coin-glow))}
+.plusN{position:fixed;z-index:9998;pointer-events:none;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);text-shadow:0 2px 10px rgba(0,0,0,.5);will-change:transform,opacity;animation:plusFloat .9s ease-out forwards}
+@keyframes plusFloat{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:1;transform:translateY(-12px) scale(1.12)}100%{transform:translateY(-58px) scale(1);opacity:0}}
+/* rotated sticker */
+.sticker{position:absolute;z-index:4;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:#0d0d12;background:var(--gold);padding:5px 11px;border-radius:9px;transform:rotate(-8deg);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.sticker.pink{background:var(--pink);color:#fff;transform:rotate(7deg)}
+/* reward modal */
+.rw-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(5,5,9,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
+.rw-modal.show{display:flex;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.rw-card{position:relative;width:360px;max-width:100%;background:linear-gradient(180deg,#1b1b25,#121219);border:1px solid var(--border2);border-radius:24px;padding:30px 26px 24px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:rwPop .4s cubic-bezier(.2,1.3,.4,1)}
+@keyframes rwPop{from{transform:scale(.85) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.rw-badge{width:84px;height:84px;margin:0 auto 14px;display:block;filter:drop-shadow(0 8px 24px var(--coin-glow));animation:spinCoin 3.2s linear infinite}
+@keyframes spinCoin{to{transform:rotateY(360deg)}}
+.rw-title{font-family:'Dancing Script',cursive;font-size:30px;color:#fff;margin-bottom:4px}
+.rw-reward{font-family:'Bebas Neue',sans-serif;font-size:23px;color:var(--gold);letter-spacing:.5px;margin-bottom:10px}
+.rw-sub{font-size:13.5px;color:var(--text2);line-height:1.55;margin-bottom:20px}
+.rw-sub b{color:#fff}
+.rw-claim{width:100%;background:var(--pink);color:#fff;border:none;padding:14px;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.rw-claim:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 10px 30px var(--pink-glow)}
+.rw-later{margin-top:12px;background:none;border:none;color:var(--text3);font-size:12.5px;cursor:pointer}
+.rw-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text3);font-size:24px;cursor:pointer;line-height:1}
+@media(max-width:768px){
+  .bunny-arena{width:340px;max-width:92vw;flex-direction:column}
+  .coin-hud{position:static;right:auto;top:auto;width:210px;margin:0 auto 14px;padding:11px 14px}
+  .hud-coins{font-size:28px}
+  .tap-bubble{display:none}
+  .coin-chip{margin-top:16px}.hero-eyebrow{margin-bottom:12px}
+  .combo-badge{font-size:17px;top:26%;left:2px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-aurora i,.grain,.tap-bubble,.live-dot,.rw-badge,.coin-chip,.hero-eyebrow{animation:none!important}
+  .hero-floaties{display:none}
+  .hl-mark::after{transform:skewX(-6deg) scaleX(1);animation:none}
+}
 
 /* STATS */
 .stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 40px}
@@ -1232,23 +1327,54 @@ html,body{overflow-x:hidden;max-width:100%}
     </div>
   </div>
 
+  <!-- coin symbol (reused everywhere) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="goldg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffe684"/><stop offset=".5" stop-color="#ffc23d"/><stop offset="1" stop-color="#f29d2e"/>
+      </linearGradient>
+      <symbol id="coinSym" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="url(#goldg)" stroke="#e08e22" stroke-width="2"/>
+        <circle cx="24" cy="24" r="16.5" fill="none" stroke="#fff3c4" stroke-width="1.4" opacity=".55"/>
+        <path d="M24 17 L30 29 Q24 33 18 29 Z" fill="#ff7a2d"/>
+        <path d="M22.5 16.5 l-5 -3 l1.2 5 Z" fill="#43cf6b"/>
+        <path d="M25.5 16.5 l5 -3 l-1.2 5 Z" fill="#43cf6b"/>
+      </symbol>
+    </defs>
+  </svg>
+  <svg class="jbcoin" id="coinTpl" style="display:none" aria-hidden="true"><use href="#coinSym"/></svg>
+
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-grid-bg"></div>
+    <div class="hero-aurora"><i></i><i></i><i></i></div>
+    <div class="hero-floaties" id="heroFloaties"></div>
     <div class="hero-inner">
       <div>
-        <div class="hero-h1">Unlimited Naughty</div>
-        <div class="hero-h1-pink">Content &<br/>Pure Pleasure</div>
-        <p class="hero-sub">Hop into your wildest fantasy. Stream exclusive 4K adult videos, live creator calls, and drop-your-jaw originals — anytime, anywhere, 100% private.</p>
+        <div class="hero-eyebrow"><span class="live-dot"></span><b id="tappingNow">2,847</b>&nbsp;bunnies tapping now</div>
+        <div class="hero-h1">Hop Into Your</div>
+        <div class="hero-h1-pink"><span class="hl-mark">Wildest</span> Fantasy</div>
+        <p class="hero-sub">Stream exclusive 4K originals, live creator calls, and jaw-dropping daily drops — then tap the bunny to stack <b style="color:var(--gold)">Juice Coins</b> and unlock real rewards. Anytime, anywhere, 100% private.</p>
         <div class="hero-btns">
           <button class="btn-hero-watch" onclick="goToPayment('sub_weekly')">Get Naughty Now</button>
           <button class="btn-hero-plans" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Explore Plans ›</button>
         </div>
+        <div class="coin-chip"><svg class="cc-coin"><use href="#coinSym"/></svg><div><span class="cc-val" id="chipCoins">0</span> <span class="cc-txt">Juice Coins — <b>tap the bunny →</b></span></div></div>
       </div>
       <div class="hero-visual">
-        <div class="bunny-wrap">
-          <div class="bunny-glow"></div>
-          <div class="bunny-sprite" role="img" aria-label="Juice Bunny"></div>
+        <div class="bunny-arena">
+          <div class="arena-glow" id="arenaGlow"></div>
+          <div class="coin-hud">
+            <div class="hud-top"><svg class="hud-coin"><use href="#coinSym"/></svg><div><div class="hud-coins" id="hudCoins">0</div><div class="hud-lbl">Juice Coins</div></div></div>
+            <div class="reward-bar"><i id="rewardBar"></i></div>
+            <div class="reward-next" id="rewardNext">100 coins to <b>Sneak Peek</b></div>
+          </div>
+          <div class="combo-badge" id="comboBadge"></div>
+          <button class="bunny-tap" id="bunnyTap" aria-label="Tap the bunny to earn Juice Coins">
+            <div class="bunny-sprite" role="img" aria-label="Juice Bunny"></div>
+          </button>
+          <div class="tap-bubble" id="tapBubble">Tap me for coins!</div>
+          <div class="sticker pink" style="left:-6px;bottom:12%">FRESH DAILY</div>
+          <div class="sticker" style="right:6px;bottom:5%">18+ ONLY</div>
         </div>
       </div>
     </div>
@@ -4039,6 +4165,139 @@ async function sendCbotMsgText(text){
   document.getElementById('cbotInput').focus();
 }
 
+/* ===== JUICE COINS — tap-to-earn rewards game ===== */
+(function(){
+  function init(){
+  var tap=document.getElementById('bunnyTap');
+  if(!tap) return;
+  var arena=tap.closest('.bunny-arena');
+  var hudVal=document.getElementById('hudCoins');
+  var chipVal=document.getElementById('chipCoins');
+  var bar=document.getElementById('rewardBar');
+  var nextTxt=document.getElementById('rewardNext');
+  var combo=document.getElementById('comboBadge');
+  var bubble=document.getElementById('tapBubble');
+  var glow=document.getElementById('arenaGlow');
+  var hudCoinEl=arena.querySelector('.hud-coin');
+  var tpl=document.getElementById('coinTpl');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  var MILES=[
+    {at:100,name:'Sneak Peek',reward:'Exclusive preview unlocked'},
+    {at:300,name:'10% OFF',reward:'10% off your first week',code:'JUICY10'},
+    {at:700,name:'Free Day Pass',reward:'24 hours free access on signup'},
+    {at:1500,name:'VIP Trial',reward:'3 days of VIP creator calls'}
+  ];
+
+  var coins=0,claimed={};
+  try{coins=parseInt(localStorage.getItem('jbCoins')||'0',10)||0;claimed=JSON.parse(localStorage.getItem('jbClaimed')||'{}')||{};}catch(e){}
+  var comboCount=0,comboTimer=null,lastTap=0;
+
+  function fmt(n){return n>=1000?(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k':''+n;}
+  function nextMile(){for(var i=0;i<MILES.length;i++){if(coins<MILES[i].at)return MILES[i];}return null;}
+  function prevAt(){var p=0;for(var i=0;i<MILES.length;i++){if(coins>=MILES[i].at)p=MILES[i].at;}return p;}
+  function save(){try{localStorage.setItem('jbCoins',coins);localStorage.setItem('jbClaimed',JSON.stringify(claimed));}catch(e){}}
+
+  function render(){
+    if(hudVal)hudVal.textContent=fmt(coins);
+    if(chipVal)chipVal.textContent=fmt(coins);
+    var m=nextMile();
+    if(m){var lo=prevAt();var pct=Math.max(0,Math.min(100,(coins-lo)/(m.at-lo)*100));
+      if(bar)bar.style.width=pct+'%';
+      if(nextTxt)nextTxt.innerHTML=(m.at-coins)+' coins to <b>'+m.name+'</b>';
+    }else{if(bar)bar.style.width='100%';if(nextTxt)nextTxt.innerHTML='<b>All rewards unlocked!</b>';}
+  }
+
+  function newCoin(){var c=tpl.cloneNode(true);c.removeAttribute('id');c.style.display='block';return c;}
+  function flyCoin(px,py){
+    if(reduce||!hudCoinEl)return;
+    var c=newCoin();c.style.position='fixed';c.style.left='0';c.style.top='0';document.body.appendChild(c);
+    var tr=hudCoinEl.getBoundingClientRect();var tx=tr.left+tr.width/2,ty=tr.top+tr.height/2;
+    var sx=px-15,sy=py-15;var midx=sx+(tx-sx)*.4+(Math.random()*80-40),midy=sy-80-Math.random()*40;
+    var a=c.animate([
+      {transform:'translate('+sx+'px,'+sy+'px) scale(.4)',opacity:0},
+      {transform:'translate('+midx+'px,'+midy+'px) scale(1.2)',opacity:1,offset:.5},
+      {transform:'translate('+(tx-15)+'px,'+(ty-15)+'px) scale(.5)',opacity:.9}
+    ],{duration:620+Math.random()*160,easing:'cubic-bezier(.4,.1,.3,1)'});
+    a.onfinish=function(){c.remove();};
+  }
+  function floatPlus(x,y,gain,mult){
+    var p=document.createElement('div');p.className='plusN';p.textContent='+'+gain;
+    p.style.left=(x-10)+'px';p.style.top=(y-20)+'px';if(mult>1)p.style.color='#ff8a3d';
+    document.body.appendChild(p);setTimeout(function(){p.remove();},950);
+  }
+  function burst(){
+    if(reduce)return;var cx=window.innerWidth/2,cy=window.innerHeight/2;
+    for(var i=0;i<18;i++){(function(){var c=newCoin();c.style.position='fixed';document.body.appendChild(c);
+      var ang=Math.random()*Math.PI*2,dist=120+Math.random()*180;
+      var a=c.animate([
+        {transform:'translate('+(cx-15)+'px,'+(cy-15)+'px) scale(.3)',opacity:1},
+        {transform:'translate('+(cx-15+Math.cos(ang)*dist)+'px,'+(cy-15+Math.sin(ang)*dist+130)+'px) scale(1)',opacity:0}
+      ],{duration:900+Math.random()*500,easing:'cubic-bezier(.2,.6,.4,1)'});
+      a.onfinish=function(){c.remove();};})();}
+  }
+  function updateCombo(mult){
+    if(!combo)return;
+    if(comboCount>=4&&mult>1){combo.textContent='COMBO x'+mult;combo.classList.add('on');}
+    else combo.classList.remove('on');
+  }
+
+  var modal=document.getElementById('rwModal');
+  function showReward(m){
+    document.getElementById('rwReward').textContent=m.reward;
+    document.getElementById('rwSub').innerHTML='You tapped your way to <b>'+m.at+' Juice Coins</b>. '+(m.code?'Use code <b>'+m.code+'</b> at checkout. ':'')+'Lock it in before it hops away.';
+    modal.classList.add('show');burst();
+  }
+  function closeModal(){modal.classList.remove('show');}
+  document.getElementById('rwClose').onclick=closeModal;
+  document.getElementById('rwLater').onclick=closeModal;
+  document.getElementById('rwClaim').onclick=function(){closeModal();if(typeof goTo==='function')goTo('signup');};
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+
+  function checkMiles(){
+    for(var i=0;i<MILES.length;i++){var m=MILES[i];
+      if(coins>=m.at&&!claimed['m'+m.at]){claimed['m'+m.at]=1;save();showReward(m);break;}}
+  }
+
+  function onTap(e){
+    var now=Date.now();
+    if(now-lastTap<1200)comboCount++;else comboCount=0;
+    lastTap=now;clearTimeout(comboTimer);
+    comboTimer=setTimeout(function(){comboCount=0;updateCombo(1);if(glow)glow.style.opacity='1';},1400);
+    var mult=Math.min(5,1+Math.floor(comboCount/4));
+    var gain=5*mult;coins+=gain;render();save();
+    tap.classList.remove('bounce');void tap.offsetWidth;tap.classList.add('bounce');
+    if(hudVal){hudVal.classList.remove('pop');void hudVal.offsetWidth;hudVal.classList.add('pop');}
+    if(bubble)bubble.classList.add('hide');
+    updateCombo(mult);
+    var r=tap.getBoundingClientRect();
+    var px=(e&&e.clientX)?e.clientX:r.left+r.width/2;
+    var py=(e&&e.clientY)?e.clientY:r.top+r.height*0.42;
+    var n=Math.min(6,mult+1);
+    for(var i=0;i<n;i++){(function(d){setTimeout(function(){flyCoin(px+(Math.random()*40-20),py+(Math.random()*30-15));},d*45);})(i);}
+    floatPlus(px,py,gain,mult);
+    if(glow)glow.style.opacity=Math.min(1.9,1+comboCount*0.09);
+    checkMiles();
+  }
+  tap.addEventListener('pointerdown',function(e){e.preventDefault();onTap(e);});
+  tap.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();onTap(null);}});
+
+  // ambient floating coins
+  var fl=document.getElementById('heroFloaties');
+  if(fl&&!reduce){for(var i=0;i<9;i++){var c=newCoin();c.removeAttribute('style');c.className='fc';
+    c.style.left=(Math.random()*100)+'%';var sz=14+Math.random()*20;c.style.width=sz+'px';c.style.height=sz+'px';
+    c.style.animationDuration=(15+Math.random()*16)+'s';c.style.animationDelay=(-Math.random()*22)+'s';fl.appendChild(c);}}
+
+  // live "tapping now" social proof
+  var tn=document.getElementById('tappingNow');
+  if(tn){var base=2600+Math.floor(Math.random()*500);tn.textContent=base.toLocaleString();
+    setInterval(function(){base+=Math.floor(Math.random()*7)-2;if(base<2400)base=2400;tn.textContent=base.toLocaleString();},2600);}
+
+  render();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
 /* -- HERO BUNNY: sprite-sheet spin --
    Replaced the transparent-WebM + JS alpha-detection approach with a
    plain background-image sprite sheet (34 real frames baked from the
@@ -4048,5 +4307,20 @@ async function sendCbotMsgText(text){
    / @keyframes bunnySpriteSpin in the stylesheet above. */
 </script>
 
+<!-- film grain -->
+<div class="grain"></div>
+
+<!-- reward unlocked modal -->
+<div class="rw-modal" id="rwModal" role="dialog" aria-modal="true" aria-labelledby="rwTitle">
+  <div class="rw-card">
+    <button class="rw-close" id="rwClose" aria-label="Close">×</button>
+    <svg class="rw-badge"><use href="#coinSym"/></svg>
+    <div class="rw-title" id="rwTitle">Nice hops!</div>
+    <div class="rw-reward" id="rwReward"></div>
+    <div class="rw-sub" id="rwSub"></div>
+    <button class="rw-claim" id="rwClaim">Create a free account to claim</button>
+    <div><button class="rw-later" id="rwLater">Keep tapping</button></div>
+  </div>
+</div>
 </body>
 </html>
